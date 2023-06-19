@@ -101,5 +101,4 @@ const App = ({navigation}) => {
     </View>
   );
 };
-
 export default App;
