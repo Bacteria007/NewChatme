@@ -20,6 +20,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChatBot from './src/screens/ChatBot';
 
+
+import WelcomeScreen from './src/screens/Welcome/WelcomeScreen';
+
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -97,8 +101,13 @@ const App = ({navigation}) => {
           <Tab.Screen name="Reels" component={Reels} />
           <Tab.Screen name="Contacts" component={Contacts} />
         </Tab.Navigator>
+        {/* <Stack.Navigator> 
+    <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{headerShown:false}}/>
+   </Stack.Navigator> */}
       </NavigationContainer>
     </View>
   );
 };
+
+
 export default App;
