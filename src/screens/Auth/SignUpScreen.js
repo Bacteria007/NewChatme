@@ -27,7 +27,7 @@ const SignUpScreen = () => {
   return (
     <View style={[SignUpStyleSheet.container]}>
       <Image
-        source={require('../../assets/imges/AuthScreenPictures/SignUpPic/logo.png')}
+        source={require('../../assets/imges/AuthScreenPictures/SignUpPic/logo.png')} 
         style={[SignUpStyleSheet.image]}
       />
       <Text style={[SignUpStyleSheet.title]}>Enter Your Phone Number</Text>
