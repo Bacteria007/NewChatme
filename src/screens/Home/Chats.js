@@ -1,10 +1,14 @@
 import React from 'react'
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import AppHeader from '../../components/Headers/AppHeaders/AppHeader'
+import FontStyle from '../../assets/styles/FontStyle'
+import AppColors from '../../assets/colors/Appcolors'
+import AppSubHeader from '../../components/Headers/AppHeaders/AppSubHeader'
 // import AppHeader from './AppHeader'
 
 
-const Chats = () => {
+const Chats = ({navigation}) => {
 
 
   const allChats = [
@@ -20,7 +24,9 @@ const Chats = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={()=>{
+        navigation.navigate('UserChat',{item:item});
+      }}>
         <View style={{
           height: hp('11%'), width: wp('100%'),
           // backgroundColor:"rgba(255,255,255,0.5)",
@@ -30,8 +36,8 @@ const Chats = () => {
           <View style={{ height: hp('11%'), width: wp('100%'), flexDirection: "row", alignItems: 'center' }}>
             <View style={{ marginLeft: 10 }}><TouchableOpacity><Image source={item.dpImage} style={{ height: hp('6%'), width: wp('12%'), borderRadius: 25 }} /></TouchableOpacity></View>
             <View style={{ flexDirection: 'column', marginLeft: 10 }}>
-              <Text style={{ fontFamily: "Poppins-Regular", color: 'black', fontSize: 17, }}>{item.profileName}</Text>
-              <Text style={{ fontFamily: "Poppins-Regular", color: 'grey', fontSize: 11, }}>{item.lastMsg}</Text>
+              <Text style={{ fontFamily: FontStyle.regularFont, color: AppColors.black, fontSize: 17, }}>{item.profileName}</Text>
+              <Text style={{ fontFamily: FontStyle.regularFont, color: 'grey', fontSize: 11, }}>{item.lastMsg}</Text>
             </View>
           </View>
         </View>
@@ -42,8 +48,8 @@ const Chats = () => {
 
 
     <View style={{ flex: 1, backgroundColor: "white" }}>
-      {/* <AppHeader title={"CHATME"} /> */}
-
+      <AppHeader  />
+      <AppSubHeader/>
       <FlatList
         data={allChats}
         renderItem={renderItem}

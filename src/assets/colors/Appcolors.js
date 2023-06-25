@@ -1,8 +1,9 @@
-const Colors={
+const AppColors={
 
-    primary:"#BA68C8",
+    primary:"#7B1FA2",
     white:'white',
-    black:'black'
+    black:'black',
+    lightGrey:"rgb(239, 239, 239)"
 
 //'''''''''''''''''''''''ChatmeColors''''''''''''''''''''''''''''
 // rgb(0, 1, 47) // dark blue
@@ -17,4 +18,4 @@ const Colors={
 // dEEP pURPLE :  #9575CD , 7E57C2 , 673AB7 , 5835B1 , 512DA8 , 4527A0 , 311B92 , B388FF
 
     };
-    export default Colors;
+    export default AppColors;
