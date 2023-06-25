@@ -22,6 +22,9 @@ import UserChat from './src/screens/chats/UserChat';
 import Chats from './src/screens/Home/Chats';
 import { AppProvider } from './src/context/AppContext';
 
+import SignUpScreen from './src/screens/Auth/SignUpScreen';
+import AppHeader from './src/components/Headers/AppHeaders/AppHeader';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -113,22 +116,24 @@ const App = ({navigation}) => {
     );
   };
   
-  return (<AppProvider>
-    {/* <View style={{ flex: 1, backgroundColor: 'white' }}> */}
+  return (
+  <AppProvider>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
 
-      {/* <AppHeader title={'ChatMe'} navigation={navigation} /> */}
+       {/* <AppHeader title={'ChatMe'} navigation={navigation} />  */}
 
       <NavigationContainer >
         <Stack.Navigator options={{headerShown:false}}> 
-           {/* <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{headerShown:false}}/> */}
-           <Stack.Screen name='TabScreen' component={TabScreens} options={{headerShown:false}}/>
-           <Stack.Screen name='Drawer' component={Drawer} options={{headerShown:false}}/>
-           {/* <Stack.Screen name='Discussion' component={Discussion} options={{headerShown:false}}/> */}
-           {/* <Stack.Screen name="Chats" component={Chats} />/ */}
+           <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{headerShown:false}}/>
+           <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={{headerShown:false}}/>
+          <Stack.Screen name='TabScreen' component={TabScreens} options={{headerShown:false}}/>
+           <Stack.Screen name='Drawer' component={Drawer} options={{headerShown:false}}/> 
+           <Stack.Screen name='Discussion' component={Discussion} options={{headerShown:false}}/> 
+          <Stack.Screen name="Chats" component={Chats} /> 
           <Stack.Screen name="UserChat" component={UserChat} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
-    {/* </View> */}
+    </View>
     </AppProvider>
   );
 };

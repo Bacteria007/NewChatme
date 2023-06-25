@@ -9,12 +9,12 @@ import {
 import {Text} from 'react-native-paper';
 import WelcomeScreenStyles from '../../assets/styles/WelcomeScreenStyle/WelcomeScreenStyleSheet';
 import Appcolors from '../../assets/colors/Appcolors';
-const WelcomeScreen = () => {
+const WelcomeScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Appcolors.white}}>
       <StatusBar backgroundColor={Appcolors.primary} />
       <View style={[WelcomeScreenStyles.TopView]}>
-        <Text style={[WelcomeScreenStyles.HeadingText1]}>   ChatMe</Text>
+        <Text style={[WelcomeScreenStyles.HeadingText1]}> ChatMe</Text>
       </View>
       <View>
         <Image
@@ -33,14 +33,18 @@ const WelcomeScreen = () => {
           who connect securely with their contacts
         </Text>
         <TouchableOpacity style={[WelcomeScreenStyles.TouchableButton1]}>
-          <Text style={[WelcomeScreenStyles.TouchableButton1Text]}>
+          <Text
+            style={[WelcomeScreenStyles.TouchableButton1Text]}
+            onPress={() => {
+              navigation.navigate('SignUpScreen');
+            }}>
             Register as new user
-            </Text>
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={[WelcomeScreenStyles.TouchableButton2]}>
           <Text style={[WelcomeScreenStyles.TouchableButton2Text]}>
             Login to existing account
-            </Text>
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
