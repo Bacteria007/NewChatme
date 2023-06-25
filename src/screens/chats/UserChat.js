@@ -20,7 +20,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Item} from 'react-native-paper/lib/typescript/src/components/Drawer/Drawer';
 // import AppColors from '../../asset/colors/AppColors';
-import Modal from 'react-native-modal';
+// import Modal from 'react-native-modal';
 import Colors from '../../assets/colors/Appcolors';
 import Status_bar from '../../components/Headers/Status_bar';
 import UserChatStyle from '../../assets/styles/UserChatStyle';

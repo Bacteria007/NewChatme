@@ -1,9 +1,10 @@
 const AppColors={
 
-    primary:"#7B1FA2",
+    primary:"#BA68C8",
     white:'white',
     black:'black',
-    lightGrey:"rgb(239, 239, 239)"
+    lightGrey:"rgb(239, 239, 239)",
+    gray:'gray'
 
 //'''''''''''''''''''''''ChatmeColors''''''''''''''''''''''''''''
 // rgb(0, 1, 47) // dark blue

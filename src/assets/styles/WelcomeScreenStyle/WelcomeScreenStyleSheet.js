@@ -33,14 +33,14 @@ const WelcomeScreenStyles = StyleSheet.create({
   },
   Text: {
     fontSize: hp('2'),
-    fontFamily: 'Poppins-Light',
+    fontFamily: 'Poppins-Regular',
     color: Appcolors.black,
     textAlign: 'center',
     lineHeight: hp('2.2'),
   },
   Text2: {
     fontSize: hp('1.80'),
-    fontFamily: 'Poppins-Light',
+    fontFamily: 'Poppins-Regular',
     color: Appcolors.black,
     textAlign: 'center',
   },
