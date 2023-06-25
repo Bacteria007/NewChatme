@@ -14,7 +14,7 @@ const WelcomeScreen = () => {
     <SafeAreaView style={{flex: 1, backgroundColor: Appcolors.white}}>
       <StatusBar backgroundColor={Appcolors.primary} />
       <View style={[WelcomeScreenStyles.TopView]}>
-        <Text style={[WelcomeScreenStyles.HeadingText1]}>ChatMe</Text>
+        <Text style={[WelcomeScreenStyles.HeadingText1]}>   ChatMe</Text>
       </View>
       <View>
         <Image

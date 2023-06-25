@@ -9,9 +9,10 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Groups from './Groups';
 import ChatBot from '../ChatBot';
+import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 
 
-const Home = () => {
+const Home = ({navigation}) => {
 
     const focusedIconColor = Colors.primary
     const inActiveIconKAColor = "grey"
@@ -22,6 +23,7 @@ const Home = () => {
     const Tab = createMaterialTopTabNavigator()
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
+              <AppHeader title={'ChatMe'} navigation={navigation} />
 
             <Tab.Navigator
                 screenOptions={({ route }) => ({
