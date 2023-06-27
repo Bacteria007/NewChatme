@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { View } from 'react-native';
@@ -16,18 +17,23 @@ import Ionicons from 'react-native-vector-icons/Ionicons'; //more
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import WelcomeScreen from './src/screens/Welcome/WelcomeScreen';
-import Drawer from './src/components/Drawer/Drawer';
+// import Drawer from './src/components/Drawer/Drawer';
 import UserChat from './src/screens/chats/UserChat';
 import Chats from './src/screens/Home/Chats';
 import { AppProvider } from './src/context/AppContext';
 
 import SignUpScreen from './src/screens/Auth/SignUpScreen';
 import AppHeader from './src/components/Headers/AppHeaders/AppHeader';
+import UserProfile from './src/screens/profile/UserProfile';
+import AboutUs from './src/screens/About/AboutUs';
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
 
 // const NavScreens=()=>{
 //   <Stack.Navigator>
@@ -103,37 +109,37 @@ const App = ({navigation}) => {
 
     )
   }
-  const Discussion=()=>{
+  const DrawerScreens=()=>{
     return (
-      <Stack.Navigator 
+      <Drawer.Navigator 
       screenOptions={{
         headerShown:false
-      }} initialRouteName="Chats">
-          <Stack.Screen name="Chats" component={Chats} />
-          <Stack.Screen name="UserChat" component={UserChat} />
-      </Stack.Navigator>
+      }} initialRouteName="UserProfile">
+          <Drawer.Screen name="UserProfile" component={UserProfile} />
+          <Drawer.Screen name="AboutUs" component={AboutUs} />
+      </Drawer.Navigator>
       
     );
   };
   
   return (
   <AppProvider>
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    {/* <View style={{ flex: 1, backgroundColor: 'white' }}> */}
 
        {/* <AppHeader title={'ChatMe'} navigation={navigation} />  */}
 
       <NavigationContainer >
         <Stack.Navigator options={{headerShown:false}}> 
-           <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{headerShown:false}}/>
-           <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={{headerShown:false}}/>
+           {/* <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{headerShown:false}}/>
+           <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={{headerShown:false}}/> */}
           <Stack.Screen name='TabScreen' component={TabScreens} options={{headerShown:false}}/>
-           <Stack.Screen name='Drawer' component={Drawer} options={{headerShown:false}}/> 
-           <Stack.Screen name='Discussion' component={Discussion} options={{headerShown:false}}/> 
-          <Stack.Screen name="Chats" component={Chats} /> 
+           <Stack.Screen name='DrawerScreens' component={UserProfile} options={{headerShown:false}}/> 
+           {/* <Stack.Screen name='Discussion' component={Discussion} options={{headerShown:false}}/>  */}
+          {/* <Stack.Screen name="Chats" component={Chats} />  */}
           <Stack.Screen name="UserChat" component={UserChat} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
-    </View>
+    {/* </View> */}
     </AppProvider>
   );
 };

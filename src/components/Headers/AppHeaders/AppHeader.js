@@ -18,6 +18,8 @@ import AppContext from '../../../context/AppContext';
 import Status_bar from '../Status_bar';
 import AppColors from '../../../assets/colors/Appcolors';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
+import { useNavigation } from '@react-navigation/native';
+
 
 // const NavScreens = ({navigation}) => {
 //   <Stack.Navigator>
@@ -25,8 +27,9 @@ import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
 //   </Stack.Navigator>;
 // };
 
-const AppHeader = ({ navigation}) => {
+const AppHeader = () => {
   const {appName} = useContext(AppContext);
+  const navigation=useNavigation()
   
   return (
     <View>
@@ -42,7 +45,7 @@ const AppHeader = ({ navigation}) => {
             />
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>{
-            navigation.navigate('Drawer')
+            navigation.navigate('DrawerScreens')
           }}>
             <Icon
               type={Icons.MaterialCommunityIcons}

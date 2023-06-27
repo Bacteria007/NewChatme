@@ -22,7 +22,7 @@ const UserChatInput = () => {
         <Icons.Entypo name="emoji-happy" size={wp('6.4%')} />
       </TouchableOpacity>
       <TextInput
-        placeholder="Write a message"
+        placeholder="Write a message" 
         multiline={true}
         editable={true}
         inlineImageLeft='search_icon'
