@@ -18,7 +18,7 @@ import AppContext from '../../../context/AppContext';
 import Status_bar from '../Status_bar';
 import AppColors from '../../../assets/colors/Appcolors';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
-
+import {s} from 'react-native-wind'
 // const NavScreens = ({navigation}) => {
 //   <Stack.Navigator>
 //     <Stack.Screen name="Bot" component={<ChatBot />} />
@@ -29,7 +29,7 @@ const AppHeader = ({ navigation}) => {
   const {appName} = useContext(AppContext);
   
   return (
-    <View>
+    <View style={[AppHeaderStyle.mainHeader]}>
       <Status_bar />
       <View style={[AppHeaderStyle.headerView]}>
         <Text style={[AppHeaderStyle.appNameStyle]}>{appName}</Text>

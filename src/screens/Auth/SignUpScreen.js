@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, Image, StatusBar} from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import SignUpStyleSheet from '../../assets/styles/AuthStyleSheet/SignUpStyleSheet/SignUpStyleSheet';
+import Status_bar from '../../components/Headers/Status_bar';
+import AppColors from '../../assets/colors/Appcolors';
 
-const SignUpScreen = () => {
+const SignUpScreen = (navigation) => {
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -13,10 +16,11 @@ const SignUpScreen = () => {
     setCountryCode(country.callingCode);
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = ({navigation}) => {
     // Handle sign up logic here
     console.log('Phone Number:', phoneNumber);
     console.log('Country Code:', countryCode);
+    navigation.navigate('TabScreen')
   };
   useEffect(() => {
     // Set default country as Pakistan
@@ -26,8 +30,10 @@ const SignUpScreen = () => {
 
   return (
     <View style={[SignUpStyleSheet.container]}>
+           <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white}/>
+
       <Image
-        source={require('../../assets/imges/AuthScreenPictures/SignUpPic/logo.png')}   
+        source={require('../../assets/imges/AuthScreenPictures/SignUpPic/SignUpPic.png')}   
         style={[SignUpStyleSheet.image]}
       />
       <Text style={[SignUpStyleSheet.title]}>Enter Your Phone Number</Text>
@@ -62,8 +68,7 @@ const SignUpScreen = () => {
       />
 
       <TouchableOpacity
-        title="Next"
-        onPress={handleSignUp}
+        onPress={()=>handleSignUp(navigation)}
         style={[SignUpStyleSheet.TouchableButtonStyle]}>
         <Text style={[SignUpStyleSheet.TouchableTextStyle]}>Next</Text>
       </TouchableOpacity>

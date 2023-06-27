@@ -5,6 +5,7 @@ import AppHeader from '../../components/Headers/AppHeaders/AppHeader'
 import FontStyle from '../../assets/styles/FontStyle'
 import AppColors from '../../assets/colors/Appcolors'
 import AppSubHeader from '../../components/Headers/AppHeaders/AppSubHeader'
+import Status_bar from '../../components/Headers/Status_bar'
 // import AppHeader from './AppHeader'
 
 
@@ -18,7 +19,19 @@ const Chats = ({navigation}) => {
     { dpImage: require('../../assets/imges/girlGuitar.jpg'), profileName: 'Afshan', lastMsg: 'Hello Afshan', },
     { dpImage: require('../../assets/imges/mic.jpg'), profileName: 'Hina', lastMsg: 'Hello Afshan', },
     { dpImage: require('../../assets/imges/mic.jpg'), profileName: 'Hina', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/mic.jpg'), profileName: 'Hina', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/mic.jpg'), profileName: 'Hina', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/mic.jpg'), profileName: 'Hina', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/mic.jpg'), profileName: 'Hina', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/mic.jpg'), profileName: 'Hina', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/mic.jpg'), profileName: 'Hina', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/mic.jpg'), profileName: 'Hina', lastMsg: 'Hello Afshan', },
 
+    { dpImage: require('../../assets/imges/bacteria.jpeg'), profileName: 'Rabia', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/bacteria.jpeg'), profileName: 'Rabia', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/bacteria.jpeg'), profileName: 'Rabia', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/bacteria.jpeg'), profileName: 'Rabia', lastMsg: 'Hello Afshan', },
+    { dpImage: require('../../assets/imges/bacteria.jpeg'), profileName: 'Rabia', lastMsg: 'Hello Afshan', },
     { dpImage: require('../../assets/imges/bacteria.jpeg'), profileName: 'Rabia', lastMsg: 'Hello Afshan', },
   ]
 
@@ -48,8 +61,10 @@ const Chats = ({navigation}) => {
 
 
     <View style={{ flex: 1, backgroundColor: "white" }}>
+     <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white}/>
       <AppHeader  />
       <AppSubHeader/>
+      {/* <View style={{borderBottomWidth:hp('0.2%'),marginTop:hp('2%'),borderBottomColor:AppColors.primary,}}></View> */}
       <FlatList
         data={allChats}
         renderItem={renderItem}
