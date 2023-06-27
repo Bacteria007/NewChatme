@@ -18,15 +18,22 @@ import AppContext from '../../../context/AppContext';
 import Status_bar from '../Status_bar';
 import AppColors from '../../../assets/colors/Appcolors';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
+<<<<<<< HEAD
+import { useNavigation } from '@react-navigation/native';
+
+
+=======
 import {s} from 'react-native-wind'
+>>>>>>> 684f34d871163ca04cd0b2dc0a56df899011c0cc
 // const NavScreens = ({navigation}) => {
 //   <Stack.Navigator>
 //     <Stack.Screen name="Bot" component={<ChatBot />} />
 //   </Stack.Navigator>;
 // };
 
-const AppHeader = ({ navigation}) => {
+const AppHeader = () => {
   const {appName} = useContext(AppContext);
+  const navigation=useNavigation()
   
   return (
     <View style={[AppHeaderStyle.mainHeader]}>
@@ -42,7 +49,7 @@ const AppHeader = ({ navigation}) => {
             />
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>{
-            navigation.navigate('Drawer')
+            navigation.navigate('DrawerScreens')
           }}>
             <Icon
               type={Icons.MaterialCommunityIcons}
