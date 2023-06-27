@@ -12,7 +12,7 @@ import {
 const AppSubHeader = () => {
   return (
     <View style={[AppSubHeaderStyle.searchViewStyle]}>
-        <Icons.Feather name="search" size={wp('6%')} />
+        <Icons.Feather name="search" size={wp('6%')}/>
         <TextInput placeholder="Search" style={[AppSubHeaderStyle.textInputPlaceholderStyle]} />
       </View>
   )

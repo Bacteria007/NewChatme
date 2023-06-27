@@ -9,10 +9,12 @@ import {
 import {Text} from 'react-native-paper';
 import WelcomeScreenStyles from '../../assets/styles/WelcomeScreenStyle/WelcomeScreenStyleSheet';
 import Appcolors from '../../assets/colors/Appcolors';
+import Status_bar from '../../components/Headers/Status_bar';
+
 const WelcomeScreen = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Appcolors.white}}>
-      <StatusBar backgroundColor={Appcolors.primary} />
+     <Status_bar darkModeBgColor={"black"} lightModeBgColor={Appcolors.white}/>
       <View style={[WelcomeScreenStyles.TopView]}>
         <Text style={[WelcomeScreenStyles.HeadingText1]}> ChatMe</Text>
       </View>

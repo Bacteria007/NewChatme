@@ -12,18 +12,14 @@ const AppSubHeaderStyle = StyleSheet.create({
     backgroundColor: AppColors.lightGrey,
     marginHorizontal: wp('4%'),
     paddingHorizontal: wp('4%'),
-    borderRadius: wp('12%'),
+    borderRadius: wp('7%'),
     height: hp('5.5%'),
     alignItems: 'center',
     borderColor: AppColors.primary,
-    borderWidth: wp('0.3%'),
-    // fontFamily: FontStyle.regularFont,
-    // paddingTop: hp('1%'),
+    // borderWidth: wp('0.1%'),
+    marginTop:hp('1%'),
   },
   textInputPlaceholderStyle: {fontSize: wp('4.6%')},
-  searchIconSize:{
-    
-  }
-});
+ });
 
 export default AppSubHeaderStyle;
