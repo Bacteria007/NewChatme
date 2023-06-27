@@ -8,6 +8,12 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const AppHeaderStyle = StyleSheet.create({
+
+  mainHeader:{
+    height:hp('6%'),
+    justifyContent:'center'
+
+  },
   headerView: {
     flexDirection: 'row',
     paddingHorizontal: wp('3.5%'),
@@ -16,10 +22,9 @@ const AppHeaderStyle = StyleSheet.create({
     //  borderBottomColor:AppColors.primary
   },
   appNameStyle: {
-    fontSize: wp('7.5%'),
+    fontSize: wp('6%'),
     color: AppColors.primary,
     fontFamily: FontStyle.regularFont,
-    paddingTop: hp('1%'),
   },
   iconContainerStyle: {
     flexDirection: 'row',

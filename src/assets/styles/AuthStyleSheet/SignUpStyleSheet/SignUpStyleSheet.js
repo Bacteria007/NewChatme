@@ -21,8 +21,8 @@ const SignUpStyleSheet = StyleSheet.create({
 
       },
       image: {
-        width: wp("75"),
-        height: hp('25'),
+        width: wp("75%"),
+        height: hp('35%'),
              },
       countryContainer: {
         alignItems: 'center',

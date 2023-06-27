@@ -31,7 +31,7 @@ export const Icons = {
 //   SimpleLineIcons,
 };
 
-const Icon = ({type, name, color, size = 37, style}) => {
+const Icon = ({type, name, color, size , style}) => {
   const fontSize = 24;
   const Tag = type;
   return (
