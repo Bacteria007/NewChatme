@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, ScrollView } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
