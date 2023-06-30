@@ -18,7 +18,9 @@ import AppContext from '../../../context/AppContext';
 import Status_bar from '../Status_bar';
 import AppColors from '../../../assets/colors/Appcolors';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
+
 import { DrawerActions } from '@react-navigation/native';
+
 
 // const NavScreens = ({navigation}) => {
 //   <Stack.Navigator>

@@ -25,6 +25,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import TermsAndConditions from './src/screens/TermsAndConditions';
 
+import SignUpScreen from './src/screens/Auth/SignUpScreen';
+import AppHeader from './src/components/Headers/AppHeaders/AppHeader';
+import UserProfile from './src/screens/profile/UserProfile';
+import AboutUs from './src/screens/About/AboutUs';
+
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -128,6 +134,7 @@ const App = () => {
 
     )
   }
+
   const DrawerScreens = () => {
     return (
       <Drawer.Navigator screenOptions={{ headerShown: false }} initialRouteName="Home">
@@ -198,11 +205,12 @@ const App = () => {
         />
       </Drawer.Navigator>
 
+
     );
   };
 
   return (
-    <AppProvider>
+
       <NavigationContainer >
         <Stack.Navigator options={{ headerShown: false }} initialRouteName='DrawerScreens'>
           <Stack.Screen name='TabScreen' component={TabScreens} options={{ headerShown: false }} />
@@ -212,6 +220,7 @@ const App = () => {
           <Stack.Screen name='DrawerScreens' component={DrawerScreens} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
+
     </AppProvider>
   );
 };
