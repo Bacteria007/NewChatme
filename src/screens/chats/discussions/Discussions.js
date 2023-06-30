@@ -6,6 +6,7 @@ import FontStyle from '../../../assets/styles/FontStyle'
 import AppColors from '../../../assets/colors/Appcolors'
 import AppSubHeader from '../../../components/Headers/AppHeaders/AppSubHeader'
 import Status_bar from '../../../components/Headers/Status_bar'
+import DrawerScreenswrapper from '../../drawer/DrawerScreenswrapper'
 // import AppHeader from './AppHeader'
 
 
@@ -54,8 +55,8 @@ const Discussions = ({navigation}) => {
   }
   return (
 
-
-    <View style={{ flex: 1, backgroundColor: "white" }}>
+<DrawerScreenswrapper>
+    <View style={{height:hp('100%'), backgroundColor: "white" }}>
      <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white}/>
       <AppHeader  navigation={navigation}/>
       <AppSubHeader/>
@@ -64,6 +65,7 @@ const Discussions = ({navigation}) => {
         renderItem={renderItem}
       />
     </View>
+    </DrawerScreenswrapper>
   )
 }
 
