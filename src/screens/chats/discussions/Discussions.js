@@ -10,7 +10,7 @@ import DrawerScreenswrapper from '../../drawer/DrawerScreenswrapper'
 // import AppHeader from './AppHeader'
 
 
-const Discussions = ({navigation}) => {
+const Discussions = ({ navigation }) => {
 
 
   const allChats = [
@@ -38,10 +38,10 @@ const Discussions = ({navigation}) => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={()=>{
-       navigation.navigate('UserChat',{item:item})
+      <TouchableOpacity onPress={() => {
+        navigation.navigate('UserChat', { item: item })
       }}>
-        <View style={{  height: hp('11%'), width: wp('100%'), }} >
+        <View style={{ height: hp('11%'), width: wp('100%'), }} >
           <View style={{ height: hp('11%'), width: wp('100%'), flexDirection: "row", alignItems: 'center' }}>
             <View style={{ marginLeft: 10 }}><TouchableOpacity><Image source={item.dpImage} style={{ height: hp('6%'), width: wp('12%'), borderRadius: 25 }} /></TouchableOpacity></View>
             <View style={{ flexDirection: 'column', marginLeft: 10 }}>
@@ -55,17 +55,15 @@ const Discussions = ({navigation}) => {
   }
   return (
 
-<DrawerScreenswrapper>
-    <View style={{height:hp('100%'), backgroundColor: "white" }}>
-     <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white}/>
-      <AppHeader  navigation={navigation}/>
-      <AppSubHeader/>
-      <FlatList
-        data={allChats}
-        renderItem={renderItem}
-      />
-    </View>
-    </DrawerScreenswrapper>
+      <View style={{ height: hp('100%'), backgroundColor: "white" }}>
+        <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white} />
+        <AppHeader navigation={navigation} />
+        <AppSubHeader />
+        <FlatList
+          data={allChats}
+          renderItem={renderItem}
+        />
+      </View>
   )
 }
 

@@ -5,7 +5,7 @@ const AppColors = {
     white: 'white',
     black: 'black',
     lightGrey: "rgb(239, 239, 239)",
-    inActiveIconsColor: "rgba(0,0,0,0.4)",
+    inActiveIconsColor: "rgba(0,0,0,0.5)",
     gray: 'gray',
     coolgray: '#383949',
     // purple shades
