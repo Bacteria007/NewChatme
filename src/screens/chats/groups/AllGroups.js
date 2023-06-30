@@ -1,10 +1,13 @@
 import React from 'react'
 import { View ,Text} from 'react-native'
-const AllGroups = () => {
+import DrawerScreenswrapper from '../../drawer/DrawerScreenswrapper'
+import AppHeader from '../../../components/Headers/AppHeaders/AppHeader'
+const AllGroups = ({navigation}) => {
   return (
-    <View>
+ <DrawerScreenswrapper>
+  <AppHeader navigation={navigation}/>
         <Text>Groups</Text>
-    </View>
+        </DrawerScreenswrapper>
   )
 }
 
