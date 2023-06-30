@@ -5,10 +5,10 @@ import AppHeader from '../../components/Headers/AppHeaders/AppHeader'
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper'
 const Calls = ({navigation}) => {
   return (
-    <DrawerScreenswrapper>
+    <View>
       <AppHeader navigation={navigation}/>
         <Text>Calls</Text>
-        </DrawerScreenswrapper>
+        </View>
   )
 }
 

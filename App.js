@@ -28,11 +28,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   DrawerContentScrollView,
   DrawerItemList,
-  createDrawerNavigator,
+  createDrawerNavigator, useDrawerProgress
 } from '@react-navigation/drawer';
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
-import Animated, { color } from 'react-native-reanimated';
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
+import DrawerScreenswrapper from './src/screens/drawer/DrawerScreenswrapper';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -65,107 +66,121 @@ const App = () => {
 
   let iconSize = 22;
   const TabScreens = () => {
+    const progress = useDrawerProgress()
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [
+        { perspective: 1000 },
+        { scale: interpolate(progress.value, [0, 1], [1, 0.8], 'clamp') },
+        // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
+        { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') }
+      ],
+      // borderRadius:10,
+      overflow:'hidden',
+
+    }));
     return (
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          headerShown: false,
-          tabBarIndicatorStyle: {  backgroundColor: 'transparent' },
-          tabBarStyle: {
-            backgroundColor: AppColors.white,
-            height: hp('11%'),
-            borderTopColor: 'transparent',
-          },
-        tabBarItemStyle:{backgroundColor:AppColors.Lavender},
-          tabBarLabelStyle: { fontWeight: 'bold', fontSize: 12,marginBottom:hp('2%'),marginTop:hp('0%')},
-          tabBarActiveTintColor: AppColors.primary,
-          tabBarInactiveTintColor: AppColors.inActiveIconsColor,
-          tabBarHideOnKeyboard: 'true',
-          tabBarPressColor: 'rgba(255,255,255,0.6)',
-          tabBarIcon: ({ focused }) => {
-            if (route.name === 'Chats') {
-              return (
-                <Icons.Ionicons
-                  name={
-                    focused
-                      ? 'ios-chatbubbles-sharp'
-                      : 'ios-chatbubbles-outline'
-                  }
-                  size={iconSize}
-                  color={
-                    focused ? AppColors.primary : AppColors.inActiveIconsColor
-                  }
-                />
-              );
-            } else if (route.name === 'Calls') {
-              return (
-                <Icons.Ionicons
-                  name={focused ? 'call-sharp' : 'call-outline'}
-                  // ios-call ios-call-sharp
-                  size={iconSize}
-                  color={
-                    focused ? AppColors.primary : AppColors.inActiveIconsColor
-                  }
-                />
-              );
-            } else if (route.name === 'Contacts') {
-              return (
-                <Icons.MaterialCommunityIcons
-                  name={focused ? 'contacts' : 'contacts-outline'}
-                  size={iconSize}
-                  color={
-                    focused ? AppColors.primary : AppColors.inActiveIconsColor
-                  }
-                />
-              );
-            } else if (route.name === 'Reels') {
-              return (
-                <Icons.MaterialCommunityIcons
-                  name={focused ? 'video-wireless' : 'video-wireless-outline'}
-                  size={iconSize}
-                  color={
-                    focused ? AppColors.primary : AppColors.inActiveIconsColor
-                  }
-                />
-              );
-            } else if (route.name === 'Groups') {
-              return (
-                <Icons.Ionicons
-                  name={focused ? 'people-sharp' : 'people-outline'}
-                  size={iconSize}
-                  color={
-                    focused ? AppColors.primary : AppColors.inActiveIconsColor
-                  }
-                />
-              );
-            }
-          },
-        })}>
-        <Tab.Screen name="Chats" component={Discussions} />
-        <Tab.Screen name="Groups" component={Groups} />
-        <Tab.Screen name="Calls" component={Calls} />
-        <Tab.Screen name="Reels" component={Reels} />
-        <Tab.Screen name="Contacts" component={Contacts} />
-      </Tab.Navigator>
+      <Animated.View style={[animatedStyle, { flex: 1}]}>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            headerShown: false,
+            tabBarIndicatorStyle: { backgroundColor: 'transparent' },
+            tabBarStyle: {
+              backgroundColor: AppColors.white,
+              height: hp('11%'),
+              borderTopColor: 'transparent',
+            },
+            tabBarItemStyle: { backgroundColor: AppColors.white },
+            tabBarLabelStyle: { fontWeight: 'bold', fontSize: 12, marginBottom: hp('2%'), marginTop: hp('0%') },
+            tabBarActiveTintColor: AppColors.primary,
+            tabBarInactiveTintColor: AppColors.inActiveIconsColor,
+            tabBarHideOnKeyboard: 'true',
+            tabBarPressColor: 'rgba(255,255,255,0.6)',
+            tabBarIcon: ({ focused }) => {
+              if (route.name === 'Chats') {
+                return (
+                  <Icons.Ionicons
+                    name={
+                      focused
+                        ? 'ios-chatbubbles-sharp'
+                        : 'ios-chatbubbles-outline'
+                    }
+                    size={iconSize}
+                    color={
+                      focused ? AppColors.primary : AppColors.inActiveIconsColor
+                    }
+                  />
+                );
+              } else if (route.name === 'Calls') {
+                return (
+                  <Icons.Ionicons
+                    name={focused ? 'call-sharp' : 'call-outline'}
+                    // ios-call ios-call-sharp
+                    size={iconSize}
+                    color={
+                      focused ? AppColors.primary : AppColors.inActiveIconsColor
+                    }
+                  />
+                );
+              } else if (route.name === 'Contacts') {
+                return (
+                  <Icons.MaterialCommunityIcons
+                    name={focused ? 'contacts' : 'contacts-outline'}
+                    size={iconSize}
+                    color={
+                      focused ? AppColors.primary : AppColors.inActiveIconsColor
+                    }
+                  />
+                );
+              } else if (route.name === 'Reels') {
+                return (
+                  <Icons.MaterialCommunityIcons
+                    name={focused ? 'video-wireless' : 'video-wireless-outline'}
+                    size={iconSize}
+                    color={
+                      focused ? AppColors.primary : AppColors.inActiveIconsColor
+                    }
+                  />
+                );
+              } else if (route.name === 'Groups') {
+                return (
+                  <Icons.Ionicons
+                    name={focused ? 'people-sharp' : 'people-outline'}
+                    size={iconSize}
+                    color={
+                      focused ? AppColors.primary : AppColors.inActiveIconsColor
+                    }
+                  />
+                );
+              }
+            },
+          })}>
+          <Tab.Screen name="Chats" component={Discussions} />
+          <Tab.Screen name="Groups" component={Groups} />
+          <Tab.Screen name="Calls" component={Calls} />
+          <Tab.Screen name="Reels" component={Reels} />
+          <Tab.Screen name="Contacts" component={Contacts} />
+        </Tab.Navigator>
+      </Animated.View>
     );
   };
   const DrawerScreens = () => {
     return (
       <Drawer.Navigator
-      
+
         screenOptions={{
           headerShown: false,
           overlayColor: 'transparent',
           drawerType: 'slide',
-          drawerActiveTintColor:AppColors.black,
-          drawerInactiveTintColor:AppColors.black,
-          drawerStyle: { backgroundColor:AppColors.Mauve, width: wp('60%') },
+          drawerActiveTintColor: AppColors.black,
+          drawerInactiveTintColor: AppColors.black,
+          drawerStyle: { backgroundColor: AppColors.primary, width: wp('60%') },
           drawerLabelStyle: { marginLeft: wp('-6%') },
-          sceneContainerStyle: { backgroundColor: AppColors.Mauve },
-          
+          sceneContainerStyle: { backgroundColor: AppColors.primary },
+
         }}
         backBehavior="initialRoute"
         initialRouteName="Home"
-        
+
         drawerContent={props => {
           return (
             <View style={{ flex: 1 }}>
@@ -175,9 +190,9 @@ const App = () => {
                   <Image
                     source={require('./src/assets/imges/w11.jpg')}
                     style={{
-                      height: wp('30%'),
-                      width: wp('30%'),
-                      borderRadius: wp('30%'),
+                      height: wp('25%'),
+                      width: wp('25%'),
+                      borderRadius: wp('100%'),
                     }}
                   />
                   <Text style={{ fontSize: hp('3%'), color: AppColors.white }}>
@@ -189,20 +204,22 @@ const App = () => {
             </View>
           );
         }}
-        
-        >
+
+      >
         <Drawer.Screen
           name="Home"
           component={TabScreens}
           options={{
             drawerIcon: ({ focused }) => (
               <Icons.Ionicons
-                name={focused ? 'ios-home' : 'ios-home-outline'}
-                color={focused ? AppColors.white : AppColors.black}
+                name={'ios-home' }
+                color={AppColors.black}
+                // name={focused ? 'ios-home' : 'ios-home-outline'}
+                // color={focused ? AppColors.white : AppColors.black}
                 size={iconSize}
               />
             ),
-            
+
           }}
         />
         <Drawer.Screen
@@ -211,8 +228,10 @@ const App = () => {
           options={{
             drawerIcon: ({ focused }) => (
               <Icons.MaterialIcons
-                name={focused ? 'person' : 'person-outline'}
-                color={focused ? AppColors.white : AppColors.black}
+                name={ 'person'}
+                color={ AppColors.black}
+                // name={focused ? 'person' : 'person-outline'}
+                // color={focused ? AppColors.white : AppColors.black}
                 size={iconSize}
               />
             ),
@@ -225,11 +244,17 @@ const App = () => {
             drawerIcon: ({ focused }) => (
               <Icons.Ionicons
                 name={
-                  focused
-                    ? 'ios-information-circle-sharp'
-                    : 'ios-information-circle-outline'
+                  
+                     'ios-information-circle-sharp'
+                    
                 }
-                color={focused ? AppColors.white : AppColors.black}
+                color={ AppColors.black}
+                // name={
+                //   focused
+                //     ? 'ios-information-circle-sharp'
+                //     : 'ios-information-circle-outline'
+                // }
+                // color={focused ? AppColors.white : AppColors.black}
                 size={iconSize}
               />
             ),
@@ -241,8 +266,10 @@ const App = () => {
           options={{
             drawerIcon: ({ focused }) => (
               <Icons.Ionicons
-                name={focused ? 'ios-settings-sharp' : 'ios-settings-outline'}
-                color={focused ? AppColors.white : AppColors.black}
+                name={'ios-settings-sharp'}
+                color={ AppColors.black}
+                // name={focused ? 'ios-settings-sharp' : 'ios-settings-outline'}
+                // color={focused ? AppColors.white : AppColors.black}
                 size={iconSize}
               />
             ),
@@ -254,19 +281,19 @@ const App = () => {
           component={TermsAndConditions}
           options={{
             drawerIcon: ({ focused }) =>
-              focused ? (
+              // focused ? (
                 <Icons.FontAwesome5
                   name="file-signature"
-                  color={focused ? AppColors.white : AppColors.black}
+                  color={ AppColors.black}               
                   size={iconSize}
                 />
-              ) : (
-                <Icons.MaterialCommunityIcons
-                  name="file-sign"
-                  color={focused ? AppColors.white : AppColors.black}
-                  size={iconSize}
-                />
-              ),
+              // ) : (
+              //   <Icons.MaterialCommunityIcons
+              //     name="file-sign"
+              //     color={focused ? AppColors.white : AppColors.black}
+              //     size={iconSize}
+              //   />
+              // ),
 
           }}
         />

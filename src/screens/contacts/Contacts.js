@@ -1,8 +1,10 @@
 import React from 'react'
 import { View ,Text} from 'react-native'
-const Contacts = () => {
+import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
+const Contacts = ({navigation}) => {
   return (
     <View>
+      <AppHeader navigation={navigation}/>
         <Text>Contacts  </Text>
     </View>
   )
