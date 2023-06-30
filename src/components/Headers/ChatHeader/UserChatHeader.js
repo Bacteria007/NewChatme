@@ -6,11 +6,9 @@ import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
   } from 'react-native-responsive-screen';
-import { useNavigation } from '@react-navigation/native';
   
 
-const UserChatHeader = ({item}) => {
-  const navigation=useNavigation()
+const UserChatHeader = ({item,navigation}) => {
     // const {item}=props.route.params;
   return (
     <View style={[UserChatHeaderStyle.containerView]}>
@@ -18,8 +16,7 @@ const UserChatHeader = ({item}) => {
       <View style={[UserChatHeaderStyle.leftview]}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Chats')
-            // props.navigation.navigate('Home');
+            navigation.goBack()
           }}>
           <Icons.FontAwesome5
             name="arrow-left"

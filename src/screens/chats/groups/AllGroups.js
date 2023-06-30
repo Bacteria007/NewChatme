@@ -1,6 +1,6 @@
 import React from 'react'
 import { View ,Text} from 'react-native'
-const Groups = () => {
+const AllGroups = () => {
   return (
     <View>
         <Text>Groups</Text>
@@ -8,7 +8,7 @@ const Groups = () => {
   )
 }
 
-export default Groups
+export default AllGroups
 
 
 

@@ -1,28 +1,29 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { View, Text, TouchableOpacity, StyleSheet, Animated, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 // SCREENS
-import Reels from './src/screens/Reels/Reels';
-import Contacts from './src/screens/Contact/Contacts';
-import Calls from './src/screens/Calls/Calls';
+import Reels from './src/screens/reels/Reels';
+import Contacts from './src/screens/contacts/Contacts';
+import Calls from './src/screens/calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
+import SignUpScreen from './src/screens/auth/SignUpScreen';
+import UserProfile from './src/screens/profile/UserProfile';
+import AboutUs from './src/screens/about/AboutUs';
+import Groups from './src/screens/chats/groups/AllGroups';
+import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
+import Discussions from './src/screens/chats/discussions/Discussions';
+import UserChat from './src/screens/chats/singlePersonChat/UserChat';
+import Settings from './src/screens/settings/Settings';
+
+import { AppProvider } from './src/context/AppContext';
 // ICONS
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; // add call SimpleLineIcons call-in out
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; //more
-import Ionicons from 'react-native-vector-icons/Ionicons'; //more
-// Navigation
+import Icon, { Icons } from './src/assets/Icons';// Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import WelcomeScreen from './src/screens/Welcome/WelcomeScreen';
-// import Drawer from './src/components/Drawer/Drawer';
-import UserChat from './src/screens/chats/UserChat';
-import Chats from './src/screens/Home/Chats';
-import { AppProvider } from './src/context/AppContext';
-import Icon, { Icons } from './src/assets/Icons';
+import TermsAndConditions from './src/screens/TermsAndConditions';
 
 import SignUpScreen from './src/screens/Auth/SignUpScreen';
 import AppHeader from './src/components/Headers/AppHeaders/AppHeader';
@@ -30,96 +31,102 @@ import UserProfile from './src/screens/profile/UserProfile';
 import AboutUs from './src/screens/About/AboutUs';
 
 
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 
-const App = ({ navigation }) => {
+const App = () => {
 
-  const [scrollY, setScrollY] = useState(new Animated.Value(0));
-  const [visible, setVisible] = useState(true)
-  const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-    { useNativeDriver: true }
-  )
-  const togleTabVisibility = (value) => {
-    setVisible(value)
-  }
-  useEffect(() => {
-    scrollY.addListener(({ value }) => {
-      if (value > 0) {
-        togleTabVisibility(false)
-      } else {
-        togleTabVisibility(true)
-      }
-    });
-    return () => {
-      scrollY.removeAllListeners();
-    }
-  }, [])
+  // const [scrollY, setScrollY] = useState(new Animated.Value(0));
+  // const [visible, setVisible] = useState(true)
+  // const handleScroll = Animated.event(
+  //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+  //   { useNativeDriver: true }
+  // )
+  // const togleTabVisibility = (value) => {
+  //   setVisible(value)
+  // }
+  // useEffect(() => {
+  //   scrollY.addListener(({ value }) => {
+  //     if (value > 0) {
+  //       togleTabVisibility(false)
+  //     } else {
+  //       togleTabVisibility(true)
+  //     }
+  //   });
+  //   return () => {
+  //     scrollY.removeAllListeners();
+  //   }
+  // }, [])
 
 
-  let focusedIconColor = AppColors.primary;
-  let inActiveIconKAColor = 'rgba(0,0,0,0.4)';
-  let activeTextColor = AppColors.primary;
-  let inActiveTextColor = inActiveIconKAColor;
+
   let iconSize = 22;
-  const tabkacolor = "white"
 
-  const TabScreens = ({ navigation }) => {
+  const TabScreens = () => {
     return (
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarIndicatorStyle: { height: hp('1%'), backgroundColor: 'white' },
-          tabBarStyle: { backgroundColor: AppColors.white, height: hp('7%') },
+          tabBarStyle: { backgroundColor: AppColors.white, height: hp('7%'), borderTopColor: "transparent" },
           tabBarLabelStyle: { fontWeight: 'bold', fontSize: 12 },
-          tabBarItemStyle: { fontWeight: 'bold', fontSize: 12, color: activeTextColor },
-          tabBarActiveTintColor: activeTextColor,
-          tabBarInactiveTintColor: inActiveTextColor,
+          tabBarItemStyle: { fontWeight: 'bold', fontSize: 12, color: AppColors.primary },
+          tabBarActiveTintColor: AppColors.primary,
+          tabBarInactiveTintColor: AppColors.inActiveIconsColor,
           tabBarHideOnKeyboard: 'true',
           tabBarPressColor: 'rgba(255,255,255,0.7)',
           tabBarIcon: ({ focused }) => {
+
             if (route.name === 'Chats') {
               return (
-                <FontAwesome
-                  name={'home'}
+                <Icons.Ionicons
+                  name={focused ? "ios-chatbubbles-sharp" : "ios-chatbubbles-outline"}
                   size={iconSize}
-                  color={focused ? focusedIconColor : inActiveIconKAColor}
+                  color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
                 />
               );
             } else if (route.name === 'Calls') {
               return (
-                <Ionicons
-                  name={'call'}
+                <Icons.Ionicons
+                  name={focused ? "call-sharp" : "call-outline"}
+                  // ios-call ios-call-sharp
                   size={iconSize}
-                  color={focused ? focusedIconColor : inActiveIconKAColor}
+                  color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
                 />
               );
             } else if (route.name === 'Contacts') {
               return (
-                // materialicon antdesign contacts
-                <MaterialIcons
-                  // sound antdesign
-                  // notifi
-                  name={'contacts'}
+                <Icons.MaterialCommunityIcons
+                  name={focused ? "contacts" : "contacts-outline"}
                   size={iconSize}
-                  color={focused ? focusedIconColor : inActiveIconKAColor}
+                  color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
                 />
               );
             } else if (route.name === 'Reels') {
               return (
-                <FontAwesome5
-                  name={'stream'}
+                <Icons.MaterialCommunityIcons
+                  name={focused ? "video-wireless" : "video-wireless-outline"}
                   size={iconSize}
-                  color={focused ? focusedIconColor : inActiveIconKAColor}
+                  color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
+                />
+              );
+            }
+            else if (route.name === 'Groups') {
+              return (
+                <Icons.Ionicons
+                  name={focused ? "people-sharp" : "people-outline"}
+                  size={iconSize}
+                  color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
                 />
               );
             }
           },
         })}>
-        <Tab.Screen name="Chats" component={Chats} />
+        <Tab.Screen name="Chats" component={Discussions} />
+        <Tab.Screen name="Groups" component={Groups} />
         <Tab.Screen name="Calls" component={Calls} />
         <Tab.Screen name="Reels" component={Reels} />
         <Tab.Screen name="Contacts" component={Contacts} />
@@ -127,38 +134,93 @@ const App = ({ navigation }) => {
 
     )
   }
-  const DrawerScreens=()=>{
+
+  const DrawerScreens = () => {
     return (
-      <Drawer.Navigator 
-      screenOptions={{
-        headerShown:false
-      }} initialRouteName="UserProfile">
-        <Drawer.Screen name="Chats" component={Chats} />
-          <Drawer.Screen name="UserProfile" component={UserProfile} />
-          <Drawer.Screen name="AboutUs" component={AboutUs} />
+      <Drawer.Navigator screenOptions={{ headerShown: false }} initialRouteName="Home">
+        <Drawer.Screen name="Home" component={TabScreens}
+          options={{
+            drawerType: 'slide',
+            drawerIcon: ({ focused }) => (
+              <Icons.Ionicons
+                name={focused ? 'ios-home' : 'ios-home-outline'}
+                color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
+                size={iconSize}
+              />
+            )
+          }}
+        />
+        <Drawer.Screen name="UserProfile" component={UserProfile}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.MaterialIcons
+                name={focused ? 'person' : 'person-outline'}
+                color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
+                size={iconSize}
+              />
+            )
+          }}
+        />
+        <Drawer.Screen name="AboutUs" component={AboutUs}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.Ionicons
+                name={focused ? 'ios-information-circle-sahrp' : 'ios-information-circle-outline'}
+                color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
+                size={iconSize}
+              />
+            )
+          }}
+        />
+        <Drawer.Screen name="Settings" component={Settings}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.Ionicons
+                name={focused ? 'ios-settings-sharp' : 'ios-settings-outline'}
+                color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
+                size={iconSize}
+              />
+            )
+          }}
+        />
+        <Drawer.Screen name="Terms And Conditions" component={TermsAndConditions}
+          options={{
+            drawerIcon: ({ focused }) => (
+              focused ?
+                <Icons.FontAwesome5
+                  name='file-signature'
+                  color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
+                  size={iconSize}
+                />
+                :
+                <Icons.MaterialCommunityIcons
+                  name='file-sign'
+                  color={focused ? AppColors.primary : AppColors.inActiveIconsColor}
+                  size={iconSize}
+                />
+
+
+            )
+          }}
+        />
       </Drawer.Navigator>
-      
+
+
     );
   };
 
   return (
-  <AppProvider>
-    {/* <View style={{ flex: 1, backgroundColor: 'white' }}> */}
-
-       {/* <AppHeader title={'ChatMe'} navigation={navigation} />  */}
 
       <NavigationContainer >
-        <Stack.Navigator options={{headerShown:false}}> 
-           {/* <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{headerShown:false}}/>
-           <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={{headerShown:false}}/> */}
-          <Stack.Screen name='TabScreen' component={TabScreens} options={{headerShown:false}}/>
-           <Stack.Screen name='DrawerScreens' component={UserProfile} options={{headerShown:false}}/> 
-           {/* <Stack.Screen name='Discussion' component={Discussion} options={{headerShown:false}}/>  */}
-          {/* <Stack.Screen name="Chats" component={Chats} />  */}
-          <Stack.Screen name="UserChat" component={UserChat} options={{headerShown:false}}/>
+        <Stack.Navigator options={{ headerShown: false }} initialRouteName='DrawerScreens'>
+          <Stack.Screen name='TabScreen' component={TabScreens} options={{ headerShown: false }} />
+          <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{ headerShown: false }} />
+          <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="UserChat" component={UserChat} options={{ headerShown: false }} />
+          <Stack.Screen name='DrawerScreens' component={DrawerScreens} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
-    {/* </View> */}
+
     </AppProvider>
   );
 };

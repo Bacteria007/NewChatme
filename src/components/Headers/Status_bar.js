@@ -4,6 +4,7 @@ import AppColors from '../../assets/colors/Appcolors';
 
 const Status_bar = ({darkModeBgColor,lightModeBgColor}) => {
   const isDarkMode = useColorScheme() === 'dark';
+
   return (
     <View style={{backgroundColor: 'white'}}>
       <StatusBar

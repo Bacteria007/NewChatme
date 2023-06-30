@@ -1,10 +1,13 @@
 const AppColors={
 
+    // primary:"dodgerblue",
     primary:"#BA68C8",
     white:'white',
     black:'black',
     lightGrey:"rgb(239, 239, 239)",
-    gray:'gray'
+    inActiveIconsColor:"rgba(0,0,0,0.4)",
+    gray:'gray',
+    coolgray:'#383949'
 
 //'''''''''''''''''''''''ChatmeColors''''''''''''''''''''''''''''
 // rgb(0, 1, 47) // dark blue

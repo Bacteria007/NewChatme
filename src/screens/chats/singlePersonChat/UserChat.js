@@ -1,19 +1,8 @@
 import React, {useState} from 'react';
 import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  FlatList,
-} from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import FontStyle from '../../assets/styles/FontStyle';
+  SafeAreaView,StyleSheet,TouchableOpacity,Image,TextInput,FlatList,} from 'react-native';
+import { heightPercentageToDP as hp,widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import FontStyle from '../../../assets/styles/FontStyle';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -21,12 +10,12 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {Item} from 'react-native-paper/lib/typescript/src/components/Drawer/Drawer';
 // import AppColors from '../../asset/colors/AppColors';
 // import Modal from 'react-native-modal';
-import Colors from '../../assets/colors/Appcolors';
-import Status_bar from '../../components/Headers/Status_bar';
-import UserChatStyle from '../../assets/styles/UserChatStyle';
-import AppColors from '../../assets/colors/Appcolors';
-import UserChatHeader from '../../components/Headers/ChatHeader/UserChatHeader';
-import UserChatInput from '../../components/ChatInput/UserChatInput';
+import Colors from '../../../assets/colors/Appcolors';
+import Status_bar from '../../../components/Headers/Status_bar';
+import UserChatStyle from '../../../assets/styles/UserChatStyle';
+import AppColors from '../../../assets/colors/Appcolors';
+import UserChatHeader from '../../../components/Headers/ChatHeader/UserChatHeader';
+import UserChatInput from '../../../components/ChatInput/UserChatInput';
 
 const UserChat = props => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -82,8 +71,8 @@ const UserChat = props => {
   const {item} = props.route.params;
   return (
     <SafeAreaView>
-      <Status_bar />
-      <UserChatHeader item={item}/>
+      <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white}/>
+      <UserChatHeader item={item} navigation={props.navigation}/>
       <UserChatInput/>
       {/* <View style={[UserChatStyle.containerView]}>
         <View style={[UserChatStyle.headerView]}>
@@ -237,6 +226,9 @@ const UserChat = props => {
     </SafeAreaView>
   );
 };
+
+export default UserChat;
+
 const styles = StyleSheet.create({
   header: {
     backgroundColor: Colors.primary,
@@ -252,5 +244,3 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
-
-export default UserChat;
