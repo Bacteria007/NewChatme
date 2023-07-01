@@ -18,17 +18,19 @@ const DrawerHeaderStyle = StyleSheet.create({
 
   },
   headerView: {
-    flexDirection: 'row',   
-    width:wp('44%'),
     flex:1,
-    paddingHorizontal: wp('3.8%'),
-    justifyContent: 'space-between',
-    alignItems:'center',
+    flexDirection: 'row',   
+    alignItems: 'center',
+    justifyContent:'flex-start',
+    // backgroundColor:'red',
+    paddingHorizontal:wp('1%')
+    
   },
   screenNameStyle: {
     fontSize: wp('6.5%'),
-    color: AppColors.black,
-    fontFamily: FontStyle.mediumFont,
+    color: AppColors.white,
+    fontFamily: FontStyle.regularFont,
+    marginLeft:wp('0.5%')
   },
 
 });
