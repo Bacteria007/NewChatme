@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Image, View, Text} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Image, View, Text } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -19,21 +19,21 @@ import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import Settings from './src/screens/settings/Settings';
 
-import {AppProvider} from './src/context/AppContext';
+import { AppProvider } from './src/context/AppContext';
 // ICONS
-import Icon, {Icons} from './src/assets/Icons'; // Navigation
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Icon, { Icons } from './src/assets/Icons'; // Navigation
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   DrawerContentScrollView,
   DrawerItemList,
-  createDrawerNavigator,
-  useDrawerProgress,
+  createDrawerNavigator, useDrawerProgress
 } from '@react-navigation/drawer';
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
-import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
+import DrawerScreenswrapper from './src/screens/drawer/DrawerScreenswrapper';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -64,46 +64,38 @@ const App = () => {
   //     }
   //   }, [])
 
-  let iconSize = 20;
+  let iconSize = 22;
   const TabScreens = () => {
-    let progress = useDrawerProgress();
-    console.log('progress', progress);
+    const progress = useDrawerProgress()
     const animatedStyle = useAnimatedStyle(() => ({
       transform: [
-        {perspective: 1000},
-        {scale: interpolate(progress.value, [0, 1], [1, 0.8], 'clamp')},
+        { perspective: 1000 },
+        { scale: interpolate(progress.value, [0, 1], [1, 0.8], 'clamp') },
         // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
-        {translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp')},
+        { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') }
       ],
-      overflow: 'hidden',
-      // borderRadius:progress.value===1?12:0
-    }));
+      // borderRadius:10,
+      overflow:'hidden',
 
+    }));
     return (
-      <Animated.View style={[animatedStyle, {flex: 1}]}>
+      <Animated.View style={[animatedStyle, { flex: 1}]}>
         <Tab.Navigator
-          screenOptions={({route}) => ({
+          screenOptions={({ route }) => ({
             headerShown: false,
-            tabBarIndicatorStyle: {backgroundColor: 'transparent'},
+            tabBarIndicatorStyle: { backgroundColor: 'transparent' },
             tabBarStyle: {
-              height: hp('12%'),
+              backgroundColor: AppColors.white,
+              height: hp('11%'),
               borderTopColor: 'transparent',
-              flex:0.12,
-              justifyContent: 'flex-end',
-              alignItems: 'center',
             },
-            tabBarItemStyle: {backgroundColor: AppColors.tab},
-            tabBarLabelStyle: {
-              fontWeight: 'bold',
-              fontSize: wp('3.5%'),
-              marginBottom: hp('2.2%'),
-              marginTop: hp('0%'),
-            },
+            tabBarItemStyle: { backgroundColor: AppColors.white },
+            tabBarLabelStyle: { fontWeight: 'bold', fontSize: 12, marginBottom: hp('2%'), marginTop: hp('0%') },
             tabBarActiveTintColor: AppColors.primary,
             tabBarInactiveTintColor: AppColors.inActiveIconsColor,
             tabBarHideOnKeyboard: 'true',
             tabBarPressColor: 'rgba(255,255,255,0.6)',
-            tabBarIcon: ({focused}) => {
+            tabBarIcon: ({ focused }) => {
               if (route.name === 'Chats') {
                 return (
                   <Icons.Ionicons
@@ -112,7 +104,7 @@ const App = () => {
                         ? 'ios-chatbubbles-sharp'
                         : 'ios-chatbubbles-outline'
                     }
-                    size={22}
+                    size={iconSize}
                     color={
                       focused ? AppColors.primary : AppColors.inActiveIconsColor
                     }
@@ -123,7 +115,7 @@ const App = () => {
                   <Icons.Ionicons
                     name={focused ? 'call-sharp' : 'call-outline'}
                     // ios-call ios-call-sharp
-                    size={21}
+                    size={iconSize}
                     color={
                       focused ? AppColors.primary : AppColors.inActiveIconsColor
                     }
@@ -133,7 +125,7 @@ const App = () => {
                 return (
                   <Icons.MaterialCommunityIcons
                     name={focused ? 'contacts' : 'contacts-outline'}
-                    size={21}
+                    size={iconSize}
                     color={
                       focused ? AppColors.primary : AppColors.inActiveIconsColor
                     }
@@ -143,7 +135,7 @@ const App = () => {
                 return (
                   <Icons.MaterialCommunityIcons
                     name={focused ? 'video-wireless' : 'video-wireless-outline'}
-                    size={21}
+                    size={iconSize}
                     color={
                       focused ? AppColors.primary : AppColors.inActiveIconsColor
                     }
@@ -153,7 +145,7 @@ const App = () => {
                 return (
                   <Icons.Ionicons
                     name={focused ? 'people-sharp' : 'people-outline'}
-                    size={22}
+                    size={iconSize}
                     color={
                       focused ? AppColors.primary : AppColors.inActiveIconsColor
                     }
@@ -174,24 +166,27 @@ const App = () => {
   const DrawerScreens = () => {
     return (
       <Drawer.Navigator
+
         screenOptions={{
           headerShown: false,
           overlayColor: 'transparent',
           drawerType: 'slide',
           drawerActiveTintColor: AppColors.black,
           drawerInactiveTintColor: AppColors.black,
-          drawerStyle: {backgroundColor: AppColors.primary, width: wp('60%')},
-          drawerLabelStyle: {marginLeft: wp('-6%')},
-          sceneContainerStyle: {backgroundColor: AppColors.primary},
+          drawerStyle: { backgroundColor: AppColors.primary, width: wp('60%') },
+          drawerLabelStyle: { marginLeft: wp('-6%') },
+          sceneContainerStyle: { backgroundColor: AppColors.primary },
+
         }}
         backBehavior="initialRoute"
         initialRouteName="Home"
+
         drawerContent={props => {
           return (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <DrawerContentScrollView {...props}>
                 <Animated.View
-                  style={[Containers.centerContainer, {height: hp('25%')}]}>
+                  style={[Containers.centerContainer, { height: hp('25%') }]}>
                   <Image
                     source={require('./src/assets/imges/w11.jpg')}
                     style={{
@@ -200,7 +195,7 @@ const App = () => {
                       borderRadius: wp('100%'),
                     }}
                   />
-                  <Text style={{fontSize: hp('3%'), color: AppColors.white}}>
+                  <Text style={{ fontSize: hp('3%'), color: AppColors.white }}>
                     User Name
                   </Text>
                 </Animated.View>
@@ -208,37 +203,33 @@ const App = () => {
               </DrawerContentScrollView>
             </View>
           );
-        }}>
+        }}
+
+      >
         <Drawer.Screen
           name="Home"
           component={TabScreens}
           options={{
-            drawerIcon: ({focused}) => (
-              <Icons.MaterialCommunityIcons
-                name={'home'}
+            drawerIcon: ({ focused }) => (
+              <Icons.Ionicons
+                name={'ios-home' }
                 color={AppColors.black}
                 // name={focused ? 'ios-home' : 'ios-home-outline'}
                 // color={focused ? AppColors.white : AppColors.black}
                 size={iconSize}
               />
-              // <Icons.Ionicons
-              //   name={'ios-home'}
-              //   color={AppColors.black}
-              //   // name={focused ? 'ios-home' : 'ios-home-outline'}
-              //   // color={focused ? AppColors.white : AppColors.black}
-              //   size={iconSize}
-              // />
             ),
+
           }}
         />
         <Drawer.Screen
           name="UserProfile"
           component={UserProfile}
           options={{
-            drawerIcon: ({focused}) => (
+            drawerIcon: ({ focused }) => (
               <Icons.MaterialIcons
-                name={'person'}
-                color={AppColors.black}
+                name={ 'person'}
+                color={ AppColors.black}
                 // name={focused ? 'person' : 'person-outline'}
                 // color={focused ? AppColors.white : AppColors.black}
                 size={iconSize}
@@ -250,10 +241,14 @@ const App = () => {
           name="AboutUs"
           component={AboutUs}
           options={{
-            drawerIcon: ({focused}) => (
+            drawerIcon: ({ focused }) => (
               <Icons.Ionicons
-                name={'ios-information-circle-sharp'}
-                color={AppColors.black}
+                name={
+                  
+                     'ios-information-circle-sharp'
+                    
+                }
+                color={ AppColors.black}
                 // name={
                 //   focused
                 //     ? 'ios-information-circle-sharp'
@@ -269,10 +264,10 @@ const App = () => {
           name="Settings"
           component={Settings}
           options={{
-            drawerIcon: ({focused}) => (
+            drawerIcon: ({ focused }) => (
               <Icons.Ionicons
                 name={'ios-settings-sharp'}
-                color={AppColors.black}
+                color={ AppColors.black}
                 // name={focused ? 'ios-settings-sharp' : 'ios-settings-outline'}
                 // color={focused ? AppColors.white : AppColors.black}
                 size={iconSize}
@@ -281,24 +276,25 @@ const App = () => {
           }}
         />
         <Drawer.Screen
+
           name="Terms And Conditions"
           component={TermsAndConditions}
           options={{
-            drawerIcon: ({focused}) => (
+            drawerIcon: ({ focused }) =>
               // focused ? (
-              <Icons.FontAwesome5
-                name="file-signature"
-                color={AppColors.black}
-                size={iconSize}
-              />
-            ),
-            // ) : (
-            //   <Icons.MaterialCommunityIcons
-            //     name="file-sign"
-            //     color={focused ? AppColors.white : AppColors.black}
-            //     size={iconSize}
-            //   />
-            // ),
+                <Icons.FontAwesome5
+                  name="file-signature"
+                  color={ AppColors.black}               
+                  size={iconSize}
+                />
+              // ) : (
+              //   <Icons.MaterialCommunityIcons
+              //     name="file-sign"
+              //     color={focused ? AppColors.white : AppColors.black}
+              //     size={iconSize}
+              //   />
+              // ),
+
           }}
         />
       </Drawer.Navigator>
@@ -307,39 +303,37 @@ const App = () => {
 
   return (
     <AppProvider>
-      <Animated.View style={{flex:1}}>
       <NavigationContainer>
         <Stack.Navigator
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
           initialRouteName="DrawerScreens">
-          {/* <Stack.Screen
+          <Stack.Screen
             name="TabScreen"
             component={TabScreens}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="WelcomeScreen"
             component={WelcomeScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="SignUpScreen"
             component={SignUpScreen}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="UserChat"
             component={UserChat}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="DrawerScreens"
             component={DrawerScreens}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>
-      </Animated.View>
     </AppProvider>
   );
 };

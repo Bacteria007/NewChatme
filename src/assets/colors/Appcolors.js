@@ -5,7 +5,7 @@ const AppColors = {
     white: 'white',
     black: 'black',
     lightGrey: "rgb(239, 239, 239)",
-    inActiveIconsColor: "rgba(0,0,0,0.6)",
+    inActiveIconsColor: "rgba(0,0,0,0.5)",
     gray: 'gray',
     coolgray: '#383949',
     // purple shades
@@ -16,7 +16,7 @@ const AppColors = {
     Orchid: '#DA70D6',
     Plum: '#8E4585',
     Violet: '#9400D3',
-    tab:'rgba(243,237,245,0.8)'
+ 
     //'''''''''''''''''''''''ChatmeColors''''''''''''''''''''''''''''
     // rgb(0, 1, 47) // dark blue
     // blue1:"rgb(2, 16, 104) ",
