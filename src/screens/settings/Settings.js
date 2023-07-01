@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper'
-import DrawerScreensHeader from '../../components/Headers/DrawerHeader/DrawerScreensHeader'
+import DrawerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader'
 import AppColors from '../../assets/colors/Appcolors'
 import {
   widthPercentageToDP as wp,
@@ -13,9 +13,9 @@ import { Icons } from '../../assets/Icons'
 const Settings = ({navigation}) => {
   return (
     <DrawerScreenswrapper>
-    <View>
+    <View style={{height:hp('100'),backgroundColor:AppColors.white}}>
       <DrawerScreensHeader navigation={navigation} screenName='Settings'/>
-      <View style={{height:hp('70%'),width:wp('100%'),justifyContent:'space-between'}}>
+      <View style={{height:hp('80%'),justifyContent:'space-evenly'}}>
       <View style={{backgroundColor:AppColors.white}}>
           <Text style={{fontSize:wp('6%'),fontFamily:FontStyle.mediumFont,paddingHorizontal:wp('4%'),color:AppColors.black}}>Security</Text>
           <TouchableOpacity>

@@ -15,21 +15,23 @@ import {
 import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 import { Icons } from '../../../assets/Icons';
 import AppColors from '../../../assets/colors/Appcolors';
+import Status_bar from '../Status_bar';
 
 
-const DrawerScreensHeader = ({navigation,screenName}) => {
+const InnerScreensHeader = ({navigation,screenName}) => {
 
   return (
     <View style={[DrawerHeaderStyle.containerView]}>
+      <Status_bar darkModeBgColor={AppColors.black} lightModeBgColor={AppColors.primary} content={'light-content'} />
       <View style={[DrawerHeaderStyle.headerView]}>
         <TouchableOpacity
           onPress={() => {
             navigation.goBack()
           }}>
-          <Icons.FontAwesome5
-            name="arrow-left"
-            size={wp('5.5%')}
-            color={AppColors.black}
+          <Icons.Ionicons
+            name="arrow-back"
+            size={wp('7%')}
+            color={AppColors.white}
           />
         </TouchableOpacity>
         <Text style={[DrawerHeaderStyle.screenNameStyle]}>{screenName}</Text>
@@ -38,4 +40,4 @@ const DrawerScreensHeader = ({navigation,screenName}) => {
 
   );
 };
-export default DrawerScreensHeader;
+export default InnerScreensHeader;
