@@ -14,7 +14,7 @@ const DrawerScreenswrapper = ({ children }) => {
       { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') }
     ],
     overflow:'hidden',
-    // borderRadius:10
+    // borderRadius:progress.value===1?12:0
     
   }));
 
@@ -30,7 +30,7 @@ export default DrawerScreenswrapper;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,   
+    flex: 1,   
     backgroundColor:'lightgrey',  
     }
 })

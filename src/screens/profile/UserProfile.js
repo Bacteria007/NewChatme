@@ -15,13 +15,29 @@ import Status_bar from '../../components/Headers/Status_bar'
 import AppColors from '../../assets/colors/Appcolors'
 import Icon, { Icons } from '../../assets/Icons.js';
 import SelectInfo from './SelectInfo';
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
+import { useDrawerProgress } from '@react-navigation/drawer'
 
 const UserProfile = (props) => {
+
+  const progress = useDrawerProgress()
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { perspective: 1000 },
+      { scale: interpolate(progress.value, [0, 1], [1, 0.8], 'clamp') },
+      // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
+      { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') }
+    ],
+    overflow:'hidden',
+    // borderRadius:progress.value===1?12:0
+    
+  }));
+
   return (
-    <DrawerScreenswrapper>
-      <View style={{ backgroundColor: "white", flex: 1, height: hp('100%'), width: wp('100%') }}>
+      <Animated.View>
         <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white} />
         <AppHeader navigation={props.navigation} />
+      <ScrollView style={{ backgroundColor: "white"}}>
 
         {/* main view for profile img */}
         <View
@@ -95,10 +111,262 @@ const UserProfile = (props) => {
           }
           iconName2="pencil"
         />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
+        <SelectInfo
+          iconType1={Icons.FontAwesome5}
+          iconName1={'user-alt'}
+          title="Name"
+          subtitle={
+            'This is not your user name or pin. This name will be visible to your WhatsApp contacts.'
+          }
+          iconName2="pencil"
+        />
       
 
-      </View>
-    </DrawerScreenswrapper>
+      </ScrollView>
+      </Animated.View>
   )
 }
 
