@@ -4,10 +4,10 @@ const AppColors = {
     primary: "#BA68C8",
     white: 'white',
     black: 'black',
+    gray: 'gray',
+    transparent:'transparent',
     lightGrey: "rgb(239, 239, 239)",
     inActiveIconsColor: "rgba(0,0,0,0.6)",
-    gray: 'gray',
-    coolgray: '#383949',
     // purple shades
     Lavender: '#E6E6FA',
     Lilac: '#C8A2C8',
@@ -16,7 +16,8 @@ const AppColors = {
     Orchid: '#DA70D6',
     Plum: '#8E4585',
     Violet: '#9400D3',
-    tab:'rgba(243,237,245,0.8)'
+    tab:'rgba(243,237,245,0.8)',
+    dodgerblue:"dodgerblue"
     //'''''''''''''''''''''''ChatmeColors''''''''''''''''''''''''''''
     // rgb(0, 1, 47) // dark blue
     // blue1:"rgb(2, 16, 104) ",

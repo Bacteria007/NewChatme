@@ -22,7 +22,7 @@ const InnerScreensHeader = ({navigation,screenName}) => {
 
   return (
     <View style={[DrawerHeaderStyle.containerView]}>
-      <Status_bar darkModeBgColor={AppColors.black} lightModeBgColor={AppColors.primary} content={'light-content'} />
+      <Status_bar darkModeBgColor={AppColors.black} lightModeBgColor={AppColors.primary} lightModeContent={'light-content'} darkModeContent={'dark-content'} />
       <View style={[DrawerHeaderStyle.headerView]}>
         <TouchableOpacity
           onPress={() => {
