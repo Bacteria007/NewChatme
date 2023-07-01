@@ -28,6 +28,7 @@ export const Icons = {
   Foundation,
   EvilIcons,
   Fontisto,
+  Foundation,
 //   SimpleLineIcons,
 };
 
