@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Image, View, Text } from 'react-native';
 import {
@@ -6,20 +7,20 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 // SCREENS
-import Reels from './src/screens/reels/Reels';
+import Reels from './src/screens/Reels/Reels';
 import Contacts from './src/screens/contacts/Contacts';
-import Calls from './src/screens/calls/Calls';
+import Calls from './src/screens/Calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
-import SignUpScreen from './src/screens/auth/SignUpScreen';
+import SignUpScreen from './src/screens/Auth/SignUpScreen';
 import UserProfile from './src/screens/profile/UserProfile';
-import AboutUs from './src/screens/about/AboutUs';
+import AboutUs from './src/screens/About/AboutUs';
 import Groups from './src/screens/chats/groups/AllGroups';
-import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
+import WelcomeScreen from './src/screens/Welcome/WelcomeScreen';
 import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import Settings from './src/screens/settings/Settings';
 
-import { AppProvider } from './src/context/AppContext';
+import {AppProvider} from './src/context/AppContext';
 // ICONS
 import Icon, { Icons } from './src/assets/Icons'; // Navigation
 import { NavigationContainer } from '@react-navigation/native';
@@ -33,7 +34,6 @@ import {
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
-import DrawerScreenswrapper from './src/screens/drawer/DrawerScreenswrapper';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -226,7 +226,7 @@ const App = () => {
           name="UserProfile"
           component={UserProfile}
           options={{
-            drawerIcon: ({ focused }) => (
+            drawerIcon: ({focused}) => (
               <Icons.MaterialIcons
                 name={ 'person'}
                 color={ AppColors.black}
@@ -241,7 +241,7 @@ const App = () => {
           name="AboutUs"
           component={AboutUs}
           options={{
-            drawerIcon: ({ focused }) => (
+            drawerIcon: ({focused}) => (
               <Icons.Ionicons
                 name={
                   
@@ -264,7 +264,7 @@ const App = () => {
           name="Settings"
           component={Settings}
           options={{
-            drawerIcon: ({ focused }) => (
+            drawerIcon: ({focused}) => (
               <Icons.Ionicons
                 name={'ios-settings-sharp'}
                 color={ AppColors.black}

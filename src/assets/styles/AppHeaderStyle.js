@@ -23,7 +23,7 @@ const AppHeaderStyle = StyleSheet.create({
   appNameStyle: {
     fontSize: wp('6%'),
     color: AppColors.primary,
-    fontFamily: FontStyle.boldFont,
+    fontFamily: FontStyle.mediumFont,
     marginLeft:wp('1%')
   },
   iconContainerStyle: {
