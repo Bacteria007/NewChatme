@@ -34,7 +34,6 @@ import {
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
-import DrawerScreenswrapper from './src/screens/drawer/DrawerScreenswrapper';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
