@@ -71,7 +71,7 @@ const UserChat = props => {
   const {item} = props.route.params;
   return (
     <SafeAreaView>
-      <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white}/>
+      <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.primary} content={'light-content'}/>
       <UserChatHeader item={item} navigation={props.navigation}/>
       <UserChatInput/>
       {/* <View style={[UserChatStyle.containerView]}>
