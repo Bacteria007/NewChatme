@@ -8,6 +8,12 @@ const AppColors = {
     transparent:'transparent',
     lightGrey: "rgb(239, 239, 239)",
     inActiveIconsColor: "rgba(0,0,0,0.6)",
+
+    gray: 'gray',
+    coolgray: '#383949',
+    tomato:'#dd5f56',
+
+
     // purple shades
     Lavender: '#E6E6FA',
     Lilac: '#C8A2C8',

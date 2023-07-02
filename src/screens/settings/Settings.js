@@ -18,7 +18,9 @@ const Settings = ({navigation}) => {
       <View style={{height:hp('80%'),justifyContent:'space-evenly'}}>
       <View style={{backgroundColor:AppColors.white}}>
           <Text style={{fontSize:wp('6%'),fontFamily:FontStyle.mediumFont,paddingHorizontal:wp('4%'),color:AppColors.black}}>Security</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate('blocked')
+          }}>
           <View style={{flexDirection:'row',height:hp('6%'),justifyContent:'space-between',paddingHorizontal:wp('4%'),alignItems:'center',borderBottomWidth:wp('0.1%')}}>
           <Text style={{fontSize:wp('4.5%'),fontFamily:FontStyle.regularFont,color:AppColors.black}}>Block Contact</Text>
           <Icons.FontAwesome5
@@ -28,7 +30,9 @@ const Settings = ({navigation}) => {
           />
           </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate('changePassword')
+          }}>
           <View style={{flexDirection:'row',height:hp('6%'),justifyContent:'space-between',paddingHorizontal:wp('4%'),alignItems:'center',borderBottomWidth:wp('0.1%')}}>
           <Text style={{fontSize:wp('4.5%'),fontFamily:FontStyle.regularFont,color:AppColors.black}}>Change Password</Text>
           <Icons.FontAwesome5
@@ -38,7 +42,9 @@ const Settings = ({navigation}) => {
           />
           </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate('changeNumberInfo')
+          }}>
           <View style={{flexDirection:'row',height:hp('6%'),justifyContent:'space-between',paddingHorizontal:wp('4%'),alignItems:'center',borderBottomWidth:wp('0.1%')}}>
           <Text style={{fontSize:wp('4.5%'),fontFamily:FontStyle.regularFont,color:AppColors.black}}>Change Number</Text>
           <Icons.FontAwesome5
@@ -51,7 +57,9 @@ const Settings = ({navigation}) => {
       </View>
       <View style={{backgroundColor:AppColors.white}}>
           <Text style={{fontSize:wp('6%'),fontFamily:FontStyle.mediumFont,paddingHorizontal:wp('4%'),color:AppColors.black}}>Account preferences</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate('theme')
+          }}>
           <View style={{flexDirection:'row',height:hp('6%'),justifyContent:'space-between',paddingHorizontal:wp('4%'),alignItems:'center',borderBottomWidth:wp('0.1%')}}>
           <Text style={{fontSize:wp('4.5%'),fontFamily:FontStyle.regularFont,color:AppColors.black}}>Theme</Text>
           <Icons.FontAwesome5
@@ -61,7 +69,9 @@ const Settings = ({navigation}) => {
           />
           </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate('activity')
+          }}>
           <View style={{flexDirection:'row',height:hp('6%'),justifyContent:'space-between',paddingHorizontal:wp('4%'),alignItems:'center',borderBottomWidth:wp('0.1%')}}>
           <Text style={{fontSize:wp('4.5%'),fontFamily:FontStyle.regularFont,color:AppColors.black}}>My Activity</Text>
           <Icons.FontAwesome5
@@ -71,7 +81,9 @@ const Settings = ({navigation}) => {
           />
           </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate('deleteAccount')
+          }}>
           <View style={{flexDirection:'row',height:hp('6%'),justifyContent:'space-between',paddingHorizontal:wp('4%'),alignItems:'center',borderBottomWidth:wp('0.1%')}}>
           <Text style={{fontSize:wp('4.5%'),fontFamily:FontStyle.regularFont,color:AppColors.black}}>Delete Account</Text>
           <Icons.FontAwesome5
