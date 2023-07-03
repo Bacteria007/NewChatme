@@ -6,15 +6,15 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 // SCREENS
-import Reels from './src/screens/Reels/Reels';
+import Reels from './src/screens/reels/Reels';
 import Contacts from './src/screens/contacts/Contacts';
-import Calls from './src/screens/Calls/Calls';
+import Calls from './src/screens/calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
-import SignUpScreen from './src/screens/Auth/SignUpScreen';
+import SignUpScreen from './src/screens/auth/SignUpScreen';
 import UserProfile from './src/screens/profile/UserProfile';
-import AboutUs from './src/screens/About/AboutUs';
+import AboutUs from './src/screens/about/AboutUs';
 import Groups from './src/screens/chats/groups/AllGroups';
-import WelcomeScreen from './src/screens/Welcome/WelcomeScreen';
+import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
 import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import Settings from './src/screens/settings/Settings';

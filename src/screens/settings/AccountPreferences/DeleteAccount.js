@@ -3,8 +3,12 @@ import React from 'react'
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader'
 import { Icons } from '../../../assets/Icons'
 import AppColors from '../../../assets/colors/Appcolors'
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
-const DeleteAccount = () => {
+const DeleteAccount = ({navigation}) => {
   return (
     <View>
       <InnerScreensHeader navigation={navigation} screenName='Delete Account'/>
