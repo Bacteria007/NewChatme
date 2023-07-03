@@ -76,7 +76,7 @@ const SignUpStyleSheet = StyleSheet.create({
       },
       TouchableButtonStyle:{
         width:wp('85'),
-        borderColor:AppColors.gray,
+        borderColor:AppColors.primary,
         borderWidth:wp("0.25"),
         borderRadius:wp('1.5'),
         height:hp('5'),

@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity, SafeAreaView, Image} from 'react-native';
-import {Text} from 'react-native-paper';
+import {View,Text, TouchableOpacity, SafeAreaView, Image} from 'react-native';
 import WelcomeScreenStyles from '../../assets/styles/WelcomeScreenStyle/WelcomeScreenStyleSheet';
 import Appcolors from '../../assets/colors/Appcolors';
 import Status_bar from '../../components/Headers/Status_bar';
