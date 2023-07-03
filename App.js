@@ -42,6 +42,7 @@ import BlockContacts from './src/screens/settings/security/BlockContacts';
 import DeleteAccount from './src/screens/settings/AccountPreferences/DeleteAccount';
 import Theme from './src/screens/settings/AccountPreferences/Theme';
 import MyActivity from './src/screens/settings/AccountPreferences/MyActivity';
+import LogInScreen from './src/screens/Auth/LogInScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -389,6 +390,14 @@ const App = () => {
             <Stack.Screen
               name="SignUpScreen"
               component={SignUpScreen}
+
+              options={{headerShown: false}}
+
+
+            />
+             <Stack.Screen
+              name="LogInScreen"
+              component={LogInScreen}
 
               options={{headerShown: false}}
 
