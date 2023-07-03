@@ -65,7 +65,10 @@ const WelcomeScreen = ({navigation}) => {
             Register as new user
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[WelcomeScreenStyles.TouchableButton2]}>
+        <TouchableOpacity style={[WelcomeScreenStyles.TouchableButton2]}
+        onPress={() => {
+          navigation.navigate('LogInScreen');
+        }}>
           <Text style={[WelcomeScreenStyles.TouchableButton2Text]}>
             Login to existing account
           </Text>
