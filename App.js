@@ -6,15 +6,15 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 // SCREENS
-import Reels from './src/screens/reels/Reels';
+import Reels from './src/screens/Reels/Reels';
 import Contacts from './src/screens/contacts/Contacts';
-import Calls from './src/screens/calls/Calls';
+import Calls from './src/screens/Calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
-import SignUpScreen from './src/screens/auth/SignUpScreen';
+import SignUpScreen from './src/screens/Auth/SignUpScreen';
 import UserProfile from './src/screens/profile/UserProfile';
-import AboutUs from './src/screens/about/AboutUs';
+import AboutUs from './src/screens/About/AboutUs';
 import Groups from './src/screens/chats/groups/AllGroups';
-import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
+import WelcomeScreen from './src/screens/Welcome/WelcomeScreen';
 import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import Settings from './src/screens/settings/Settings';
@@ -34,6 +34,13 @@ import {
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
+import ChangeNumber from './src/screens/settings/security/ChangeNumber';
+import ChangeNumberInfo from './src/screens/settings/security/ChangeNumberInfo';
+import ChangePassword from './src/screens/settings/security/ChangePassword';
+import BlockContacts from './src/screens/settings/security/BlockContacts';
+import DeleteAccount from './src/screens/settings/AccountPreferences/DeleteAccount';
+import Theme from './src/screens/settings/AccountPreferences/Theme';
+import MyActivity from './src/screens/settings/AccountPreferences/MyActivity';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -88,7 +95,7 @@ const App = () => {
             tabBarStyle: {
               height: hp('12%'),
               borderTopColor: 'transparent',
-              flex:0.12,
+              flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
             },
@@ -169,6 +176,54 @@ const App = () => {
           <Tab.Screen name="Contacts" component={Contacts} />
         </Tab.Navigator>
       </Animated.View>
+    );
+  };
+  const SettingStack = () => {
+    return (
+      <Stack.Navigator
+        options={{headerShown: false}}
+        initialRouteName="mainScreen">
+        <Stack.Screen
+          name="mainScreen"
+          component={Settings}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="chnageNumber"
+          component={ChangeNumber}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="changeNumberInfo"
+          component={ChangeNumberInfo}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="changePassword"
+          component={ChangePassword}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="blocked"
+          component={BlockContacts}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="deleteAccount"
+          component={DeleteAccount}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="theme"
+          component={Theme}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="activity"
+          component={MyActivity}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
     );
   };
   const DrawerScreens = () => {
@@ -267,7 +322,7 @@ const App = () => {
         />
         <Drawer.Screen
           name="Settings"
-          component={Settings}
+          component={SettingStack}
           options={{
             drawerIcon: ({focused}) => (
               <Icons.Ionicons
@@ -307,38 +362,38 @@ const App = () => {
 
   return (
     <AppProvider>
-      <Animated.View style={{flex:1}}>
-      <NavigationContainer>
-        <Stack.Navigator
-          options={{headerShown: false}}
-          initialRouteName="DrawerScreens">
-          {/* <Stack.Screen
-            name="TabScreen"
-            component={TabScreens}
-            options={{ headerShown: false }}
-          /> */}
-          <Stack.Screen
-            name="WelcomeScreen"
-            component={WelcomeScreen}
+      <Animated.View style={{flex: 1}}>
+        <NavigationContainer>
+          <Stack.Navigator
             options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="SignUpScreen"
-            component={SignUpScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="UserChat"
-            component={UserChat}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="DrawerScreens"
-            component={DrawerScreens}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+            initialRouteName="WelcomeScreen">
+            <Stack.Screen
+              name="TabScreen"
+              component={TabScreens}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="WelcomeScreen"
+              component={WelcomeScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="SignUpScreen"
+              component={SignUpScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="UserChat"
+              component={UserChat}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="DrawerScreens"
+              component={DrawerScreens}
+              options={{headerShown: false}}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
       </Animated.View>
     </AppProvider>
   );
