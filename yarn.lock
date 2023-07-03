@@ -8052,6 +8052,11 @@ react-native-gradle-plugin@^0.71.19:
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.19.tgz"
   integrity sha512-1dVk9NwhoyKHCSxcrM6vY6cxmojeATsBobDicX0ZKr7DgUF2cBQRTKsimQFvzH8XhOVXyH8p4HyDSZNIFI8OlQ==
 
+react-native-localize@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.npmjs.org/react-native-localize/-/react-native-localize-3.0.2.tgz"
+  integrity sha512-/l/oE1LVNgIRRhLbhmfFMHiWV0xhUn0A0iz1ytLVRYywL7FTp8Rx2vkJS/q/RpExDvV7yLw2493XZBYIM1dnLQ==
+
 react-native-modal@^13.0.1:
   version "13.0.1"
   resolved "https://registry.npmjs.org/react-native-modal/-/react-native-modal-13.0.1.tgz"
@@ -8166,7 +8171,7 @@ react-native-wind@^1.2.0:
   resolved "https://registry.npmjs.org/react-native-wind/-/react-native-wind-1.2.0.tgz"
   integrity sha512-y3UkZeFaBK1JCFDDn+oZ0u4ukLuYFg4xGBY6H2ZAalooQAlLDhqsH41aHNWjGTS4y8qmEhR7LQeamLbmcs421A==
 
-react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", react-native@>=0.35, react-native@>=0.59.0, react-native@>=0.65.0, react-native@0.71.10:
+react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", react-native@>=0.35, react-native@>=0.59.0, react-native@>=0.65.0, react-native@>=0.70.0, react-native@0.71.10:
   version "0.71.10"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.71.10.tgz"
   integrity sha512-O+sWH9ln7euxhHdooVL8is2FiVc7CfAp2zsKgIRhbq/8lGbJr5ZyT6QkCQK0M8Sx1zNe9puebr+BE8uBFsartg==
@@ -8285,7 +8290,7 @@ react-transform-hmr@^1.0.4:
     global "^4.3.0"
     react-proxy "^1.1.7"
 
-react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^16.13.1, react@^16.14.0, react@^16.3.0, "react@^16.8.0 || ^17.0.0 || ^18.0.0", react@^18.2.0, react@>=16.3.0, react@>=16.5.1, react@>=16.8, react@>=17.0.0, react@16.x.x, react@18.2.0:
+react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^16.13.1, react@^16.14.0, react@^16.3.0, "react@^16.8.0 || ^17.0.0 || ^18.0.0", react@^18.2.0, react@>=16.3.0, react@>=16.5.1, react@>=16.8, react@>=17.0.0, react@>=18.1.0, react@16.x.x, react@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
