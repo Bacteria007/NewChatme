@@ -60,7 +60,7 @@ const SignUpScreen = ({navigation}) => {
     <View style={[SignUpStyleSheet.container]}>
       <Status_bar
         darkModeBgColor={'black'}
-        lightModeBgColor={AppColors.white}
+        lightModeBgColor={AppColors.primary}
       />
 
       <Image
