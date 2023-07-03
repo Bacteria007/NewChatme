@@ -11,8 +11,8 @@ import CountryPicker from 'react-native-country-picker-modal';
 import SignUpStyleSheet from '../../assets/styles/AuthStyleSheet/SignUpStyleSheet/SignUpStyleSheet';
 import Status_bar from '../../components/Headers/Status_bar';
 import AppColors from '../../assets/colors/Appcolors';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const SignUpScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -26,28 +26,28 @@ const SignUpScreen = ({navigation}) => {
   };
 
   const handleSignUp = ({navigation}) => {
-    // const formdata = new FormData();
-    // formdata.append('name', '');
-    // formdata.append('phoneNo', phoneNumber);
-    // formdata.append('password', password);
-    // axios({
-    //   method: 'post',
-    //   url: 'http://192.168.43.122:8888/signup',
-    //   data: formdata,
-    //   headers: {'Content-Type': 'multipart/form-data'},
-    // })
-    //   .then(function (response) {
-    //     if (response.data.save === true) {
-    //       AsyncStorage.setItem('user', JSON.stringify(response.data.newUser));
-    //       navigation.navigate('DrawerScreens');
-    //     } else {
-    //       alert('Account cannot be created!Please try again later.');
-    //     }
-    //   })
-    //   .catch(function (response) {
-    //     //handle error
-    //     console.log(response);
-    //   });
+    const formdata = new FormData();
+    formdata.append('name', '');
+    formdata.append('phoneNo', phoneNumber);
+    formdata.append('password', password);
+    axios({
+      method: 'post',
+      url: 'http://192.168.43.122:8888/signup',
+      data: formdata,
+      headers: {'Content-Type': 'multipart/form-data'},
+    })
+      .then(function (response) {
+        if (response.data.save === true) {
+          AsyncStorage.setItem('user', JSON.stringify(response.data.newUser));
+          navigation.navigate('DrawerScreens');
+        } else {
+          alert('Account cannot be created!Please try again later.');
+        }
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+      });
   };
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const SignUpScreen = ({navigation}) => {
       />
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('DrawerScreens')}
+        onPress={() => handleSignUp({navigation})}
         style={[SignUpStyleSheet.TouchableButtonStyle]}>
         <Text style={[SignUpStyleSheet.TouchableTextStyle]}>Next</Text>
       </TouchableOpacity>
