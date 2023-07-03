@@ -30,7 +30,7 @@ const SignUpScreen = (navigation) => {
 
   return (
     <View style={[SignUpStyleSheet.container]}>
-           <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white}/>
+           <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.primary}/>
 
       <Image
         source={require('../../assets/imges/AuthScreenPictures/SignUpPic/SignUpPic.png')}   

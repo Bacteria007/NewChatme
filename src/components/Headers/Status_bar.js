@@ -7,7 +7,7 @@ const Status_bar = ({darkModeBgColor,lightModeBgColor}) => {
   return (
     <View style={{backgroundColor: 'white'}}>
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        barStyle={isDarkMode ? 'dark-content' : 'light-content' }
         backgroundColor={isDarkMode?darkModeBgColor:lightModeBgColor}
       />
     </View>

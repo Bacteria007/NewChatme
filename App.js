@@ -148,8 +148,8 @@ const App = ({ navigation }) => {
 
       <NavigationContainer >
         <Stack.Navigator options={{headerShown:false}}> 
-           {/* <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{headerShown:false}}/>
-           <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={{headerShown:false}}/> */}
+           <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{headerShown:false}}/> 
+           <Stack.Screen name='SignUpScreen' component={SignUpScreen} options={{headerShown:false}}/> 
           <Stack.Screen name='TabScreen' component={TabScreens} options={{headerShown:false}}/>
            <Stack.Screen name='DrawerScreens' component={UserProfile} options={{headerShown:false}}/> 
            {/* <Stack.Screen name='Discussion' component={Discussion} options={{headerShown:false}}/>  */}

@@ -11,23 +11,25 @@ const SignUpStyleSheet = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        paddingTop:hp('2')
+        paddingTop:hp('1'),
       },
       title: {
         fontSize: hp('3'),
         fontFamily:'Poppins-Medium',
-        paddingTop:hp('2.5'),
+        paddingTop:hp('1'),
         color:AppColors.black,
+        
 
       },
       image: {
         width: wp("75%"),
-        height: hp('35%'),
+        height: hp('30%'),
              },
       countryContainer: {
+        height:hp('7'),
         alignItems: 'center',
         marginTop:hp('3'),
-        marginBottom:hp('2.5'),
+        marginBottom:hp('1.5'),
         borderWidth:wp('0.25'),
         borderColor:AppColors.gray,
         borderRadius:wp('1.5'),
@@ -48,7 +50,7 @@ const SignUpStyleSheet = StyleSheet.create({
       phoneNumberContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: hp('2'),
+        marginBottom:hp('1.5'),
         width:wp('85'),
         justifyContent:'space-between'
       },
@@ -63,13 +65,14 @@ const SignUpStyleSheet = StyleSheet.create({
         
       },
       passwordInput: {
+        height:hp('7'),
         width:wp('85'),
         fontSize: wp('5'),
         marginBottom: hp('5'),
         borderColor:AppColors.gray,
         borderWidth:wp("0.25"),
         borderRadius:wp('1.5'),
-        paddingHorizontal:wp('6')
+        paddingHorizontal:wp('6'),
       },
       TouchableButtonStyle:{
         width:wp('85'),
