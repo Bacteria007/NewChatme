@@ -43,8 +43,6 @@ import DeleteAccount from './src/screens/settings/AccountPreferences/DeleteAccou
 import Theme from './src/screens/settings/AccountPreferences/Theme';
 import MyActivity from './src/screens/settings/AccountPreferences/MyActivity';
 
-import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
-
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -370,31 +368,18 @@ const App = () => {
   return (
     <AppProvider>
 
-      <Animated.View style={{flex: 1}}>
-        <NavigationContainer>
-          <Stack.Navigator
-            options={{headerShown: false}}
-            initialRouteName="WelcomeScreen">
-            <Stack.Screen
-              name="TabScreen"
-              component={TabScreens}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="WelcomeScreen"
-              component={WelcomeScreen}
-              options={{headerShown: false}}
+     
 
       <Animated.View style={{ flex: 1 }}>
         <NavigationContainer>
           <Stack.Navigator
             options={{ headerShown: false }}
-            initialRouteName="DrawerScreens">
-            {/* <Stack.Screen
+            initialRouteName="WelcomeScreen">
+            <Stack.Screen
             name="TabScreen"
             component={TabScreens}
             options={{ headerShown: false }}
-          /> */}
+          /> 
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
@@ -407,7 +392,6 @@ const App = () => {
 
               options={{headerShown: false}}
 
-              options={{ headerShown: false }}
 
             />
             <Stack.Screen
@@ -416,7 +400,6 @@ const App = () => {
 
               options={{headerShown: false}}
 
-              options={{ headerShown: false }}
 
             />
             <Stack.Screen
@@ -425,7 +408,6 @@ const App = () => {
 
               options={{headerShown: false}}
 
-              options={{ headerShown: false }}
 
             />
           </Stack.Navigator>
