@@ -37,11 +37,11 @@ const SignUpStyleSheet = StyleSheet.create({
         paddingVertical:hp('1'),
       },
       countryCode: {
-        fontSize:wp('6'),
+        fontSize:wp('5'),
         borderColor:AppColors.gray,
         borderWidth:wp("0.25"),
         height:hp('7'),
-        width:wp('15'),
+        width:wp('16'),
         textAlign:'center',
         borderRadius:wp('1.5'),
        textAlignVertical:'center',
