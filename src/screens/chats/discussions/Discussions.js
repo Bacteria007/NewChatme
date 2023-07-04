@@ -55,8 +55,8 @@ const Discussions = ({ navigation }) => {
   }
   return (
 
-      <View style={{ height: hp('100%'), backgroundColor: "white" }}>
-        <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white} />
+      <View style={{ height: hp('100%'), backgroundColor:AppColors.white }}>
+        <Status_bar darkModeBgColor={AppColors.black} lightModeBgColor={AppColors.white} darkModeContent={'light-content'} lightModeContent={'dark-content'}/>
         <AppHeader navigation={navigation} />
         <AppSubHeader />
         <FlatList
