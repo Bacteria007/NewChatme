@@ -32,6 +32,7 @@ const InnerScreensHeader = ({navigation,screenName}) => {
             name="arrow-back"
             size={wp('7%')}
             color={AppColors.white}
+            style={{marginLeft:wp('2%')}}
           />
         </TouchableOpacity>
         <Text style={[DrawerHeaderStyle.screenNameStyle]}>{screenName}</Text>

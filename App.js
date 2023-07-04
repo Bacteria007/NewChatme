@@ -4,7 +4,7 @@ import { StyleSheet, Image, View, Text } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+} from 'react-native-responsive-screen'
 // SCREENS
 import Reels from './src/screens/reels/Reels';
 import Contacts from './src/screens/contacts/Contacts';
@@ -42,7 +42,7 @@ import BlockContacts from './src/screens/settings/security/BlockContacts';
 import DeleteAccount from './src/screens/settings/AccountPreferences/DeleteAccount';
 import Theme from './src/screens/settings/AccountPreferences/Theme';
 import MyActivity from './src/screens/settings/AccountPreferences/MyActivity';
-import LogInScreen from './src/screens/Auth/LogInScreen';
+import LogInScreen from './src/screens/auth/LogInScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -241,7 +241,7 @@ const App = () => {
           drawerStyle: { backgroundColor: AppColors.primary, width: wp('50%') },
           drawerLabelStyle: { marginLeft: wp('-6%') },
           sceneContainerStyle: { backgroundColor: AppColors.primary },
-          drawerHideStatusBarOnOpen: true,
+          // drawerHideStatusBarOnOpen: true,
           drawerActiveBackgroundColor:AppColors.white,
 
         }}
