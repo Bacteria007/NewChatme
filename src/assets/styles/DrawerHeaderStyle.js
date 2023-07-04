@@ -27,10 +27,10 @@ const DrawerHeaderStyle = StyleSheet.create({
     
   },
   screenNameStyle: {
-    fontSize: wp('6.5%'),
+    fontSize: wp('5.5%'),
     color: AppColors.white,
     fontFamily: FontStyle.regularFont,
-    marginLeft:wp('0.5%')
+    marginLeft:wp('1%')
   },
 
 });

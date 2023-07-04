@@ -13,9 +13,9 @@ import { Icons } from '../../assets/Icons'
 const Settings = ({navigation}) => {
   return (
     <DrawerScreenswrapper>
-    <View style={{height:hp('100'),backgroundColor:AppColors.white}}>
+    <View style={{height:hp('100'),backgroundColor:'#F1F1F5'}}>
       <DrawerScreensHeader navigation={navigation} screenName='Settings'/>
-      <View style={{height:hp('80%'),justifyContent:'space-evenly'}}>
+      <View style={{height:hp('71%'),justifyContent:'space-between'}}>
       <View style={{backgroundColor:AppColors.white}}>
           <Text style={{fontSize:wp('6%'),fontFamily:FontStyle.mediumFont,paddingHorizontal:wp('4%'),color:AppColors.black}}>Security</Text>
           <TouchableOpacity onPress={()=>{

@@ -12,6 +12,7 @@ const AppColors = {
     gray: 'gray',
     coolgray: '#383949',
     tomato:'#dd5f56',
+    red:'red',
 
 
     // purple shades
