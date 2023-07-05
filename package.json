@@ -18,7 +18,6 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "axios": "^1.4.0",
-    "i18n-js": "^4.2.3",
     "react": "18.2.0",
     "react-native": "0.71.10",
     "react-native-axios": "^0.17.1",
@@ -38,8 +37,7 @@
     "react-native-svg-transformer": "^1.0.0",
     "react-native-tab-view": "^3.5.1",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-wind": "^1.2.0",
-    "rn-fetch-blob": "^0.12.0"
+    "react-native-wind": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -1,9 +1,9 @@
 import React from 'react';
-import {View,Text, TouchableOpacity, SafeAreaView, Image} from 'react-native';
+import {View, Text, TouchableOpacity, SafeAreaView, Image} from 'react-native';
 import WelcomeScreenStyles from '../../assets/styles/WelcomeScreenStyle/WelcomeScreenStyleSheet';
 import Appcolors from '../../assets/colors/Appcolors';
 import Status_bar from '../../components/Headers/Status_bar';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 
 const WelcomeScreen = ({navigation}) => {
   return (
@@ -14,27 +14,7 @@ const WelcomeScreen = ({navigation}) => {
       />
 
       {/* *****************           HEADER OF WELCOME SCREEN   ************** */}
-      <View style={[WelcomeScreenStyles.TopView]}>
-        <View style={[WelcomeScreenStyles.TopInnerView1]}>
-          <Image
-            source={require('../../assets/imges/WelcomeScreenPic/logo.png')}
-            style={[WelcomeScreenStyles.LogoImageStyle]}
-          />
-          <Text style={[WelcomeScreenStyles.HeadingText1]}> ChatMe</Text>
-        </View>
-
-        <View style={[WelcomeScreenStyles.TopInnerView2]}>
-          <TouchableOpacity
-            style={[WelcomeScreenStyles.TopInnerView2Touchable]}>
-            <FontAwesome
-              name="language"
-              color={Appcolors.primary}
-              style={[WelcomeScreenStyles.iconStyle]}
-            />
-            <Text style={[WelcomeScreenStyles.TouchableText1]}>EN</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <View style={[WelcomeScreenStyles.TopView]}></View>
 
       {/* *****************           WELCOME SCREEN IMAGE       *************** */}
       <View>
@@ -64,10 +44,11 @@ const WelcomeScreen = ({navigation}) => {
             Register as new user
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[WelcomeScreenStyles.TouchableButton2]}
-        onPress={() => {
-          navigation.navigate('LogInScreen');
-        }}>
+        <TouchableOpacity
+          style={[WelcomeScreenStyles.TouchableButton2]}
+          onPress={() => {
+            navigation.navigate('LogInScreen');
+          }}>
           <Text style={[WelcomeScreenStyles.TouchableButton2Text]}>
             Login to existing account
           </Text>
