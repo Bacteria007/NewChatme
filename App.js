@@ -39,9 +39,9 @@ import ChangeNumber from './src/screens/settings/security/ChangeNumber';
 import ChangeNumberInfo from './src/screens/settings/security/ChangeNumberInfo';
 import ChangePassword from './src/screens/settings/security/ChangePassword';
 import BlockContacts from './src/screens/settings/security/BlockContacts';
-import DeleteAccount from './src/screens/settings/AccountPreferences/DeleteAccount';
-import Theme from './src/screens/settings/AccountPreferences/Theme';
-import MyActivity from './src/screens/settings/AccountPreferences/MyActivity';
+import DeleteAccount from './src/screens/settings/accountPreferences/DeleteAccount';
+import Theme from './src/screens/settings/accountPreferences/Theme';
+import MyActivity from './src/screens/settings/accountPreferences/MyActivity';
 import LogInScreen from './src/screens/auth/LogInScreen';
 
 
