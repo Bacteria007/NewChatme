@@ -9,9 +9,6 @@ const WelcomeScreenStyles = StyleSheet.create({
   TopView: {
     height: hp('8'),
     width: wp('100'),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingRight: wp('3'),
   },
   HeadingText1: {
     fontSize: wp('6'),
