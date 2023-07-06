@@ -2,11 +2,11 @@ import React from 'react'
 import { View ,Text} from 'react-native'
 import { s } from 'react-native-wind'
 import AppHeader from '../../components/Headers/AppHeaders/AppHeader'
-import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper'
+
 const Calls = ({navigation}) => {
   return (
     <View>
-      <AppHeader navigation={navigation}/>
+      <AppHeader navigation={navigation} headerTitle={"Calls"}/>
         <Text>Calls</Text>
         </View>
   )

@@ -29,7 +29,7 @@ const AppHeaderStyle = StyleSheet.create({
   iconContainerStyle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: wp('18%'),
+    // width: wp('18%'),
     alignItems: 'center',
   },
 });

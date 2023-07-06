@@ -4,7 +4,7 @@ import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 const Contacts = ({navigation}) => {
   return (
     <View>
-      <AppHeader navigation={navigation}/>
+      <AppHeader navigation={navigation} headerTitle={"Contacts"}/>
         <Text>Contacts  </Text>
     </View>
   )

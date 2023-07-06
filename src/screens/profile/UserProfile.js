@@ -8,8 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper'
-import AppHeader from '../../components/Headers/AppHeaders/AppHeader'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import Status_bar from '../../components/Headers/Status_bar'
 import AppColors from '../../assets/colors/Appcolors'
@@ -17,6 +15,7 @@ import Icon, { Icons } from '../../assets/Icons.js';
 import SelectInfo from './SelectInfo';
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 import { useDrawerProgress } from '@react-navigation/drawer'
+import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
 
 
 const UserProfile = (props) => {
@@ -36,8 +35,7 @@ const UserProfile = (props) => {
     <Animated.View style={[animatedStyle,{flex:1}]}>
       <View style={{ backgroundColor: "white", flex: 1, height: hp('100%'), width: wp('100%') }}>
         <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white} />
-        <AppHeader navigation={props.navigation} />
-
+<InnerScreensHeader screenName={"Profile"} navigation={props.navigation}/>
         {/* main view for profile img */}
         <View
           style={{

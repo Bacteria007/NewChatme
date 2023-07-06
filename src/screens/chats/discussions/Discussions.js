@@ -6,12 +6,8 @@ import FontStyle from '../../../assets/styles/FontStyle'
 import AppColors from '../../../assets/colors/Appcolors'
 import AppSubHeader from '../../../components/Headers/AppHeaders/AppSubHeader'
 import Status_bar from '../../../components/Headers/Status_bar'
-import DrawerScreenswrapper from '../../drawer/DrawerScreenswrapper'
-// import AppHeader from './AppHeader'
-
 
 const Discussions = ({ navigation }) => {
-
 
   const allChats = [
     { dpImage: require('../../../assets/imges/w11.jpg'), profileName: 'Aqsa', lastMsg: 'Hello Afshan', },
@@ -57,7 +53,7 @@ const Discussions = ({ navigation }) => {
 
       <View style={{ height: hp('100%'), backgroundColor:AppColors.white }}>
         <Status_bar darkModeBgColor={AppColors.black} lightModeBgColor={AppColors.white} darkModeContent={'light-content'} lightModeContent={'dark-content'}/>
-        <AppHeader navigation={navigation} />
+        <AppHeader navigation={navigation} headerTitle={"ChatMe"}/>
         <AppSubHeader />
         <FlatList
           data={allChats}

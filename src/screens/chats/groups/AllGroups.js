@@ -4,7 +4,7 @@ import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 const AllGroups = ({navigation}) => {
   return (
     <View>
-      <AppHeader navigation={navigation} />
+      <AppHeader navigation={navigation} headerTitle={"Groups"}/>
       <Text>Groups</Text>
     </View>
   );
