@@ -45,6 +45,7 @@ import MyActivity from './src/screens/settings/accountPreferences/MyActivity';
 import LogInScreen from './src/screens/auth/LogInScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ChatBot from './src/screens/ChatBot';
+import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -226,6 +227,11 @@ const App = () => {
         <Stack.Screen
           name="activity"
           component={MyActivity}
+          options={{ headerShown: false }}
+        />
+          <Stack.Screen
+          name="appLanguage"
+          component={LanguageChangeScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

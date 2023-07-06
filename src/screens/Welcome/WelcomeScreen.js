@@ -1,11 +1,14 @@
-import React from 'react';
+import React ,{useContext}from 'react';
 import {View, Text, TouchableOpacity, SafeAreaView, Image} from 'react-native';
 import WelcomeScreenStyles from '../../assets/styles/WelcomeScreenStyle/WelcomeScreenStyleSheet';
 import Appcolors from '../../assets/colors/Appcolors';
 import Status_bar from '../../components/Headers/Status_bar';
-
+import TranslationFile from '../../assets/translation/TranslationFile';
+import AppContext from '../../context/AppContext';
 
 const WelcomeScreen = ({navigation}) => {
+  const {language}  = useContext(AppContext);
+ 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Appcolors.white}}>
       <Status_bar
@@ -27,13 +30,14 @@ const WelcomeScreen = ({navigation}) => {
       {/* *****************           VIEW WITH TEXT AND TOUCHABLE BUTTONS   ************** */}
       <View>
         <Text style={[WelcomeScreenStyles.HeadingText2]}>
-          Welcome to ChatMe
+        {TranslationFile[language].Welcome_to_ChatMe} 
         </Text>
         <Text style={[WelcomeScreenStyles.Text]}>
-          Be part of millions of people on ChatMe
+        {TranslationFile[language].Be_part_of_millions_of_people_on_ChatMe}
         </Text>
         <Text style={[WelcomeScreenStyles.Text2]}>
-          who connect securely with their contacts
+        {TranslationFile[language].who_connect_securely_with_their_contacts}
+  
         </Text>
         <TouchableOpacity style={[WelcomeScreenStyles.TouchableButton1]}>
           <Text
@@ -41,7 +45,7 @@ const WelcomeScreen = ({navigation}) => {
             onPress={() => {
               navigation.navigate('SignUpScreen');
             }}>
-            Register as new user
+           {TranslationFile[language].Register_as_new_user} 
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -50,7 +54,7 @@ const WelcomeScreen = ({navigation}) => {
             navigation.navigate('LogInScreen');
           }}>
           <Text style={[WelcomeScreenStyles.TouchableButton2Text]}>
-            Login to existing account
+            {TranslationFile[language].Login_to_existing_account}
           </Text>
         </TouchableOpacity>
       </View>
