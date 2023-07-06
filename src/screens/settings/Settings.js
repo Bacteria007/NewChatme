@@ -1,8 +1,7 @@
-import {View, Text, TouchableOpacity, ScrollView,Modal} from 'react-native';
-import React from 'react';
+import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
+import React, {useContext} from 'react';
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
 import DrawerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
-import LanguageChangeView from '../../components/LanguageChange/LanguageChangeScreen';
 import AppColors from '../../assets/colors/Appcolors';
 import {
   widthPercentageToDP as wp,
@@ -10,8 +9,11 @@ import {
 } from 'react-native-responsive-screen';
 import FontStyle from '../../assets/styles/FontStyle';
 import {Icons} from '../../assets/Icons';
+import AppContext from '../../context/AppContext';
 
 const Settings = ({navigation}) => {
+  // USECONTEXT STATE
+  const {language} = useContext(AppContext);
 
   return (
     <DrawerScreenswrapper>
@@ -218,9 +220,10 @@ const Settings = ({navigation}) => {
               }}>
               App Language
             </Text>
-            <TouchableOpacity onPress={()=>{
-              navigation.navigate('appLanguage')
-            }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('appLanguage');
+              }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -236,7 +239,7 @@ const Settings = ({navigation}) => {
                     fontFamily: FontStyle.regularFont,
                     color: AppColors.black,
                   }}>
-                  English
+                  {language}  {/*  TEXT DISPLAY ACCORDING TO SELECTED LANGUAGE */}
                 </Text>
                 <Icons.FontAwesome5
                   name="arrow-right"

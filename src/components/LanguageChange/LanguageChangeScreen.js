@@ -1,79 +1,72 @@
-import React ,{useContext}from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {useContext} from 'react';
+import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 import InnerScreensHeader from '../Headers/InnerHeaders/InnerScreensHeader';
-import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppContext from '../../context/AppContext';
-
+import LanguageChangeScreenStyleSheet from '../../assets/styles/LanguageChangeStyleSheet/LanguageChangeScreenStyleSheet';
 
 const LanguageChangeScreen = ({navigation}) => {
-  const {storeLanguage}  = useContext(AppContext);
+  
+  // USECONTEXT STATE
+  const {storeLanguage} = useContext(AppContext);
 
-  const handleLanguageSelect = (selectedLanguage) => {
-    // Save the selected language to AsyncStorage
-    AsyncStorage.setItem('selectedLanguage', selectedLanguage)
+  // ARRAY CONTAINONG MULTIPLE LANGUAGES
+  const allLanguages = [
+    {languageShortName: 'EN', languageName: 'English'},
+    {languageShortName: 'UR', languageName: 'Urdu'},
+  ];
+
+  // FUNCTION FOR SELECTING LANGUAGE
+  const handleLanguageSelect = selectedLanguage => {
+    AsyncStorage.setItem('selectedLanguage', selectedLanguage) // Save the selected language to AsyncStorage
       .then(() => {
         storeLanguage(selectedLanguage);
-        console.log('suucessfuly selected language:');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Error saving selected language:', error);
       });
   };
 
+  //  FUNCTION WHICH DISPLAY UI  FOR FLATLIST
+  const renderItem = ({item}) => {
+    return (
+      <TouchableOpacity
+        style={[LanguageChangeScreenStyleSheet.languageButtonView]}
+        onPress={() => {
+          navigation.goBack();
+          if (item.languageShortName === 'EN') {
+            handleLanguageSelect('English');
+          } else if (item.languageShortName === 'UR') {
+            handleLanguageSelect('Urdu');
+          } else {
+            handleLanguageSelect('English');
+          }
+        }}>
+        <View style={[LanguageChangeScreenStyleSheet.SmallView]}>
+          <Text
+            style={[LanguageChangeScreenStyleSheet.languageButtonSmallText]}>
+            {item.languageShortName}
+          </Text>
+        </View>
+        <View style={[LanguageChangeScreenStyleSheet.LargeView]}>
+          <Text
+            style={[LanguageChangeScreenStyleSheet.languageButtonLargeText]}>
+            {item.languageName}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
- 
-        
-    <View style={{backgroundColor:AppColors.white,flex:1}}>
-    <InnerScreensHeader navigation={navigation} screenName="Select Language" />
-            <TouchableOpacity style={styles.languageButton} 
-            onPress={() => {handleLanguageSelect('en'),
-           navigation.goBack() 
-          }
-          }
-          >
-              <Text style={styles.languageButtonText}>English</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.languageButton} 
-            
-            onPress={() =>{ handleLanguageSelect('ur')
-             navigation.goBack() 
-          }
-            }
-            >
-              <Text style={styles.languageButtonText}>Urdu</Text>
-            </TouchableOpacity>
-           
-          </View>
-      
-     
+    <View style={[LanguageChangeScreenStyleSheet.Container]}>
+      <InnerScreensHeader
+        navigation={navigation}
+        screenName="Select Language"
+      />
+      <FlatList data={allLanguages} renderItem={renderItem} />
+    </View>
   );
 };
 
-
-const styles = StyleSheet.create({
-  
-    languageButton: {
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      marginBottom: 10,
-      backgroundColor: '#f0f0f0',
-      borderRadius: 5,
-    },
-    languageButtonText: {
-      fontSize: 16,
-    },
-    closeButton: {
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      backgroundColor: 'red',
-      borderRadius: 5,
-      alignSelf: 'flex-end',
-    },
-    closeButtonText: {
-      fontSize: 16,
-      color: 'white',
-    },
-  });
 export default LanguageChangeScreen;

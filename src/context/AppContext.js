@@ -6,7 +6,7 @@ import * as RNLocalize from 'react-native-localize';
 export const AppProvider = ({children}) => {
   const appName = 'ChatMe';
   const [userName, setUserName] = useState();
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState('English');
 
   const storeUserName = val => {
     setUserName(val);
@@ -17,7 +17,7 @@ export const AppProvider = ({children}) => {
   };
 
   // ********************************************     USE EFFECT FOR LANGUAGE RETRIVE FROM ASYNC STORAGE   ***************
- 
+
   useEffect(() => {
     // Retrieve the selected language from AsyncStorage
     AsyncStorage.getItem('selectedLanguage')
