@@ -10,7 +10,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import axios from 'react-native-axios'
+import axios from 'react-native-axios';
 
 const ChatBot = props => {
   const [data, setData] = useState([]);
@@ -35,19 +35,15 @@ const ChatBot = props => {
       },
     );
     const text = response.data.choices[0].text;
-    setData([
-      ...data,
-      {type: 'user', text: textInput},
-      {type: 'bot', text: text},
-    ]);
+    setData([ ...data,{type: 'user', text: textInput}, {type: 'bot', text: text},  ]);
     setTextInput('');
   };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>AI ChatBot</Text>
       <FlatList
-      showsVerticalScrollIndicator={false}
-    //   showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        //   showsHorizontalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         data={data}
         style={styles.body}
@@ -61,28 +57,41 @@ const ChatBot = props => {
                 }}>
                 {item.type === 'user' ? 'Me:  ' : 'Bot:'}
               </Text>
-              <Text style={styles.bot} >{item.text}</Text>
+              <Text style={styles.bot}>{item.text}</Text>
             </View>
           );
         }}
       />
 
-<View style={{flexDirection:'row',width:'80%', borderColor:'black', borderRadius:40, borderWidth:1,height:60,justifyContent:'center',alignContent:'center'}}>
-<TextInput
-        style={styles.input}
-        value={textInput}
-        onChangeText={text => setTextInput(text)}
-        placeholder="Ask me AnyThing"
-      />
-      {textInput==''?<TouchableOpacity style={styles.button} >
-        {/* <Text style={styles.buttonText}>Send Message</Text> */}
-        <FontAwesome name="send" size={30} color='#E1BEE7' />
-      </TouchableOpacity>:<TouchableOpacity style={styles.button} onPress={handleSend}>
-        {/* <Text style={styles.buttonText}>Send Message</Text> */}
-        <FontAwesome name="send" size={30} color='#E1BEE7' />
-      </TouchableOpacity>}
-</View>
-    
+      <View
+        style={{
+          flexDirection: 'row',
+          width: '80%',
+          borderColor: 'black',
+          borderRadius: 40,
+          borderWidth: 1,
+          height: 60,
+          justifyContent: 'center',
+          alignContent: 'center',
+        }}>
+        <TextInput
+          style={styles.input}
+          value={textInput}
+          onChangeText={text => setTextInput(text)}
+          placeholder="Ask me AnyThing"
+        />
+        {textInput == '' ? (
+          <TouchableOpacity style={styles.button}>
+            {/* <Text style={styles.buttonText}>Send Message</Text> */}
+            <FontAwesome name="send" size={30} color="#E1BEE7" />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.button} onPress={handleSend}>
+            {/* <Text style={styles.buttonText}>Send Message</Text> */}
+            <FontAwesome name="send" size={30} color="#E1BEE7" />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
@@ -101,24 +110,24 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   body: {
-    flex:1,
+    flex: 1,
     backgroundColor: '#CE93D8',
     width: '90%',
-    marginTop:5,
-    marginBottom:10
-//    marginRight:10
+    marginTop: 5,
+    marginBottom: 10,
+    //    marginRight:10
     // marginRight:20,
   },
   bot: {
     fontSize: 16,
-   marginRight:25
+    marginRight: 25,
     // padding:0
   },
   input: {
     borderColor: 'black',
     // borderWidth: 1,
     width: '60%',
-    borderRadius:20,
+    borderRadius: 20,
     // marginLeft:10,
     // paddingHorizontal:10
   },
@@ -126,18 +135,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#4A148C',
     borderColor: 'black',
     borderWidth: 1,
-    borderBottomLeftRadius:20,
-    borderTopLeftRadius:20,
-    borderBottomEndRadius:20,
+    borderBottomLeftRadius: 20,
+    borderTopLeftRadius: 20,
+    borderBottomEndRadius: 20,
     width: '15%',
     // paddingTop:10,
     // paddingLeft:10,
     // marginRight:10,
-    alignItems:'center',
-    justifyContent:'center',marginTop:5,
-    marginLeft:15,
-    height:50
-    
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 5,
+    marginLeft: 15,
+    height: 50,
   },
   buttonText: {
     fontSize: 12,

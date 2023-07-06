@@ -34,15 +34,17 @@ import {
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 
-import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import ChangeNumber from './src/screens/settings/security/ChangeNumber';
 import ChangeNumberInfo from './src/screens/settings/security/ChangeNumberInfo';
 import ChangePassword from './src/screens/settings/security/ChangePassword';
 import BlockContacts from './src/screens/settings/security/BlockContacts';
-import DeleteAccount from './src/screens/settings/AccountPreferences/DeleteAccount';
-import Theme from './src/screens/settings/AccountPreferences/Theme';
-import MyActivity from './src/screens/settings/AccountPreferences/MyActivity';
+import DeleteAccount from './src/screens/settings/accountPreferences/DeleteAccount';
+import Theme from './src/screens/settings/accountPreferences/Theme';
+import MyActivity from './src/screens/settings/accountPreferences/MyActivity';
 import LogInScreen from './src/screens/auth/LogInScreen';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import ChatBot from './src/screens/ChatBot';
 
 
 const Tab = createBottomTabNavigator();
@@ -184,47 +186,47 @@ const App = () => {
   const SettingStack = () => {
     return (
       <Stack.Navigator
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
         initialRouteName="mainScreen">
         <Stack.Screen
           name="mainScreen"
           component={Settings}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="chnageNumber"
           component={ChangeNumber}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="changeNumberInfo"
           component={ChangeNumberInfo}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="changePassword"
           component={ChangePassword}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="blocked"
           component={BlockContacts}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="deleteAccount"
           component={DeleteAccount}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="theme"
           component={Theme}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="activity"
           component={MyActivity}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     );
@@ -242,8 +244,7 @@ const App = () => {
           drawerLabelStyle: { marginLeft: wp('-6%') },
           sceneContainerStyle: { backgroundColor: AppColors.primary },
           // drawerHideStatusBarOnOpen: true,
-          drawerActiveBackgroundColor:AppColors.white,
-
+          drawerActiveBackgroundColor: AppColors.white,
         }}
         // backBehavior='history'
         initialRouteName="Home"
@@ -368,60 +369,58 @@ const App = () => {
 
   return (
     <AppProvider>
-
-     
-
-      <Animated.View style={{ flex: 1 }}>
-        <NavigationContainer>
-          <Stack.Navigator
-            options={{ headerShown: false }}
-            initialRouteName="WelcomeScreen">
-            <Stack.Screen
+      <NavigationContainer>
+        <Stack.Navigator
+          options={{ headerShown: false }}
+          initialRouteName="Drawer">
+          <Stack.Screen
             name="TabScreen"
             component={TabScreens}
             options={{ headerShown: false }}
-          /> 
-            <Stack.Screen
-              name="WelcomeScreen"
-              component={WelcomeScreen}
-              options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="WelcomeScreen"
+            component={WelcomeScreen}
+            options={{ headerShown: false }}
 
-            />
-            <Stack.Screen
-              name="SignUpScreen"
-              component={SignUpScreen}
+          />
+          <Stack.Screen
+            name="SignUpScreen"
+            component={SignUpScreen}
 
-              options={{headerShown: false}}
-
-
-            />
-             <Stack.Screen
-              name="LogInScreen"
-              component={LogInScreen}
-
-              options={{headerShown: false}}
+            options={{ headerShown: false }}
 
 
-            />
-            <Stack.Screen
-              name="UserChat"
-              component={UserChat}
+          />
+          <Stack.Screen
+            name="LogInScreen"
+            component={LogInScreen}
 
-              options={{headerShown: false}}
-
-
-            />
-            <Stack.Screen
-              name="DrawerScreens"
-              component={DrawerScreens}
-
-              options={{headerShown: false}}
+            options={{ headerShown: false }}
 
 
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Animated.View>
+          />
+          <Stack.Screen
+            name="UserChat"
+            component={UserChat}
+
+            options={{ headerShown: false }}
+
+
+          />
+          <Stack.Screen
+            name="Drawer"
+            component={DrawerScreens}
+
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+          name='ChatBot'
+          component={ChatBot}
+          options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </AppProvider>
   );
 };

@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler'
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -13,14 +13,10 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import ChatBot from '../../../screens/ChatBot';
-import AppContext from '../../../context/AppContext';
-import Status_bar from '../Status_bar';
+
 import AppColors from '../../../assets/colors/Appcolors';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
-
-import { DrawerActions } from '@react-navigation/native';
-
+import { useDrawerStatus} from '@react-navigation/drawer';
 
 // const NavScreens = ({navigation}) => {
 //   <Stack.Navigator>
@@ -28,31 +24,52 @@ import { DrawerActions } from '@react-navigation/native';
 //   </Stack.Navigator>;
 // };
 
-const AppHeader = ({navigation}) => {
-  const { appName } = useContext(AppContext);
+const AppHeader = ({ navigation,headerTitle }) => {
+  const isDrawerOen = useDrawerStatus()
 
   return (
     <View style={[AppHeaderStyle.mainHeader]}>
       {/* <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white}/> */}
       <View style={[AppHeaderStyle.headerView]}>
-        <Text style={[AppHeaderStyle.appNameStyle]}>{appName}</Text>
-        <View style={[AppHeaderStyle.iconContainerStyle]}>
-          <TouchableOpacity>
-            <Icons.MaterialCommunityIcons
-              name="robot"
+        {isDrawerOen==='open' ?
+          <TouchableOpacity onPress={() => {
+            // setIsOpen(!isOpen)
+            navigation.toggleDrawer()
+          }}>
+            <Icons.AntDesign
+              name="menu-unfold"
               color={AppColors.primary}
-              size={wp('7.5%')}
+              size={wp('6.5%')}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.toggleDrawer()}}>
-            <Icon
-              type={Icons.Ionicons}
-              name="reorder-three"
+          :
+          <TouchableOpacity onPress={() => {
+            navigation.toggleDrawer()
+            // navigation.closeDrawer()
+          }}>
+
+            <Icons.AntDesign
+              name="menu-fold"
               color={AppColors.primary}
-              size={wp('9%')}
+              size={wp('6.5%')}
+            />
+
+          </TouchableOpacity>
+        }
+        {/* <View style={[AppHeaderStyle.iconContainerStyle]}> */}
+          <Text style={[AppHeaderStyle.appNameStyle]}>{headerTitle}</Text>
+
+          <TouchableOpacity
+          onPress={()=>{navigation.navigate('ChatBot')}}
+          >
+            <Icons.Entypo
+              name="user"
+              color={AppColors.primary}
+              size={wp('6%')}
             />
           </TouchableOpacity>
-        </View>
+
+        {/* </View> */}
       </View>
     </View>
 
