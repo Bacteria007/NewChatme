@@ -27,21 +27,22 @@ const UserProfile = (props) => {
       // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
       { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') }
     ],
-    overflow:'hidden',
+    overflow: 'hidden',
     // borderRadius:10
-    
+
   }));
   return (
-    <Animated.View style={[animatedStyle,{flex:1}]}>
+    <Animated.View style={[animatedStyle, { flex: 1 }]}>
       <View style={{ backgroundColor: "white", flex: 1, height: hp('100%'), width: wp('100%') }}>
         <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white} />
-<InnerScreensHeader screenName={"Profile"} navigation={props.navigation}/>
+        <InnerScreensHeader screenName={"Profile"} navigation={props.navigation} />
         {/* main view for profile img */}
         <View
           style={{
             height: hp('30%'),
             justifyContent: 'center',
             alignItems: 'center',
+            // backgroundColor:'red'
           }}>
           <TouchableOpacity
             activeOpacity={0.7}  //😁
@@ -50,25 +51,26 @@ const UserProfile = (props) => {
             }}
             style={{
               // backgroundColor: 'yellow',
-              height: hp('20%'),
-              width: wp('40%'),
-              borderRadius: 75,
+              height: hp('22%'),
+              width: hp('22%'),
+              borderRadius: 100,
             }}>
             <ImageBackground
               source={require('../../assets/imges/img2.png')}
               style={{
                 height: hp('20%'),
-                width: wp('40%'),
+                width: hp('20%'),
               }}
-              imageStyle={{ borderRadius: 75 }}>
+              imageStyle={{ borderRadius: 100 }}>
               {/* img k oper same size ka view ta k camera icon k view ko rotate kr k bottom right corner pr ly jaye*/}
 
               <View
                 style={{
                   height: hp('20%'),
-                  width: wp('40%'),
+                  width: hp('20%'),
                   borderRadius: 75,
                   transform: [{ rotate: '180deg' }],
+                  // backgroundColor:'green'
                 }}>
                 <TouchableOpacity
                   activeOpacity={0.5}
@@ -77,8 +79,8 @@ const UserProfile = (props) => {
                   <View
                     style={{
                       height: hp('6%'),
-                      width: wp('13%'),
-                      borderRadius: 75,
+                      width: hp('6%'),
+                      borderRadius: 100,
                       backgroundColor: AppColors.black,
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -87,7 +89,7 @@ const UserProfile = (props) => {
                     <Icon
                       type={Icons.MaterialIcons}
                       name="camera-alt"
-                      size={25}
+                      size={23}
                       color="white"
                     />
 
@@ -108,7 +110,7 @@ const UserProfile = (props) => {
           }
           iconName2="pencil"
         />
-      
+
 
       </View>
     </Animated.View>

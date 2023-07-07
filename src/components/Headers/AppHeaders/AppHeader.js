@@ -16,7 +16,8 @@ import {
 
 import AppColors from '../../../assets/colors/Appcolors';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
-import { useDrawerStatus} from '@react-navigation/drawer';
+import { useDrawerStatus } from '@react-navigation/drawer';
+import AppContext from '../../../context/AppContext';
 
 // const NavScreens = ({navigation}) => {
 //   <Stack.Navigator>
@@ -24,14 +25,16 @@ import { useDrawerStatus} from '@react-navigation/drawer';
 //   </Stack.Navigator>;
 // };
 
-const AppHeader = ({ navigation,headerTitle }) => {
-  const isDrawerOen = useDrawerStatus()
+const AppHeader = ({ navigation, headerTitle }) => {
+  const isDrawerOen = useDrawerStatus();
+  const isDarkMode = useColorScheme() === 'dark';
+  const { darkThemeActivator, changeTheme } = useContext(AppContext);
 
   return (
-    <View style={[AppHeaderStyle.mainHeader]}>
+    <View style={[AppHeaderStyle.mainHeader, { backgroundColor: darkThemeActivator ? AppColors.darkTheme : AppColors.white }]}>
       {/* <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white}/> */}
       <View style={[AppHeaderStyle.headerView]}>
-        {isDrawerOen==='open' ?
+        {isDrawerOen === 'open' ?
           <TouchableOpacity onPress={() => {
             // setIsOpen(!isOpen)
             navigation.toggleDrawer()
@@ -56,11 +59,38 @@ const AppHeader = ({ navigation,headerTitle }) => {
 
           </TouchableOpacity>
         }
-        {/* <View style={[AppHeaderStyle.iconContainerStyle]}> */}
-          <Text style={[AppHeaderStyle.appNameStyle]}>{headerTitle}</Text>
+        <Text style={[AppHeaderStyle.appNameStyle]}>{headerTitle}</Text>
+        <View style={[AppHeaderStyle.iconContainerStyle]}>
 
+          {darkThemeActivator ?
+            <TouchableOpacity
+              onPress={() => {
+                changeTheme()
+                console.log('darkthemeactivator', darkThemeActivator)
+              }}
+            >
+              <Icons.Entypo
+                name="light-up"
+                color={AppColors.primary}
+                size={wp('6%')}
+              />
+            </TouchableOpacity>
+            :
+
+            <TouchableOpacity
+              onPress={() => { changeTheme() 
+                console.log('darkthemeactivator', darkThemeActivator)
+              }}
+            >
+              <Icons.Ionicons
+                name="moon-sharp"
+                color={AppColors.primary}
+                size={wp('6%')}
+              />
+            </TouchableOpacity>
+          }
           <TouchableOpacity
-          onPress={()=>{navigation.navigate('ChatBot')}}
+            onPress={() => { navigation.navigate('ChatBot') }}
           >
             <Icons.Entypo
               name="user"
@@ -69,7 +99,7 @@ const AppHeader = ({ navigation,headerTitle }) => {
             />
           </TouchableOpacity>
 
-        {/* </View> */}
+        </View>
       </View>
     </View>
 

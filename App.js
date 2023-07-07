@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Image, View, Text } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -19,7 +19,7 @@ import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import Settings from './src/screens/settings/Settings';
 
-import { AppProvider } from './src/context/AppContext';
+import AppContext, { AppProvider } from './src/context/AppContext';
 // ICONS
 import Icon, { Icons } from './src/assets/Icons'; // Navigation
 import { NavigationContainer } from '@react-navigation/native';
@@ -46,6 +46,7 @@ import LogInScreen from './src/screens/auth/LogInScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ChatBot from './src/screens/ChatBot';
 import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
+import TabIcons from './src/components/TabIcons';
 
 
 const Tab = createBottomTabNavigator();
@@ -53,6 +54,7 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const App = () => {
+
   //   const [scrollY, setScrollY] = useState(new Animated.Value(0));
   //   const [visible, setVisible] = useState(true)
   //   const handleScroll = Animated.event(
@@ -79,6 +81,8 @@ const App = () => {
 
   let iconSize = 20;
   const TabScreens = () => {
+    const { darkThemeActivator } = useContext(AppContext);
+
     let progress = useDrawerProgress();
     console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
@@ -100,77 +104,45 @@ const App = () => {
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
             tabBarStyle: {
               height: hp('12%'),
-              borderTopColor: 'transparent',
+              borderTopWidth:0,
+              borderTopColor:darkThemeActivator? AppColors.darkTheme:'transparent',
               flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
             },
-            tabBarItemStyle: { backgroundColor: AppColors.tab },
+            tabBarItemStyle: { backgroundColor:darkThemeActivator?AppColors.darkTheme: AppColors.tab,
+             },
             tabBarLabelStyle: {
               fontWeight: 'bold',
               fontSize: wp('3.5%'),
               marginBottom: hp('2.2%'),
               marginTop: hp('0%'),
             },
-            tabBarActiveTintColor: AppColors.primary,
-            tabBarInactiveTintColor: AppColors.inActiveIconsColor,
+            tabBarActiveTintColor:AppColors.primary,
+            tabBarInactiveTintColor:darkThemeActivator? AppColors.darkThemeContent: AppColors.inActiveIconsColor,
             tabBarHideOnKeyboard: 'true',
             tabBarPressColor: 'rgba(255,255,255,0.6)',
+            
             tabBarIcon: ({ focused }) => {
               if (route.name === 'Chats') {
                 return (
-                  <Icons.Ionicons
-                    name={
-                      focused
-                        ? 'ios-chatbubbles-sharp'
-                        : 'ios-chatbubbles-outline'
-                    }
-                    size={22}
-                    color={
-                      focused ? AppColors.primary : AppColors.inActiveIconsColor
-                    }
-                  />
+                  <TabIcons focused={focused} size={22} type={Icons.Ionicons} name={focused ? 'ios-chatbubbles-sharp' : 'ios-chatbubbles-outline'} />
                 );
               } else if (route.name === 'Calls') {
                 return (
-                  <Icons.Ionicons
-                    name={focused ? 'call-sharp' : 'call-outline'}
-                    // ios-call ios-call-sharp
-                    size={21}
-                    color={
-                      focused ? AppColors.primary : AppColors.inActiveIconsColor
-                    }
-                  />
+                  <TabIcons focused={focused} size={21} type={Icons.Ionicons} name={focused ? 'call-sharp' : 'call-outline'} />
                 );
               } else if (route.name === 'Contacts') {
                 return (
-                  <Icons.MaterialCommunityIcons
-                    name={focused ? 'contacts' : 'contacts-outline'}
-                    size={21}
-                    color={
-                      focused ? AppColors.primary : AppColors.inActiveIconsColor
-                    }
-                  />
+                  <TabIcons focused={focused} size={21} type={Icons.MaterialCommunityIcons} name={focused ? 'contacts' : 'contacts-outline'}/>
                 );
               } else if (route.name === 'Reels') {
                 return (
-                  <Icons.MaterialCommunityIcons
-                    name={focused ? 'video-wireless' : 'video-wireless-outline'}
-                    size={21}
-                    color={
-                      focused ? AppColors.primary : AppColors.inActiveIconsColor
-                    }
-                  />
+                  <TabIcons focused={focused} size={21} type={Icons.MaterialCommunityIcons} name={focused ?  'video-wireless' : 'video-wireless-outline'}/>
                 );
               } else if (route.name === 'Groups') {
                 return (
-                  <Icons.Ionicons
-                    name={focused ? 'people-sharp' : 'people-outline'}
-                    size={22}
-                    color={
-                      focused ? AppColors.primary : AppColors.inActiveIconsColor
-                    }
-                  />
+                  <TabIcons focused={focused} size={22} type={Icons.Ionicons} name={focused ?  'people-sharp' : 'people-outline'}/>
                 );
               }
             },
@@ -372,7 +344,6 @@ const App = () => {
       </Drawer.Navigator>
     );
   };
-
   return (
     <AppProvider>
       <NavigationContainer>

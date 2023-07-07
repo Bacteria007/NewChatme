@@ -14,7 +14,7 @@ const DrawerHeaderStyle = StyleSheet.create({
     width:wp('100%'),
    paddingTop:hp('0.5%'),
     justifyContent: 'space-between',
-    backgroundColor: AppColors.primary,
+    // backgroundColor: AppColors.primary,
 
   },
   headerView: {

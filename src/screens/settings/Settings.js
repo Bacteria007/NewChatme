@@ -1,5 +1,5 @@
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
-import React, {useContext} from 'react';
+import React,{useContext} from 'react';
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
 import DrawerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
 import AppColors from '../../assets/colors/Appcolors';
@@ -10,14 +10,13 @@ import {
 import FontStyle from '../../assets/styles/FontStyle';
 import {Icons} from '../../assets/Icons';
 import AppContext from '../../context/AppContext';
-
 const Settings = ({navigation}) => {
+
   // USECONTEXT STATE
   const {language} = useContext(AppContext);
-
   return (
     <DrawerScreenswrapper>
-      <View style={{height: hp('100'), backgroundColor: '#F1F1F5'}}>
+          <View style={{height: hp('100%'), backgroundColor: '#F1F1F5'}}>
         <DrawerScreensHeader navigation={navigation} screenName="Settings" />
         <View style={{height: hp('71%'), justifyContent: 'space-between'}}>
           <View style={{backgroundColor: AppColors.white}}>
@@ -220,10 +219,9 @@ const Settings = ({navigation}) => {
               }}>
               App Language
             </Text>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('appLanguage');
-              }}>
+            <TouchableOpacity onPress={()=>{
+              navigation.navigate('appLanguage')
+            }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -239,6 +237,7 @@ const Settings = ({navigation}) => {
                     fontFamily: FontStyle.regularFont,
                     color: AppColors.black,
                   }}>
+                  English
                   {language}  {/*  TEXT DISPLAY ACCORDING TO SELECTED LANGUAGE */}
                 </Text>
                 <Icons.FontAwesome5
@@ -287,7 +286,7 @@ const Settings = ({navigation}) => {
           </View>
         </View>
       </View>
-    </DrawerScreenswrapper>
+         </DrawerScreenswrapper>
   );
 };
 
