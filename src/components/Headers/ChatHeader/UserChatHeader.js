@@ -46,7 +46,9 @@ const UserChatHeader = ({item,navigation}) => {
         <TouchableOpacity style={{alignSelf: 'center'}}>
           <Icons.FontAwesome5 name="video" size={wp('6%')} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity style={{alignSelf: 'center'}}>
+        <TouchableOpacity onPress={()=>{
+          navigation.navigate('rejected',{item:item})
+        }} style={{alignSelf: 'center'}}>
           <Icons.FontAwesome
             name="phone"
             size={wp('7%')}

@@ -12,7 +12,7 @@ const DrawerHeaderStyle = StyleSheet.create({
   containerView: {
     height: hp('7%'),
     width:wp('100%'),
-   paddingTop:hp('0.5%'),
+  //  paddingTop:hp('0.5%'),
     justifyContent: 'space-between',
     // backgroundColor: AppColors.primary,
 

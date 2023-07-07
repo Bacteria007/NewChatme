@@ -48,7 +48,7 @@ import Notification from './src/screens/settings/Notification/Notification';
 import RejectedCall from './src/screens/calls/RejectedCall';
 import OutgoingCall from './src/screens/calls/OutgoingCall';
 
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
 import ChatBot from './src/screens/ChatBot';
 import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
 import TabIcons from './src/components/TabIcons';
@@ -401,15 +401,6 @@ const App = () => {
               component={DrawerScreens}
 
             options={{ headerShown: false }}
-
-
-          />
-          <Stack.Screen
-            name="UserChat"
-            component={UserChat}
-
-            options={{ headerShown: false }}
-
 
 
           />
