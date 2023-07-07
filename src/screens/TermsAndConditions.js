@@ -1,16 +1,14 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import DrawerScreenswrapper from './drawer/DrawerScreenswrapper'
-import AppHeader from '../components/Headers/AppHeaders/AppHeader'
+import InnerScreensHeader from '../components/Headers/InnerHeaders/InnerScreensHeader'
 
-const TermsAndConditions = ({navigation}) => {
+const TermsAndConditions = ({ navigation }) => {
+
   return (
-    <DrawerScreenswrapper>
     <View>
-      <AppHeader navigation={navigation}/>
+      <InnerScreensHeader navigation={navigation} screenName={'Terms and conditions'} />
       <Text>TermsAndConditions</Text>
     </View>
-    </DrawerScreenswrapper>
   )
 }
 

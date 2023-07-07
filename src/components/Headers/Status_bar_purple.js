@@ -1,9 +1,8 @@
 import {View, Text, StatusBar, useColorScheme} from 'react-native';
-import React, { useContext } from 'react';
+import React from 'react';
 import AppColors from '../../assets/colors/Appcolors';
-import AppContext from '../../context/AppContext';
 
-const Status_bar = ({darkModeBgColor,lightModeBgColor,darkModeContent,lightModeContent}) => {
+const Status_bar_purple = ({darkModeBgColor,lightModeBgColor,darkModeContent,lightModeContent}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const { darkThemeActivator } = useContext(AppContext);
 
@@ -17,4 +16,4 @@ const Status_bar = ({darkModeBgColor,lightModeBgColor,darkModeContent,lightModeC
   );
 };
 
-export default Status_bar;
+export default Status_bar_purple;

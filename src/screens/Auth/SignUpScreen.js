@@ -32,7 +32,7 @@ const SignUpScreen = ({navigation}) => {
     formdata.append('password', password);
     axios({
       method: 'post',
-      url: 'http://192.168.43.122:8888/signup',
+      url: 'http://192.168.10.14:8888/signup',
       data: formdata,
       headers: {'Content-Type': 'multipart/form-data'},
     })

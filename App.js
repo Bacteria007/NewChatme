@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Image, View, Text } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -19,7 +19,7 @@ import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import Settings from './src/screens/settings/Settings';
 
-import { AppProvider } from './src/context/AppContext';
+import AppContext, { AppProvider } from './src/context/AppContext';
 // ICONS
 import Icon, { Icons } from './src/assets/Icons'; // Navigation
 import { NavigationContainer } from '@react-navigation/native';
@@ -34,18 +34,25 @@ import {
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 
-import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import ChangeNumber from './src/screens/settings/security/ChangeNumber';
 import ChangeNumberInfo from './src/screens/settings/security/ChangeNumberInfo';
 import ChangePassword from './src/screens/settings/security/ChangePassword';
 import BlockContacts from './src/screens/settings/security/BlockContacts';
-import DeleteAccount from './src/screens/settings/AccountPreferences/DeleteAccount';
-import Theme from './src/screens/settings/AccountPreferences/Theme';
-import MyActivity from './src/screens/settings/AccountPreferences/MyActivity';
+import DeleteAccount from './src/screens/settings/accountPreferences/DeleteAccount';
+import Theme from './src/screens/settings/accountPreferences/Theme';
+import MyActivity from './src/screens/settings/accountPreferences/MyActivity';
 import LogInScreen from './src/screens/auth/LogInScreen';
+
 import Notification from './src/screens/settings/Notification/Notification';
 import RejectedCall from './src/screens/calls/RejectedCall';
 import OutgoingCall from './src/screens/calls/OutgoingCall';
+
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import ChatBot from './src/screens/ChatBot';
+import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
+import TabIcons from './src/components/TabIcons';
+
 
 
 const Tab = createBottomTabNavigator();
@@ -53,6 +60,7 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const App = () => {
+
   //   const [scrollY, setScrollY] = useState(new Animated.Value(0));
   //   const [visible, setVisible] = useState(true)
   //   const handleScroll = Animated.event(
@@ -79,6 +87,8 @@ const App = () => {
 
   let iconSize = 20;
   const TabScreens = () => {
+    const { darkThemeActivator } = useContext(AppContext);
+
     let progress = useDrawerProgress();
     console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
@@ -100,77 +110,45 @@ const App = () => {
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
             tabBarStyle: {
               height: hp('12%'),
-              borderTopColor: 'transparent',
+              borderTopWidth:0,
+              borderTopColor:darkThemeActivator? AppColors.darkTheme:'transparent',
               flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
             },
-            tabBarItemStyle: { backgroundColor: AppColors.tab },
+            tabBarItemStyle: { backgroundColor:darkThemeActivator?AppColors.darkTheme: AppColors.tab,
+             },
             tabBarLabelStyle: {
               fontWeight: 'bold',
               fontSize: wp('3.5%'),
               marginBottom: hp('2.2%'),
               marginTop: hp('0%'),
             },
-            tabBarActiveTintColor: AppColors.primary,
-            tabBarInactiveTintColor: AppColors.inActiveIconsColor,
+            tabBarActiveTintColor:AppColors.primary,
+            tabBarInactiveTintColor:darkThemeActivator? AppColors.darkThemeContent: AppColors.inActiveIconsColor,
             tabBarHideOnKeyboard: 'true',
             tabBarPressColor: 'rgba(255,255,255,0.6)',
+            
             tabBarIcon: ({ focused }) => {
               if (route.name === 'Chats') {
                 return (
-                  <Icons.Ionicons
-                    name={
-                      focused
-                        ? 'ios-chatbubbles-sharp'
-                        : 'ios-chatbubbles-outline'
-                    }
-                    size={22}
-                    color={
-                      focused ? AppColors.primary : AppColors.inActiveIconsColor
-                    }
-                  />
+                  <TabIcons focused={focused} size={22} type={Icons.Ionicons} name={focused ? 'ios-chatbubbles-sharp' : 'ios-chatbubbles-outline'} />
                 );
               } else if (route.name === 'Calls') {
                 return (
-                  <Icons.Ionicons
-                    name={focused ? 'call-sharp' : 'call-outline'}
-                    // ios-call ios-call-sharp
-                    size={21}
-                    color={
-                      focused ? AppColors.primary : AppColors.inActiveIconsColor
-                    }
-                  />
+                  <TabIcons focused={focused} size={21} type={Icons.Ionicons} name={focused ? 'call-sharp' : 'call-outline'} />
                 );
               } else if (route.name === 'Contacts') {
                 return (
-                  <Icons.MaterialCommunityIcons
-                    name={focused ? 'contacts' : 'contacts-outline'}
-                    size={21}
-                    color={
-                      focused ? AppColors.primary : AppColors.inActiveIconsColor
-                    }
-                  />
+                  <TabIcons focused={focused} size={21} type={Icons.MaterialCommunityIcons} name={focused ? 'contacts' : 'contacts-outline'}/>
                 );
               } else if (route.name === 'Reels') {
                 return (
-                  <Icons.MaterialCommunityIcons
-                    name={focused ? 'video-wireless' : 'video-wireless-outline'}
-                    size={21}
-                    color={
-                      focused ? AppColors.primary : AppColors.inActiveIconsColor
-                    }
-                  />
+                  <TabIcons focused={focused} size={21} type={Icons.MaterialCommunityIcons} name={focused ?  'video-wireless' : 'video-wireless-outline'}/>
                 );
               } else if (route.name === 'Groups') {
                 return (
-                  <Icons.Ionicons
-                    name={focused ? 'people-sharp' : 'people-outline'}
-                    size={22}
-                    color={
-                      focused ? AppColors.primary : AppColors.inActiveIconsColor
-                    }
-                  />
+                  <TabIcons focused={focused} size={22} type={Icons.Ionicons} name={focused ?  'people-sharp' : 'people-outline'}/>
                 );
               }
             },
@@ -187,47 +165,52 @@ const App = () => {
   const SettingStack = () => {
     return (
       <Stack.Navigator
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
         initialRouteName="mainScreen">
         <Stack.Screen
           name="mainScreen"
           component={Settings}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="changeNumber"
           component={ChangeNumber}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="changeNumberInfo"
           component={ChangeNumberInfo}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="changePassword"
           component={ChangePassword}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="blocked"
           component={BlockContacts}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="deleteAccount"
           component={DeleteAccount}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="theme"
           component={Theme}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="activity"
           component={MyActivity}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
+        />
+          <Stack.Screen
+          name="appLanguage"
+          component={LanguageChangeScreen}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="notification"
@@ -250,8 +233,7 @@ const App = () => {
           drawerLabelStyle: { marginLeft: wp('-6%') },
           sceneContainerStyle: { backgroundColor: AppColors.primary },
           // drawerHideStatusBarOnOpen: true,
-          drawerActiveBackgroundColor:AppColors.white,
-
+          drawerActiveBackgroundColor: AppColors.white,
         }}
         // backBehavior='history'
         initialRouteName="Home"
@@ -373,41 +355,34 @@ const App = () => {
       </Drawer.Navigator>
     );
   };
-
   return (
     <AppProvider>
-
-     
-
-      <Animated.View style={{ flex: 1 }}>
-        <NavigationContainer>
-          <Stack.Navigator
-            options={{ headerShown: false }}
-            initialRouteName="WelcomeScreen">
-            <Stack.Screen
+      <NavigationContainer>
+        <Stack.Navigator
+          options={{ headerShown: false }}
+          initialRouteName="Drawer">
+          <Stack.Screen
             name="TabScreen"
             component={TabScreens}
             options={{ headerShown: false }}
-          /> 
-            <Stack.Screen
-              name="WelcomeScreen"
-              component={WelcomeScreen}
-              options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="WelcomeScreen"
+            component={WelcomeScreen}
+            options={{ headerShown: false }}
 
-            />
-            <Stack.Screen
-              name="SignUpScreen"
-              component={SignUpScreen}
+          />
+          <Stack.Screen
+            name="SignUpScreen"
+            component={SignUpScreen}
 
-              options={{headerShown: false}}
+            options={{ headerShown: false }}
 
 
-            />
-             <Stack.Screen
-              name="LogInScreen"
-              component={LogInScreen}
-
-              options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="LogInScreen"
+            component={LogInScreen}
 
 
             />
@@ -425,13 +400,32 @@ const App = () => {
               name="DrawerScreens"
               component={DrawerScreens}
 
-              options={{headerShown: false}}
+            options={{ headerShown: false }}
 
 
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Animated.View>
+          />
+          <Stack.Screen
+            name="UserChat"
+            component={UserChat}
+
+            options={{ headerShown: false }}
+
+
+
+          />
+          <Stack.Screen
+            name="Drawer"
+            component={DrawerScreens}
+
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+          name='ChatBot'
+          component={ChatBot}
+          options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </AppProvider>
   );
 };

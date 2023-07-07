@@ -9,9 +9,6 @@ const WelcomeScreenStyles = StyleSheet.create({
   TopView: {
     height: hp('8'),
     width: wp('100'),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingRight: wp('3'),
   },
   HeadingText1: {
     fontSize: wp('6'),
@@ -39,7 +36,7 @@ const WelcomeScreenStyles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     color: Appcolors.black,
     textAlign: 'center',
-    lineHeight: hp('2.2'),
+    lineHeight: hp('2.6'),
   },
   Text2: {
     fontSize: hp('1.80'),
