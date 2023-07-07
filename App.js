@@ -44,7 +44,7 @@ import Theme from './src/screens/settings/accountPreferences/Theme';
 import MyActivity from './src/screens/settings/accountPreferences/MyActivity';
 import LogInScreen from './src/screens/auth/LogInScreen';
 
-import Notification from './src/screens/settings/Notification/Notification';
+import Notification from './src/screens/settings/notification/Notification';
 import RejectedCall from './src/screens/calls/RejectedCall';
 import OutgoingCall from './src/screens/calls/OutgoingCall';
 

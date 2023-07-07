@@ -1,6 +1,6 @@
-import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
 import Modal from 'react-native-modal';
 
@@ -12,13 +12,14 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import FontStyle from '../../assets/styles/FontStyle';
-import {Icons} from '../../assets/Icons';
+import { Icons } from '../../assets/Icons';
 import AppContext from '../../context/AppContext';
 
 import SettingScreenStyle from '../../assets/styles/SettingScreenStyle';
 import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
 
-const Settings = ({navigation}) => {
+
+const Settings = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -26,8 +27,10 @@ const Settings = ({navigation}) => {
   const iconName = 'arrow-right';
   const iconSize = wp('5.5%');
   const iconColor = AppColors.black;
+  const { language } = useContext(AppContext);
 
-  const {language} = useContext(AppContext);
+
+
   return (
     <DrawerScreenswrapper>
       <View style={[SettingScreenStyle.containerView]}>
@@ -168,7 +171,7 @@ const Settings = ({navigation}) => {
           </View>
 
           <View style={[SettingScreenStyle.sectionView]}>
-            <View style={{backgroundColor: AppColors.white}}>
+            <View style={{ backgroundColor: AppColors.white }}>
               <Text
                 style={{
                   fontSize: wp('6%'),
@@ -208,34 +211,34 @@ const Settings = ({navigation}) => {
                 </View>
               </TouchableOpacity>
             </View>
-            </View>
+          </View>
 
-            <View style={[SettingScreenStyle.sectionView]}>
-              <Text style={[SettingScreenStyle.sectionHeadText]}>
-                Notifications
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('notification');
-                }}>
-                <View
-                  style={[
-                    SettingScreenStyle.touchableView,
-                    {
-                      borderBottomWidth: wp('0%'),
-                    },
-                  ]}>
-                  <Text style={[SettingScreenStyle.touchableText]}>
-                    Notifications
-                  </Text>
-                  <Icons.FontAwesome5
-                    name={iconName}
-                    size={iconSize}
-                    color={iconColor}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
+          <View style={[SettingScreenStyle.sectionView]}>
+            <Text style={[SettingScreenStyle.sectionHeadText]}>
+              Notifications
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('notification');
+              }}>
+              <View
+                style={[
+                  SettingScreenStyle.touchableView,
+                  {
+                    borderBottomWidth: wp('0%'),
+                  },
+                ]}>
+                <Text style={[SettingScreenStyle.touchableText]}>
+                  Notifications
+                </Text>
+                <Icons.FontAwesome5
+                  name={iconName}
+                  size={iconSize}
+                  color={iconColor}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
           {/* </View> */}
         </View>
       </View>
