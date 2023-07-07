@@ -360,7 +360,7 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator
           options={{ headerShown: false }}
-          initialRouteName="Drawer">
+          initialRouteName="WelcomeScreen">
           <Stack.Screen
             name="TabScreen"
             component={TabScreens}

@@ -189,7 +189,7 @@ const Settings = ({navigation}) => {
                     justifyContent: 'space-between',
                     paddingHorizontal: wp('4%'),
                     alignItems: 'center',
-                    borderBottomWidth: wp('0.1%'),
+                    borderBottomWidth: wp('0%'),
                   }}>
                   <Text
                     style={{
@@ -207,6 +207,7 @@ const Settings = ({navigation}) => {
                   />
                 </View>
               </TouchableOpacity>
+            </View>
             </View>
 
             <View style={[SettingScreenStyle.sectionView]}>
@@ -235,7 +236,7 @@ const Settings = ({navigation}) => {
                 </View>
               </TouchableOpacity>
             </View>
-          </View>
+          {/* </View> */}
         </View>
       </View>
     </DrawerScreenswrapper>
