@@ -43,6 +43,9 @@ import DeleteAccount from './src/screens/settings/AccountPreferences/DeleteAccou
 import Theme from './src/screens/settings/AccountPreferences/Theme';
 import MyActivity from './src/screens/settings/AccountPreferences/MyActivity';
 import LogInScreen from './src/screens/auth/LogInScreen';
+import Notification from './src/screens/settings/Notification/Notification';
+import RejectedCall from './src/screens/calls/RejectedCall';
+import OutgoingCall from './src/screens/calls/OutgoingCall';
 
 
 const Tab = createBottomTabNavigator();
@@ -192,7 +195,7 @@ const App = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="chnageNumber"
+          name="changeNumber"
           component={ChangeNumber}
           options={{headerShown: false}}
         />
@@ -224,6 +227,11 @@ const App = () => {
         <Stack.Screen
           name="activity"
           component={MyActivity}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="notification"
+          component={Notification}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
@@ -406,10 +414,12 @@ const App = () => {
             <Stack.Screen
               name="UserChat"
               component={UserChat}
-
               options={{headerShown: false}}
-
-
+            />
+            <Stack.Screen
+              name="rejected"
+              component={OutgoingCall}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="DrawerScreens"
