@@ -43,10 +43,16 @@ import DeleteAccount from './src/screens/settings/accountPreferences/DeleteAccou
 import Theme from './src/screens/settings/accountPreferences/Theme';
 import MyActivity from './src/screens/settings/accountPreferences/MyActivity';
 import LogInScreen from './src/screens/auth/LogInScreen';
+
+import Notification from './src/screens/settings/Notification/Notification';
+import RejectedCall from './src/screens/calls/RejectedCall';
+import OutgoingCall from './src/screens/calls/OutgoingCall';
+
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ChatBot from './src/screens/ChatBot';
 import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
 import TabIcons from './src/components/TabIcons';
+
 
 
 const Tab = createBottomTabNavigator();
@@ -167,7 +173,7 @@ const App = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="chnageNumber"
+          name="changeNumber"
           component={ChangeNumber}
           options={{ headerShown: false }}
         />
@@ -205,6 +211,11 @@ const App = () => {
           name="appLanguage"
           component={LanguageChangeScreen}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="notification"
+          component={Notification}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     );
@@ -373,6 +384,22 @@ const App = () => {
             name="LogInScreen"
             component={LogInScreen}
 
+
+            />
+            <Stack.Screen
+              name="UserChat"
+              component={UserChat}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="rejected"
+              component={OutgoingCall}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="DrawerScreens"
+              component={DrawerScreens}
+
             options={{ headerShown: false }}
 
 
@@ -382,6 +409,7 @@ const App = () => {
             component={UserChat}
 
             options={{ headerShown: false }}
+
 
 
           />

@@ -99,7 +99,10 @@ const SignUpScreen = ({navigation}) => {
       />
 
       <TouchableOpacity
-        onPress={() => handleSignUp({navigation})}
+        onPress={() => 
+          navigation.navigate('DrawerScreens')
+          // handleSignUp({navigation})
+        }
         style={[SignUpStyleSheet.TouchableButtonStyle]}>
         <Text style={[SignUpStyleSheet.TouchableTextStyle]}>Next</Text>
       </TouchableOpacity>
