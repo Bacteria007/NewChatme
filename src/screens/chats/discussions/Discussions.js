@@ -38,7 +38,7 @@ const Discussions = ({ navigation }) => {
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => {
-        navigation.navigate('rejected', { item: item })
+        navigation.navigate('UserChat', { item: item })
       }}>
         <View style={{ height: hp('11%'), width: wp('100%'), }} >
           <View style={{ height: hp('11%'), width: wp('100%'), flexDirection: "row", alignItems: 'center' }}>
