@@ -1,4 +1,4 @@
-import 'react-native-gesture-handler'
+import 'react-native-gesture-handler';
 import React, { useContext, useState } from 'react';
 import {
   View,
@@ -7,6 +7,7 @@ import {
   StatusBar,
   useColorScheme,
   TextInput,
+  Image,
 } from 'react-native';
 import Icon, { Icons } from '../../../assets/Icons';
 import {
@@ -14,10 +15,16 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
+import BotIcon from '../../../assets/imges/headericons/bot.svg'
+import MenuLeft from '../../../assets/imges/headericons/menuLeft.svg'
+import MenuRight from '../../../assets/imges/headericons/menuRight.svg'
+import ContrastTheme from '../../../assets/imges/headericons/contrast-theme.svg'
 import AppColors from '../../../assets/colors/Appcolors';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
 import { useDrawerStatus } from '@react-navigation/drawer';
 import AppContext from '../../../context/AppContext';
+import { BgTheme } from '../../../assets/styles/BgTheme';
+import Status_bar from '../Status_bar';
 
 // const NavScreens = ({navigation}) => {
 //   <Stack.Navigator>
@@ -31,78 +38,71 @@ const AppHeader = ({ navigation, headerTitle }) => {
   const { darkThemeActivator, changeTheme } = useContext(AppContext);
 
   return (
-    <View style={[AppHeaderStyle.mainHeader, { backgroundColor: darkThemeActivator ? AppColors.darkTheme : AppColors.white }]}>
-      {/* <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white}/> */}
+    <View
+      style={[
+        AppHeaderStyle.mainHeader,
+        { backgroundColor: BgTheme ? AppColors.darkTheme : AppColors.white },
+      ]}>
       <View style={[AppHeaderStyle.headerView]}>
-        {isDrawerOen === 'open' ?
-          <TouchableOpacity onPress={() => {
-            // setIsOpen(!isOpen)
-            navigation.toggleDrawer()
-          }}>
-            <Icons.AntDesign
-              name="menu-unfold"
-              color={AppColors.primary}
-              size={wp('6.5%')}
-            />
-          </TouchableOpacity>
-          :
-          <TouchableOpacity onPress={() => {
-            navigation.toggleDrawer()
-            // navigation.closeDrawer()
-          }}>
-
-            <Icons.AntDesign
+        {/* {isDrawerOen === 'open' ? ( */}
+           <TouchableOpacity
+           style={{flexDirection:'row'}}
+           onPress={() => {
+             // setIsOpen(!isOpen)
+             navigation.toggleDrawer();
+           }}>
+             {/* <Icons.AntDesign
               name="menu-fold"
               color={AppColors.primary}
               size={wp('6.5%')}
-            />
-
-          </TouchableOpacity>
-        }
+            /> */}
+             <MenuLeft/>
+           </TouchableOpacity>
+          {/* :   )} */}
         <Text style={[AppHeaderStyle.appNameStyle]}>{headerTitle}</Text>
         <View style={[AppHeaderStyle.iconContainerStyle]}>
-
-          {darkThemeActivator ?
+        <TouchableOpacity
+              onPress={() => {
+                changeTheme();
+                console.log('darkthemeactivator', darkThemeActivator);
+              }}>
+             {/* <ContrastTheme size={10}/> */}
+             <Icons.MaterialCommunityIcons name="theme-light-dark" size={24} color={AppColors.primary}/>
+            </TouchableOpacity>
+          {/* {darkThemeActivator ? (
             <TouchableOpacity
               onPress={() => {
-                changeTheme()
-                console.log('darkthemeactivator', darkThemeActivator)
-              }}
-            >
+                changeTheme();
+                console.log('darkthemeactivator', darkThemeActivator);
+              }}>
               <Icons.Entypo
                 name="light-up"
                 color={AppColors.primary}
                 size={wp('6%')}
               />
             </TouchableOpacity>
-            :
-
+          ) : (
             <TouchableOpacity
-              onPress={() => { changeTheme() 
-                console.log('darkthemeactivator', darkThemeActivator)
-              }}
-            >
+              onPress={() => {
+                changeTheme();
+                console.log('darkthemeactivator', darkThemeActivator);
+              }}>
               <Icons.Ionicons
                 name="moon-sharp"
                 color={AppColors.primary}
                 size={wp('6%')}
               />
             </TouchableOpacity>
-          }
+          )} */}
           <TouchableOpacity
-            onPress={() => { navigation.navigate('ChatBot') }}
-          >
-            <Icons.Entypo
-              name="user"
-              color={AppColors.primary}
-              size={wp('6%')}
-            />
+            onPress={() => {
+              navigation.navigate('ChatBot');
+            }}>
+            <BotIcon />
           </TouchableOpacity>
-
         </View>
       </View>
     </View>
-
   );
 };
 export default AppHeader;

@@ -17,8 +17,8 @@ const AppColors = {
   tomato: '#dd5f56',
   red: 'red',
   coolgray: '#383949', //pehlywala
-searchBorderDark:'rgba(211,211,211,0.5)',
-searchContentDark:"rgba(255,255,255,0.7)",
+  searchBorderDark: 'rgba(211,211,211,0.5)',
+  searchContentDark: "rgba(255,255,255,0.7)",
   // purple shades
   Lavender: '#E6E6FA',
   Lilac: '#C8A2C8',
@@ -27,11 +27,16 @@ searchContentDark:"rgba(255,255,255,0.7)",
   Orchid: '#DA70D6',
   Plum: '#8E4585',
   Violet: '#9400D3',
-  dodgerblue: "dodgerblue"
- 
+  dodgerblue: "dodgerblue",
+
   //  PURPLE COLOR VARIANT
   // p1:  #BA68CB , #AB47BC , #9C27B0 , #8E24AA , #7B1FA2 , #6A1B9A , #4A148C 
   // dEEP pURPLE :  #9575CD , 7E57C2 , 673AB7 , 5835B1 , 512DA8 , 4527A0 , 311B92 , B388FF
+
+
+  // ????????????????????????????? GRADIENTS
+
+  g1:'#5FFAE0'
 
 };
 export default AppColors;
