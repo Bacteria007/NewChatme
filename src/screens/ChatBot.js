@@ -14,7 +14,7 @@ import axios from 'react-native-axios';
 
 const ChatBot = props => {
   const [data, setData] = useState([]);
-  const apiKey = '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';
+  const apiKey = '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';
   const apiURL =
     'https://api.openai.com/v1/engines/text-davinci-002/completions';
   const [textInput, setTextInput] = useState('');
