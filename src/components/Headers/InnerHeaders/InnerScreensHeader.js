@@ -24,11 +24,15 @@ const InnerScreensHeader = ({navigation,screenName}) => {
 
   return (
     <View style={[DrawerHeaderStyle.containerView]}>
-      <Status_bar darkModeBgColor={AppColors.darkTheme} lightModeBgColor={AppColors.primary} lightModeContent={'light-content'} darkModeContent={'dark-content'} />
+      {/* <Status_bar darkModeBgColor={AppColors.darkTheme} lightModeBgColor={AppColors.primary} lightModeContent={'light-content'} darkModeContent={'dark-content'} /> */}
+      <StatusBar
+        barStyle={darkThemeActivator ? 'light-content' : 'light-content'}
+        backgroundColor={darkThemeActivator?AppColors.darkTheme:AppColors.primary}
+      />
       <View style={[DrawerHeaderStyle.headerView,{backgroundColor:darkThemeActivator?AppColors.darkTheme:AppColors.primary}]}>
         <TouchableOpacity
           onPress={() => {
-            navigation.goBack()
+            navigation.navigate('Chats')
           }}>
           <Icons.Ionicons
             name="arrow-back"

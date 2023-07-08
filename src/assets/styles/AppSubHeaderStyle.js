@@ -8,14 +8,43 @@ import {
 import AppColors from '../colors/Appcolors';
 
 const AppSubHeaderStyle = StyleSheet.create({
+
+  container: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+  },
+  inputContainer: {
+    height: hp('6%'),
+    width: wp('95%'),
+    backgroundColor: AppColors.lightGrey,
+    borderRadius: 25,
+  },
+  searchText: {
+    color: AppColors.coolgray
+  },
+  iconContainer: {
+    paddingLeft: 4,
+    justifyContent: 'center',
+    margin: 0,
+  },
+  searchStyle:{
+    color: AppColors.coolgray, size: 23
+  },
+crossStyle:{
+  color: AppColors.coolgray, size: 23,
+},
+
+//===== PEHLY WALA
+
   searchViewStyle: {
     flexDirection: 'row',
-    marginHorizontal: wp('4%'),
-    paddingHorizontal: wp('4%'),
-    borderRadius: wp('8%'),
+    // marginHorizontal: wp('4%'),
+    // paddingHorizontal: wp('4%'),
+    // borderRadius: wp('8%'),
     alignItems: 'center',
-    borderWidth: hp('0.3%'),
-    marginTop:hp('1%'),
+    // borderWidth: hp('0.3%'),
+    // marginTop:hp('1%'),
     height:wp('12%')
   },
   textInputPlaceholderStyle: {fontSize: wp('4%'),marginLeft:wp('3%')},

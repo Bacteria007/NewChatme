@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -6,9 +6,15 @@ import {
 } from 'react-native-responsive-screen';
 import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
+import {BgTheme} from "./BgTheme";
+// import AppContext from '../../context/AppContext';
+
+// const bgTheme=()=>{
+//   const {darkThemeActivator}=useContext(AppContext)
+//   return darkThemeActivator
+// }
 
 const AppHeaderStyle = StyleSheet.create({
-
   mainHeader: {
     height: hp('8%'),
     justifyContent: 'center',
@@ -30,7 +36,7 @@ const AppHeaderStyle = StyleSheet.create({
     justifyContent: 'space-between',
     width: wp('20%'),
     alignItems: 'center',
-    // backgroundColor:'white'
+    // backgroundColor:BgTheme?'red':'white'
   },
 });
 
