@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
 
 import React, { useState, useContext } from 'react';
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
@@ -44,9 +44,12 @@ const Settings = ({ navigation }) => {
                 navigation.navigate('blocked');
               }}>
               <View style={[SettingScreenStyle.touchableView]}>
+                <View style={{flexDirection:'row',justifyContent:'space-between',width:wp('40%')}}>
+                  <Icons.FontAwesome5 name='user-slash' size={wp('5%')}/>
                 <Text style={[SettingScreenStyle.touchableText]}>
                   Block Contact
                 </Text>
+                </View>
                 <Icons.FontAwesome5
                   name={iconName}
                   size={iconSize}
@@ -59,9 +62,12 @@ const Settings = ({ navigation }) => {
                 navigation.navigate('changePassword');
               }}>
               <View style={[SettingScreenStyle.touchableView]}>
+                <View style={{flexDirection:'row'}}>
+                  <Image source={require('../../assets/imges/passwordChange.png')} style={{height:wp('5%'),width:wp('5%')}} />
                 <Text style={[SettingScreenStyle.touchableText]}>
                   Change Password
                 </Text>
+                </View>
                 <Icons.FontAwesome5
                   name={iconName}
                   size={iconSize}
