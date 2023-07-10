@@ -391,7 +391,7 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator
           options={{ headerShown: false }}
-          initialRouteName="Drawer">
+          initialRouteName="DrawerScreens">
           <Stack.Screen
             name="TabScreen"
             component={TabScreens}

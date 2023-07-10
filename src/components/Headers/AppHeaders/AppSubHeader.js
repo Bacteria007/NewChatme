@@ -9,17 +9,14 @@ import { SearchBar } from '@rneui/themed';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
 import AppSubHeaderStyle from '../../../assets/styles/AppSubHeaderStyle';
 
-const AppSubHeader = () => {
+const AppSubHeader = ({ handleSearchOnChange, searchQuery}) => {
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const handleOnChange = e => {
-    setSearchQuery(e);
-  };
+
   return (
     <SearchBar
       lightTheme
-      onChangeText={handleOnChange}
-      value={searchQuery}
+      onChangeText={handleSearchOnChange}      // YE AIK FUNCTION LY RAHA HAI DISCUSSION WALI SCREEN SY 
+      value={searchQuery}                     // ISS MEIN WO VALUE AIY GI JO K HUM SEARCH KR RAHY HAIN VALUE MREIN DATA DISCUSSION WALI SCREEN SY AA RAHA HAI
       elevation={0}
       underlineColorAndroid="transparent"
       placeholder="Search Chats"
