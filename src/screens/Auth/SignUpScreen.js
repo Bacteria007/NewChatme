@@ -13,6 +13,11 @@ import Status_bar from '../../components/Headers/Status_bar';
 import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { PhoneNumberUtil } from 'google-libphonenumber';
+import Snackbar from 'react-native-snackbar';
+
+
+
 
 const SignUpScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -20,10 +25,27 @@ const SignUpScreen = ({navigation}) => {
   const [countryCode, setCountryCode] = useState('');
   const [selectedCountry, setSelectedCountry] = useState(null);
 
+  const phoneNumberUtil = PhoneNumberUtil.getInstance();
+
+  const isValidPhoneNumber = () => {
+    try {
+      const parsedPhoneNumber = phoneNumberUtil.parseAndKeepRawInput(
+        phoneNumber,
+        selectedCountry?.cca2
+      );
+      return phoneNumberUtil.isValidNumber(parsedPhoneNumber);
+    } catch (error) {
+      return false;
+    }
+  };
+
+ 
+
   const handleCountrySelect = country => {
     setSelectedCountry(country);
     setCountryCode(country.callingCode);
   };
+
 
   const handleSignUp = ({navigation}) => {
     const formdata = new FormData();
@@ -88,6 +110,7 @@ const SignUpScreen = ({navigation}) => {
           onChangeText={text => setPhoneNumber(text)}
           keyboardType="numeric"
           maxLength={15}
+          value={phoneNumber}
         />
       </View>
 
@@ -99,10 +122,32 @@ const SignUpScreen = ({navigation}) => {
       />
 
       <TouchableOpacity
-        onPress={() => 
-          navigation.navigate('DrawerScreens')
+        onPress={() => {
+          if (!isValidPhoneNumber()) {
+            Snackbar.show({
+              
+              text: 'Phone number is not valid',
+              duration: Snackbar.LENGTH_LONG,
+           marginBottom:60
+            });
+            return;
+          }
+          if(password.length< 8){
+            Snackbar.show({
+              
+              text: 'Password contain atleast 8 character',
+              duration: Snackbar.LENGTH_LONG,
+           marginBottom:60
+            });
+            return;
+          }
+          else{
+            navigation.navigate('DrawerScreens')
+          }
+        
+          // handleSubmit();
           // handleSignUp({navigation})
-        }
+        }}
         style={[SignUpStyleSheet.TouchableButtonStyle]}>
         <Text style={[SignUpStyleSheet.TouchableTextStyle]}>Next</Text>
       </TouchableOpacity>
