@@ -414,7 +414,7 @@ const App = () => {
           <Stack.Screen
             name="LogInScreen"
             component={LogInScreen}
-
+            options={{ headerShown: false }}
 
           />
           <Stack.Screen
