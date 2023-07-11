@@ -12,6 +12,7 @@ const LogInStyleSheet = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         paddingTop:hp('1'),
+        // backgroundColor:'red'
       },
       title: {
         fontSize: hp('3'),
@@ -23,6 +24,9 @@ const LogInStyleSheet = StyleSheet.create({
         // textShadowRadius: 0.1,
         
 
+      },
+      text:{
+        textAlign:'center'
       },
       image: {
         width: wp("70%"),
@@ -50,6 +54,14 @@ const LogInStyleSheet = StyleSheet.create({
        textAlignVertical:'center',
        color:AppColors.black
       },
+      passwordIcon: {
+        fontSize:wp('6'),
+        height:hp('7'),
+        width:wp('16'),
+        textAlign:'center',
+       textAlignVertical:'center',
+       color:AppColors.gray
+      },
       phoneNumberContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -57,24 +69,38 @@ const LogInStyleSheet = StyleSheet.create({
         width:wp('85'),
         justifyContent:'space-between'
       },
-      phoneNumberInput: {
-        fontSize: wp('5'),
+      passwordContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: hp('5'),
+        width:wp('85'),
+        justifyContent:'space-between',
         borderColor:AppColors.gray,
         borderWidth:wp("0.25"),
+        borderRadius:wp('1.5'),
+        // backgroundColor:'red',
+        height:hp('7'),
+      },
+      forgotpasswordText:{
+marginBottom: hp('5'),
+justifyContent:"flex-start"
+      },
+      phoneNumberInput: {
+        fontSize: wp('5'),
         height:hp('7'),
         width:wp('68'),
         borderRadius:wp('1.5'),
+        borderColor:AppColors.gray,
+        borderWidth:wp("0.25"),
         paddingHorizontal:wp('5')
         
       },
-      passwordInput: {
+     
+         passwordInput: {
         height:hp('7'),
-        width:wp('85'),
+        width:wp('68'),
         fontSize: wp('5'),
-        marginBottom: hp('5'),
-        borderColor:AppColors.gray,
-        borderWidth:wp("0.25"),
-        borderRadius:wp('1.5'),
+     
         paddingHorizontal:wp('6'),
       },
       TouchableButtonStyle:{

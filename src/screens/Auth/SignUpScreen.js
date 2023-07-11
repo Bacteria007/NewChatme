@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,24 +14,34 @@ import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { PhoneNumberUtil } from 'google-libphonenumber';
-import Snackbar from 'react-native-snackbar';
+import { Snackbar } from 'react-native-paper';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import { Icons } from '../../assets/Icons';
 
-
-
-
-const SignUpScreen = ({navigation}) => {
+const SignUpScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [selectedCountry, setSelectedCountry] = useState(null);
-
+  const [visible, setVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordSnackWidth, setPasswordSnackWidth] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
+
+  const showSnackbar = message => {
+    setSnackbarMessage(message);
+    setVisible(true);
+  };
 
   const isValidPhoneNumber = () => {
     try {
       const parsedPhoneNumber = phoneNumberUtil.parseAndKeepRawInput(
         phoneNumber,
-        selectedCountry?.cca2
+        selectedCountry?.cca2,
       );
       return phoneNumberUtil.isValidNumber(parsedPhoneNumber);
     } catch (error) {
@@ -39,15 +49,12 @@ const SignUpScreen = ({navigation}) => {
     }
   };
 
- 
-
   const handleCountrySelect = country => {
     setSelectedCountry(country);
     setCountryCode(country.callingCode);
   };
 
-
-  const handleSignUp = ({navigation}) => {
+  const handleSignUp = ({ navigation }) => {
     const formdata = new FormData();
     formdata.append('name', '');
     formdata.append('phoneNo', phoneNumber);
@@ -56,7 +63,7 @@ const SignUpScreen = ({navigation}) => {
       method: 'post',
       url: 'http://192.168.10.14:8888/signup',
       data: formdata,
-      headers: {'Content-Type': 'multipart/form-data'},
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
       .then(function (response) {
         if (response.data.save === true) {
@@ -74,7 +81,7 @@ const SignUpScreen = ({navigation}) => {
 
   useEffect(() => {
     // Set default country as Pakistan
-    setSelectedCountry({cca2: 'PK', callingCode: '92'});
+    setSelectedCountry({ cca2: 'PK', callingCode: '92' });
     setCountryCode('92');
   }, []);
 
@@ -114,37 +121,76 @@ const SignUpScreen = ({navigation}) => {
         />
       </View>
 
-      <TextInput
-        style={[SignUpStyleSheet.passwordInput]}
-        secureTextEntry
-        placeholder="Password"
-        onChangeText={text => setPassword(text)}
-      />
-
+      <View style={[SignUpStyleSheet.passwordContainer]}>
+        <TextInput
+          style={[SignUpStyleSheet.passwordInput]}
+          secureTextEntry={passwordVisible}
+          placeholder="Password"
+          onChangeText={text => setPassword(text)}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            setPasswordVisible(!passwordVisible);
+          }}>
+          <Icons.Feather
+            name={passwordVisible === true ? 'eye-off' : 'eye'}
+            style={[SignUpStyleSheet.passwordIcon]}
+          />
+        </TouchableOpacity>
+      </View>
+      <Snackbar
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        duration={2000}
+        style={
+          passwordSnackWidth === true
+            ? {
+                backgroundColor: '#D3D3D3',
+                width: wp('80'),
+                marginBottom: hp('6'),
+                alignSelf: 'center',
+              }
+            : {
+                backgroundColor: '#D3D3D3',
+                width: wp('55'),
+                marginBottom: hp('6'),
+                alignSelf: 'center',
+              }
+        }>
+        <Text style={[SignUpStyleSheet.text]}>{snackbarMessage}</Text>
+      </Snackbar>
       <TouchableOpacity
         onPress={() => {
+          if ((phoneNumber == '') & (password == '')) {
+            setPasswordSnackWidth(!false);
+            showSnackbar('Enter Phone Number and Password');
+            return;
+          }
           if (!isValidPhoneNumber()) {
-            Snackbar.show({
-              
-              text: 'Phone number is not valid',
-              duration: Snackbar.LENGTH_LONG,
-           marginBottom:60
-            });
-            return;
+            if (phoneNumber === '') {
+              setPasswordSnackWidth(!false);
+              showSnackbar('Phone number must not be empty');
+              return;
+            } else {
+              setPasswordSnackWidth(!true);
+              showSnackbar('Phone number is not valid');
+              return;
+            }
           }
-          if(password.length< 8){
-            Snackbar.show({
-              
-              text: 'Password contain atleast 8 character',
-              duration: Snackbar.LENGTH_LONG,
-           marginBottom:60
-            });
-            return;
+          if (password.length < 8) {
+            if (password === '') {
+              setPasswordSnackWidth(!false);
+              showSnackbar('Password must not be empty');
+              return;
+            } else {
+              setPasswordSnackWidth(!false);
+              showSnackbar('Password contain atLeast 8 character');
+              return;
+            }
+          } else {
+            navigation.navigate('DrawerScreens');
           }
-          else{
-            navigation.navigate('DrawerScreens')
-          }
-        
+
           // handleSubmit();
           // handleSignUp({navigation})
         }}
