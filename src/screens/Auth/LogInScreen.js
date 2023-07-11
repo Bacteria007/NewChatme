@@ -1,41 +1,38 @@
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/LogInStyleSheet';
 import Status_bar from '../../components/Headers/Status_bar';
 import AppColors from '../../assets/colors/Appcolors';
 import { PhoneNumberUtil } from 'google-libphonenumber';
-import {Snackbar} from 'react-native-paper';
+import { Snackbar } from 'react-native-paper';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import { Icons } from '../../assets/Icons';
 
-// import Snackbar from 'react-native-snackbar';
-const LogInScreen =()=>{
-    const [phoneNumber, setPhoneNumber] = useState('');
+const LogInScreen = ({ navigation }) => {
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [visible, setVisible] = useState(false);
-//   const [passwordSnackWidth, setPasswordSnackWidth] = useState(false);
-const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordSnackWidth, setPasswordSnackWidth] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-const showSnackbar = (message) => {
+  const showSnackbar = message => {
     setSnackbarMessage(message);
     setVisible(true);
   };
-
-  const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
   const isValidPhoneNumber = () => {
     try {
       const parsedPhoneNumber = phoneNumberUtil.parseAndKeepRawInput(
         phoneNumber,
-        selectedCountry?.cca2
+        selectedCountry?.cca2,
       );
       return phoneNumberUtil.isValidNumber(parsedPhoneNumber);
     } catch (error) {
@@ -43,19 +40,14 @@ const showSnackbar = (message) => {
     }
   };
 
- 
-
   const handleCountrySelect = country => {
     setSelectedCountry(country);
     setCountryCode(country.callingCode);
   };
 
-
- 
-
   useEffect(() => {
     // Set default country as Pakistan
-    setSelectedCountry({cca2: 'PK', callingCode: '92'});
+    setSelectedCountry({ cca2: 'PK', callingCode: '92' });
     setCountryCode('92');
   }, []);
 
@@ -95,41 +87,77 @@ const showSnackbar = (message) => {
         />
       </View>
 
-      <TextInput
-        style={[LogInStyleSheet.passwordInput]}
-        secureTextEntry
-        placeholder="Password"
-        onChangeText={text => setPassword(text)}
-      />
-
-<Snackbar
-    visible={visible}
-    onDismiss={() => setVisible(false)}
-    duration={2000}
-    style={
-    //    passwordSnackWidth === true
-    //       ?  { backgroundColor: 'skyblue', width: 290, height: 30, marginBottom: 70 ,alignSelf:'center'}
-        //   :
-          { backgroundColor: '#D3D3D3', width: 290, height: 30, marginBottom: 70 ,alignSelf:'center'}
-      }
-  >
-    <Text>{snackbarMessage}</Text>
-  </Snackbar>
+      <View style={[LogInStyleSheet.passwordContainer]}>
+        <TextInput
+          style={[LogInStyleSheet.passwordInput]}
+          secureTextEntry={passwordVisible}
+          placeholder="Password"
+          onChangeText={text => setPassword(text)}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            setPasswordVisible(!passwordVisible);
+          }}>
+          <Icons.Feather
+            name={passwordVisible === true ? 'eye-off' : 'eye'}
+            style={[LogInStyleSheet.passwordIcon]}
+          />
+        </TouchableOpacity>
+      </View>
+      {/* <Text style={[LogInStyleSheet.forgotpasswordText]}>Forgot Password?</Text> */}
+      <Snackbar
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        duration={2000}
+        style={
+          passwordSnackWidth === true
+            ? {
+                backgroundColor: '#D3D3D3',
+                width: wp('80'),
+                marginBottom: hp('6'),
+                alignSelf: 'center',
+              }
+            : {
+                backgroundColor: '#D3D3D3',
+                width: wp('55'),
+                marginBottom: hp('6'),
+                alignSelf: 'center',
+              }
+        }>
+        <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
+      </Snackbar>
       <TouchableOpacity
         onPress={() => {
+          if ((phoneNumber == '') & (password == '')) {
+            setPasswordSnackWidth(!false);
+            showSnackbar('Enter Phone Number and Password');
+            return;
+          }
           if (!isValidPhoneNumber()) {
-            showSnackbar('Phone number is not valid')
-            return;
+            if (phoneNumber === '') {
+              setPasswordSnackWidth(!false);
+              showSnackbar('Phone number must not be empty');
+              return;
+            } else {
+              setPasswordSnackWidth(!true);
+              showSnackbar('Phone number is not valid');
+              return;
+            }
           }
-          if(password.length< 8){
-            // setPasswordSnackWidth(!false)
-            showSnackbar('Password contain atLeast 8 character')
-            return;
+          if (password.length < 8) {
+            if (password === '') {
+              setPasswordSnackWidth(!false);
+              showSnackbar('Password must not be empty');
+              return;
+            } else {
+              setPasswordSnackWidth(!false);
+              showSnackbar('Password contain atLeast 8 character');
+              return;
+            }
+          } else {
+            navigation.navigate('DrawerScreens');
           }
-          else{
-            navigation.navigate('DrawerScreens')
-          }
-        
+
           // handleSubmit();
           // handleSignUp({navigation})
         }}
@@ -137,6 +165,6 @@ const showSnackbar = (message) => {
         <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
       </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
 export default LogInScreen;
