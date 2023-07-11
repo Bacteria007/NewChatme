@@ -16,8 +16,9 @@ import {BgTheme} from "./BgTheme";
 
 const AppHeaderStyle = StyleSheet.create({
   mainHeader: {
-    height: hp('8%'),
+    height: hp('18%'),
     justifyContent: 'center',
+    position:'absolute',
   },
   headerView: {
     flexDirection: 'row',

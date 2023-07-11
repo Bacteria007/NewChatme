@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 
 import {
   View,
@@ -11,7 +11,8 @@ import {
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'react-native-axios';
-
+import AppColors from '../assets/colors/Appcolors';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 const ChatBot = props => {
   const [data, setData] = useState([]);
   const apiKey = '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';
@@ -35,61 +36,64 @@ const ChatBot = props => {
       },
     );
     const text = response.data.choices[0].text;
-    setData([ ...data,{type: 'user', text: textInput}, {type: 'bot', text: text},  ]);
+    setData([...data, { type: 'user', text: textInput }, { type: 'bot', text: text },]);
     setTextInput('');
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>AI ChatBot</Text>
+      <View style={styles.titleConatiner}>
+      <Text style={styles.title}>Talk Bot</Text>
+      </View>
       <FlatList
         showsVerticalScrollIndicator={false}
-        //   showsHorizontalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         data={data}
         style={styles.body}
-        renderItem={({item}) => {
+        renderItem={({ item }) => {
           return (
-            <View style={{flexDirection: 'row', padding: 10}}>
+            <View style={{ flexDirection: 'row', padding: 10 }}>
               <Text
                 style={{
                   fontWeight: 'bold',
                   color: item.type === 'user' ? '#4A148C' : 'red',
                 }}>
-                {item.type === 'user' ? 'Me:  ' : 'Bot:'}
+                {item.type === 'user' ? (
+                  <View style={styles.userMsgBoxConatianer}>
+                    <View style={styles.userMsgBox}>
+                      <Text style={styles.userText}>{item.text}</Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View style={styles.botMsgBox}>
+                    <Text style={styles.botText}>{item.text}</Text>
+                  </View>
+                )}
               </Text>
-              <Text style={styles.bot}>{item.text}</Text>
             </View>
           );
         }}
       />
 
       <View
-        style={{
-          flexDirection: 'row',
-          width: '80%',
-          borderColor: 'black',
-          borderRadius: 40,
-          borderWidth: 1,
-          height: 60,
-          justifyContent: 'center',
-          alignContent: 'center',
-        }}>
+        style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           value={textInput}
           onChangeText={text => setTextInput(text)}
-          placeholder="Ask me AnyThing"
+          placeholder="Ask me AnyThing" placeholderTextColor={AppColors.gray}
         />
         {textInput == '' ? (
-          <TouchableOpacity style={styles.button}>
-            {/* <Text style={styles.buttonText}>Send Message</Text> */}
-            <FontAwesome name="send" size={30} color="#E1BEE7" />
+          <View style={styles.sendButtonView}>
+          <TouchableOpacity style={styles.sendButton}>
+            <FontAwesome name="send" size={20} color={AppColors.white}/>
           </TouchableOpacity>
+          </View>
         ) : (
-          <TouchableOpacity style={styles.button} onPress={handleSend}>
-            {/* <Text style={styles.buttonText}>Send Message</Text> */}
-            <FontAwesome name="send" size={30} color="#E1BEE7" />
+          <View style={styles.sendButtonView}>
+          <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+            <FontAwesome name="send" size={20} color={AppColors.lightwhite} />
           </TouchableOpacity>
+          </View>
         )}
       </View>
     </View>
@@ -100,8 +104,8 @@ export default ChatBot;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#CE93D8',
-    alignItems: 'center',
+    backgroundColor: AppColors.bgprimary,
+   
   },
   title: {
     fontSize: 28,
@@ -109,47 +113,72 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
   },
+  titleConatiner:{
+    width:wp('100%'),
+    alignItems:'center'
+  },
+ 
   body: {
-    flex: 1,
-    backgroundColor: '#CE93D8',
-    width: '90%',
-    marginTop: 5,
-    marginBottom: 10,
-    //    marginRight:10
-    // marginRight:20,
+    backgroundColor: AppColors.bgprimary,
+    width: wp('100%'),
+    marginBottom: hp('1%'),
   },
-  bot: {
-    fontSize: 16,
-    marginRight: 25,
-    // padding:0
-  },
+ 
   input: {
     borderColor: 'black',
-    // borderWidth: 1,
-    width: '60%',
+    width: wp('60%'),
     borderRadius: 20,
-    // marginLeft:10,
-    // paddingHorizontal:10
   },
-  button: {
-    backgroundColor: '#4A148C',
-    borderColor: 'black',
-    borderWidth: 1,
-    borderBottomLeftRadius: 20,
-    borderTopLeftRadius: 20,
-    borderBottomEndRadius: 20,
-    width: '15%',
-    // paddingTop:10,
-    // paddingLeft:10,
-    // marginRight:10,
+  inputContainer:{
+    flexDirection: 'row',
+    width: wp('90%'),
+    borderColor:AppColors.black,
+    borderRadius: wp('90%'),
+    borderWidth:2,
+    height: hp('7%'),
+    justifyContent: 'space-around',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 5,
-    marginLeft: 15,
-    height: 50,
+    alignSelf:'center',
+    marginBottom:hp('1%')
+    
   },
-  buttonText: {
+  sendButton: {
+    backgroundColor: AppColors.primary,
+    padding:7,
+    borderRadius:hp('5.5'),
+    height:hp('5.5%'),width:hp('5.5%'),
+    justifyContent:'center',
+  },
+  sendButtonView:{
+    flexDirection:"row",alignItems:"center"
+  },
+    buttonText: {
     fontSize: 12,
-    color: 'Green',
+    color: AppColors.primary,
   },
+  botText: {
+    fontSize: hp('2.5%'),
+    color: AppColors.white,
+  },
+  userText: {
+    fontSize: hp('2%'),
+    color: AppColors.black,
+  },
+  botMsgBox: {
+    backgroundColor: AppColors.coolgray,
+    width: wp('40%'),
+    padding:7,
+    borderRadius:wp('2%'),
+  },
+  userMsgBox: {
+    backgroundColor:AppColors.lightBlack,
+    width: wp('45%'),
+    padding:8,
+    borderRadius:wp('2%'),
+    alignSelf:'flex-end'
+  },
+  userMsgBoxConatianer: {
+    width: wp('95%'),
+   
+  }
 });
