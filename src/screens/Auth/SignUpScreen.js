@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   Image,
-  StatusBar,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import SignUpStyleSheet from '../../assets/styles/AuthStyleSheet/SignUpStyleSheet/SignUpStyleSheet';
@@ -20,8 +23,11 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Icons } from '../../assets/Icons';
+import TranslationFile from '../../assets/translation/TranslationFile';
+import AppContext from '../../context/AppContext';
 
 const SignUpScreen = ({ navigation }) => {
+  const { language } = useContext(AppContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -91,12 +97,16 @@ const SignUpScreen = ({ navigation }) => {
         darkModeBgColor={'black'}
         lightModeBgColor={AppColors.primary}
       />
-
+      {/* <KeyboardAvoidingView style={[SignUpStyleSheet.container1]} behavior={Platform.OS === 'android' ?'padding':'height'}>
+<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+<> */}
       <Image
         source={require('../../assets/imges/AuthScreenPictures/SignUpPic/SignUpPic.png')}
         style={[SignUpStyleSheet.image]}
       />
-      <Text style={[SignUpStyleSheet.title]}>Enter Your Phone Number</Text>
+      <Text style={[SignUpStyleSheet.title]}>
+        {TranslationFile[language].Enter_Your_Phone_Number}
+      </Text>
       <View style={[SignUpStyleSheet.countryContainer]}>
         <CountryPicker
           withFilter
@@ -113,7 +123,7 @@ const SignUpScreen = ({ navigation }) => {
         <Text style={[SignUpStyleSheet.countryCode]}>+{countryCode}</Text>
         <TextInput
           style={[SignUpStyleSheet.phoneNumberInput]}
-          placeholder="Phone Number"
+          placeholder={TranslationFile[language].Phone_Number}
           onChangeText={text => setPhoneNumber(text)}
           keyboardType="numeric"
           maxLength={15}
@@ -125,7 +135,7 @@ const SignUpScreen = ({ navigation }) => {
         <TextInput
           style={[SignUpStyleSheet.passwordInput]}
           secureTextEntry={passwordVisible}
-          placeholder="Password"
+          placeholder={TranslationFile[language].Password}
           onChangeText={text => setPassword(text)}
         />
         <TouchableOpacity
@@ -161,30 +171,39 @@ const SignUpScreen = ({ navigation }) => {
       </Snackbar>
       <TouchableOpacity
         onPress={() => {
+          Keyboard.dismiss;
           if ((phoneNumber == '') & (password == '')) {
             setPasswordSnackWidth(!false);
-            showSnackbar('Enter Phone Number and Password');
+            showSnackbar(
+              TranslationFile[language].Enter_Phone_Number_and_Password,
+            );
             return;
           }
           if (!isValidPhoneNumber()) {
             if (phoneNumber === '') {
               setPasswordSnackWidth(!false);
-              showSnackbar('Phone number must not be empty');
+              showSnackbar(
+                TranslationFile[language].Phone_number_must_not_be_empty,
+              );
               return;
             } else {
               setPasswordSnackWidth(!true);
-              showSnackbar('Phone number is not valid');
+              showSnackbar(TranslationFile[language].Phone_number_is_not_valid);
               return;
             }
           }
           if (password.length < 8) {
             if (password === '') {
               setPasswordSnackWidth(!false);
-              showSnackbar('Password must not be empty');
+              showSnackbar(
+                TranslationFile[language].Password_must_not_be_empty,
+              );
               return;
             } else {
               setPasswordSnackWidth(!false);
-              showSnackbar('Password contain atLeast 8 character');
+              showSnackbar(
+                TranslationFile[language].Password_contain_atLeast_8_character,
+              );
               return;
             }
           } else {
@@ -195,8 +214,13 @@ const SignUpScreen = ({ navigation }) => {
           // handleSignUp({navigation})
         }}
         style={[SignUpStyleSheet.TouchableButtonStyle]}>
-        <Text style={[SignUpStyleSheet.TouchableTextStyle]}>Next</Text>
+        <Text style={[SignUpStyleSheet.TouchableTextStyle]}>
+          {TranslationFile[language].Next}
+        </Text>
       </TouchableOpacity>
+      {/* </>
+    </TouchableWithoutFeedback>
+    </KeyboardAvoidingView > */}
     </View>
   );
 };

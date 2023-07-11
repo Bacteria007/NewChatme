@@ -11,6 +11,10 @@ const SignUpStyleSheet = StyleSheet.create({
     alignItems: 'center',
     paddingTop: hp('1'),
   },
+  // container1: {
+  //   flex: 1,
+  //   justifyContent:'flex-end'
+  // },
   title: {
     fontSize: hp('3'),
     fontFamily: 'Poppins-Medium',
@@ -100,5 +104,8 @@ const SignUpStyleSheet = StyleSheet.create({
     textAlignVertical: 'center',
     color: AppColors.gray,
   },
+  text:{
+    textAlign:'center'
+  }
 });
 export default SignUpStyleSheet;
