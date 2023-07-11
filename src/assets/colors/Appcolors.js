@@ -5,6 +5,7 @@ const AppColors = {
   white: 'white',
   black: 'black',
   gray: 'gray',
+  bgprimary:'#FAFBFF',
   transparent: 'transparent',
   lightGrey: "rgb(239, 239, 239)",
   lightBlack: "rgba(0, 0, 0,0.1)",

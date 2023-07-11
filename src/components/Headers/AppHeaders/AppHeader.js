@@ -14,6 +14,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import { SearchBar } from '@rneui/themed';
 
 import BotIcon from '../../../assets/imges/headericons/bot.svg'
 import MenuLeft from '../../../assets/imges/headericons/menuLeft.svg'
@@ -25,6 +26,8 @@ import { useDrawerStatus } from '@react-navigation/drawer';
 import AppContext from '../../../context/AppContext';
 import { BgTheme } from '../../../assets/styles/BgTheme';
 import Status_bar from '../Status_bar';
+import AppSubHeader from './AppSubHeader';
+import AppSubHeaderStyle from '../../../assets/styles/AppSubHeaderStyle';
 
 // const NavScreens = ({navigation}) => {
 //   <Stack.Navigator>
@@ -32,7 +35,7 @@ import Status_bar from '../Status_bar';
 //   </Stack.Navigator>;
 // };
 
-const AppHeader = ({ navigation, headerTitle }) => {
+const AppHeader = ({ navigation, headerTitle,searchQuery,handleSearchOnChange }) => {
   const isDrawerOen = useDrawerStatus();
   const isDarkMode = useColorScheme() === 'dark';
   const { darkThemeActivator, changeTheme } = useContext(AppContext);
@@ -41,7 +44,7 @@ const AppHeader = ({ navigation, headerTitle }) => {
     <View
       style={[
         AppHeaderStyle.mainHeader,
-        { backgroundColor: BgTheme ? AppColors.darkTheme : AppColors.white },
+        { backgroundColor: BgTheme ? AppColors.darkTheme : AppColors.pbg },
       ]}>
       <View style={[AppHeaderStyle.headerView]}>
         {/* {isDrawerOen === 'open' ? ( */}
@@ -102,6 +105,28 @@ const AppHeader = ({ navigation, headerTitle }) => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <SearchBar
+      lightTheme
+      onChangeText={handleSearchOnChange}      // YE AIK FUNCTION LY RAHA HAI DISCUSSION WALI SCREEN SY 
+      value={searchQuery}                     // ISS MEIN WO VALUE AIY GI JO K HUM SEARCH KR RAHY HAIN VALUE MREIN DATA DISCUSSION WALI SCREEN SY AA RAHA HAI
+      elevation={0}
+      underlineColorAndroid="transparent"
+      placeholder="Search Chats"
+      placeholderTextColor={AppColors.coolgray}
+      round
+      showCancel
+      containerStyle={AppSubHeaderStyle.container}
+      inputContainerStyle={AppSubHeaderStyle.inputContainer}
+      inputStyle={{ color: AppColors.coolgray }}
+      leftIconContainerStyle={AppSubHeaderStyle.iconContainer}
+      rightIconContainerStyle={AppSubHeaderStyle.iconContainer}
+      searchIcon={AppSubHeaderStyle.searchStyle}
+      clearIcon={AppSubHeaderStyle.crossStyle}
+      clearTextOnFocus={true}
+    />
+
+
     </View>
   );
 };
