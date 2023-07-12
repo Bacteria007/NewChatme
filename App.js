@@ -123,7 +123,7 @@ const App = () => {
               // flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
-              backgroundColor: AppColors.lightwhite,
+              backgroundColor: AppColors.lightBlack,
               position: 'absolute',
               elevation: 0  // <-- this is the solution
             },

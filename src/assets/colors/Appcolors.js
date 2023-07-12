@@ -5,6 +5,7 @@ const AppColors = {
   white: 'white',
   black: 'black',
   gray: 'gray',
+
   bgprimary:'#FAFBFF',
   transparent: 'transparent',
   lightGrey: "rgb(239, 239, 239)",
@@ -21,6 +22,9 @@ const AppColors = {
   searchBorderDark: 'rgba(211,211,211,0.5)',
   searchContentDark: "rgba(255,255,255,0.7)",
   homeCards:'rgba(255,255,255,0.4)',
+  linearGradient:{
+    blue:'#c4ddfe',pink:'#ffb6c1',
+  },
   // purple shades
   Lavender: '#E6E6FA',//3
   Mauve: '#E0B0FF', //2
