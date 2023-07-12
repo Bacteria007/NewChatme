@@ -13,7 +13,7 @@ const TabIcons = ({type,name,focused,size}) => {
     name={name}
     size={size}
     color={
-        darkThemeActivator?( focused ? AppColors.primary : AppColors.darkThemeContent):(focused ? AppColors.primary : AppColors.inActiveIconsColor)
+        darkThemeActivator?( focused ? AppColors.Orchid : AppColors.darkThemeContent):(focused ? AppColors.black : AppColors.inActiveIconsColor)
         }
     />
   )

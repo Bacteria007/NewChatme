@@ -9,54 +9,48 @@ import AppColors from '../colors/Appcolors';
 
 const DiscussionStyle = StyleSheet.create({
   wholeScreenContainer: {
-    flex:1,
+    // flex:1,
     height: hp('100%'),
-    backgroundColor: AppColors.bgprimary,
+    // backgroundColor: AppColors.black,
   },
   animatedHeader: {
     elevation: 4,
     zIndex: 100,
-    top: 0,
+    // top: 0,
   },
-  flatlistContainer: {
+  flatlistItemContainer: {
 
-    paddingTop: 10,
+    marginTop: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    top: 110,
+    // top: 115,
+    // backgroundColor:'red',
+    
   },
-  cardStyle: {
-    height: hp('11%'),
-    width: wp('95%'),
-    borderRadius: 10,
-    elevation: 2,
-  },
-  cardView: {
-    flexDirection: 'row',
-    height: hp('11%'),
-    width: wp('95%'),
-    borderRadius: 10,
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-
   neomorphStyle: {
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.6,
     shadowRadius: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: AppColors.white,
+    backgroundColor: AppColors.homeCards,
     borderRadius: 10,
-    height: hp('11%'),
+    height: hp('10%'),
     width: wp('95%'),
   },
 
-  nameAndMsgContainer: { flexDirection: 'column', marginLeft: 10 },
+  nameAndMsgContainer: { 
+    flexDirection: 'column',
+     marginLeft: 10,
+     },
   dpImage: {
     height: hp('6%'),
     width: hp('6%'),
     borderRadius: 100,
   },
+  dpImageView: {
+    marginLeft: 10,
+    // backgroundColor:'orange',
+   },
   profileName: {
     fontFamily: FontStyle.regularFont,
     color: AppColors.black,
@@ -67,7 +61,22 @@ const DiscussionStyle = StyleSheet.create({
     color: AppColors.gray,
     fontSize: 11,
   },
-  dpImageView: { marginLeft: 10 },
+  cardStyle: {
+    height: hp('9%'),
+    width: wp('95%'),
+    borderRadius: 10,
+    elevation: 2,
+  },
+  cardView: {
+    flexDirection: 'row',
+    height: hp('9%'),
+    width: wp('95%'),
+    borderRadius: 10,
+    alignItems: 'center',
+    backgroundColor: "rgba(255,255,255,0.1)",
+  },
+
+  
 });
 
 export default DiscussionStyle;

@@ -5,10 +5,12 @@ const AppColors = {
   white: 'white',
   black: 'black',
   gray: 'gray',
+
   bgprimary:'#FAFBFF',
   transparent: 'transparent',
   lightGrey: "rgb(239, 239, 239)",
   lightBlack: "rgba(0, 0, 0,0.1)",
+  lightBlack2: "rgba(0, 0, 0,0.2)",
   inActiveIconsColor: "rgba(0,0,0,0.6)",
   lightwhite: "rgba(255, 255, 255,0.7)",
   tab: 'rgba(243,237,245,0.8)',
@@ -20,12 +22,14 @@ const AppColors = {
   coolgray: '#383949', //pehlywala
   searchBorderDark: 'rgba(211,211,211,0.5)',
   searchContentDark: "rgba(255,255,255,0.7)",
+  homeCards:'rgba(255,255,255,0.4)',
+  linearGradient:{
+    blue:'#c4ddfe',pink:'#ffb6c1',
+  },
   // purple shades
-  Lavender: '#E6E6FA',
-  Lilac: '#C8A2C8',
-  Periwinkle: '#CCCCFF',
-  Mauve: '#E0B0FF',
-  Orchid: '#DA70D6',
+  Lavender: '#E6E6FA',//3
+  Mauve: '#E0B0FF', //2
+  Orchid: '#DA70D6', //1
   Plum: '#8E4585',
   Violet: '#9400D3',
   dodgerblue: "dodgerblue",
