@@ -22,7 +22,7 @@ import Settings from './src/screens/settings/Settings';
 import AppContext, { AppProvider } from './src/context/AppContext';
 // ICONS
 import Icon, { Icons } from './src/assets/Icons'; // Navigation
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer,useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -58,6 +58,8 @@ import ReelsFilledIcon from './src/assets/imges/footerIcons/reelsFilled.svg'
 import ContactsFill from './src/assets/imges/footerIcons/contacts.svg'
 import ContactsOutline from './src/assets/imges/footerIcons/contactsOutline.svg'
 import LinearGradient from 'react-native-linear-gradient';
+
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -90,6 +92,7 @@ const App = () => {
 
   let iconSize = 20;
   const TabScreens = () => {
+    const isFocused=useIsFocused()
     const { darkThemeActivator } = useContext(AppContext);
 
     let progress = useDrawerProgress();
@@ -107,32 +110,36 @@ const App = () => {
 
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
+        <Tab.Navigator 
+       
+          screenOptions={({ route,focused }) => ({
+
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
             tabBarStyle: {
-              height: hp('12%'),
+              height: hp('9%'),
               borderTopWidth: 0,
-              borderTopColor: darkThemeActivator ? AppColors.darkTheme : 'transparent',
-              flex: 0.12,
+              borderTopColor: darkThemeActivator ? AppColors.darkTheme : AppColors.transparent,
+              // flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
+              backgroundColor: AppColors.lightwhite,
+              position: 'absolute',
+              elevation: 0  // <-- this is the solution
             },
-            tabBarItemStyle: {
-              backgroundColor: darkThemeActivator ? AppColors.darkTheme : AppColors.tab,
-            },
+            tabBarItemStyle: { backgroundColor: darkThemeActivator ? AppColors.darkTheme : AppColors.transparent },
             tabBarLabelStyle: {
               fontWeight: 'bold',
               fontSize: wp('3.5%'),
-              marginBottom: hp('2.2%'),
-              marginTop: hp('0%'),
+              marginBottom: hp('2%'),
+              // marginTop: hp('0%'),
             },
-            tabBarActiveTintColor: AppColors.primary,
+            tabBarActiveTintColor: AppColors.black,
             tabBarInactiveTintColor: darkThemeActivator ? AppColors.darkThemeContent : AppColors.inActiveIconsColor,
             tabBarHideOnKeyboard: 'true',
             tabBarPressColor: 'rgba(255,255,255,0.6)',
-
+            // tabBarLabelPosition:'beside-icon',
+            // tabBarShowLabel:false,
             tabBarIcon: ({ focused }) => {
               if (route.name === 'Chats') {
                 return (
@@ -145,24 +152,14 @@ const App = () => {
               } else if (route.name === 'Contacts') {
                 return (
                   <TabIcons focused={focused} size={21} type={Icons.MaterialCommunityIcons} name={focused ? 'contacts' : 'contacts-outline'} />
-                  // focused ?
-                  // <ContactsFill />
-                  // :
-                  // <ContactsOutline />
-                  );
+                  
+                );
               } else if (route.name === 'Reels') {
                 return (
-
-                  // <TabIcons focused={focused} size={21} type={Icons.MaterialCommunityIcons} name={focused ?  'video-wireless' : 'video-wireless-outline'}/>
-                  //------------------ 
-                  focused?
-                  <Icons.FontAwesome5 name="stream" size={18} color={AppColors.primary}/>:
-                  <StreamOutline/>
-                  //------------------ 
-                  // focused ?
-                  //   <ReelsFilledIcon />
-                  //   :
-                  //   <ReelsoutlineIcon />
+                  focused ?
+                    <Icons.FontAwesome5 name="stream" size={18} color={AppColors.black} /> :
+                    <StreamOutline />
+                 
                 );
               } else if (route.name === 'Groups') {
                 return (
@@ -172,8 +169,11 @@ const App = () => {
                 );
               }
             },
-          })}>
-          <Tab.Screen name="Chats" component={Discussions} />
+          })
+
+
+          }>
+          <Tab.Screen name="Chats" component={Discussions}/>
           <Tab.Screen name="Groups" component={Groups} />
           <Tab.Screen name="Calls" component={Calls} />
           <Tab.Screen name="Reels" component={Reels} />
@@ -249,27 +249,21 @@ const App = () => {
           drawerType: 'slide',
           drawerActiveTintColor: AppColors.black,
           drawerInactiveTintColor: AppColors.black,
-          drawerStyle: { 
-            width: wp('50%'),
-            backgroundColor: AppColors.primary,
-         },
-          drawerLabelStyle: { marginLeft: wp('-6%') },
-          sceneContainerStyle: {
-            
-             backgroundColor: AppColors.primary 
+          drawerStyle: {
+            width: wp('55%'),
+            backgroundColor: AppColors.Orchid,
           },
-          // drawerHideStatusBarOnOpen: true,
+          drawerLabelStyle: { marginLeft: wp('-6%') },
           drawerActiveBackgroundColor: AppColors.white,
+          sceneContainerStyle: { backgroundColor: AppColors.Orchid },
+          // drawerHideStatusBarOnOpen: true,
+          // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen 
         }}
         // backBehavior='history'
         initialRouteName="Home"
         drawerContent={props => {
           return (
-            <View style={{ flex: 1 }} linearGradientProps={{
-              colors: ['red', 'pink'],
-              start: { x: 0, y: 0.5 },
-              end: { x: 1, y: 0.5 },
-            }}>
+            <View style={{ flex: 1 }}>
               <DrawerContentScrollView {...props}>
                 <Animated.View
                   style={[Containers.centerContainer, { height: hp('25%') }]}>
@@ -288,7 +282,7 @@ const App = () => {
                 <DrawerItemList {...props} />
               </DrawerContentScrollView>
             </View>
-           
+
           );
         }}>
         <Drawer.Screen
@@ -386,17 +380,19 @@ const App = () => {
       </Drawer.Navigator>
     );
   };
+const theme={
+  colors: {
+    background: "transparent",
+  },
+}
   return (
     <AppProvider>
-      <NavigationContainer>
+      <NavigationContainer theme={theme}>
         <Stack.Navigator
           options={{ headerShown: false }}
-          initialRouteName="DrawerScreens">
-          <Stack.Screen
-            name="TabScreen"
-            component={TabScreens}
-            options={{ headerShown: false }}
-          />
+          initialRouteName="DrawerScreens"
+        >
+
           <Stack.Screen
             name="WelcomeScreen"
             component={WelcomeScreen}
@@ -427,16 +423,9 @@ const App = () => {
             component={OutgoingCall}
             options={{ headerShown: false }}
           />
+
           <Stack.Screen
             name="DrawerScreens"
-            component={DrawerScreens}
-
-            options={{ headerShown: false }}
-
-
-          />
-          <Stack.Screen
-            name="Drawer"
             component={DrawerScreens}
 
             options={{ headerShown: false }}

@@ -16,18 +16,24 @@ import {BgTheme} from "./BgTheme";
 
 const AppHeaderStyle = StyleSheet.create({
   mainHeader: {
-    height: hp('18%'),
+    // flex:1,
     justifyContent: 'center',
-    position:'absolute',
+    alignItems:'center',
+    height: hp('16%'),
+    // position:'absolute',
   },
   headerView: {
     flexDirection: 'row',
     paddingHorizontal: wp('3.5%'),
     justifyContent: 'space-between',
+    alignItems:'center',
+    width:wp('100%'),
+    // backgroundColor:'blue',
+
   },
   appNameStyle: {
     fontSize: wp('6%'),
-    color: AppColors.primary,
+    color: AppColors.black,
     fontFamily: FontStyle.mediumFont,
     marginLeft:wp('6%'),
     alignSelf:'center'
@@ -37,7 +43,7 @@ const AppHeaderStyle = StyleSheet.create({
     justifyContent: 'space-between',
     width: wp('20%'),
     alignItems: 'center',
-    // backgroundColor:BgTheme?'red':'white'
+    // backgroundColor:'red'
   },
 });
 

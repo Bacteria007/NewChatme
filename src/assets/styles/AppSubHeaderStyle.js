@@ -10,14 +10,15 @@ import AppColors from '../colors/Appcolors';
 const AppSubHeaderStyle = StyleSheet.create({
 
   container: {
-    backgroundColor: 'transparent',
+    backgroundColor:AppColors.transparent,
     borderTopWidth: 0,
     borderBottomWidth: 0,
+    // backgroundColor:'red'
   },
   inputContainer: {
     height: hp('6%'),
     width: wp('95%'),
-    backgroundColor: AppColors.lightGrey,
+    backgroundColor: AppColors.homeCards, //transparent
     borderRadius: 25,
   },
   searchText: {

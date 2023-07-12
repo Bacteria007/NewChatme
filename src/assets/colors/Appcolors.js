@@ -20,12 +20,11 @@ const AppColors = {
   coolgray: '#383949', //pehlywala
   searchBorderDark: 'rgba(211,211,211,0.5)',
   searchContentDark: "rgba(255,255,255,0.7)",
+  homeCards:'rgba(255,255,255,0.4)',
   // purple shades
-  Lavender: '#E6E6FA',
-  Lilac: '#C8A2C8',
-  Periwinkle: '#CCCCFF',
-  Mauve: '#E0B0FF',
-  Orchid: '#DA70D6',
+  Lavender: '#E6E6FA',//3
+  Mauve: '#E0B0FF', //2
+  Orchid: '#DA70D6', //1
   Plum: '#8E4585',
   Violet: '#9400D3',
   dodgerblue: "dodgerblue",

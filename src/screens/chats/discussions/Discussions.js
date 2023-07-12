@@ -6,8 +6,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
-  useColorScheme,
-  ImageBackground, Animated, StyleSheet
+  ImageBackground, Animated
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -22,14 +21,13 @@ import AppContext from '../../../context/AppContext';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import { Card } from 'react-native-paper';
 import DiscussionStyle from '../../../assets/styles/DiscussionStyle';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import SvgWave from "../../../assets/imges/svgBackgroungs/LG.svg";
+import LinearGradient from 'react-native-linear-gradient';
 const Discussions = ({ navigation }) => {
 
-
   //            **************                    USE STATES      *****************
-
-
-  const isDarkMode = useColorScheme() === 'dark';
-  const { darkThemeActivator, changeTheme } = useContext(AppContext);
+  const { darkThemeActivator } = useContext(AppContext);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [filteredUsers, setFilteredUsers] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -47,43 +45,43 @@ const Discussions = ({ navigation }) => {
   const allChats = [
     {
       dpImage: require('../../../assets/imges/w11.jpg'),
-      profileName: 'Aqsa',
-      lastMsg: 'Hello Afshan',
+      profileName: 'Aqsa 1',
+      lastMsg: 'Hello Aqsa',
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
-      profileName: 'Hina',
-      lastMsg: 'Hello Afshan',
+      profileName: 'Hina 2',
+      lastMsg: 'Hello Hina',
     },
     {
       dpImage: require('../../../assets/imges/w11.jpg'),
-      profileName: 'Aqsa',
-      lastMsg: 'Hello Afshan',
+      profileName: 'Aqsa 3',
+      lastMsg: 'Hello Aqsa',
     },
     {
       dpImage: require('../../../assets/imges/girlGuitar.jpg'),
-      profileName: 'Afshan',
+      profileName: 'Afshan 4',
       lastMsg: 'Hello Afshan',
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
-      profileName: 'Hina',
-      lastMsg: 'Hello Afshan',
+      profileName: 'Hina 5',
+      lastMsg: 'Hello Hina',
     },
     {
       dpImage: require('../../../assets/imges/w11.jpg'),
       profileName: 'Aqsa',
-      lastMsg: 'Hello Afshan',
+      lastMsg: 'Hello Aqsa',
     },
     {
       dpImage: require('../../../assets/imges/bacteria.jpeg'),
       profileName: 'Rabia',
-      lastMsg: 'Hello Afshan',
+      lastMsg: 'Hello Rabia',
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
       profileName: 'Hina',
-      lastMsg: 'Hello Afshan',
+      lastMsg: 'Hello Hina',
     },
     {
       dpImage: require('../../../assets/imges/bacteria.jpeg'),
@@ -176,21 +174,21 @@ const Discussions = ({ navigation }) => {
 
   const renderItem = ({ item }) => {
     return (
-      <View
-        style={DiscussionStyle.flatlistContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('UserChat', { item: item });
-          }}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('UserChat', { item: item });
+        }}
+      // style={{backgroundColor:'blue',marginTop:20}}
+      >
+        <View
+          style={DiscussionStyle.flatlistItemContainer}>
           {/* discussion content container */}
           <Neomorph
             lightShadowColor="#e2e2e2"
             darkShadowColor='#ddd'
             inner
+            // swapShadows
             style={DiscussionStyle.neomorphStyle}>
-            {/* <Card style={DiscussionStyle.cardStyle}>
-            <View style={DiscussionStyle.cardView}> */}
-            {/* dp view */}
             <View style={DiscussionStyle.dpImageView}>
               <TouchableOpacity>
                 <Image
@@ -211,44 +209,43 @@ const Discussions = ({ navigation }) => {
               </Text>
             </View>
 
-            {/* </View>
-            </Card> */}
-
           </Neomorph>
-        </TouchableOpacity>
 
-      </View>
+        </View>
+      </TouchableOpacity>
+
     );
   };
   return (
-    <View
-      style={DiscussionStyle.wholeScreenContainer}>
-      {/* <ImageBackground
-      source={require('../../../assets/imges/img3.jpeg')} style={{ height: hp('100%'), width: wp('100%') }} blurRadius={100}
-    > */}
-      <StatusBar
-        barStyle={darkThemeActivator ? 'light-content' : 'dark-content'}
-        backgroundColor={
-          darkThemeActivator ? AppColors.darkTheme : AppColors.white
-        }
-      />
-      <Animated.View style={[DiscussionStyle.animatedHeader, {
-        transform: [{ translateY: myTranslateY }],
-      }]}>
-        <AppHeader navigation={navigation} headerTitle={'ChatMe'} handleSearchOnChange={handleSearch}
-          searchQuery={searchText} />
-      </Animated.View>
-      <Animated.FlatList
-        data={filteredUsers == '' ? allChats : filteredUsers}
-        renderItem={renderItem}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: true },
-        )}
-      />
-      {/* </ImageBackground> */}
+    <View style={DiscussionStyle.wholeScreenContainer}>
+      {  /*start  top itny %, left  end top , left */}
+      <LinearGradient colors={['rgb(142, 209, 252)', '#DA70D6']} start={{ x: 0.5, y: 0 }} end={{ x: 1, y: 1 }}>
+
+        {/* <SvgWave style={{ position: 'absolute' }} /> */}
+        <StatusBar barStyle={darkThemeActivator ? 'light-content' : 'dark-content'} backgroundColor={darkThemeActivator ? AppColors.darkTheme : AppColors.white} />
+        {/* <Animated.View style={[DiscussionStyle.animatedHeader, {
+          transform: [{ translateY: myTranslateY }],
+        }]}> */}
+
+        <AppHeader navigation={navigation} headerTitle={'ChatMe'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+        {/* </Animated.View> */}
+
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={filteredUsers == '' ? allChats : filteredUsers}
+          renderItem={renderItem}
+        // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
+        />
+
+      </LinearGradient>
     </View>
+
   );
 };
 
 export default Discussions;
+
+ // onScroll={Animated.event(
+          //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          //   { useNativeDriver: true },
+          // )}

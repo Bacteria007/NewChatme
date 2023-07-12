@@ -8,12 +8,11 @@ const Status_bar = ({darkModeBgColor,lightModeBgColor,darkModeContent,lightModeC
   const { darkThemeActivator } = useContext(AppContext);
 
   return (
-    <View style={{backgroundColor: 'white'}}>
       <StatusBar
         barStyle={darkThemeActivator ? darkModeContent : lightModeContent}
         backgroundColor={darkThemeActivator?darkModeBgColor:lightModeBgColor}
       />
-    </View>
+
   );
 };
 
