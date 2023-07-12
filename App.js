@@ -123,7 +123,7 @@ const App = () => {
               // flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
-              backgroundColor: AppColors.lightBlack,
+              backgroundColor: AppColors.tab,
               position: 'absolute',
               elevation: 0  // <-- this is the solution
             },

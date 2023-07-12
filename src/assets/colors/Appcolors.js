@@ -10,6 +10,7 @@ const AppColors = {
   transparent: 'transparent',
   lightGrey: "rgb(239, 239, 239)",
   lightBlack: "rgba(0, 0, 0,0.1)",
+  lightBlack2: "rgba(0, 0, 0,0.2)",
   inActiveIconsColor: "rgba(0,0,0,0.6)",
   lightwhite: "rgba(255, 255, 255,0.7)",
   tab: 'rgba(243,237,245,0.8)',
