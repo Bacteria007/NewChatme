@@ -9,7 +9,7 @@ const AllGroups = ({ navigation }) => {
 
 
     <View style={styles.wholeContainer}>
-      <LinearGradient colors={['rgb(142, 209, 252)', '#DA70D6']} start={{ x: 0.5, y: 0 }} end={{ x: 1, y: 1 }}>
+      <LinearGradient colors={['#c4ddfe', '#ffb6c1']} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }}  locations={[0.3,0.9]}>
         <AppHeader navigation={navigation} headerTitle={"Groups"} />
         <Text style={styles.textstyle}>Groups</Text>
         <Text style={styles.textstyle}>Groups</Text>

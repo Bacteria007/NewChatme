@@ -18,7 +18,7 @@ const AppSubHeaderStyle = StyleSheet.create({
   inputContainer: {
     height: hp('6%'),
     width: wp('95%'),
-    backgroundColor: AppColors.homeCards, //transparent
+    backgroundColor: AppColors.lightBlack, //transparent
     borderRadius: 25,
   },
   searchText: {

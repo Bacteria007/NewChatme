@@ -216,8 +216,8 @@ const Discussions = ({ navigation }) => {
   };
   return (
     <View style={DiscussionStyle.wholeScreenContainer}>
-      {  /*start  top itny %, left  end top , left */}
-      <LinearGradient colors={['rgb(142, 209, 252)', '#DA70D6']} start={{ x: 0.5, y: 0 }} end={{ x: 0, y: 1 }}>
+      {  /*start  top itny %, left %  ---  end top , left */}
+      <LinearGradient colors={['#c4ddfe', '#ffb6c1']} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }}  locations={[0.3,0.9]}>
 
         {/* <SvgWave style={{ position: 'absolute' }} /> */}
         <StatusBar barStyle={darkThemeActivator ? 'light-content' : 'dark-content'} backgroundColor={darkThemeActivator ? AppColors.darkTheme : AppColors.white} />
