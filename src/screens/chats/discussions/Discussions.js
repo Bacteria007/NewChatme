@@ -34,7 +34,7 @@ const Discussions = ({ navigation }) => {
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible)
   }
-
+// Animated Variables
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const headerHeight = hp('16%')
   const myDiffClamp = Animated.diffClamp(scrollY, 0, headerHeight)
@@ -154,8 +154,6 @@ const Discussions = ({ navigation }) => {
       lastMsg: 'Hello Afshan',
     },
   ];
-
-
   //  **********************              FINCTION FOR HANDLING SEARCHBAR       ***********************************
   const handleSearch = text => {
     setSearchText(text);
@@ -219,7 +217,7 @@ const Discussions = ({ navigation }) => {
   return (
     <View style={DiscussionStyle.wholeScreenContainer}>
       {  /*start  top itny %, left  end top , left */}
-      <LinearGradient colors={['rgb(142, 209, 252)', '#DA70D6']} start={{ x: 0.5, y: 0 }} end={{ x: 1, y: 1 }}>
+      <LinearGradient colors={['rgb(142, 209, 252)', '#DA70D6']} start={{ x: 0.5, y: 0 }} end={{ x: 0, y: 1 }}>
 
         {/* <SvgWave style={{ position: 'absolute' }} /> */}
         <StatusBar barStyle={darkThemeActivator ? 'light-content' : 'dark-content'} backgroundColor={darkThemeActivator ? AppColors.darkTheme : AppColors.white} />
