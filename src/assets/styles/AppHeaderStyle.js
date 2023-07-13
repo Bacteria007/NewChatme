@@ -33,7 +33,7 @@ const AppHeaderStyle = StyleSheet.create({
   },
   appNameStyle: {
     fontSize: wp('6%'),
-    color: AppColors.black,
+    
     fontFamily: FontStyle.mediumFont,
     marginLeft:wp('6%'),
     alignSelf:'center'

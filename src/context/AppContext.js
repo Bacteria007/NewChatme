@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-const AppContext = React.createContext();
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as RNLocalize from 'react-native-localize';
+const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';

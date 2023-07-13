@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Image, View, Text } from 'react-native';
+import { StyleSheet, Image, View, Text, SafeAreaView } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -22,7 +22,7 @@ import Settings from './src/screens/settings/Settings';
 import AppContext, { AppProvider } from './src/context/AppContext';
 // ICONS
 import Icon, { Icons } from './src/assets/Icons'; // Navigation
-import { NavigationContainer,useIsFocused } from '@react-navigation/native';
+import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -58,6 +58,7 @@ import ReelsFilledIcon from './src/assets/imges/footerIcons/reelsFilled.svg'
 import ContactsFill from './src/assets/imges/footerIcons/contacts.svg'
 import ContactsOutline from './src/assets/imges/footerIcons/contactsOutline.svg'
 import LinearGradient from 'react-native-linear-gradient';
+import { ThemeContext } from './src/context/ThemeContext';
 
 
 const Tab = createBottomTabNavigator();
@@ -92,8 +93,8 @@ const App = () => {
 
   let iconSize = 20;
   const TabScreens = () => {
-    const isFocused=useIsFocused()
-    const { darkThemeActivator } = useContext(AppContext);
+    const isFocused = useIsFocused()
+    const { darkThemeActivator,theme } = useContext(ThemeContext);
 
     let progress = useDrawerProgress();
     console.log('progress', progress);
@@ -105,14 +106,18 @@ const App = () => {
         { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') },
       ],
       overflow: 'hidden',
+      // shadowColor:AppColors.white,
+      // shadowOffset:{height:hp('50%'),width:wp('30%')},
+      // shadowOpacity:0.5,shadowRadius:50,
+      // elevation: 2,
       // borderRadius:progress.value===1?12:0
     }));
 
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
-        <Tab.Navigator 
-       
-          screenOptions={({ route,focused }) => ({
+        <Tab.Navigator
+initialRouteName='Groups'
+          screenOptions={({ route, focused }) => ({
 
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
@@ -123,19 +128,51 @@ const App = () => {
               // flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
-              backgroundColor: AppColors.tab,
+              backgroundColor:AppColors.lightwhite,
+              // backgroundColor:"rgba(255, 182, 193,0.7)", //pink
+              // backgroundColor:"rgba (196,221,254,0.4)", //blue
+              elevation: 0,  // <-- this is the solution
               position: 'absolute',
-              elevation: 0  // <-- this is the solution
             },
-            tabBarItemStyle: { backgroundColor: darkThemeActivator ? AppColors.darkTheme : AppColors.transparent },
+            tabBarItemStyle: { backgroundColor: theme.tabColor  },
             tabBarLabelStyle: {
               fontWeight: 'bold',
               fontSize: wp('3.5%'),
+              marginBottom: hp('2.2%'),
+              marginTop: hp('0%'),
               marginBottom: hp('2%'),
               // marginTop: hp('0%'),
             },
-            tabBarActiveTintColor: AppColors.black,
-            tabBarInactiveTintColor: darkThemeActivator ? AppColors.darkThemeContent : AppColors.inActiveIconsColor,
+            // tabBarLabel:({ focused }) => {
+            //   return <Text style={{fontSize: hp('1.7%'), fontWeight: 'bold', color:focused? AppColors.black:AppColors.inActiveIconsColor,
+
+            //   marginBottom: hp('1%')}}>{focused ? route.name : route.name}</Text>
+            // },
+            // tabBarBackground: () => (
+            //   <View>
+            //     <LinearGradient
+            //       //---1
+            //       // colors={["rgba(255, 255, 255,0.0)", "rgba(255, 255, 255,0.7)"]}  // pink only
+            //       // start={{ x: 1, y: 0.0 }} end={{ x: 1, y: 1 }} // horizontal
+            //       // locations={[0.1, 0.4]}
+            //       //---2
+            //       // colors={["rgba(196,221,254,0.2)", "rgba(196,221,254,0.9)"]} // blue
+            //       // locations={[0.1, 0.4]}
+            //       //---3
+            //       colors={["rgba(255, 255, 255,0.1)", "rgba(255, 255, 255,1)"]}  // pink only
+            //       start={{ x: 1, y: 0.0 }} end={{ x: 1, y: 1 }} // horizontal
+            //        locations={[0.1, 0.3]}
+            //       //---
+            //       //--------
+            //       // start={{ x: 0.6, y: 0.5 }} end={{ x: 0.1, y: 0.5 }} // for vertical colors
+            //       // colors={["rgba(196,221,254,0.6)", "rgba(255, 182, 193,0.7)"]} //pink blue
+            //       // colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} //pink blue
+            //       style={{ height: hp('9%') }}
+            //     />
+            //   </View>
+            // ),
+            tabBarActiveTintColor:  theme.focusedTabIconsColor,
+            tabBarInactiveTintColor: theme.notFocusedTabIconsColor,
             tabBarHideOnKeyboard: 'true',
             tabBarPressColor: 'rgba(255,255,255,0.6)',
             // tabBarLabelPosition:'beside-icon',
@@ -143,41 +180,44 @@ const App = () => {
             tabBarIcon: ({ focused }) => {
               if (route.name === 'Chats') {
                 return (
-                  <TabIcons focused={focused} size={22} type={Icons.Ionicons} name={focused ? 'ios-chatbubbles-sharp' : 'ios-chatbubbles-outline'} />
+                  <TabIcons focused={focused} size={19} type={Icons.Ionicons} name={focused ? 'ios-chatbubbles-sharp' : 'ios-chatbubbles-outline'} />
                 );
               } else if (route.name === 'Calls') {
                 return (
-                  <TabIcons focused={focused} size={21} type={Icons.Ionicons} name={focused ? 'call-sharp' : 'call-outline'} />
+                  <TabIcons focused={focused} size={19} type={Icons.Ionicons} name={focused ? 'call-sharp' : 'call-outline'} />
                 );
               } else if (route.name === 'Contacts') {
                 return (
-                  <TabIcons focused={focused} size={21} type={Icons.MaterialCommunityIcons} name={focused ? 'contacts' : 'contacts-outline'} />
-                  
+                  <TabIcons focused={focused} size={19} type={Icons.MaterialCommunityIcons} name={focused ? 'contacts' : 'contacts-outline'} />
+
                 );
               } else if (route.name === 'Reels') {
                 return (
                   focused ?
-                    <Icons.FontAwesome5 name="stream" size={18} color={AppColors.black} /> :
+                    <Icons.FontAwesome5 name="stream" size={16} color={AppColors.black} /> :
                     <StreamOutline />
-                 
+
                 );
               } else if (route.name === 'Groups') {
                 return (
-                  <TabIcons focused={focused} size={22} type={Icons.Ionicons} name={focused ? 'people-sharp' : 'people-outline'} />
+                  <TabIcons focused={focused} size={19} type={Icons.Ionicons} name={focused ? 'people-sharp' : 'people-outline'} />
 
 
                 );
               }
             },
+
           })
+          }
+        >
 
 
-          }>
-          <Tab.Screen name="Chats" component={Discussions}/>
+          <Tab.Screen name="Chats" component={Discussions} />
           <Tab.Screen name="Groups" component={Groups} />
           <Tab.Screen name="Calls" component={Calls} />
           <Tab.Screen name="Reels" component={Reels} />
           <Tab.Screen name="Contacts" component={Contacts} />
+
         </Tab.Navigator>
       </Animated.View>
     );
@@ -251,11 +291,16 @@ const App = () => {
           drawerInactiveTintColor: AppColors.black,
           drawerStyle: {
             width: wp('55%'),
-            backgroundColor: AppColors.Orchid,
+            backgroundColor: AppColors.linearGradient.pink,
           },
           drawerLabelStyle: { marginLeft: wp('-6%') },
           drawerActiveBackgroundColor: AppColors.white,
-          sceneContainerStyle: { backgroundColor: AppColors.Orchid },
+          sceneContainerStyle: {
+            backgroundColor: AppColors.linearGradient.pink,
+            // shadowColor:AppColors.white,
+            // shadowOffset:{height:hp('50%'),width:wp('30%')},
+            // shadowOpacity:0.5,shadowRadius:50,elevation:10
+          },
           // drawerHideStatusBarOnOpen: true,
           // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen 
         }}
@@ -288,7 +333,9 @@ const App = () => {
         <Drawer.Screen
           name="Home"
           component={TabScreens}
+
           options={{
+
             drawerIcon: ({ focused }) => (
               <Icons.MaterialCommunityIcons
                 name={'home'}
@@ -380,17 +427,19 @@ const App = () => {
       </Drawer.Navigator>
     );
   };
-const theme={
-  colors: {
-    background: "transparent",
-  },
-}
+  const theme = {
+    colors: {
+      background: "transparent",
+    },
+  }
   return (
+
     <AppProvider>
       <NavigationContainer theme={theme}>
         <Stack.Navigator
           options={{ headerShown: false }}
           initialRouteName="DrawerScreens"
+        // screenOptions={{navigationBarColor:"rgba(255, 182, 193,0.5)"}}
         >
 
           <Stack.Screen
@@ -438,6 +487,7 @@ const theme={
         </Stack.Navigator>
       </NavigationContainer>
     </AppProvider>
+
   );
 };
 

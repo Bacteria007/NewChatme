@@ -1,20 +1,17 @@
-import {  Text, View } from 'react-native'
 import React, { useContext } from 'react'
 import Icon, { Icons } from '../assets/Icons'
-import AppContext from '../context/AppContext';
 import AppColors from '../assets/colors/Appcolors';
+import { ThemeContext } from '../context/ThemeContext';
 
-const TabIcons = ({type,name,focused,size}) => {
-    const { darkThemeActivator } = useContext(AppContext);
+const TabIcons = ({ type, name, focused, size }) => {
+  const { theme } = useContext(ThemeContext);
 
   return (
     <Icon
-    type={type}
-    name={name}
-    size={size}
-    color={
-        darkThemeActivator?( focused ? AppColors.Orchid : AppColors.darkThemeContent):(focused ? AppColors.black : AppColors.inActiveIconsColor)
-        }
+      type={type}
+      name={name}
+      size={size}
+      color={focused ? theme.focusedTabIconsColor : theme.notFocusedTabIconsColor}
     />
   )
 }

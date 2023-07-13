@@ -18,11 +18,12 @@ const AppSubHeaderStyle = StyleSheet.create({
   inputContainer: {
     height: hp('6%'),
     width: wp('95%'),
-    backgroundColor: AppColors.lightBlack, //transparent
+    // backgroundColor: "rgba(255,255,255,0.3)", //dark theme
     borderRadius: 25,
   },
   searchText: {
-    color: AppColors.coolgray
+    // color: 'rgba(255,255,255,0.5)' //dark
+    color: AppColors.coolgray //light
   },
   iconContainer: {
     paddingLeft: 4,
@@ -30,10 +31,15 @@ const AppSubHeaderStyle = StyleSheet.create({
     margin: 0,
   },
   searchStyle:{
-    color: AppColors.coolgray, size: 23
+    // color: AppColors.lightwhite, //dark
+  // color: AppColors.coolgray, //light
+     
   },
 crossStyle:{
-  color: AppColors.coolgray, size: 23,
+  // color: AppColors.lightwhite, //dar
+    color: AppColors.coolgray, //light,
+  
+  size: 23,
 },
 
 //===== PEHLY WALA

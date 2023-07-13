@@ -1,27 +1,18 @@
 import React from 'react'
 import AppHeader from '../../components/Headers/AppHeaders/AppHeader'
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontStyle from '../../assets/styles/FontStyle';
-
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import Waves from '../../assets/imges/svgBackgroungs/wwwhirl.svg'
 const Calls = ({ navigation }) => {
   return (
 
     <View style={styles.wholeContainer}>
-      <AppHeader navigation={navigation} headerTitle={"Calls"} />
-      <LinearGradient colors={['rgb(142, 209, 252)', '#DA70D6']} start={{ x: 0.5, y: 0 }} end={{ x: 1, y: 1 }}>
-        <Text style={styles.textstyle}>Calls</Text>
-        <Text style={styles.textstyle}>Calls</Text>
-        <Text style={styles.textstyle}>Calls</Text>
-        <Text style={styles.textstyle}>Calls</Text>
-        <Text style={styles.textstyle}>Calls</Text>
-        <Text style={styles.textstyle}>Calls</Text>
-        <Text style={styles.textstyle}>Calls</Text>
-        <Text style={styles.textstyle}>Calls</Text>
-        <Text style={styles.textstyle}>Calls</Text>
-        <Text style={styles.textstyle}>Calls</Text>
-        <Text style={styles.textstyle}>Calls</Text>
-      </LinearGradient>
+      <ImageBackground source={require('../../assets/imges/svgBackgroungs/ss.png')} resizeMethod='resize' resizeMode='cover' style={{ height: hp('100%'), width: wp('100%') }}>
+        <AppHeader navigation={navigation} headerTitle={"Calls"} />
+
+      </ImageBackground>
 
     </View>
   )

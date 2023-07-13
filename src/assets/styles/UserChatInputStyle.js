@@ -7,8 +7,9 @@ import {
 import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
+
 const UserChatInputStyle = StyleSheet.create({
-  bottomActionContainerView:{flexDirection: 'row', position: 'absolute', top: hp('85.8%')},
+  bottomActionContainerView:{flexDirection: 'row', position: 'absolute', top: hp('84%'),bottom:20},
   bottomLeftContainer:{
     flexDirection: 'row',
     backgroundColor: AppColors.white,
@@ -26,11 +27,12 @@ const UserChatInputStyle = StyleSheet.create({
     // borderRadius:wp('4%'),
     // marginHorizontal:wp('5%'),
     // position:"absolute",top:hp('78%')
+    
   },
   microphoneContainerView:{
     height: hp('6.5%'),
     width: hp('6.5%'),
-    backgroundColor: AppColors.primary,
+  // backgroundColor:gradientStyle,
     borderRadius: 100,
     paddingVertical: hp('1.9%'),
     paddingHorizontal: wp('4.6%'),
@@ -38,3 +40,5 @@ const UserChatInputStyle = StyleSheet.create({
 });
 
 export default UserChatInputStyle;
+
+

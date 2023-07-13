@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {
-  SafeAreaView,StyleSheet,TouchableOpacity,Image,TextInput,FlatList,} from 'react-native';
+  View,StyleSheet,TouchableOpacity,Image,TextInput,FlatList,ImageBackground} from 'react-native';
 import { heightPercentageToDP as hp,widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import FontStyle from '../../../assets/styles/FontStyle';
 import Feather from 'react-native-vector-icons/Feather';
@@ -70,8 +70,9 @@ const UserChat = props => {
 
   const {item} = props.route.params;
   return (
-    <SafeAreaView>
-      <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.primary} content={'light-content'}/>
+<View styles={styles.contianer}>
+      <Status_bar darkModeBgColor={AppColors.black} lightModeBgColor={AppColors.linearGradient.blue} content={'light-content'}/>
+      <ImageBackground source={require('../../../assets/imges/svgBackgroungs/chatswavy.png')} style={{height:hp('100%'),width:wp('100%')}} resizeMode='cover' blurRadius={10}>
       <UserChatHeader item={item} navigation={props.navigation}/>
       <UserChatInput/>
       {/* <View style={[UserChatStyle.containerView]}>
@@ -223,13 +224,15 @@ const UserChat = props => {
           </View>
         </TouchableOpacity>
       </View> */}
-    </SafeAreaView>
+      </ImageBackground>
+      </View>
   );
 };
 
 export default UserChat;
 
 const styles = StyleSheet.create({
+  contianer:{flex:1,justifyContent:'center',alignItems:'center' },
   header: {
     backgroundColor: Colors.primary,
     height: hp('8%'),

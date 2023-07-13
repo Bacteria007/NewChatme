@@ -11,7 +11,12 @@ const DiscussionStyle = StyleSheet.create({
   wholeScreenContainer: {
     // flex:1,
     height: hp('100%'),
-    // backgroundColor: AppColors.black,
+    // backgroundColor: AppColors.transparent,
+  },
+  contentontainer: {
+   justifyContent:'center',alignItems:'center',
+    backgroundColor: AppColors.transparent,
+    flex:1
   },
   animatedHeader: {
     elevation: 4,
@@ -19,29 +24,42 @@ const DiscussionStyle = StyleSheet.create({
     // top: 0,
   },
   flatlistItemContainer: {
-
     marginTop: 10,
     justifyContent: 'center',
     alignItems: 'center',
     // top: 115,
     // backgroundColor:'red',
-    
   },
   neomorphStyle: {
-    shadowOpacity: 0.6,
-    shadowRadius: 1,
+    
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: AppColors.homeCards,
+    // backgroundColor: AppColors.homeCards, //innner
+    // backgroundColor: 'rgba(255, 255, 255,0.4)', //swap
     borderRadius: 10,
     height: hp('10%'),
     width: wp('95%'),
-  },
+    // 
+    },
+  shadowStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // backgroundColor: AppColors.homeCards, //innner
+    // backgroundColor: 'rgba(255, 255, 255,1)', //swap
+    borderRadius: 10,
+    height: hp('10%'),
+    width: wp('95%'),
+    shadowOpacity:0.2,
+    // shadowRadius:100,
+    // shadowColor:"rgba(0,0,0,0.2)",
+    // shadowOffset:{height:hp('10%'),width:wp('10%')},
+    // elevation:10 
+    },
 
-  nameAndMsgContainer: { 
+  nameAndMsgContainer: {
     flexDirection: 'column',
-     marginLeft: 10,
-     },
+    marginLeft: 10,
+  },
   dpImage: {
     height: hp('6%'),
     width: hp('6%'),
@@ -50,33 +68,30 @@ const DiscussionStyle = StyleSheet.create({
   dpImageView: {
     marginLeft: 10,
     // backgroundColor:'orange',
-   },
+  },
   profileName: {
     fontFamily: FontStyle.regularFont,
-    color: AppColors.black,
     fontSize: 17,
   },
   lastMsg: {
     fontFamily: FontStyle.regularFont,
-    color: AppColors.gray,
     fontSize: 11,
   },
   cardStyle: {
-    height: hp('9%'),
+    height: hp('10%'),
     width: wp('95%'),
     borderRadius: 10,
-    elevation: 2,
+    backgroundColor:'rgba(0,0,0,0.3)',
+    elevation: 1,
   },
   cardView: {
     flexDirection: 'row',
-    height: hp('9%'),
+    height: hp('10%'),
     width: wp('95%'),
     borderRadius: 10,
     alignItems: 'center',
-    backgroundColor: "rgba(255,255,255,0.1)",
+    // backgroundColor: 'rgba(255,255,255,0.1)',
   },
-
-  
 });
 
 export default DiscussionStyle;
