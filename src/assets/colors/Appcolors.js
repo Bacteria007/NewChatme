@@ -10,7 +10,7 @@ const AppColors = {
   transparent: 'transparent',
   lightGrey: "rgb(239, 239, 239)",
   lightBlack: "rgba(0, 0, 0,0.1)",
-  lightBlack2: "rgba(0, 0, 0,0.2)",
+  lightBlack2: "rgba(0,0,0,0.7)",
   inActiveIconsColor: "rgba(0,0,0,0.6)",
   lightwhite: "rgba(255, 255, 255,0.7)",
   tab: 'rgba(243,237,245,0.8)',
@@ -19,10 +19,19 @@ const AppColors = {
   gray: 'gray',
   tomato: '#dd5f56',
   red: 'red',
+  darkThemeColors:{
+    bgColor:'rgb(15, 15, 15)',
+    groupDpIcon:"rgba(0,0,0,0.7)",
+    groupDpCircle:"rgba(255, 255, 255,0.7)",
+    darkHomeCards:"rgba(255,255,255,0.1)",
+  },
   coolgray: '#383949', //pehlywala
+  // coolgray: '#1f1f1f', //afshan 1
+  // coolgray: '#121212', // maryam
   searchBorderDark: 'rgba(211,211,211,0.5)',
   searchContentDark: "rgba(255,255,255,0.7)",
   homeCards:'rgba(255,255,255,0.4)',
+
   linearGradient:{
     blue:'#c4ddfe',pink:'#ffb6c1',
   },

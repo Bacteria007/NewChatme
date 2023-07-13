@@ -7,13 +7,19 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import AppColors from '../../assets/colors/Appcolors';
-
+import LinearGradient from "react-native-linear-gradient";
 
 const UserChatInput = () => {
+  const getGradientStyle = (colors) => {
+    return {
+      background: `linear-gradient(to bottom, ${colors.join(',')})`, // Generate the linear gradient background
+    };
+  };
+  const gradientStyle = getGradientStyle(['#000', '#fff']); // Specify your desired gradient colors
   const [textMessage, setTextMessage] = useState('')
   return (
     //KeyboardAvoidingView is not working why
-    <KeyboardAvoidingView style={{flex:1}} enabled={true} behavior='padding'>
+    <KeyboardAvoidingView style={{flex:1,}} enabled={true} behavior='padding'>
     <View
     style={[UserChatInputStyle.bottomActionContainerView]}>
     <View
@@ -41,7 +47,8 @@ const UserChatInput = () => {
     </View>
     <TouchableOpacity>
       <View
-        style={[UserChatInputStyle.microphoneContainerView]}>
+        style={[UserChatInputStyle.microphoneContainerView,gradientStyle]}>
+        
         <Icons.FontAwesome name="microphone" size={wp('5.7%')} color={AppColors.white} />
       </View>
     </TouchableOpacity>

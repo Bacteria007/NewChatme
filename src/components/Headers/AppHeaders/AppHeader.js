@@ -18,67 +18,109 @@ import {
 } from 'react-native-responsive-screen';
 import { SearchBar } from '@rneui/themed';
 
-import BotIcon from '../../../assets/imges/headericons/bot.svg'
-import MenuLeft from '../../../assets/imges/headericons/menuLeft.svg'
+import BotIconBlack from '../../../assets/imges/headericons/botBlack.svg'
+import BotIconWhite from '../../../assets/imges/headericons/botWhite.svg'
+import MenuLeftBlack from '../../../assets/imges/headericons/menuLeftBlack.svg'
+import MenuLeftWhite from '../../../assets/imges/headericons/menuLeftWhite.svg'
 import AppColors from '../../../assets/colors/Appcolors';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
-import { useDrawerStatus } from '@react-navigation/drawer';
-import AppContext from '../../../context/AppContext';
-import { BgTheme } from '../../../assets/styles/BgTheme';
 import AppSubHeaderStyle from '../../../assets/styles/AppSubHeaderStyle';
-import Wave from "../../../assets/imges/svgBackgroungs/LG.svg";
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange }) => {
-  const isDrawerOen = useDrawerStatus();
-  const isDarkMode = useColorScheme() === 'dark';
-  const { darkThemeActivator, changeTheme } = useContext(AppContext);
+
+  const { updateTheme, theme, darkThemeActivator } = useContext(ThemeContext);
+
+
+  const DarkThemeChanger = () => {
+    // Update the theme
+    const newTheme = {
+      linearBlue: AppColors.darkThemeColors.bgColor,
+      linearPink: AppColors.darkThemeColors.bgColor,
+      notFocusedTabIconsColor: AppColors.inActiveIconsColor,
+      focusedTabIconsColor: AppColors.black,
+      headerIconsColor: AppColors.white,
+      headerSearchText:AppColors.lightwhite,
+      headerSearchBar: AppColors.coolgray,
+      tabColor: AppColors.lightwhite,
+      discussionsCardColor: AppColors.darkThemeColors.darkHomeCards,
+      profileName: AppColors.white,
+      lastMsg: AppColors.lightwhite,
+      groupDpIconColor: AppColors.darkThemeColors.groupDpIcon,
+      groupDpCircle: AppColors.darkThemeColors.groupDpCircle,
+      headerSearchBarIcons: AppColors.coolgray,
+      chatsHeaderBg: AppColors.transparent,
+      statusBarBg: AppColors.black,
+      statusBarText: 'light-content',
+    };
+    updateTheme(newTheme);
+  };
+  const LightThemeChanger = () => {
+    // Update the theme
+    const newTheme = {
+      linearBlue: AppColors.linearGradient.blue,
+      linearPink: AppColors.linearGradient.pink,
+      notFocusedTabIconsColor: AppColors.inActiveIconsColor,
+      focusedTabIconsColor: AppColors.black,
+      headerIconsColor: AppColors.black,
+      headerSearchBar: AppColors.lightBlack,
+      headerSearchText:AppColors.black,
+      tabColor: AppColors.lightwhite,
+      discussionsCardColor: AppColors.homeCards,
+      profileName: AppColors.black,
+      lastMsg: AppColors.lightBlack2,
+      groupDpIconColor: AppColors.darkThemeColors.groupDpIcon,
+      groupDpCircle: AppColors.darkThemeColors.groupDpCircle,
+      headerSearchBarIcons: AppColors.coolgray,
+      chatsHeaderBg: AppColors.transparent,
+      statusBarBg: AppColors.linearGradient.blue,
+      statusBarTextLight: 'light-content',
+      statusBarTextDark: 'dark-content',
+      statusBarText: 'dark-content',
+
+    };
+    updateTheme(newTheme);
+  };
+
 
   return (
 
     <View>
       {/* <Wave style={{ position: 'absolute' }}  /> */}
-      <View style={[
-        AppHeaderStyle.mainHeader,
-        { backgroundColor: BgTheme ? AppColors.darkTheme : AppColors.transparent },
-      ]}>
+      <View style={[AppHeaderStyle.mainHeader, {
+        backgroundColor: theme.chatsHeaderBg
+      }]}>
         <View style={[AppHeaderStyle.headerView]}>
           <TouchableOpacity
             style={{ flexDirection: 'row' }}
             onPress={() => { navigation.toggleDrawer() }}>
 
-            <MenuLeft />
+            {darkThemeActivator ? <MenuLeftWhite /> : <MenuLeftBlack />}
           </TouchableOpacity>
 
-          <Text style={[AppHeaderStyle.appNameStyle]}>{headerTitle}</Text>
+          <Text style={[AppHeaderStyle.appNameStyle, { color: theme.headerIconsColor }]}>{headerTitle}</Text>
           <View style={[AppHeaderStyle.iconContainerStyle]}>
-            <TouchableOpacity
-              onPress={() => {
-                changeTheme();
-                console.log('darkthemeactivator', darkThemeActivator);
-              }}>
-
-            </TouchableOpacity>
             {darkThemeActivator ? (
               <TouchableOpacity
                 onPress={() => {
-                  changeTheme();
+                  LightThemeChanger();
                   console.log('darkthemeactivator', darkThemeActivator);
                 }}>
                 <Icons.Entypo
                   name="light-up"
-                  color={AppColors.black}
+                  color={theme.headerIconsColor}
                   size={wp('6%')}
                 />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 onPress={() => {
-                  changeTheme();
+                  DarkThemeChanger();
                   console.log('darkthemeactivator', darkThemeActivator);
                 }}>
                 <Icons.Ionicons
                   name="moon-sharp"
-                  color={AppColors.black}
+                  color={theme.headerIconsColor}
                   size={wp('6%')}
                 />
               </TouchableOpacity>
@@ -87,7 +129,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
               onPress={() => {
                 navigation.navigate('ChatBot');
               }}>
-              <BotIcon />
+              {darkThemeActivator ? <BotIconWhite /> : <BotIconBlack />}
             </TouchableOpacity>
           </View>
         </View>
@@ -99,16 +141,16 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
           elevation={0}
           underlineColorAndroid="transparent"
           placeholder="Search Chats"
-          placeholderTextColor={AppColors.coolgray}
+          placeholderTextColor={theme.headerSearchText} //light
           round
           showCancel
-          containerStyle={AppSubHeaderStyle.container}
-          inputContainerStyle={AppSubHeaderStyle.inputContainer}
-          inputStyle={{ color: AppColors.coolgray }}
+          containerStyle={[AppSubHeaderStyle.container]}
+          inputContainerStyle={[AppSubHeaderStyle.inputContainer,{backgroundColor:theme.headerSearchBar}]}
+          inputStyle={{ color: theme.headerSearchText }}
+          searchIcon={{ color: theme.headerSearchText,size: 23 }}
+          clearIcon={{ color: theme.headerSearchText }}
           leftIconContainerStyle={AppSubHeaderStyle.iconContainer}
           rightIconContainerStyle={AppSubHeaderStyle.iconContainer}
-          searchIcon={AppSubHeaderStyle.searchStyle}
-          clearIcon={AppSubHeaderStyle.crossStyle}
           clearTextOnFocus={true}
         />
       </View>

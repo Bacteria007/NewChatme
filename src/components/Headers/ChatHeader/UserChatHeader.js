@@ -6,6 +6,7 @@ import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
   } from 'react-native-responsive-screen';
+import AppColors from '../../../assets/colors/Appcolors';
   
 
 const UserChatHeader = ({item,navigation}) => {
@@ -21,7 +22,7 @@ const UserChatHeader = ({item,navigation}) => {
           <Icons.FontAwesome5
             name="arrow-left"
             size={wp('5.5%')}
-            color="white"
+            color={AppColors.black}
             style={{marginTop: hp('2.7%')}}
           />
         </TouchableOpacity>
@@ -44,7 +45,7 @@ const UserChatHeader = ({item,navigation}) => {
       <View
         style={[UserChatHeaderStyle.rightView]}>
         <TouchableOpacity style={{alignSelf: 'center'}}>
-          <Icons.FontAwesome5 name="video" size={wp('6%')} color="white" />
+          <Icons.FontAwesome5 name="video" size={wp('6%')} color={AppColors.black} />
         </TouchableOpacity>
         <TouchableOpacity onPress={()=>{
           navigation.navigate('rejected',{item:item})
@@ -52,14 +53,14 @@ const UserChatHeader = ({item,navigation}) => {
           <Icons.FontAwesome
             name="phone"
             size={wp('7%')}
-            color="white"
+          color={AppColors.black}
             style={{paddingLeft: wp('4%')}}
           />
         </TouchableOpacity>
         <TouchableOpacity
           // onPress={toggleModal}
           style={{alignSelf: 'center'}}>
-          <Icons.Feather name="more-vertical" size={wp('7%')} color="white" />
+          <Icons.Feather name="more-vertical" size={wp('7%')} color={AppColors.black}/>
         </TouchableOpacity>
       </View>
     </View>

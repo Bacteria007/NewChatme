@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
-  ImageBackground, Animated
+  ImageBackground, Animated,StyleSheet
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -18,23 +18,25 @@ import AppColors from '../../../assets/colors/Appcolors';
 import AppSubHeader from '../../../components/Headers/AppHeaders/AppSubHeader';
 import Status_bar from '../../../components/Headers/Status_bar';
 import AppContext from '../../../context/AppContext';
-import { Neomorph } from 'react-native-neomorph-shadows-fixes';
+import { Neomorph, Shadow } from 'react-native-neomorph-shadows-fixes';
 import { Card } from 'react-native-paper';
 import DiscussionStyle from '../../../assets/styles/DiscussionStyle';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SvgWave from "../../../assets/imges/svgBackgroungs/LG.svg";
 import LinearGradient from 'react-native-linear-gradient';
+import { ThemeContext } from '../../../context/ThemeContext';
 const Discussions = ({ navigation }) => {
 
   //            **************                    USE STATES      *****************
   const { darkThemeActivator } = useContext(AppContext);
+  const {theme}=useContext(ThemeContext)
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [filteredUsers, setFilteredUsers] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible)
   }
-// Animated Variables
+  // Animated Variables
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const headerHeight = hp('16%')
   const myDiffClamp = Animated.diffClamp(scrollY, 0, headerHeight)
@@ -181,12 +183,8 @@ const Discussions = ({ navigation }) => {
         <View
           style={DiscussionStyle.flatlistItemContainer}>
           {/* discussion content container */}
-          <Neomorph
-            lightShadowColor="#e2e2e2"
-            darkShadowColor='#ddd'
-            inner
-            // swapShadows
-            style={DiscussionStyle.neomorphStyle}>
+          {/* <Shadow inner style={DiscussionStyle.shadowStyle}  > */}
+          <Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[DiscussionStyle.neomorphStyle,{backgroundColor:theme.discussionsCardColor}]} >
             <View style={DiscussionStyle.dpImageView}>
               <TouchableOpacity>
                 <Image
@@ -198,17 +196,16 @@ const Discussions = ({ navigation }) => {
             {/* msg view */}
             <View style={DiscussionStyle.nameAndMsgContainer}>
               <Text
-                style={DiscussionStyle.profileName}>
+                style={[DiscussionStyle.profileName,{color:theme.profileName}]}>
                 {item.profileName}
               </Text>
               <Text
-                style={DiscussionStyle.lastMsg}>
+                style={[DiscussionStyle.lastMsg,{color:theme.lastMsg}]}>
                 {item.lastMsg}
               </Text>
             </View>
-
+            {/* </Shadow> */}
           </Neomorph>
-
         </View>
       </TouchableOpacity>
 
@@ -216,11 +213,13 @@ const Discussions = ({ navigation }) => {
   };
   return (
     <View style={DiscussionStyle.wholeScreenContainer}>
-      {  /*start  top itny %, left %  ---  end top , left */}
-      <LinearGradient colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }}  locations={[0.3,0.9]}>
-
-        {/* <SvgWave style={{ position: 'absolute' }} /> */}
-        <StatusBar barStyle={darkThemeActivator ? 'light-content' : 'dark-content'} backgroundColor={darkThemeActivator ? AppColors.darkTheme : AppColors.white} />
+      {  /*start  top itny %, left %  ---  end bottom , left */}
+      <LinearGradient colors={[theme.linearBlue,theme.linearPink]} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }} locations={[0.3, 0.9]}
+       style={StyleSheet.absoluteFillObject}
+        />
+        {/*vertical*/}
+        {/* <LinearGradient colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} start={{ x: 0.9, y: 0.5 }} end={{ x: 0.1, y: 0.5 }}>   */}
+        <StatusBar barStyle={theme.statusBarText} backgroundColor={theme.statusBarBg} />
         {/* <Animated.View style={[DiscussionStyle.animatedHeader, {
           transform: [{ translateY: myTranslateY }],
         }]}> */}
@@ -235,9 +234,10 @@ const Discussions = ({ navigation }) => {
         // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
         />
 
-      </LinearGradient>
+      {/* </LinearGradient> */}
+      {/* </SafeAreaView> */}
     </View>
-
+   
   );
 };
 

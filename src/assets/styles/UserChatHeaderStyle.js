@@ -9,7 +9,7 @@ import AppColors from '../colors/Appcolors';
 
 const UserChatHeaderStyle = StyleSheet.create({
   containerView: {
-    backgroundColor: AppColors.primary,
+    backgroundColor: AppColors.linearGradient.blue,
     height: hp('8%'),
   },
   headerView: {
@@ -37,7 +37,7 @@ const UserChatHeaderStyle = StyleSheet.create({
   dpContainerView: {
     height: hp('5%'),
     width: hp('5%'),
-    backgroundColor: AppColors.white,
+    backgroundColor: AppColors.black,
     borderRadius: 100,
     marginTop: hp('0.6%'),
   },
@@ -49,10 +49,10 @@ const UserChatHeaderStyle = StyleSheet.create({
   profileNameContainerStyle: {marginLeft: wp('2%')},
   profileNameTextStyle: {
     fontSize: wp('5.5%'),
-    color: AppColors.white,
+    color: AppColors.black,
   },
   profileStatusStyle: {
-    color: AppColors.white,
+    color: AppColors.black,
     fontSize: wp('3'),
   },
 
