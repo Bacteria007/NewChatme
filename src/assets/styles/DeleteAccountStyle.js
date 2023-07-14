@@ -17,10 +17,10 @@ const DeleteAccountStyle = StyleSheet.create({
   },
   warningView: {
     flexDirection: 'row',
-    borderBottomWidth: wp('0.3%'),
+    // borderBottomWidth: wp('0.3%'),
     borderBottomColor: AppColors.tab,
-    backgroundColor: AppColors.tab,
-    elevation: 3,
+    // backgroundColor: AppColors.tab,
+    // elevation: 3,
   },
   warningLeftView: {
     width: wp('7%'),
@@ -55,7 +55,7 @@ const DeleteAccountStyle = StyleSheet.create({
   labelText: {
     marginTop: hp('3%'),
     marginBottom: hp('-1%'),
-    color: AppColors.Lilac,
+    color: AppColors.primary,opacity:0.8,
     fontFamily: FontStyle.mediumFont,
 
   },

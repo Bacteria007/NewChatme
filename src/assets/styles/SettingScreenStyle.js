@@ -36,10 +36,12 @@ const SettingScreenStyle = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: wp('0.1%'),
   },
+  iconTextContainer:{flexDirection:'row'},
   touchableText: {
     fontSize: wp('4.5%'),
     fontFamily: FontStyle.regularFont,
     color: AppColors.black,
+    marginLeft:wp('3%')
   },
   modalView:{width:wp('90%'),height:hp('30%'),backgroundColor:AppColors.white,justifyContent:'center',alignItems:'center'},
   modalHeadText:{fontSize:wp('6.5%'),fontFamily:FontStyle.mediumFont,color:AppColors.black},
