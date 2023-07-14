@@ -291,12 +291,12 @@ initialRouteName='Groups'
           drawerInactiveTintColor: AppColors.black,
           drawerStyle: {
             width: wp('55%'),
-            backgroundColor: AppColors.linearGradient.pink,
+            backgroundColor: AppColors.periWinkle,
           },
           drawerLabelStyle: { marginLeft: wp('-6%') },
           drawerActiveBackgroundColor: AppColors.white,
           sceneContainerStyle: {
-            backgroundColor: AppColors.linearGradient.pink,
+            backgroundColor: AppColors.periWinkle,
             // shadowColor:AppColors.white,
             // shadowOffset:{height:hp('50%'),width:wp('30%')},
             // shadowOpacity:0.5,shadowRadius:50,elevation:10

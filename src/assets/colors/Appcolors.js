@@ -42,6 +42,9 @@ const AppColors = {
   Plum: '#8E4585',
   Violet: '#9400D3',
   dodgerblue: "dodgerblue",
+  Lilac:"#DCD0FF",
+  pinkPurple:'#EDABEF',
+  periWinkle:"#BFA9E0",
 
   //  PURPLE COLOR VARIANT
   // p1:  #BA68CB , #AB47BC , #9C27B0 , #8E24AA , #7B1FA2 , #6A1B9A , #4A148C 

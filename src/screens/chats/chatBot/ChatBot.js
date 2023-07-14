@@ -57,7 +57,7 @@ const ChatBot = props => {
           <Text style={{marginLeft:-10,marginRight:2}}>   {item.type === 'user' ? 'Maryam:  ' :
           <View style={{borderRadius:hp('5')}}>
            <Image
-           source={require('../../../assets/imges/BotScreenImg/bot.jpg')}
+           source={require('../../../assets/imges/BotScreenImg/botPic.png')}
            style={styles.dpImageStyle}
          /> 
          </View>
@@ -69,7 +69,7 @@ const ChatBot = props => {
           
           </View>
           ))}
-            <Text style={[styles.timestamp,{color:AppColors.white}]}>{item.timestamp}</Text> 
+            <Text style={styles.timestamp}>{item.timestamp}</Text> 
             
         </View>
         </View>
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
 
   },
   botMsgContainer: {
-    backgroundColor: AppColors.linearGradient.blue,
+    backgroundColor: "rgba(196,221,254,0.6)",
     maxWidth: '80%',
 
     
@@ -204,6 +204,7 @@ paddingVertical:hp('1.25'),
   },
   userMsgContainer: {
     backgroundColor: AppColors.lightBlack,
+    // elevation:2,
     maxWidth: '80%',
     paddingVertical: 8,
     paddingHorizontal: 12,
