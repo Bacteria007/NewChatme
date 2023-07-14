@@ -11,6 +11,7 @@ const TabIcons = ({ type, name, focused, size }) => {
       type={type}
       name={name}
       size={size}
+      // color={focused ? AppColors.primary :AppColors.black}
       color={focused ? theme.focusedTabIconsColor : theme.notFocusedTabIconsColor}
     />
   )

@@ -26,10 +26,11 @@ import AppColors from '../../../assets/colors/Appcolors';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
 import AppSubHeaderStyle from '../../../assets/styles/AppSubHeaderStyle';
 import { ThemeContext } from '../../../context/ThemeContext';
+import BotChatHeaderStyle from '../../../assets/styles/BotHeaderSheet/BotChatHeaderStyle';
 
 const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange }) => {
 
-  const { updateTheme, theme, darkThemeActivator } = useContext(ThemeContext);
+  const { updateTheme, theme, darkThemeActivator,changeThemeState } = useContext(ThemeContext);
 
 
   const DarkThemeChanger = () => {
@@ -37,12 +38,11 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
     const newTheme = {
       linearBlue: AppColors.darkThemeColors.bgColor,
       linearPink: AppColors.darkThemeColors.bgColor,
-      notFocusedTabIconsColor: AppColors.inActiveIconsColor,
-      focusedTabIconsColor: AppColors.black,
+      notFocusedTabIconsColor: AppColors.lightwhite,
+      focusedTabIconsColor: AppColors.white,
       headerIconsColor: AppColors.white,
       headerSearchText:AppColors.lightwhite,
-      headerSearchBar: AppColors.coolgray,
-      tabColor: AppColors.lightwhite,
+      headerSearchBar: AppColors.darkThemeColors.darkHomeCards,
       discussionsCardColor: AppColors.darkThemeColors.darkHomeCards,
       profileName: AppColors.white,
       lastMsg: AppColors.lightwhite,
@@ -54,6 +54,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       statusBarText: 'light-content',
     };
     updateTheme(newTheme);
+    changeThemeState()
   };
   const LightThemeChanger = () => {
     // Update the theme
@@ -65,7 +66,6 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       headerIconsColor: AppColors.black,
       headerSearchBar: AppColors.lightBlack,
       headerSearchText:AppColors.black,
-      tabColor: AppColors.lightwhite,
       discussionsCardColor: AppColors.homeCards,
       profileName: AppColors.black,
       lastMsg: AppColors.lightBlack2,
@@ -80,6 +80,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
 
     };
     updateTheme(newTheme);
+    changeThemeState()
   };
 
 
@@ -104,7 +105,6 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
               <TouchableOpacity
                 onPress={() => {
                   LightThemeChanger();
-                  console.log('darkthemeactivator', darkThemeActivator);
                 }}>
                 <Icons.Entypo
                   name="light-up"
@@ -116,7 +116,6 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
               <TouchableOpacity
                 onPress={() => {
                   DarkThemeChanger();
-                  console.log('darkthemeactivator', darkThemeActivator);
                 }}>
                 <Icons.Ionicons
                   name="moon-sharp"
@@ -129,7 +128,10 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
               onPress={() => {
                 navigation.navigate('ChatBot');
               }}>
-              {darkThemeActivator ? <BotIconWhite /> : <BotIconBlack />}
+              {/* {darkThemeActivator ? <BotIconWhite /> : <BotIconBlack />} */}
+              <View style={[BotChatHeaderStyle.dpContainerView]}>
+              <Image source={require('../../../assets/imges/BotScreenImg/botPic.png')} style={{height:hp('5%'),width:hp('5%')}}/>
+              </View>
             </TouchableOpacity>
           </View>
         </View>

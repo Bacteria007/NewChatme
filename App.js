@@ -1,10 +1,11 @@
 import 'react-native-gesture-handler';
-import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Image, View, Text, SafeAreaView, StatusBar } from 'react-native';
+import React, {  useContext } from 'react';
+import {  Image, View, Text, } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen'
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
 // SCREENS
 import Reels from './src/screens/reels/Reels';
 import Contacts from './src/screens/contacts/Contacts';
@@ -19,9 +20,7 @@ import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import Settings from './src/screens/settings/Settings';
 
-import AppContext, { AppProvider } from './src/context/AppContext';
-// ICONS
-import Icon, { Icons } from './src/assets/Icons'; // Navigation
+import  { Icons } from './src/assets/Icons'; // Navigation
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -33,32 +32,23 @@ import {
 } from '@react-navigation/drawer';
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
-
-import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import ChangeNumber from './src/screens/settings/security/ChangeNumber';
 import ChangeNumberInfo from './src/screens/settings/security/ChangeNumberInfo';
 import ChangePassword from './src/screens/settings/security/ChangePassword';
 import BlockContacts from './src/screens/settings/security/BlockContacts';
 import DeleteAccount from './src/screens/settings/accountPreferences/DeleteAccount';
-import Theme from './src/screens/settings/accountPreferences/Theme';
 import MyActivity from './src/screens/settings/accountPreferences/MyActivity';
 import LogInScreen from './src/screens/auth/LogInScreen';
-
 import Notification from './src/screens/settings/notification/Notification';
-import RejectedCall from './src/screens/calls/RejectedCall';
 import OutgoingCall from './src/screens/calls/OutgoingCall';
-
-
 import ChatBot from './src/screens/chats/chatBot/ChatBot';
 import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
 import TabIcons from './src/components/TabIcons';
-import StreamOutline from './src/assets/imges/footerIcons/streamOutline.svg';
-import ReelsoutlineIcon from './src/assets/imges/footerIcons/reels.svg'
-import ReelsFilledIcon from './src/assets/imges/footerIcons/reelsFilled.svg'
-import ContactsFill from './src/assets/imges/footerIcons/contacts.svg'
-import ContactsOutline from './src/assets/imges/footerIcons/contactsOutline.svg'
+import StreamOutlineWhite from './src/assets/imges/footerIcons/streamOutlineBlack.svg';
+import StreamOutlineBlack from './src/assets/imges/footerIcons/streamOutlineWhite.svg';
 import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext } from './src/context/ThemeContext';
+import  { AppProvider } from './src/context/AppContext';
 
 
 const Tab = createBottomTabNavigator();
@@ -67,34 +57,10 @@ const Drawer = createDrawerNavigator();
 
 const App = () => {
 
-  //   const [scrollY, setScrollY] = useState(new Animated.Value(0));
-  //   const [visible, setVisible] = useState(true)
-  //   const handleScroll = Animated.event(
-  //     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-  //     { useNativeDriver: true }
-  //   )
-  //   const togleTabVisibility = (value) => {
-  //     setVisible(value)
-  // console.log(value)
-
-  //   }
-  //   useEffect(() => {
-  //     scrollY.addListener(({ value }) => {
-  //       if (value > 0) {
-  //         togleTabVisibility(false)
-  //       } else {
-  //         togleTabVisibility(true)
-  //       }
-  //     });
-  //     return () => {
-  //       scrollY.removeAllListeners();
-  //     }
-  //   }, [])
+  const { darkThemeActivator, theme } = useContext(ThemeContext);
 
   let iconSize = 20;
   const TabScreens = () => {
-    const isFocused = useIsFocused()
-    const { darkThemeActivator, theme } = useContext(ThemeContext);
 
     let progress = useDrawerProgress();
     console.log('progress', progress);
@@ -106,10 +72,6 @@ const App = () => {
         { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') },
       ],
       overflow: 'hidden',
-      // shadowColor:AppColors.white,
-      // shadowOffset:{height:hp('50%'),width:wp('30%')},
-      // shadowOpacity:0.5,shadowRadius:50,
-      // elevation: 2,
       // borderRadius:progress.value===1?12:0
     }));
 
@@ -128,13 +90,13 @@ const App = () => {
               // flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
-              backgroundColor: AppColors.lightwhite,
+              // backgroundColor: AppColors.lightwhite,
               // backgroundColor:"rgba(255, 182, 193,0.7)", //pink
               // backgroundColor:"rgba (196,221,254,0.4)", //blue
               elevation: 0,  // <-- this is the solution
               position: 'absolute',
             },
-            tabBarItemStyle: { backgroundColor: AppColors.tab },
+            // tabBarItemStyle: { backgroundColor: AppColors.tab },
             tabBarLabelStyle: {
               fontWeight: 'bold',
               fontSize: wp('3.5%'),
@@ -143,40 +105,41 @@ const App = () => {
               marginBottom: hp('2%'),
               // marginTop: hp('0%'),
             },
+             // tabBarLabelPosition:'beside-icon',
+            // tabBarShowLabel:false,
             // tabBarLabel:({ focused }) => {
             //   return <Text style={{fontSize: hp('1.7%'), fontWeight: 'bold', color:focused? AppColors.black:AppColors.inActiveIconsColor,
 
             //   marginBottom: hp('1%')}}>{focused ? route.name : route.name}</Text>
             // },
-            // tabBarBackground: () => (
-            //   <View>
-            //     <LinearGradient
-            //       //---1
-            //       // colors={["rgba(255, 255, 255,0.0)", "rgba(255, 255, 255,0.7)"]}  // pink only
-            //       // start={{ x: 1, y: 0.0 }} end={{ x: 1, y: 1 }} // horizontal
-            //       // locations={[0.1, 0.4]}
-            //       //---2
-            //       // colors={["rgba(196,221,254,0.2)", "rgba(196,221,254,0.9)"]} // blue
-            //       // locations={[0.1, 0.4]}
-            //       //---3
-            //       colors={["rgba(255, 255, 255,0.1)", "rgba(255, 255, 255,1)"]}  // pink only
-            //       start={{ x: 1, y: 0.0 }} end={{ x: 1, y: 1 }} // horizontal
-            //        locations={[0.1, 0.3]}
-            //       //---
-            //       //--------
-            //       // start={{ x: 0.6, y: 0.5 }} end={{ x: 0.1, y: 0.5 }} // for vertical colors
-            //       // colors={["rgba(196,221,254,0.6)", "rgba(255, 182, 193,0.7)"]} //pink blue
-            //       // colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} //pink blue
-            //       style={{ height: hp('9%') }}
-            //     />
-            //   </View>
-            // ),
+            tabBarBackground: () => (
+
+              <LinearGradient
+                //---1
+                // colors={["rgba(255, 182, 193,0.1)", "rgba(255, 182, 193,1)"]}  // pink only
+                // start={{ x: 1, y: 0.0 }} end={{ x: 1, y: 1 }} // horizontal
+                // locations={[0.1, 0.4]}
+                //---2
+                // colors={["rgba(196,221,254,0.2)", "rgba(196,221,254,0.9)"]} // blue
+                // locations={[0.1, 0.4]}
+                //---3
+                // colors={["rgba(255, 255, 255,0.1)", "rgba(255, 255, 255,1)"]}  // white only
+                start={{ x: 1, y: 0.0 }} end={{ x: 1, y: 1 }} // horizontal
+                //  locations={[0.1, 0.3]}
+                //---
+                //--------
+                // start={{ x: 0.5, y: 0.5 }} end={{ x: 0.2, y: 0.5 }} // for vertical colors
+                // colors={["rgba(196,221,254,1)", "rgba(255, 182, 193,1)"]} //pink blue
+                colors={[theme.linearPink, theme.linearBlue]} //pink blue
+                // colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} //pink blue
+                style={{ height: hp('9%') }}
+              />
+            ),
             tabBarActiveTintColor: theme.focusedTabIconsColor,
             tabBarInactiveTintColor: theme.notFocusedTabIconsColor,
             tabBarHideOnKeyboard: 'true',
             tabBarPressColor: 'rgba(255,255,255,0.6)',
-            // tabBarLabelPosition:'beside-icon',
-            // tabBarShowLabel:false,
+           
             tabBarIcon: ({ focused }) => {
               if (route.name === 'Chats') {
                 return (
@@ -194,9 +157,9 @@ const App = () => {
               } else if (route.name === 'Reels') {
                 return (
                   focused ?
-                    <Icons.FontAwesome5 name="stream" size={16} color={AppColors.black} /> :
-                    <StreamOutline />
-
+                    <TabIcons type={Icons.FontAwesome5} name="stream" size={16} focused={focused}/> :
+                    (darkThemeActivator) ? <StreamOutlineBlack />: <StreamOutlineWhite/> 
+                    
                 );
               } else if (route.name === 'Groups') {
                 return (
@@ -210,8 +173,6 @@ const App = () => {
           })
           }
         >
-
-
           <Tab.Screen name="Chats" component={Discussions} />
           <Tab.Screen name="Groups" component={Groups} />
           <Tab.Screen name="Calls" component={Calls} />
@@ -428,19 +389,14 @@ const App = () => {
       </View>
     );
   };
-  const theme = {
-    colors: {
-      background: "transparent",
-    },
-  }
+  console.log('darkthemeactivator',darkThemeActivator)
   return (
 
     <AppProvider>
-      <NavigationContainer theme={theme}>
+      <NavigationContainer>
         <Stack.Navigator
           options={{ headerShown: false }}
           initialRouteName="DrawerScreens"
-        // screenOptions={{navigationBarColor:"rgba(255, 182, 193,0.5)"}}
         >
 
           <Stack.Screen

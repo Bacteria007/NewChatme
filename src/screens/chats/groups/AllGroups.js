@@ -6,26 +6,21 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
-  ImageBackground, Animated, StyleSheet
+   Animated, StyleSheet
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
-import FontStyle from '../../../assets/styles/FontStyle';
 import AppColors from '../../../assets/colors/Appcolors';
-import AppSubHeader from '../../../components/Headers/AppHeaders/AppSubHeader';
-import Status_bar from '../../../components/Headers/Status_bar';
 import AppContext from '../../../context/AppContext';
 import { Neomorph, Shadow } from 'react-native-neomorph-shadows-fixes';
 import { Card } from 'react-native-paper';
-import DiscussionStyle from '../../../assets/styles/DiscussionStyle';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import SvgWave from "../../../assets/imges/svgBackgroungs/LG.svg";
 import LinearGradient from 'react-native-linear-gradient';
-import GroupsScreenStyle from '../../../assets/styles/GroupsScreenStyle';
 import { ThemeContext } from '../../../context/ThemeContext';
+import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
+import { Icons } from "../../../assets/Icons";
 
 const AllGroups = ({ navigation }) => {
 const{theme}=useContext(ThemeContext)
@@ -182,50 +177,51 @@ const{theme}=useContext(ThemeContext)
       // style={{backgroundColor:'blue',marginTop:20}}
       >
         <View
-          style={GroupsScreenStyle.flatlistItemContainer}>
+          style={HomeNeoCards.flatlistItemContainer}>
           {/* discussion content container */}
-          {/* <Shadow inner style={GroupsScreenStyle.shadowStyle}  > */}
-          <Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[GroupsScreenStyle.neomorphStyle]} >
-            <View style={GroupsScreenStyle.dpImageView}>
+          <Shadow swapShadows style={[HomeNeoCards.shadowStyle,{backgroundColor:theme.discussionsCardColor}]}  >
+          {/* <Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[HomeNeoCards.neomorphStyle,{backgroundColor:theme.discussionsCardColor}]} > */}
+            <View style={[HomeNeoCards.iconView,{backgroundColor:theme.groupDpCircle}]}>
               <TouchableOpacity>
-                <Image
+                {/* <Image
                  source={item.dpImage}
-                  style={GroupsScreenStyle.dpImage}
-                />
+                  style={[HomeNeoCards.dpIcon]}
+                /> */}
+                <Icons.Ionicons name={'people'} size={25} color={theme.groupDpIconColor}/>
               </TouchableOpacity>
             </View>
             {/* msg view */}
-            <View style={GroupsScreenStyle.nameAndMsgContainer}>
+            <View style={HomeNeoCards.nameAndMsgContainer}>
               <Text
-                style={GroupsScreenStyle.profileName}>
+                style={[HomeNeoCards.profileName,{color:theme.profileName}]}>
                 {item.profileName}
               </Text>
               <Text
-                style={GroupsScreenStyle.lastMsg}>
+                style={[HomeNeoCards.lastMsg,{color:theme.lastMsg}]}>
                 {item.lastMsg}
               </Text>
             </View>
-            {/* </Shadow> */}
-          </Neomorph>
+            </Shadow>
+          {/* </Neomorph> */}
         </View>
       </TouchableOpacity>
 
     );
   };
   return (
-    <View style={GroupsScreenStyle.wholeScreenContainer}>
+    <View style={HomeNeoCards.wholeScreenContainer}>
       {/* <ImageBackground blurRadius={0} source={require('../../../assets/imges/svgBackgroungs/darkblue.png')} resizeMethod='resize' resizeMode='cover' style={{ height: hp('100%'), width: wp('100%'), }}> */}
       {  /*start  top itny %, left %  ---  end bottom , left */}
       {/*horizontal*/}
-      {/* <LinearGradient colors={[theme.linearBlue,theme.linearPink]} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }} locations={[0.3, 0.9]}
+      <LinearGradient colors={[theme.linearBlue,theme.linearPink]} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }} locations={[0.3, 0.9]}
        style={StyleSheet.absoluteFillObject}
-        /> */}
+        />
         {/*vertical*/}
         {/* <LinearGradient colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} start={{ x: 0.9, y: 0.5 }} end={{ x: 0.1, y: 0.5 }}>   */}
 
         {/* <SvgWave style={{ position: 'absolute' }} /> */}
-        <StatusBar barStyle={darkThemeActivator ? 'dark-content' : 'light-content'} backgroundColor={darkThemeActivator ? AppColors.linearGradient.blue: AppColors.coolgray} />
-        {/* <Animated.View style={[GroupsScreenStyle.animatedHeader, {
+        <StatusBar barStyle={theme.statusBarText} backgroundColor={theme.statusBarBg} />
+        {/* <Animated.View style={[HomeNeoCards.animatedHeader, {
           transform: [{ translateY: myTranslateY }],
         }]}> */}
 
@@ -245,4 +241,3 @@ const{theme}=useContext(ThemeContext)
 };
 
   export default AllGroups;
-  

@@ -21,8 +21,14 @@ const AppColors = {
   red: 'red',
   darkThemeColors:{
     bgColor:'rgb(15, 15, 15)',
-    groupDpIcon:"rgba(0,0,0,0.7)",
+    groupDpIcon:"rgba(0,0,0,0.9)",
     groupDpCircle:"rgba(255, 255, 255,0.7)",
+    darkHomeCards:"rgba(255,255,255,0.1)",
+  },
+  lightThemeColors:{
+    bgColor:'rgb(15, 15, 15)',
+    groupDpIcon:'#383949',
+    groupDpCircle:"rgba(255, 255, 255,1)",
     darkHomeCards:"rgba(255,255,255,0.1)",
   },
   coolgray: '#383949', //pehlywala
