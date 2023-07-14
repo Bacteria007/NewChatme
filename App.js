@@ -49,6 +49,7 @@ import StreamOutlineBlack from './src/assets/imges/footerIcons/streamOutlineWhit
 import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext } from './src/context/ThemeContext';
 import  { AppProvider } from './src/context/AppContext';
+import Theme from './src/screens/settings/accountPreferences/Theme';
 
 
 const Tab = createBottomTabNavigator();
@@ -93,8 +94,8 @@ const App = () => {
               // backgroundColor: AppColors.lightwhite,
               // backgroundColor:"rgba(255, 182, 193,0.7)", //pink
               // backgroundColor:"rgba (196,221,254,0.4)", //blue
-              elevation: 0,  // <-- this is the solution
-              position: 'absolute',
+              // elevation: 0,  // <-- this is the solution
+              // position: 'absolute',
             },
             // tabBarItemStyle: { backgroundColor: AppColors.tab },
             tabBarLabelStyle: {
