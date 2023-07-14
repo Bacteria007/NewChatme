@@ -49,7 +49,7 @@ import RejectedCall from './src/screens/calls/RejectedCall';
 import OutgoingCall from './src/screens/calls/OutgoingCall';
 
 
-import ChatBot from './src/screens/ChatBot';
+import ChatBot from './src/screens/chats/chatBot/ChatBot';
 import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
 import TabIcons from './src/components/TabIcons';
 import StreamOutline from './src/assets/imges/footerIcons/streamOutline.svg';
