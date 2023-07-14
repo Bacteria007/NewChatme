@@ -185,7 +185,7 @@ const{theme}=useContext(ThemeContext)
           style={GroupsScreenStyle.flatlistItemContainer}>
           {/* discussion content container */}
           {/* <Shadow inner style={GroupsScreenStyle.shadowStyle}  > */}
-          <Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[GroupsScreenStyle.neomorphStyle,{backgroundColor:theme.discussionsCardColor}]} >
+          <Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[GroupsScreenStyle.neomorphStyle]} >
             <View style={GroupsScreenStyle.dpImageView}>
               <TouchableOpacity>
                 <Image
@@ -217,9 +217,9 @@ const{theme}=useContext(ThemeContext)
       {/* <ImageBackground blurRadius={0} source={require('../../../assets/imges/svgBackgroungs/darkblue.png')} resizeMethod='resize' resizeMode='cover' style={{ height: hp('100%'), width: wp('100%'), }}> */}
       {  /*start  top itny %, left %  ---  end bottom , left */}
       {/*horizontal*/}
-      <LinearGradient colors={[theme.linearBlue,theme.linearPink]} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }} locations={[0.3, 0.9]}
+      {/* <LinearGradient colors={[theme.linearBlue,theme.linearPink]} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }} locations={[0.3, 0.9]}
        style={StyleSheet.absoluteFillObject}
-        />
+        /> */}
         {/*vertical*/}
         {/* <LinearGradient colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} start={{ x: 0.9, y: 0.5 }} end={{ x: 0.1, y: 0.5 }}>   */}
 
