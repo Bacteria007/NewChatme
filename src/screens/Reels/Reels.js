@@ -13,7 +13,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Video from 'react-native-video';
-import AppColors from '../../asset/colors/AppColors';
+import AppColors from '../../assets/colors/Appcolors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -24,7 +24,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import FontStyle from '../../asset/styles/FontStyle';
+import FontStyle from '../../assets/styles/FontStyle';
 import Animated from 'react-native-reanimated';
 
 const {height, width} = Dimensions.get('window');
@@ -40,35 +40,35 @@ const Reals = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [colors, setColors] = useState([
     {
-      uri: require('../../asset/video/Whatsapp_20220923125145.mp4'),
+      uri: require('../../assets/video/Whatsapp_20220923125145.mp4'),
       desc: 'description description description description description description description descdescription ription description description description description description description ',
     },
     {
-      uri: require('../../asset/video/Whatsapp_20220923051345.mp4'),
+      uri: require('../../assets/video/Whatsapp_20220923051345.mp4'),
       desc: 'description description description description description description description descdescription ription description description description description description description ',
     },
     {
-      uri: require('../../asset/video/Whatsapp_20220923125145.mp4'),
+      uri: require('../../assets/video/Whatsapp_20220923125145.mp4'),
       desc: 'description description description description description description description descdescription ription description description description description description description ',
     },
     {
-      uri: require('../../asset/video/Whatsapp_20220923051345.mp4'),
+      uri: require('../../assets/video/Whatsapp_20220923051345.mp4'),
       desc: 'description description description description description description description descdescription ription description description description description description description ',
     },
     {
-      uri: require('../../asset/video/Whatsapp_20220923125145.mp4'),
+      uri: require('../../assets/video/Whatsapp_20220923125145.mp4'),
       desc: 'description description description description description description description descdescription ription description description description description description description ',
     },
     {
-      uri: require('../../asset/video/Whatsapp_20220923051345.mp4'),
+      uri: require('../../assets/video/Whatsapp_20220923051345.mp4'),
       desc: 'description description description description description description description descdescription ription description description description description description description ',
     },
     {
-      uri: require('../../asset/video/Whatsapp_20220923125145.mp4'),
+      uri: require('../../assets/video/Whatsapp_20220923125145.mp4'),
       desc: 'description description description description description description description descdescription ription description description description description description description ',
     },
     {
-      uri: require('../../asset/video/Whatsapp_20220923051345.mp4'),
+      uri: require('../../assets/video/Whatsapp_20220923051345.mp4'),
       desc: 'description description description description description description description descdescription ription description description description description description description ',
     },
   ]);
@@ -206,7 +206,7 @@ const Reals = () => {
                         backgroundColor: AppColors.white,
                         borderRadius: 100,
                       }}>
-                        <Image source={require('../../asset/images/landscaper-homepage-work-01-600x351.jpg')} style={{height: hp('4.5%'),
+                        <Image source={require('../../assets/images/landscaper-homepage-work-01-600x351.jpg')} style={{height: hp('4.5%'),
                         borderRadius: 100,
                         width: hp('4.5%'),}}/>
                       </View>
