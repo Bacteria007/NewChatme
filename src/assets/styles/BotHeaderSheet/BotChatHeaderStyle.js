@@ -28,7 +28,7 @@ const BotChatHeaderStyle = StyleSheet.create({
   dpContainerView: {
     height: hp('5%'),
     width: hp('5%'),
-    backgroundColor: AppColors.white,
+    backgroundColor: AppColors.dodgerblue,
     borderRadius: 100,
     marginTop: hp('0.6%'),
   },

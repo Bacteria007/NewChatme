@@ -34,7 +34,7 @@ const BotChatHeader = ({navigation}) => {
          
             <View style={[BotChatHeaderStyle.dpContainerView]}>
               <Image
-                source={require('../../../assets/imges/BotScreenImg/bot.jpg')}
+                source={require('../../../assets/imges/BotScreenImg/botPic.png')}
                 style={[BotChatHeaderStyle.dpImageStyle]}
               />
             </View>
