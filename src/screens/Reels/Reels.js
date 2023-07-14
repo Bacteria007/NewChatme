@@ -13,7 +13,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Video from 'react-native-video';
-import AppColors from '../../asset/colors/AppColors';
+import AppColors from '../../asset/colors/Appcolors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'

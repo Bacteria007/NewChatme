@@ -9,7 +9,7 @@ import {
   FlatList,
   StyleSheet,
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'react-native-axios';
 import AppColors from '../../../assets/colors/Appcolors';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -110,18 +110,20 @@ const ChatBot = props => {
           placeholder="Ask me Anything"
           placeholderTextColor={AppColors.gray}
         />
-        {textInput === ''  
+        
+    
+      {textInput === ''  
         ?
        
         ""
         : (
-          <View style={styles.sendButtonView}>
+          // <View style={styles.sendButtonView}>
             <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-              <FontAwesome name="send" size={20} color={AppColors.lightwhite} />
+              <MaterialCommunityIcons name="send-circle" size={25} style={styles.sendButtonIcon} color={AppColors.periWinkle} />
             </TouchableOpacity>
-          </View>
+          // </View>
         )}
-      </View>
+          </View>
     </View>
   );
 };
@@ -155,32 +157,40 @@ const styles = StyleSheet.create({
   },
   input: {
     borderColor: 'black',
-    width: wp('60%'),
+    width: wp('50%'),
     borderRadius: 20,
+    borderColor: AppColors.black,
+    borderRadius: wp('10%'),
+    borderWidth: 2,
   },
   inputContainer: {
     flexDirection: 'row',
-    width: wp('90%'),
-    borderColor: AppColors.black,
-    borderRadius: wp('90%'),
-    borderWidth: 2,
+    width: wp('100%'),
+ 
     height: hp('7%'),
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    alignSelf: 'center',
+    // justifyContent: 'space-around',
+    // alignItems: 'center',
+    // alignSelf: 'center',
     marginBottom: hp('1%'),
   },
   sendButton: {
-    backgroundColor: AppColors.primary,
-    padding: 7,
-    borderRadius: hp('5.5'),
-    height: hp('5.5%'),
+
+    // justifyContent: 'center',
+    // alignItems:"center"
+  },
+  sendButtonIcon: {
+   
+    // borderRadius: hp('5.5'),
+    // height: hp('5.5%'),
     width: hp('5.5%'),
-    justifyContent: 'center',
+    // backgroundColor:'red'
+  //  alignSelf:'center',
+  //  justifyContent:"center"
   },
   sendButtonView: {
     flexDirection: 'row',
     alignItems: 'center',
+   
   },
   messageText: {
     fontSize: hp('2%'),
