@@ -206,7 +206,7 @@ const Reals = () => {
                         backgroundColor: AppColors.white,
                         borderRadius: 100,
                       }}>
-                        <Image source={require('../../assets/images/landscaper-homepage-work-01-600x351.jpg')} style={{height: hp('4.5%'),
+                        <Image source={require('../../assets/imges/landscaper-homepage-work-01-600x351.jpg')} style={{height: hp('4.5%'),
                         borderRadius: 100,
                         width: hp('4.5%'),}}/>
                       </View>
