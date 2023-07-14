@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Image, View, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, Image, View, Text, SafeAreaView, StatusBar } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -94,7 +94,7 @@ const App = () => {
   let iconSize = 20;
   const TabScreens = () => {
     const isFocused = useIsFocused()
-    const { darkThemeActivator,theme } = useContext(ThemeContext);
+    const { darkThemeActivator, theme } = useContext(ThemeContext);
 
     let progress = useDrawerProgress();
     console.log('progress', progress);
@@ -116,7 +116,7 @@ const App = () => {
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
         <Tab.Navigator
-initialRouteName='Groups'
+          initialRouteName='Chats'
           screenOptions={({ route, focused }) => ({
 
             headerShown: false,
@@ -128,13 +128,13 @@ initialRouteName='Groups'
               // flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
-              backgroundColor:AppColors.lightwhite,
+              backgroundColor: AppColors.lightwhite,
               // backgroundColor:"rgba(255, 182, 193,0.7)", //pink
               // backgroundColor:"rgba (196,221,254,0.4)", //blue
               elevation: 0,  // <-- this is the solution
               position: 'absolute',
             },
-            tabBarItemStyle: { backgroundColor: theme.tabColor  },
+            tabBarItemStyle: { backgroundColor: AppColors.tab },
             tabBarLabelStyle: {
               fontWeight: 'bold',
               fontSize: wp('3.5%'),
@@ -171,7 +171,7 @@ initialRouteName='Groups'
             //     />
             //   </View>
             // ),
-            tabBarActiveTintColor:  theme.focusedTabIconsColor,
+            tabBarActiveTintColor: theme.focusedTabIconsColor,
             tabBarInactiveTintColor: theme.notFocusedTabIconsColor,
             tabBarHideOnKeyboard: 'true',
             tabBarPressColor: 'rgba(255,255,255,0.6)',
@@ -281,150 +281,151 @@ initialRouteName='Groups'
     );
   };
   const DrawerScreens = () => {
+
     return (
-      <Drawer.Navigator
-        screenOptions={{
-          headerShown: false,
-          overlayColor: 'transparent',
-          drawerType: 'slide',
-          drawerActiveTintColor: AppColors.black,
-          drawerInactiveTintColor: AppColors.black,
-          drawerStyle: {
-            width: wp('55%'),
-            backgroundColor: AppColors.periWinkle,
-          },
-          drawerLabelStyle: { marginLeft: wp('-6%') },
-          drawerActiveBackgroundColor: AppColors.white,
-          sceneContainerStyle: {
-            backgroundColor: AppColors.periWinkle,
-            // shadowColor:AppColors.white,
-            // shadowOffset:{height:hp('50%'),width:wp('30%')},
-            // shadowOpacity:0.5,shadowRadius:50,elevation:10
-          },
-          // drawerHideStatusBarOnOpen: true,
-          // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen 
-        }}
-        // backBehavior='history'
-        initialRouteName="Home"
-        drawerContent={props => {
-          return (
-            <View style={{ flex: 1 }}>
-              <DrawerContentScrollView {...props}>
-                <Animated.View
-                  style={[Containers.centerContainer, { height: hp('25%') }]}>
-                  <Image
-                    source={require('./src/assets/imges/w11.jpg')}
-                    style={{
-                      height: wp('25%'),
-                      width: wp('25%'),
-                      borderRadius: wp('100%'),
-                    }}
-                  />
-                  <Text style={{ fontSize: hp('3%'), color: AppColors.black }}>
-                    User Name
-                  </Text>
-                </Animated.View>
-                <DrawerItemList {...props} />
-              </DrawerContentScrollView>
-            </View>
+      <View style={{ flex: 1 }}>
+        <Drawer.Navigator
+          screenOptions={{
+            headerShown: false,
+            overlayColor: 'transparent',
+            drawerType: 'slide',
+            drawerActiveTintColor: AppColors.black,
+            drawerInactiveTintColor: AppColors.black,
+            drawerStyle: {
+              width: wp('55%'),
+              backgroundColor: AppColors.periWinkle,
+            },
+            drawerLabelStyle: { marginLeft: wp('-6%') },
+            drawerActiveBackgroundColor: AppColors.white,
+            sceneContainerStyle: {
+              backgroundColor: AppColors.periWinkle,
+            },
+            // drawerHideStatusBarOnOpen: true,
+            // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen 
+          }}
+          // backBehavior='history'
+          initialRouteName="Home"
+          drawerContent={props => {
+            return (
+              <View style={{ flex: 1 }}>
+                <DrawerContentScrollView {...props}>
+                  <Animated.View
+                    style={[Containers.centerContainer, { height: hp('25%') }]}>
 
-          );
-        }}>
-        <Drawer.Screen
-          name="Home"
-          component={TabScreens}
+                    <Image
+                      source={require('./src/assets/imges/w11.jpg')}
+                      style={{
+                        height: wp('25%'),
+                        width: wp('25%'),
+                        borderRadius: wp('100%'),
+                      }}
+                    />
+                    <Text style={{ fontSize: hp('3%'), color: AppColors.black }}>
+                      User Name
+                    </Text>
+                  </Animated.View>
+                  <DrawerItemList {...props} />
+                </DrawerContentScrollView>
+              </View>
 
-          options={{
+            );
+          }}>
+          <Drawer.Screen
+            name="Home"
+            component={TabScreens}
 
-            drawerIcon: ({ focused }) => (
-              <Icons.MaterialCommunityIcons
-                name={'home'}
-                color={AppColors.black}
-                // name={focused ? 'ios-home' : 'ios-home-outline'}
-                // color={focused ? AppColors.white : AppColors.black}
-                size={iconSize}
-              />
-              // <Icons.Ionicons
-              //   name={'ios-home'}
-              //   color={AppColors.black}
-              //   // name={focused ? 'ios-home' : 'ios-home-outline'}
-              //   // color={focused ? AppColors.white : AppColors.black}
-              //   size={iconSize}
-              // />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="UserProfile"
-          component={UserProfile}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.MaterialIcons
-                name={'person'}
-                color={AppColors.black}
-                // name={focused ? 'person' : 'person-outline'}
-                // color={focused ? AppColors.white : AppColors.black}
-                size={iconSize}
-              />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="AboutUs"
-          component={AboutUs}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.Ionicons
-                name={'ios-information-circle-sharp'}
-                color={AppColors.black}
-                // name={
-                //   focused
-                //     ? 'ios-information-circle-sharp'
-                //     : 'ios-information-circle-outline'
-                // }
-                // color={focused ? AppColors.white : AppColors.black}
-                size={iconSize}
-              />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Settings"
-          component={SettingStack}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.Ionicons
-                name={'ios-settings-sharp'}
-                color={AppColors.black}
-                // name={focused ? 'ios-settings-sharp' : 'ios-settings-outline'}
-                // color={focused ? AppColors.white : AppColors.black}
-                size={iconSize}
-              />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Terms And Conditions"
-          component={TermsAndConditions}
-          options={{
-            drawerIcon: ({ focused }) => (
-              // focused ? (
-              <Icons.FontAwesome5
-                name="file-signature"
-                color={AppColors.black}
-                size={iconSize}
-              />
-            ),
-            // ) : (
-            //   <Icons.MaterialCommunityIcons
-            //     name="file-sign"
-            //     color={focused ? AppColors.white : AppColors.black}
-            //     size={iconSize}
-            //   />
-            // ),
-          }}
-        />
-      </Drawer.Navigator>
+            options={{
+
+              drawerIcon: ({ focused }) => (
+                <Icons.MaterialCommunityIcons
+                  name={'home'}
+                  color={AppColors.black}
+                  // name={focused ? 'ios-home' : 'ios-home-outline'}
+                  // color={focused ? AppColors.white : AppColors.black}
+                  size={iconSize}
+                />
+                // <Icons.Ionicons
+                //   name={'ios-home'}
+                //   color={AppColors.black}
+                //   // name={focused ? 'ios-home' : 'ios-home-outline'}
+                //   // color={focused ? AppColors.white : AppColors.black}
+                //   size={iconSize}
+                // />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="UserProfile"
+            component={UserProfile}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.MaterialIcons
+                  name={'person'}
+                  color={AppColors.black}
+                  // name={focused ? 'person' : 'person-outline'}
+                  // color={focused ? AppColors.white : AppColors.black}
+                  size={iconSize}
+                />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="AboutUs"
+            component={AboutUs}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.Ionicons
+                  name={'ios-information-circle-sharp'}
+                  color={AppColors.black}
+                  // name={
+                  //   focused
+                  //     ? 'ios-information-circle-sharp'
+                  //     : 'ios-information-circle-outline'
+                  // }
+                  // color={focused ? AppColors.white : AppColors.black}
+                  size={iconSize}
+                />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="Settings"
+            component={SettingStack}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.Ionicons
+                  name={'ios-settings-sharp'}
+                  color={AppColors.black}
+                  // name={focused ? 'ios-settings-sharp' : 'ios-settings-outline'}
+                  // color={focused ? AppColors.white : AppColors.black}
+                  size={iconSize}
+                />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="Terms And Conditions"
+            component={TermsAndConditions}
+            options={{
+              drawerIcon: ({ focused }) => (
+                // focused ? (
+                <Icons.FontAwesome5
+                  name="file-signature"
+                  color={AppColors.black}
+                  size={iconSize}
+                />
+              ),
+              // ) : (
+              //   <Icons.MaterialCommunityIcons
+              //     name="file-sign"
+              //     color={focused ? AppColors.white : AppColors.black}
+              //     size={iconSize}
+              //   />
+              // ),
+            }}
+          />
+        </Drawer.Navigator>
+      </View>
     );
   };
   const theme = {

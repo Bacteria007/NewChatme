@@ -11,7 +11,7 @@ const GroupsScreenStyle = StyleSheet.create({
   wholeScreenContainer: {
     // flex:1,
     height: hp('100%'),
-    // backgroundColor: AppColors.black,
+    backgroundColor: AppColors.bgprimary,
   },
   animatedHeader: {
     elevation: 4,
@@ -29,7 +29,7 @@ const GroupsScreenStyle = StyleSheet.create({
     
     flexDirection: 'row',
     alignItems: 'center',
-    // backgroundColor: 'rgba(255, 255, 255,0.4)', //swap
+    backgroundColor: 'rgba(255, 255, 255,0.4)', //swap
     borderRadius: 10,
     height: hp('10%'),
     width: wp('95%'),
