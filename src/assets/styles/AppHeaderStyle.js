@@ -21,7 +21,7 @@ const AppHeaderStyle = StyleSheet.create({
     alignItems:'center',
     height: hp('16%'),
     // position:'absolute',
-    backgroundColor:AppColors.bgprimary
+    
   },
   headerView: {
     flexDirection: 'row',

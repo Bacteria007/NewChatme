@@ -27,7 +27,7 @@ import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
 import AppSubHeaderStyle from '../../../assets/styles/AppSubHeaderStyle';
 import { ThemeContext } from '../../../context/ThemeContext';
 
-const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange }) => {
+const AppHeaderWhite = ({ navigation, headerTitle, searchQuery, handleSearchOnChange }) => {
 
   const { updateTheme, theme, darkThemeActivator } = useContext(ThemeContext);
 
@@ -40,7 +40,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       notFocusedTabIconsColor: AppColors.inActiveIconsColor,
       focusedTabIconsColor: AppColors.black,
       headerIconsColor: AppColors.white,
-      headerSearchText:AppColors.lightwhite,
+      headerSearchText: AppColors.lightwhite,
       headerSearchBar: AppColors.coolgray,
       tabColor: AppColors.lightwhite,
       discussionsCardColor: AppColors.darkThemeColors.darkHomeCards,
@@ -64,7 +64,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       focusedTabIconsColor: AppColors.black,
       headerIconsColor: AppColors.black,
       headerSearchBar: AppColors.lightBlack,
-      headerSearchText:AppColors.black,
+      headerSearchText: AppColors.black,
       tabColor: AppColors.lightwhite,
       discussionsCardColor: AppColors.homeCards,
       profileName: AppColors.black,
@@ -88,7 +88,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
     <View>
       {/* <Wave style={{ position: 'absolute' }}  /> */}
       <View style={[AppHeaderStyle.mainHeader, {
-        // backgroundColor: theme.chatsHeaderBg
+        backgroundColor: AppColors.bgprimary
       }]}>
         <View style={[AppHeaderStyle.headerView]}>
           <TouchableOpacity
@@ -98,7 +98,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
             {darkThemeActivator ? <MenuLeftWhite /> : <MenuLeftBlack />}
           </TouchableOpacity>
 
-          <Text style={[AppHeaderStyle.appNameStyle, { color: theme.headerIconsColor }]}>{headerTitle}</Text>
+          <Text style={[AppHeaderStyle.appNameStyle, { color: AppColors.primary }]}>{headerTitle}</Text>
           <View style={[AppHeaderStyle.iconContainerStyle]}>
             {darkThemeActivator ? (
               <TouchableOpacity
@@ -108,7 +108,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
                 }}>
                 <Icons.Entypo
                   name="light-up"
-                  color={theme.headerIconsColor}
+                  color={AppColors.primary}
                   size={wp('6%')}
                 />
               </TouchableOpacity>
@@ -120,7 +120,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
                 }}>
                 <Icons.Ionicons
                   name="moon-sharp"
-                  color={theme.headerIconsColor}
+                  color={AppColors.primary}
                   size={wp('6%')}
                 />
               </TouchableOpacity>
@@ -141,13 +141,15 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
           elevation={0}
           underlineColorAndroid="transparent"
           placeholder="Search Chats"
-          placeholderTextColor={AppColors.lightGrey} //light
+          placeholderTextColor={AppColors.black} //light
           round
           showCancel
-          containerStyle={[AppSubHeaderStyle.container]}
-          inputContainerStyle={[AppSubHeaderStyle.inputContainer]}
+          containerStyle={[AppSubHeaderStyle.container, {
+            backgroundColor: AppColors.transparent, //dark theme
+          }]}
+          inputContainerStyle={[AppSubHeaderStyle.inputContainer,{backgroundColor: AppColors.lightBlack}]}
           inputStyle={{ color: AppColors.coolgray }}
-          searchIcon={{ color: AppColors.coolgray,size: 23 }}
+          searchIcon={{ color: AppColors.coolgray, size: 23 }}
           clearIcon={{ color: AppColors.coolgray }}
           leftIconContainerStyle={AppSubHeaderStyle.iconContainer}
           rightIconContainerStyle={AppSubHeaderStyle.iconContainer}
@@ -157,4 +159,4 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
     </View>
   );
 };
-export default AppHeader;
+export default AppHeaderWhite;

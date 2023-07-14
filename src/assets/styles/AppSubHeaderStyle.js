@@ -18,7 +18,6 @@ const AppSubHeaderStyle = StyleSheet.create({
   inputContainer: {
     height: hp('6%'),
     width: wp('95%'),
-    backgroundColor:AppColors.lightBlack, //dark theme
     // backgroundColor: "rgba(255,255,255,0.3)", //dark theme
     borderRadius: 25,
   },

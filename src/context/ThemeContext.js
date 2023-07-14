@@ -15,9 +15,9 @@ const initialTheme = {
     profileName: AppColors.black,
     lastMsg: AppColors.lightBlack2,
     groupDpIconColor: AppColors.darkThemeColors.groupDpIcon,
-    groupDpCircle: AppColors.darkThemeColors.groupDpCircle,
+    groupDpCircle: AppColors.lightThemeColors.groupDpCircle,
     headerSearchBarIcons: AppColors.coolgray,
-    chatsHeaderBg:AppColors.transparent,
+    chatsHeaderBg:AppColors.linearGradient.blue,
     statusBarBg:AppColors.linearGradient.blue,
     statusBarTextLight:'light-content',
     statusBarTextDark:'dark-content',
@@ -36,15 +36,18 @@ export const ThemeProvider = ({ children }) => {
     // Function to update the theme
     const updateTheme = newTheme => {
         setTheme(newTheme);
-        setDarkThemeActivator(!darkThemeActivator);
     };
+    const changeThemeState=()=>{
+        setDarkThemeActivator(!darkThemeActivator)
+    }
 
     return (
         <ThemeContext.Provider
             value={{
                 theme,
                 updateTheme,
-                darkThemeActivator
+                darkThemeActivator,
+                changeThemeState
             }}>
             {children}
         </ThemeContext.Provider>

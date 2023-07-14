@@ -103,7 +103,7 @@ const Reals = () => {
             textShadowOffset: {width: wp('0.7%'), height: wp('0.7%')},
             textShadowRadius: wp('0.5%'),
           }}>
-          Reals
+          Reels
         </Text>
         <View
           style={{
