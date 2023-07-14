@@ -9,7 +9,7 @@ import AppColors from '../../colors/Appcolors';
 
 const HomeNeoCards = StyleSheet.create({
     wholeScreenContainer: {
-        // flex:1,
+        flex:1,
         height: hp('100%'),
         // backgroundColor: AppColors.transparent,
     },

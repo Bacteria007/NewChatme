@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
-   Animated, StyleSheet
+   Animated, StyleSheet,Alert
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -27,7 +27,7 @@ const{theme}=useContext(ThemeContext)
   //            **************                    USE STATES      *****************
   const { darkThemeActivator } = useContext(AppContext);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
-  const [filteredUsers, setFilteredUsers] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
+  const [searchedGroups, setSearchedGroups] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const [isModalVisible, setIsModalVisible] = useState(false);
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible)
@@ -40,140 +40,175 @@ const{theme}=useContext(ThemeContext)
     inputRange: [0, headerHeight], outputRange: [0, -headerHeight]
   });
 
-  const allChats = [
+  const [allGroups,setAllGroups] =useState([
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Aqsa 1',
       lastMsg: 'Hello Aqsa',
+      id:'fd778586-523b-5986-b467-9a5756eeb282'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Hina 2',
       lastMsg: 'Hello Hina',
+      id:'358626a1-9280-51b8-9595-63e43b049d24'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Aqsa 3',
       lastMsg: 'Hello Aqsa',
+      id:'8650517a-b9a9-5f4c-b94e-dff2a4d6e262'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Afshan 4',
       lastMsg: 'Hello Afshan',
+      id:'f2d36fca-1934-5c30-a1a7-e3e90312c0d3'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Hina 5',
       lastMsg: 'Hello Hina',
+      id:'7cec4113-5507-5e2f-bf23-4f6cc0b77043'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Aqsa',
       lastMsg: 'Hello Aqsa',
+      id:'6a1b8aed-1544-5245-ab7f-e4757edbf1cd'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Rabia',
       lastMsg: 'Hello Rabia',
+      id:'f503e3b5-a1c0-5c08-b4f3-4cde6f35db60'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Hina',
       lastMsg: 'Hello Hina',
+      id:'dc49e13a-64f2-5068-822a-907b4c009a82'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Rabia',
       lastMsg: 'Hello Afshan',
+      id:'9bc3ab13-9dc1-508c-9aba-e0f3a79bd1da'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Hina',
       lastMsg: 'Hello Afshan',
+      id:'0076ee92-4d83-5806-b5ff-4b1a32bd78e0'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Rabia',
       lastMsg: 'Hello Afshan',
+      id:'4d66b4df-e496-5465-96ad-6e00e6206c90'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Aqsa',
       lastMsg: 'Hello Afshan',
+      id:'d56467a6-e9d8-57a4-980c-a5d19c5afcb3'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Hina',
       lastMsg: 'Hello Afshan',
+      id:'e141fbbf-b131-5543-a322-5b2877f41312'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Hina',
       lastMsg: 'Hello Afshan',
+      id:'b0dbd2ee-7249-580d-ae02-28273d082a72'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Aqsa',
       lastMsg: 'Hello Afshan',
+      id:'0abb1897-d7a2-5d23-9bea-2eb3d427c177'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Rabia',
       lastMsg: 'Hello Afshan',
+      id:'8784af39-c2db-53a9-a237-5e59a4d299ce'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Hina',
       lastMsg: 'Hello Afshan',
+      id:'b0b15a77-10ab-56d3-978f-e19bd3aa1393'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Rabia',
       lastMsg: 'Hello Afshan',
+      id:'0c55fac8-ac35-5262-8cfd-d9e3ec00564d'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Hina',
       lastMsg: 'Hello Afshan',
+      id:'10fc7054-1337-5257-82dc-29be44edc544'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Aqsa',
       lastMsg: 'Hello Afshan',
+      id:'8a155701-c993-5353-ae41-59656a27241c'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
       profileName: 'Hina',
       lastMsg: 'Hello Afshan',
+      id:'d79e4614-881e-5065-bff2-1bc3f4ff44bf'
     },
     {
       dpImage: require('../../../assets/imges/groups/peoplefill.png'),
-      profileName: 'Rabia',
+      profileName: 'last group',
       lastMsg: 'Hello Afshan',
+      id:'ed0d1a71-57e0-59c0-a9c1-d46651c799a9'
     },
-  ];
+  ]);
   //  **********************              FINCTION FOR HANDLING SEARCHBAR       ***********************************
   const handleSearch = text => {
     setSearchText(text);
 
     if (text === '') {
       // If search query is empty, show all users
-      setFilteredUsers(allChats);
+      setSearchedGroups(allGroups);
     } else {
       // Filter users based on search query
-      const filtered = allChats.filter(user =>
+      const filteredGroups = allGroups.filter(user =>
         user.profileName.toLowerCase().includes(text.toLowerCase()),         // NAME KI BASE PR SEARCH HO RAHI HAI
       );
-      setFilteredUsers(filtered);
+      setSearchedGroups(filteredGroups);
     }
   };
-
+  const deleteGroup = (item) => {
+    const upDatedGroupsArray = allGroups.filter((element) => element.id !== item.id);
+    setAllGroups(upDatedGroupsArray);
+  }
+  const handleLongPress = (item) => {
+    // toggleLongPressModal();
+    Alert.alert(
+      'Delete Chat', 'All Media and chat history wil be deleted',
+      [{ text: 'Delete', onPress: () => { deleteGroup(item) } }],
+      {textStyle:{color:'blue'}},
+      { cancelable: true },
+    )
+  }
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('UserChat', { item: item });
         }}
+        onLongPress={() => handleLongPress(item)}
       // style={{backgroundColor:'blue',marginTop:20}}
       >
         <View
@@ -214,7 +249,7 @@ const{theme}=useContext(ThemeContext)
       {  /*start  top itny %, left %  ---  end bottom , left */}
       {/*horizontal*/}
       <LinearGradient colors={[theme.linearBlue,theme.linearPink]} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }} locations={[0.3, 0.9]}
-       style={StyleSheet.absoluteFillObject}
+       style={[StyleSheet.absoluteFillObject]}
         />
         {/*vertical*/}
         {/* <LinearGradient colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} start={{ x: 0.9, y: 0.5 }} end={{ x: 0.1, y: 0.5 }}>   */}
@@ -230,9 +265,10 @@ const{theme}=useContext(ThemeContext)
 
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={filteredUsers == '' ? allChats : filteredUsers}
+          data={searchedGroups == '' ? allGroups : searchedGroups}
           renderItem={renderItem}
-        // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
+          keyExtractor={(item) => { item.id.toString() }}
+          // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
         />
 
     </View>
