@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, Image,StyleSheet } from 'react-native'
 import React from 'react'
-import BotChatHeaderStyle from '../../../assets/styles/BotHeaderSheet/BotChatHeaderStyle';
+import BotChatHeaderStyle from '../../../assets/styles/BotStyleSheet/BotChatHeaderStyle';
 import { Icons } from '../../../assets/Icons';
 import {
     heightPercentageToDP as hp,
