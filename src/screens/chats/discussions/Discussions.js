@@ -320,7 +320,7 @@ export default Discussions;
           //   { useNativeDriver: true },
           // )}
 
-          const handleScroll = Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-            { useNativeDriver: true }
-          );
+          // const handleScroll = Animated.event(
+          //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          //   { useNativeDriver: true }
+          // );
