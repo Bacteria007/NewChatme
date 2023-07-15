@@ -44,8 +44,8 @@ const Settings = ({ navigation }) => {
                 navigation.navigate('blocked');
               }}>
               <View style={[SettingScreenStyle.touchableView]}>
-                <View style={{flexDirection:'row',justifyContent:'space-between',width:wp('40%')}}>
-                  <Icons.FontAwesome5 name='user-slash' size={wp('5%')}/>
+                <View style={[SettingScreenStyle.iconTextContainer]}>
+                  <Icons.AntDesign name='minuscircle' size={wp('4.5%')} color={iconColor} style={{marginTop:hp('0.2%')}}/>
                 <Text style={[SettingScreenStyle.touchableText]}>
                   Block Contact
                 </Text>
@@ -63,7 +63,7 @@ const Settings = ({ navigation }) => {
               }}>
               <View style={[SettingScreenStyle.touchableView]}>
                 <View style={{flexDirection:'row'}}>
-                  <Image source={require('../../assets/imges/passwordChange.png')} style={{height:wp('5%'),width:wp('5%')}} />
+                <Icons.MaterialCommunityIcons name='account-key' size={wp('5%')} color={iconColor}/>
                 <Text style={[SettingScreenStyle.touchableText]}>
                   Change Password
                 </Text>
@@ -86,9 +86,12 @@ const Settings = ({ navigation }) => {
                     borderBottomWidth: wp('0%'),
                   },
                 ]}>
+                    <View style={[SettingScreenStyle.iconTextContainer]}>
+                  <Icons.MaterialCommunityIcons name='account-convert' size={wp('5%')} color={iconColor} style={{marginTop:hp('0.2%')}}/>
                 <Text style={[SettingScreenStyle.touchableText]}>
                   Change Number
                 </Text>
+                </View>
                 <Icons.FontAwesome5
                   name={iconName}
                   size={iconSize}
@@ -106,7 +109,9 @@ const Settings = ({ navigation }) => {
                 toggleModal();
               }}>
               <View style={[SettingScreenStyle.touchableView]}>
-                <Text style={[SettingScreenStyle.touchableText]}>Theme</Text>
+              <View style={[SettingScreenStyle.iconTextContainer]}>
+                  <Icons.MaterialCommunityIcons name='theme-light-dark' size={wp('5%')} color={iconColor} style={{marginTop:hp('0.2%')}}/>
+                <Text style={[SettingScreenStyle.touchableText]}>Theme</Text></View>
                 <Icons.FontAwesome5
                   name={iconName}
                   size={iconSize}
@@ -143,9 +148,11 @@ const Settings = ({ navigation }) => {
                 navigation.navigate('activity');
               }}>
               <View style={[SettingScreenStyle.touchableView]}>
+              <View style={[SettingScreenStyle.iconTextContainer]}>
+                  <Icons.Feather name='activity' size={wp('5%')} color={iconColor} style={{marginTop:hp('0.2%')}}/>
                 <Text style={[SettingScreenStyle.touchableText]}>
                   My Activity
-                </Text>
+                </Text></View>
                 <Icons.FontAwesome5
                   name={iconName}
                   size={iconSize}
@@ -164,9 +171,12 @@ const Settings = ({ navigation }) => {
                     borderBottomWidth: wp('0%'),
                   },
                 ]}>
+                    <View style={[SettingScreenStyle.iconTextContainer]}>
+                  <Icons.MaterialCommunityIcons name='account-remove' size={wp('5%')} color={iconColor} style={{marginTop:hp('0.2%')}}/>
                 <Text style={[SettingScreenStyle.touchableText]}>
                   Delete Account
                 </Text>
+                </View>
                 <Icons.FontAwesome5
                   name={iconName}
                   size={iconSize}
@@ -178,13 +188,7 @@ const Settings = ({ navigation }) => {
 
           <View style={[SettingScreenStyle.sectionView]}>
             <View style={{ backgroundColor: AppColors.white }}>
-              <Text
-                style={{
-                  fontSize: wp('6%'),
-                  fontFamily: FontStyle.mediumFont,
-                  paddingHorizontal: wp('4%'),
-                  color: AppColors.black,
-                }}>
+            <Text style={[SettingScreenStyle.sectionHeadText]}>
                 App Language
               </Text>
               <TouchableOpacity
@@ -192,23 +196,18 @@ const Settings = ({ navigation }) => {
                   navigation.navigate('appLanguage');
                 }}>
                 <View
-                  style={{
-                    flexDirection: 'row',
-                    height: hp('6%'),
-                    justifyContent: 'space-between',
-                    paddingHorizontal: wp('4%'),
-                    alignItems: 'center',
+                style={[
+                  SettingScreenStyle.touchableView,
+                  {
                     borderBottomWidth: wp('0%'),
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: wp('4.5%'),
-                      fontFamily: FontStyle.regularFont,
-                      color: AppColors.black,
-                    }}>
+                  },
+                ]}>
+                      <View style={[SettingScreenStyle.iconTextContainer]}>
+                  <Icons.FontAwesome name='language' size={wp('5%')} color={iconColor}/>
+                  <Text style={[SettingScreenStyle.touchableText]}>
                     {language}{' '}
                     {/*  TEXT DISPLAY ACCORDING TO SELECTED LANGUAGE */}
-                  </Text>
+                  </Text></View>
                   <Icons.FontAwesome5
                     name="arrow-right"
                     size={wp('5.5%')}
@@ -234,9 +233,11 @@ const Settings = ({ navigation }) => {
                     borderBottomWidth: wp('0%'),
                   },
                 ]}>
+                    <View style={[SettingScreenStyle.iconTextContainer]}>
+                  <Icons.Ionicons name='notifications' size={wp('5%')} color={iconColor} style={{marginTop:hp('0.2%')}}/>
                 <Text style={[SettingScreenStyle.touchableText]}>
                   Notifications
-                </Text>
+                </Text></View>
                 <Icons.FontAwesome5
                   name={iconName}
                   size={iconSize}
