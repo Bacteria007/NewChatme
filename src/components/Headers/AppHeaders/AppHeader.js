@@ -16,7 +16,6 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import { SearchBar } from '@rneui/themed';
 
 import BotIconBlack from '../../../assets/imges/headericons/botBlack.svg'
 import BotIconWhite from '../../../assets/imges/headericons/botWhite.svg'
@@ -27,10 +26,11 @@ import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
 import AppSubHeaderStyle from '../../../assets/styles/AppSubHeaderStyle';
 import { ThemeContext } from '../../../context/ThemeContext';
 import BotChatHeaderStyle from '../../../assets/styles/BotHeaderSheet/BotChatHeaderStyle';
-
+import Primary_StatusBar from '../../statusbars/Primary_StatusBar';
+import { SearchBar } from '@rneui/base';
 const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange }) => {
 
-  const { updateTheme, theme, darkThemeActivator,changeThemeState } = useContext(ThemeContext);
+  const { updateTheme, theme, darkThemeActivator, changeThemeState } = useContext(ThemeContext);
 
 
   const DarkThemeChanger = () => {
@@ -41,7 +41,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       notFocusedTabIconsColor: AppColors.lightwhite,
       focusedTabIconsColor: AppColors.white,
       headerIconsColor: AppColors.white,
-      headerSearchText:AppColors.lightwhite,
+      headerSearchText: AppColors.lightwhite,
       headerSearchBar: AppColors.darkThemeColors.darkHomeCards,
       discussionsCardColor: AppColors.darkThemeColors.darkHomeCards,
       profileName: AppColors.white,
@@ -52,6 +52,8 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       chatsHeaderBg: AppColors.transparent,
       statusBarBg: AppColors.black,
       statusBarText: 'light-content',
+      drawerColor: AppColors.white,
+
     };
     updateTheme(newTheme);
     changeThemeState()
@@ -65,7 +67,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       focusedTabIconsColor: AppColors.black,
       headerIconsColor: AppColors.black,
       headerSearchBar: AppColors.lightBlack,
-      headerSearchText:AppColors.black,
+      headerSearchText: AppColors.black,
       discussionsCardColor: AppColors.homeCards,
       profileName: AppColors.black,
       lastMsg: AppColors.lightBlack2,
@@ -77,7 +79,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       statusBarTextLight: 'light-content',
       statusBarTextDark: 'dark-content',
       statusBarText: 'dark-content',
-
+      drawerColor: AppColors.dodgerblue,
     };
     updateTheme(newTheme);
     changeThemeState()
@@ -91,15 +93,18 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       <View style={[AppHeaderStyle.mainHeader, {
         backgroundColor: theme.chatsHeaderBg
       }]}>
+        <Primary_StatusBar />
         <View style={[AppHeaderStyle.headerView]}>
-          <TouchableOpacity
-            style={{ flexDirection: 'row' }}
-            onPress={() => { navigation.toggleDrawer() }}>
+          <View style={AppHeaderStyle.drawerAndName_Container}>
+            <TouchableOpacity
+              style={{ flexDirection: 'row' }}
+              onPress={() => { navigation.toggleDrawer() }}>
 
-            {darkThemeActivator ? <MenuLeftWhite /> : <MenuLeftBlack />}
-          </TouchableOpacity>
+              {darkThemeActivator ? <MenuLeftWhite /> : <MenuLeftBlack />}
+            </TouchableOpacity>
 
-          <Text style={[AppHeaderStyle.appNameStyle, { color: theme.headerIconsColor }]}>{headerTitle}</Text>
+            <Text style={[AppHeaderStyle.appNameStyle, { color: theme.headerIconsColor }]}>{headerTitle}</Text>
+          </View>
           <View style={[AppHeaderStyle.iconContainerStyle]}>
             {darkThemeActivator ? (
               <TouchableOpacity
@@ -130,7 +135,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
               }}>
               {/* {darkThemeActivator ? <BotIconWhite /> : <BotIconBlack />} */}
               <View style={[BotChatHeaderStyle.dpContainerView]}>
-              <Image source={require('../../../assets/imges/BotScreenImg/botPic.png')} style={{height:hp('5%'),width:hp('5%')}}/>
+                <Image source={require('../../../assets/imges/BotScreenImg/botPic.png')} style={{ height: hp('5%'), width: hp('5%') }} />
               </View>
             </TouchableOpacity>
           </View>
@@ -147,9 +152,9 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
           round
           showCancel
           containerStyle={[AppSubHeaderStyle.container]}
-          inputContainerStyle={[AppSubHeaderStyle.inputContainer,{backgroundColor:theme.headerSearchBar}]}
+          inputContainerStyle={[AppSubHeaderStyle.inputContainer, { backgroundColor: theme.headerSearchBar }]}
           inputStyle={{ color: theme.headerSearchText }}
-          searchIcon={{ color: theme.headerSearchText,size: 23 }}
+          searchIcon={{ color: theme.headerSearchText, size: 23 }}
           clearIcon={{ color: theme.headerSearchText }}
           leftIconContainerStyle={AppSubHeaderStyle.iconContainer}
           rightIconContainerStyle={AppSubHeaderStyle.iconContainer}

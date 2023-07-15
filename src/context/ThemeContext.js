@@ -22,6 +22,7 @@ const initialTheme = {
     statusBarTextLight:'light-content',
     statusBarTextDark:'dark-content',
     statusBarText:'dark-content',
+    drawerColor:AppColors.dodgerblue,
 
 };
 

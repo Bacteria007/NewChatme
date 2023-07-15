@@ -3,10 +3,8 @@ import React, { useContext } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
-  StatusBar,
-  useColorScheme,
-  TextInput,
+  TouchableOpacity, StyleSheet
+
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -14,34 +12,31 @@ import {
 } from 'react-native-responsive-screen';
 import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 import { Icons } from '../../../assets/Icons';
-import AppColors from '../../../assets/colors/Appcolors';
-import Status_bar from '../Status_bar';
-import AppContext from '../../../context/AppContext';
+import Primary_StatusBar from '../../statusbars/Primary_StatusBar';
+import { ThemeContext } from '../../../context/ThemeContext';
+import LinearGradient from 'react-native-linear-gradient';
 
 
-const InnerScreensHeader = ({navigation,screenName}) => {
-  const { darkThemeActivator } = useContext(AppContext);
+const InnerScreensHeader = ({ navigation, screenName }) => {
+  const { theme } = useContext(ThemeContext)
 
   return (
     <View style={[DrawerHeaderStyle.containerView]}>
-      {/* <Status_bar darkModeBgColor={AppColors.darkTheme} lightModeBgColor={AppColors.primary} lightModeContent={'light-content'} darkModeContent={'dark-content'} /> */}
-      <StatusBar
-        barStyle={darkThemeActivator ? 'light-content' : 'light-content'}
-        backgroundColor={darkThemeActivator?AppColors.darkTheme:AppColors.primary}
-      />
-      <View style={[DrawerHeaderStyle.headerView,{backgroundColor:darkThemeActivator?AppColors.darkTheme:AppColors.primary}]}>
+
+      <Primary_StatusBar />
+            <View style={[DrawerHeaderStyle.headerView, { backgroundColor: theme.statusBarBg }]}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Chats')
+            navigation.goBack();
           }}>
           <Icons.Ionicons
             name="arrow-back"
             size={wp('7%')}
-            color={darkThemeActivator ? AppColors.lightwhite : AppColors.white}
-            style={{marginLeft:wp('2%')}}
+            color={theme.headerIconsColor}
+            style={{ marginLeft: wp('2%') }}
           />
         </TouchableOpacity>
-        <Text style={[DrawerHeaderStyle.screenNameStyle,{color:darkThemeActivator ? AppColors.lightwhite : AppColors.white}]}>{screenName}</Text>
+        <Text style={[DrawerHeaderStyle.screenNameStyle, { color: theme.headerIconsColor }]}>{screenName}</Text>
       </View>
     </View>
 

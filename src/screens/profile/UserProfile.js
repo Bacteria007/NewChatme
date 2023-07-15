@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import Status_bar from '../../components/Headers/Status_bar'
+import Status_bar from '../../components/statusbars/Primary_StatusBar'
 import AppColors from '../../assets/colors/Appcolors'
 import Icon, { Icons } from '../../assets/Icons.js';
 import SelectInfo from './SelectInfo';
