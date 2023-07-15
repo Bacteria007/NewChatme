@@ -27,7 +27,7 @@ import AppColors from '../../../assets/colors/Appcolors';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
 import AppSubHeaderStyle from '../../../assets/styles/AppSubHeaderStyle';
 import { ThemeContext } from '../../../context/ThemeContext';
-import BotChatHeaderStyle from '../../../assets/styles/BotHeaderSheet/BotChatHeaderStyle';
+import BotChatHeaderStyle from '../../../assets/styles/BotStyleSheet/BotChatHeaderStyle';
 import Primary_StatusBar from '../../statusbars/Primary_StatusBar';
 
 const CallsScreenHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange }) => {
