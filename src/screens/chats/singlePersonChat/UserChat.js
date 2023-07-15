@@ -11,7 +11,7 @@ import {Item} from 'react-native-paper/lib/typescript/src/components/Drawer/Draw
 // import AppColors from '../../asset/colors/AppColors';
 // import Modal from 'react-native-modal';
 import Colors from '../../../assets/colors/Appcolors';
-import Status_bar from '../../../components/Headers/Status_bar';
+import Status_bar from '../../../components/statusbars/Primary_StatusBar';
 import UserChatStyle from '../../../assets/styles/UserChatStyle';
 import AppColors from '../../../assets/colors/Appcolors';
 import UserChatHeader from '../../../components/Headers/ChatHeader/UserChatHeader';

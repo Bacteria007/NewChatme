@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/LogInStyleSheet';
-import Status_bar from '../../components/Headers/Status_bar';
+import Status_bar from '../../components/statusbars/Primary_StatusBar';
 import AppColors from '../../assets/colors/Appcolors';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { Snackbar } from 'react-native-paper';

@@ -254,14 +254,14 @@ const App = () => {
             drawerActiveTintColor: AppColors.black,
             drawerInactiveTintColor: AppColors.black,
             drawerStyle: {
-              width: wp('55%'),
-              backgroundColor: AppColors.periWinkle,
+              width: wp('50%'),
+              backgroundColor:theme.drawerColor,
             },
             drawerLabelStyle: { marginLeft: wp('-6%') },
             drawerActiveBackgroundColor: AppColors.white,
             sceneContainerStyle: {
-              backgroundColor: AppColors.periWinkle,
-            },
+              backgroundColor: theme.drawerColor
+                       },
             // drawerHideStatusBarOnOpen: true,
             // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen 
           }}

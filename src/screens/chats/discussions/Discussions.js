@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import {
   FlatList,
   Image,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
-  Animated, StyleSheet, Alert
+  Animated, StyleSheet, Alert, ScrollView
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -20,21 +20,19 @@ import { Card } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext } from '../../../context/ThemeContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
+import Custom_StatusBar from '../../../components/statusbars/Primary_StatusBar';
+import TermsStyle from '../../../assets/styles/tremsAndConditions/TermsStyle';
+import { Icons } from '../../../assets/Icons';
 const Discussions = ({ navigation }) => {
 
   //            **************                    USE STATES      *****************
-  const { darkThemeActivator } = useContext(AppContext);
   const { theme } = useContext(ThemeContext)
+  const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isLongpressModalVisible, setIsLongpressModalisible] = useState(false);
-  const toggleModal = () => {
-    setIsModalVisible(!isModalVisible)
-  }
-  const toggleLongPressModal = () => {
-    setIsLongpressModalisible(!isLongpressModalVisible)
-  }
+
+  
+
   // Animated Variables
   const scrollY = React.useRef(new Animated.Value(0)).current;
   const headerHeight = hp('16%')
@@ -42,6 +40,9 @@ const Discussions = ({ navigation }) => {
   const myTranslateY = myDiffClamp.interpolate({
     inputRange: [0, headerHeight], outputRange: [0, -headerHeight]
   });
+  const scrollToTop = () => {
+    flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+  };
 
   const [allChats, setAllChats] = useState([
     {
@@ -155,7 +156,7 @@ const Discussions = ({ navigation }) => {
       lastMsg: 'Hello Afshan', id: 'ee3d8eb9-f9dd-56e8-b66e-efa704437fec'
     },
   ]);
-  //  **********************              FINCTION FOR HANDLING SEARCHBAR       ***********************************
+  //  **********************   FINCTION  ***********************************
   const handleSearch = text => {
     setSearchText(text);
 
@@ -180,7 +181,6 @@ const Discussions = ({ navigation }) => {
     Alert.alert(
       'Delete Chat', 'All Media and chat history wil be deleted',
       [{ text: 'Delete', onPress: () => { deleteChat(item) } }],
-      {textStyle:{color:'blue'}},
       { cancelable: true },
     )
   }
@@ -225,30 +225,45 @@ const Discussions = ({ navigation }) => {
 
     );
   };
+  const renderFooter = () => {
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            scrollToTop();
+          }}
+          style={[TermsStyle.arrowupStyle,{backgroundColor:theme.discussionsCardColor,elevation:0}]}
+        >
+        <Icons.AntDesign name="arrowup" size={20} color={theme.profileName} />
+        </TouchableOpacity>
+
+      </View>
+    );
+  };
   return (
     <View style={HomeNeoCards.wholeScreenContainer}>
       {  /*start  top itny %, left %  ---  end bottom , left */}
       <LinearGradient colors={[theme.linearBlue, theme.linearPink]} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }} locations={[0.3, 0.9]}
         style={StyleSheet.absoluteFillObject}
       />
+      <Custom_StatusBar />
       {/*vertical*/}
       {/* <LinearGradient colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} start={{ x: 0.9, y: 0.5 }} end={{ x: 0.1, y: 0.5 }}>   */}
-      <StatusBar barStyle={theme.statusBarText} backgroundColor={theme.statusBarBg} />
       {/* <Animated.View style={[HomeNeoCards.animatedHeader, {
           transform: [{ translateY: myTranslateY }],
         }]}> */}
 
-      <AppHeader navigation={navigation} headerTitle={'ChatMe'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+      <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       {/* </Animated.View> */}
-
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={searchedChat == '' ? allChats : searchedChat}
-        renderItem={renderItem}
-        keyExtractor={(item) => { item.id.toString() }}
-      // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
-      />
-
+        <FlatList
+          ref={flatListRef}
+          showsVerticalScrollIndicator={false}
+          data={searchedChat == '' ? allChats : searchedChat}
+          renderItem={renderItem}
+          keyExtractor={(item) => { item.id.toString() }}
+          ListFooterComponent={renderFooter}
+        // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
+        />
       {/* </LinearGradient> */}
       {/* </SafeAreaView> */}
     </View>

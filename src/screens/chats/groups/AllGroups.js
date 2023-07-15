@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import {
   FlatList,
   Image,
@@ -21,10 +21,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext } from '../../../context/ThemeContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { Icons } from "../../../assets/Icons";
+import TermsStyle from '../../../assets/styles/tremsAndConditions/TermsStyle';
 
 const AllGroups = ({ navigation }) => {
-const{theme}=useContext(ThemeContext)
   //            **************                    USE STATES      *****************
+  const{theme}=useContext(ThemeContext)
+  const flatListRef = useRef(null);
   const { darkThemeActivator } = useContext(AppContext);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedGroups, setSearchedGroups] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
@@ -175,6 +177,9 @@ const{theme}=useContext(ThemeContext)
     },
   ]);
   //  **********************              FINCTION FOR HANDLING SEARCHBAR       ***********************************
+   const scrollToTop = () => {
+    flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+  };
   const handleSearch = text => {
     setSearchText(text);
 
@@ -243,6 +248,21 @@ const{theme}=useContext(ThemeContext)
 
     );
   };
+  const renderFooter = () => {
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            scrollToTop();
+          }}
+          style={[TermsStyle.arrowupStyle,{backgroundColor:theme.discussionsCardColor,elevation:0}]}
+        >
+        <Icons.AntDesign name="arrowup" size={20} color={theme.profileName} />
+        </TouchableOpacity>
+
+      </View>
+    );
+  };
   return (
     <View style={HomeNeoCards.wholeScreenContainer}>
       {/* <ImageBackground blurRadius={0} source={require('../../../assets/imges/svgBackgroungs/darkblue.png')} resizeMethod='resize' resizeMode='cover' style={{ height: hp('100%'), width: wp('100%'), }}> */}
@@ -268,6 +288,9 @@ const{theme}=useContext(ThemeContext)
           data={searchedGroups == '' ? allGroups : searchedGroups}
           renderItem={renderItem}
           keyExtractor={(item) => { item.id.toString() }}
+          ref={flatListRef}
+          ListFooterComponent={renderFooter}
+
           // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
         />
 

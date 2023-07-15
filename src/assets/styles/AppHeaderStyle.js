@@ -6,7 +6,7 @@ import {
 } from 'react-native-responsive-screen';
 import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
-import {BgTheme} from "./BgTheme";
+import { BgTheme } from "./BgTheme";
 // import AppContext from '../../context/AppContext';
 
 // const bgTheme=()=>{
@@ -18,26 +18,31 @@ const AppHeaderStyle = StyleSheet.create({
   mainHeader: {
     // flex:1,
     justifyContent: 'center',
-    alignItems:'center',
+    alignItems: 'center',
     height: hp('16%'),
     // position:'absolute',
-    
+
   },
   headerView: {
     flexDirection: 'row',
     paddingHorizontal: wp('3.5%'),
     justifyContent: 'space-between',
-    alignItems:'center',
-    width:wp('100%'),
+    alignItems: 'center',
+    width: wp('100%'),
     // backgroundColor:'blue',
 
   },
+  drawerAndName_Container: {
+    flexDirection: 'row',
+    justifyContent:'center',alignItems:'center',
+    // backgroundColor:'red',
+  },
   appNameStyle: {
     fontSize: wp('6%'),
-    
+
     fontFamily: FontStyle.mediumFont,
-    marginLeft:wp('6%'),
-    alignSelf:'center'
+    marginLeft: wp('3%'),
+    letterSpacing: 1
   },
   iconContainerStyle: {
     flexDirection: 'row',
