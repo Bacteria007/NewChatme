@@ -31,17 +31,17 @@ const Discussions = ({ navigation }) => {
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
 
-  
+
 
   // Animated Variables
-  const scrollY = React.useRef(new Animated.Value(0)).current;
+  // const scrollY = React.useRef(new Animated.Value(0)).current;
   const headerHeight = hp('16%')
   const myDiffClamp = Animated.diffClamp(scrollY, 0, headerHeight)
   const myTranslateY = myDiffClamp.interpolate({
     inputRange: [0, headerHeight], outputRange: [0, -headerHeight]
   });
   const scrollToTop = () => {
-    flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+    flatListRef.current.scrollToOffset({ offset: 0, animated: false });
   };
 
   const [allChats, setAllChats] = useState([
@@ -72,57 +72,57 @@ const Discussions = ({ navigation }) => {
     },
     {
       dpImage: require('../../../assets/imges/w11.jpg'),
-      profileName: 'Aqsa',
+      profileName: 'Aqsa 6',
       lastMsg: 'Hello Aqsa', id: '0e7fdd30-b307-5088-976e-fde17a2a3381'
     },
     {
       dpImage: require('../../../assets/imges/bacteria.jpeg'),
-      profileName: 'Rabia',
+      profileName: 'Rabia 7',
       lastMsg: 'Hello Rabia', id: 'acb7c970-f2a9-5528-ac6d-b3c089b42264'
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
-      profileName: 'Hina',
+      profileName: 'Hina 8',
       lastMsg: 'Hello Hina', id: '61969e85-a20e-5548-9db5-81cdb8d41bdb'
     },
     {
       dpImage: require('../../../assets/imges/bacteria.jpeg'),
-      profileName: 'Rabia',
+      profileName: 'Rabia 9',
       lastMsg: 'Hello Afshan', id: 'bc42bb34-e9d6-5710-a941-48833bdbad5c'
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
-      profileName: 'Hina',
+      profileName: 'Hina 10',
       lastMsg: 'Hello Afshan', id: '2c6a1ce5-9f7a-55f9-82e2-292f5336dc9c'
     },
     {
       dpImage: require('../../../assets/imges/bacteria.jpeg'),
-      profileName: 'Rabia',
+      profileName: 'Rabia 11',
       lastMsg: 'Hello Afshan', id: 'db5db6d2-c48f-5423-922e-163915fb1ef2'
     },
     {
       dpImage: require('../../../assets/imges/w11.jpg'),
-      profileName: 'Aqsa',
+      profileName: 'Aqsa 12',
       lastMsg: 'Hello Afshan', id: '2d19e477-ab85-5993-923b-d140b3f6925a'
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
-      profileName: 'Hina',
+      profileName: 'Hina 13',
       lastMsg: 'Hello Afshan', id: 'cff01137-1f9d-50b0-98ee-cea5c99e2e0b'
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
-      profileName: 'Hina',
+      profileName: 'Hina 14',
       lastMsg: 'Hello Afshan', id: 'bbc280e7-0e81-5b71-a86f-93bddeebfef9'
     },
     {
       dpImage: require('../../../assets/imges/w11.jpg'),
-      profileName: 'Aqsa',
+      profileName: 'Aqsa 15',
       lastMsg: 'Hello Afshan', id: '1c62e987-6974-527f-a18d-313ebb0965b0'
     },
     {
       dpImage: require('../../../assets/imges/bacteria.jpeg'),
-      profileName: 'Rabia',
+      profileName: 'Rabia 16',
       lastMsg: 'Hello Afshan', id: 'b4af84ef-146c-578f-b0ad-601bdedd6687'
     },
     {
@@ -226,20 +226,59 @@ const Discussions = ({ navigation }) => {
     );
   };
   const renderFooter = () => {
-    return (
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            scrollToTop();
-          }}
-          style={[TermsStyle.arrowupStyle,{backgroundColor:theme.discussionsCardColor,elevation:0}]}
-        >
-        <Icons.AntDesign name="arrowup" size={20} color={theme.profileName} />
-        </TouchableOpacity>
+    if (allChats.length > 10) {
+      return (
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              scrollToTop();
+            }}
+            style={[TermsStyle.arrowupStyle, { backgroundColor: theme.discussionsCardColor, elevation: 0 }]}
+          >
+            <Icons.AntDesign name="arrowup" size={20} color={theme.profileName} />
+          </TouchableOpacity>
 
-      </View>
-    );
+        </View>
+      );
+    }
+    else {
+      return (
+        <View style={[TermsStyle.arrowupStyle, { opacity: 0, }]}>
+          <TouchableOpacity
+            onPress={() => {
+              scrollToTop();
+            }}
+            style={[TermsStyle.arrowupStyle, { backgroundColor: theme.discussionsCardColor, elevation: 0, display: 'none' }]}
+          >
+            <Icons.AntDesign name="arrowup" size={20} color={theme.profileName} />
+          </TouchableOpacity>
+
+        </View>
+      );
+    }
   };
+  //////////////////
+
+  const [headerVisible, setHeaderVisible] = useState(true);
+  const scrollY = React.useRef(new Animated.Value(0)).current;
+
+  // const handleScroll = (event) => {
+  //   const offsetY = event.nativeEvent.contentOffset.y;
+  //   scrollY.setValue(offsetY);
+
+  //   // Determine if the header should be visible or hidden
+  //   if (offsetY > 100) {
+  //     setHeaderVisible(false);
+  //   } else {
+  //     setHeaderVisible(true);
+  //   }
+  // };
+
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    { useNativeDriver: true }
+  );
+
   return (
     <View style={HomeNeoCards.wholeScreenContainer}>
       {  /*start  top itny %, left %  ---  end bottom , left */}
@@ -252,18 +291,21 @@ const Discussions = ({ navigation }) => {
       {/* <Animated.View style={[HomeNeoCards.animatedHeader, {
           transform: [{ translateY: myTranslateY }],
         }]}> */}
+      <Animated.View style={{ height: headerVisible ? 200 : 0, opacity: headerVisible ? 1 : 0 }}>
+        <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
 
-      <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
-      {/* </Animated.View> */}
-        <FlatList
-          ref={flatListRef}
-          showsVerticalScrollIndicator={false}
-          data={searchedChat == '' ? allChats : searchedChat}
-          renderItem={renderItem}
-          keyExtractor={(item) => { item.id.toString() }}
-          ListFooterComponent={renderFooter}
-        // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
-        />
+      </Animated.View>
+      <FlatList
+        ref={flatListRef}
+        showsVerticalScrollIndicator={false}
+        data={searchedChat == '' ? allChats : searchedChat}
+        renderItem={renderItem}
+        keyExtractor={(item) => { item.id.toString() }}
+        ListFooterComponent={renderFooter}
+        scrollEventThrottle={16}
+        onScroll={handleScroll}
+      // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
+      />
       {/* </LinearGradient> */}
       {/* </SafeAreaView> */}
     </View>
@@ -277,3 +319,8 @@ export default Discussions;
           //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           //   { useNativeDriver: true },
           // )}
+
+          const handleScroll = Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            { useNativeDriver: true }
+          );

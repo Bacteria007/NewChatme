@@ -203,7 +203,6 @@ const AllGroups = ({ navigation }) => {
     Alert.alert(
       'Delete Chat', 'All Media and chat history wil be deleted',
       [{ text: 'Delete', onPress: () => { deleteGroup(item) } }],
-      {textStyle:{color:'blue'}},
       { cancelable: true },
     )
   }
@@ -249,7 +248,7 @@ const AllGroups = ({ navigation }) => {
     );
   };
   const renderFooter = () => {
-    return (
+   if(allGroups.length>10){ return (
       <View>
         <TouchableOpacity
           onPress={() => {
@@ -262,6 +261,21 @@ const AllGroups = ({ navigation }) => {
 
       </View>
     );
+    }  else{
+      return (
+        <View style={[TermsStyle.arrowupStyle,{opacity:0,}]}>
+          <TouchableOpacity
+            onPress={() => {
+              scrollToTop();
+            }}
+            style={[TermsStyle.arrowupStyle,{backgroundColor:theme.discussionsCardColor,elevation:0,display:'none'}]}
+          >
+          <Icons.AntDesign name="arrowup" size={20} color={theme.profileName}/>
+          </TouchableOpacity>
+  
+        </View>
+      );
+    }
   };
   return (
     <View style={HomeNeoCards.wholeScreenContainer}>
