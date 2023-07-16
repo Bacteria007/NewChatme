@@ -8,6 +8,8 @@ import React, { useRef } from 'react';
 import InnerScreensHeader from '../components/Headers/InnerHeaders/InnerScreensHeader';
 import { Icons } from '../assets/Icons';
 import TermsStyle from '../assets/styles/tremsAndConditions/TermsStyle';
+import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
+import { useDrawerProgress } from '@react-navigation/drawer'
 
 const TermsAndConditions = ({ navigation }) => {
   const scrollViewRef = useRef(null);
@@ -15,12 +17,28 @@ const TermsAndConditions = ({ navigation }) => {
     scrollViewRef.current.scrollTo({ y: 0, animated: true });
   };
 
+  ///drawer wrapper
+
+  const progress = useDrawerProgress()
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { perspective: 1000 },
+      { scale: interpolate(progress.value, [0, 1], [1, 0.8], 'clamp') },
+      // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
+      { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') }
+    ],
+    overflow: 'hidden',
+    // borderRadius:10
+
+  }));
+
+  //
   return (
-    <ScrollView ref={scrollViewRef} style={TermsStyle.container}>
+    <Animated.ScrollView ref={scrollViewRef} style={[TermsStyle.container,animatedStyle]}>
       <InnerScreensHeader
         navigation={navigation}
         screenName={'Terms and conditions'}
-      />
+        />
       <View style={TermsStyle.content}>
         <Text style={TermsStyle.title}>Terms and Conditions</Text>
         <Text style={TermsStyle.body}>
@@ -61,7 +79,7 @@ const TermsAndConditions = ({ navigation }) => {
             <Icons.AntDesign name="arrowup" size={20} color={'black'} />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </Animated.ScrollView>
   );
 };
 

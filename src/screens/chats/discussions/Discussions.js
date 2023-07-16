@@ -5,24 +5,19 @@ import {
   Text,
   TouchableOpacity,
   View,
-  StatusBar,
-  Animated, StyleSheet, Alert, ScrollView
+  
+   StyleSheet, Alert,
 } from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
-import AppColors from '../../../assets/colors/Appcolors';
-import AppContext from '../../../context/AppContext';
 import { Neomorph, Shadow } from 'react-native-neomorph-shadows-fixes';
-import { Card } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext } from '../../../context/ThemeContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import Custom_StatusBar from '../../../components/statusbars/Primary_StatusBar';
 import TermsStyle from '../../../assets/styles/tremsAndConditions/TermsStyle';
 import { Icons } from '../../../assets/Icons';
+import Animated from "react-native-reanimated";
 const Discussions = ({ navigation }) => {
 
   //            **************                    USE STATES      *****************
@@ -31,15 +26,16 @@ const Discussions = ({ navigation }) => {
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
 
-
+// for aniated Header
 
   // Animated Variables
   // const scrollY = React.useRef(new Animated.Value(0)).current;
-  const headerHeight = hp('16%')
-  const myDiffClamp = Animated.diffClamp(scrollY, 0, headerHeight)
-  const myTranslateY = myDiffClamp.interpolate({
-    inputRange: [0, headerHeight], outputRange: [0, -headerHeight]
-  });
+  // const headerHeight = hp('16%')
+  // const myDiffClamp = Animated.diffClamp(scrollY, 0, headerHeight)
+  // const myTranslateY = myDiffClamp.interpolate({
+  //   inputRange: [0, headerHeight], outputRange: [0, -headerHeight]
+  // });
+
   const scrollToTop = () => {
     flatListRef.current.scrollToOffset({ offset: 0, animated: false });
   };
@@ -257,28 +253,6 @@ const Discussions = ({ navigation }) => {
       );
     }
   };
-  //////////////////
-
-  const [headerVisible, setHeaderVisible] = useState(true);
-  const scrollY = React.useRef(new Animated.Value(0)).current;
-
-  // const handleScroll = (event) => {
-  //   const offsetY = event.nativeEvent.contentOffset.y;
-  //   scrollY.setValue(offsetY);
-
-  //   // Determine if the header should be visible or hidden
-  //   if (offsetY > 100) {
-  //     setHeaderVisible(false);
-  //   } else {
-  //     setHeaderVisible(true);
-  //   }
-  // };
-
-  const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-    { useNativeDriver: true }
-  );
-
   return (
     <View style={HomeNeoCards.wholeScreenContainer}>
       {  /*start  top itny %, left %  ---  end bottom , left */}
@@ -291,10 +265,10 @@ const Discussions = ({ navigation }) => {
       {/* <Animated.View style={[HomeNeoCards.animatedHeader, {
           transform: [{ translateY: myTranslateY }],
         }]}> */}
-      <Animated.View style={{ height: headerVisible ? 200 : 0, opacity: headerVisible ? 1 : 0 }}>
+      {/* <Animated.View style={[{ backgroundColor: 'blue' }, headerStyle]}> */}
         <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
-
-      </Animated.View>
+      {/* </Animated.View> */}
+       
       <FlatList
         ref={flatListRef}
         showsVerticalScrollIndicator={false}
@@ -302,10 +276,7 @@ const Discussions = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={(item) => { item.id.toString() }}
         ListFooterComponent={renderFooter}
-        scrollEventThrottle={16}
-        onScroll={handleScroll}
-      // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
-      />
+        />
       {/* </LinearGradient> */}
       {/* </SafeAreaView> */}
     </View>
@@ -320,7 +291,15 @@ export default Discussions;
           //   { useNativeDriver: true },
           // )}
 
-          // const handleScroll = Animated.event(
-          //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          //   { useNativeDriver: true }
-          // );
+          // <View
+          //     style={{
+          //       height: hp('5%'),
+          //       width: wp('27%'),
+          //       borderRadius: hp('5%'),
+          //       backgroundColor: AppColors.coolgray,
+          //       justifyContent: 'center',
+          //       alignItems: 'center',
+          //       // marginLeft:20
+          //     }}>
+          //     <Text style={{ color: 'white',letterSpacing:1 }}>My Uploads</Text>
+          //   </View>

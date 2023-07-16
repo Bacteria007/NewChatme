@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -9,10 +9,10 @@ import AppColors from '../colors/Appcolors';
 
 const SettingScreenStyle = StyleSheet.create({
   containerView: {
-    height: hp('100'),
-    // backgroundColor: '#F1F1F5',
+    // flex:1,
+    // height: hp('100'),
     backgroundColor: AppColors.white,
-
+    // backgroundColor: '#F1F1F5',
   },
   containerView2: {
     height: hp('72%'),
@@ -20,7 +20,8 @@ const SettingScreenStyle = StyleSheet.create({
   },
   sectionView: {
     backgroundColor: AppColors.white,
-    elevation:7
+    elevation: 7,
+    // marginVertical:10
   },
   sectionHeadText: {
     fontSize: wp('6%'),
@@ -36,16 +37,30 @@ const SettingScreenStyle = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: wp('0.1%'),
   },
-  iconTextContainer:{flexDirection:'row'},
+  iconTextContainer: { flexDirection: 'row' },
   touchableText: {
     fontSize: wp('4.5%'),
     fontFamily: FontStyle.regularFont,
     color: AppColors.black,
-    marginLeft:wp('3%')
+    marginLeft: wp('3%'),
   },
-  modalView:{width:wp('90%'),height:hp('30%'),backgroundColor:AppColors.white,justifyContent:'center',alignItems:'center'},
-  modalHeadText:{fontSize:wp('6.5%'),fontFamily:FontStyle.mediumFont,color:AppColors.black},
-  modalText:{fontSize:wp('6%'),fontFamily:FontStyle.lightFont,color:AppColors.black}
+  modalView: {
+    width: wp('90%'),
+    height: hp('30%'),
+    backgroundColor: AppColors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalHeadText: {
+    fontSize: wp('6.5%'),
+    fontFamily: FontStyle.mediumFont,
+    color: AppColors.black,
+  },
+  modalText: {
+    fontSize: wp('6%'),
+    fontFamily: FontStyle.lightFont,
+    color: AppColors.black,
+  },
 });
 
 export default SettingScreenStyle;

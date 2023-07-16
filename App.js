@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, {  useContext } from 'react';
-import {  Image, View, Text, } from 'react-native';
+import React, { useContext } from 'react';
+import { Image, View, Text, SafeAreaView, } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -20,7 +20,7 @@ import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import Settings from './src/screens/settings/Settings';
 
-import  { Icons } from './src/assets/Icons'; // Navigation
+import { Icons } from './src/assets/Icons'; // Navigation
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -48,9 +48,13 @@ import StreamOutlineWhite from './src/assets/imges/footerIcons/streamOutlineBlac
 import StreamOutlineBlack from './src/assets/imges/footerIcons/streamOutlineWhite.svg';
 import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext } from './src/context/ThemeContext';
-import  { AppProvider } from './src/context/AppContext';
+import { AppProvider } from './src/context/AppContext';
 import Theme from './src/screens/settings/accountPreferences/Theme';
+import { LogBox } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -85,7 +89,7 @@ const App = () => {
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
             tabBarStyle: {
-              height: hp('9%'),
+              height: hp('8%'),
               borderTopWidth: 0,
               borderTopColor: darkThemeActivator ? AppColors.darkTheme : AppColors.transparent,
               // flex: 0.12,
@@ -101,12 +105,11 @@ const App = () => {
             tabBarLabelStyle: {
               fontWeight: 'bold',
               fontSize: wp('3.5%'),
-              marginBottom: hp('2.2%'),
+              marginBottom: hp('1%'),
               marginTop: hp('0%'),
-              marginBottom: hp('2%'),
-              // marginTop: hp('0%'),
+             
             },
-             // tabBarLabelPosition:'beside-icon',
+            // tabBarLabelPosition:'beside-icon',
             // tabBarShowLabel:false,
             // tabBarLabel:({ focused }) => {
             //   return <Text style={{fontSize: hp('1.7%'), fontWeight: 'bold', color:focused? AppColors.black:AppColors.inActiveIconsColor,
@@ -140,7 +143,7 @@ const App = () => {
             tabBarInactiveTintColor: theme.notFocusedTabIconsColor,
             tabBarHideOnKeyboard: 'true',
             tabBarPressColor: 'rgba(255,255,255,0.6)',
-           
+
             tabBarIcon: ({ focused }) => {
               if (route.name === 'Chats') {
                 return (
@@ -158,9 +161,9 @@ const App = () => {
               } else if (route.name === 'Reels') {
                 return (
                   focused ?
-                    <TabIcons type={Icons.FontAwesome5} name="stream" size={16} focused={focused}/> :
-                    (darkThemeActivator) ? <StreamOutlineBlack />: <StreamOutlineWhite/> 
-                    
+                    <TabIcons type={Icons.FontAwesome5} name="stream" size={16} focused={focused} /> :
+                    (darkThemeActivator) ? <StreamOutlineBlack /> : <StreamOutlineWhite />
+
                 );
               } else if (route.name === 'Groups') {
                 return (
@@ -182,7 +185,7 @@ const App = () => {
 
         </Tab.Navigator>
       </Animated.View>
-    );
+    )
   };
   const SettingStack = () => {
     return (
@@ -255,13 +258,13 @@ const App = () => {
             drawerInactiveTintColor: AppColors.black,
             drawerStyle: {
               width: wp('50%'),
-              backgroundColor:theme.drawerColor,
+              backgroundColor: theme.drawerColor,
             },
             drawerLabelStyle: { marginLeft: wp('-6%') },
             drawerActiveBackgroundColor: AppColors.white,
             sceneContainerStyle: {
               backgroundColor: theme.drawerColor
-                       },
+            },
             // drawerHideStatusBarOnOpen: true,
             // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen 
           }}
@@ -390,60 +393,55 @@ const App = () => {
       </View>
     );
   };
-  console.log('darkthemeactivator',darkThemeActivator)
+  console.log('darkthemeactivator', darkThemeActivator)
   return (
 
     <AppProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          options={{ headerShown: false }}
-          initialRouteName="DrawerScreens"
-        >
+      <SafeAreaProvider style={{ flex: 1 }}>
 
-          <Stack.Screen
-            name="WelcomeScreen"
-            component={WelcomeScreen}
+        <NavigationContainer>
+          <Stack.Navigator
             options={{ headerShown: false }}
-
-          />
-          <Stack.Screen
-            name="SignUpScreen"
-            component={SignUpScreen}
-
-            options={{ headerShown: false }}
-
-
-          />
-          <Stack.Screen
-            name="LogInScreen"
-            component={LogInScreen}
-            options={{ headerShown: false }}
-
-          />
-          <Stack.Screen
-            name="UserChat"
-            component={UserChat}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="rejected"
-            component={OutgoingCall}
-            options={{ headerShown: false }}
-          />
-
-          <Stack.Screen
-            name="DrawerScreens"
-            component={DrawerScreens}
-
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name='ChatBot'
-            component={ChatBot}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+            initialRouteName="DrawerScreens"
+          >
+            <Stack.Screen
+              name="WelcomeScreen"
+              component={WelcomeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SignUpScreen"
+              component={SignUpScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="LogInScreen"
+              component={LogInScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="UserChat"
+              component={UserChat}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="rejected"
+              component={OutgoingCall}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="DrawerScreens"
+              component={DrawerScreens}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name='ChatBot'
+              component={ChatBot}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
     </AppProvider>
 
   );
