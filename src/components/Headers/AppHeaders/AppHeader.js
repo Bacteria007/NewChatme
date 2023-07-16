@@ -50,7 +50,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       groupDpCircle: AppColors.darkThemeColors.groupDpCircle,
       headerSearchBarIcons: AppColors.coolgray,
       chatsHeaderBg: AppColors.transparent,
-      statusBarBg: AppColors.black,
+      statusBarBg: AppColors.darkThemeColors.bgColor,
       statusBarText: 'light-content',
       drawerColor: AppColors.white,
 
@@ -134,8 +134,8 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
                 navigation.navigate('ChatBot');
               }}>
               {/* {darkThemeActivator ? <BotIconWhite /> : <BotIconBlack />} */}
-              <View style={[BotChatHeaderStyle.dpContainerView]}>
-                <Image source={require('../../../assets/imges/BotScreenImg/botPic.png')} style={{ height: hp('5%'), width: hp('5%') }} />
+              <View style={AppHeaderStyle.botBgStyle}>
+                <Image source={require('../../../assets/imges/BotScreenImg/botPic.png')} style={AppHeaderStyle.botImgStyle} />
               </View>
             </TouchableOpacity>
           </View>

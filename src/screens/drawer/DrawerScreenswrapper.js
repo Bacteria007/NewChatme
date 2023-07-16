@@ -31,6 +31,6 @@ export default DrawerScreenswrapper;
 const styles = StyleSheet.create({
   container: {
     // flex: 1,   
-    backgroundColor:'lightgrey',  
+    // backgroundColor:'red',  
     }
 })
