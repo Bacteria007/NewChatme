@@ -87,6 +87,9 @@ const AfterSignUpStyleSheet = StyleSheet.create({
         alignItems: 'center',
         // backgroundColor:'red',
         
+      },
+      displyNameText:{
+        color:AppColors.black
       }
 });
 
