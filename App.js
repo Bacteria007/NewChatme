@@ -19,6 +19,7 @@ import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
 import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import Settings from './src/screens/settings/Settings';
+import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
 
 import { Icons } from './src/assets/Icons'; // Navigation
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
@@ -399,11 +400,15 @@ const App = () => {
     <AppProvider>
       <SafeAreaProvider style={{ flex: 1 }}>
 
-        <NavigationContainer>
+
+      <NavigationContainer>
           <Stack.Navigator
+
             options={{ headerShown: false }}
             initialRouteName="DrawerScreens"
           >
+              
+        
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
@@ -439,6 +444,12 @@ const App = () => {
               component={ChatBot}
               options={{ headerShown: false }}
             />
+                    <Stack.Screen
+            name="AfterSignUpProfileScreen"
+            component={AfterSignUpProfileScreen}
+
+            options={{ headerShown: false }}
+ />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
