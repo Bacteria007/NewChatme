@@ -63,7 +63,7 @@ const AfterSignUpStyleSheet = StyleSheet.create({
       Text1: {
         fontSize: wp('6'),
         fontFamily: 'Poppins-Medium ',
-        color: AppColors.black,
+        color: AppColors.dodgerblue,
     
       },
       CameraIconView:{
@@ -90,7 +90,60 @@ const AfterSignUpStyleSheet = StyleSheet.create({
       },
       displyNameText:{
         color:AppColors.black
-      }
+      },
+      floatingInputView:{height:hp('7'), width:wp('90'),marginTop:hp('2')
+      
+    },
+    floatingInputContainer:{
+      borderWidth:hp('0.2'),
+      paddingHorizontal: wp('3.75'),
+      borderColor: AppColors.primary,
+      borderRadius: hp('1'),
+    },
+    floatingCustomerLabel:{
+      colorFocused: AppColors.primary,
+      
+    },
+    floatingInputStyle:{
+      color: AppColors.black,
+    },
+    floatingLabel:
+      {
+        backgroundColor: AppColors.white,
+        paddingHorizontal:wp('1'),
+        marginVertical:hp('-1')
+      },
+      Text2:{
+        fontSize: wp('5'),
+        fontFamily: 'Poppins-Bold ',
+        color: AppColors.dodgerblue,
+        marginTop:hp('5'),
+        marginBottom:hp('1')
+      },
+      quesView:{
+        height:hp('5'), 
+      width:wp('90'),
+      // marginTop:hp('1'),
+      // borderColor: AppColors.primary,
+      // backgroundColor:'red',
+      // borderRadius: hp('1'),
+      // borderRadius: hp('1'),
+      // borderWidth:hp('0.2'),
+      justifyContent:'center',
+      // alignItems:'center',
+      paddingHorizontal: wp('3.75'),
+
+    },
+    TextInputContainer:{
+      borderBottomWidth:hp('0.1'),
+      paddingHorizontal: wp('2'),
+      borderColor: AppColors.primary,
+      width:wp('86'),
+      alignSelf:'center',
+      height:hp('5'), 
+    },
+      
+    
 });
 
 export default AfterSignUpStyleSheet;

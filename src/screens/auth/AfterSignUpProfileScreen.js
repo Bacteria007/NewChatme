@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { View ,Text,SafeAreaView,Image,ImageBackground,TouchableOpacity} from "react-native";
+import { View ,Text,SafeAreaView,Image,ImageBackground,TouchableOpacity,TextInput} from "react-native";
 import AfterSignUpStyleSheet from "../../assets/styles/AuthStyleSheet/AfterSignUpStyleSheet/AfterSignUpStyleSheet";
 import Primary_StatusBar from "../../components/statusbars/Primary_StatusBar";
 import Appcolors from "../../assets/colors/Appcolors";
 import { widthPercentageToDP as wp , heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { Icons } from "../../assets/Icons";
+import { FloatingLabelInput } from 'react-native-floating-label-input';
 
 const AfterSignUpProfileScreen = () =>{
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState('');
+  const [ques1 , setQues1] = useState('');
+  const [ques2 , setQues2] = useState('');
     return(
         <SafeAreaView style={AfterSignUpStyleSheet.container}>
         <Primary_StatusBar
@@ -67,44 +69,75 @@ const AfterSignUpProfileScreen = () =>{
                          </ImageBackground>
           </TouchableOpacity>
         </View>
-      
-        <Text style={AfterSignUpStyleSheet.displyNameText}>Enter your display name</Text>
-        {/* *********************************************************************************************** */}
+       
+       <Text style={AfterSignUpStyleSheet.displyNameText}>Enter your display name</Text>
+       {/* ************************************************************************************************ */}
 
-        <View style={{ padding: 50, flex: 1, backgroundColor: '#fff' }}>
-      <FloatingLabelInput
-        label="Phone"
-        value={phone}
-        staticLabel
-        hintTextColor={'#aaa'}
-        mask="99 (99) 99999-9999"
-        hint="55 (22) 98765-4321"
-        containerStyles={{
-          borderWidth: 2,
-          paddingHorizontal: 10,
-          backgroundColor: '#fff',
-          borderColor: 'blue',
-          borderRadius: 8,
-        }}
-        customLabelStyles={{
-          colorFocused: 'red',
-          fontSizeFocused: 12,
-        }}
-        labelStyles={{
-          backgroundColor: '#fff',
-          paddingHorizontal: 5,
-        }}
-        inputStyles={{
-          color: 'blue',
-          paddingHorizontal: 10,
-        }}
+    
+       {name=='' ? 
+   <View style={AfterSignUpStyleSheet.floatingInputView}>
+<FloatingLabelInput
+  value={name}
+  hintTextColor={Appcolors.gray}
+  hint="Enter Your Name"
+  containerStyles={AfterSignUpStyleSheet.floatingInputContainer}
+  customLabelStyles={AfterSignUpStyleSheet.floatingCustomerLabel}
+ 
+  inputStyles={AfterSignUpStyleSheet.floatingInputStyle}
+  onChangeText={value => {
+    setName(value);
+  }}
+/>
+</View>
+
+:
+
+<View style={AfterSignUpStyleSheet.floatingInputView}>
+<FloatingLabelInput
+ staticLabel
+  label="Name"
+  labelStyles={AfterSignUpStyleSheet.floatingLabel}
+  value={name}
+ 
+  hintTextColor={Appcolors.gray}
+  hint="Enter Your Name"
+  containerStyles={AfterSignUpStyleSheet.floatingInputContainer}
+  customLabelStyles={AfterSignUpStyleSheet.floatingCustomerLabel}
+ 
+  inputStyles={AfterSignUpStyleSheet.floatingInputStyle}
+  onChangeText={value => {
+    setName(value);
+  }}
+/>
+</View>
+}
+
+
+       {/* *************************************************************************************************** */}
+       <Text style={AfterSignUpStyleSheet.Text2}>Security questions</Text>
+       <View style={AfterSignUpStyleSheet.quesView}>
+        <Text style={AfterSignUpStyleSheet.displyNameText}>Q1 : What is your favourite fruit?</Text>
+        </View>
+        <TextInput
+        placeholder='Answer'
+        value={ques1}
+                style={AfterSignUpStyleSheet.TextInputContainer}
         onChangeText={value => {
-          setPhone(value);
+          setQues1(value);
         }}
-      />
-    </View>
+         />
 
-        {/* ************************************************************************************************ */}
+<View style={AfterSignUpStyleSheet.quesView}>
+        <Text style={AfterSignUpStyleSheet.displyNameText}>Q2 : What is your favourite game?</Text>
+        </View>
+        <TextInput
+        placeholder='Answer'
+        value={ques2}
+                style={AfterSignUpStyleSheet.TextInputContainer}
+        onChangeText={value => {
+          setQues2(value);
+        }}
+         />
 
         </View>
         
