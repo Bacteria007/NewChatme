@@ -1,70 +1,104 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
 import UserChatHeaderStyle from '../../../assets/styles/UserChatHeaderStyle';
 import { Icons } from '../../../assets/Icons';
 import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
-  } from 'react-native-responsive-screen';
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import AppColors from '../../../assets/colors/Appcolors';
-  
+import AgoraUIKit from 'agora-rn-uikit';
 
-const UserChatHeader = ({item,navigation}) => {
-    // const {item}=props.route.params;
+const UserChatHeader = ({ item, navigation }) => {
+  const [videoCall, setVideoCall] = useState(false);
+  const connectionData = {
+    appId: '83d6cd3997e244c9bb3aa8c280fde5f4',
+    channel: 'chatme-room',
+  };
+  const rtcCallbacks = {
+    EndCall: () => setVideoCall(false),
+  };
+  
+  // const {item}=props.route.params;
   return (
     <View style={[UserChatHeaderStyle.containerView]}>
-    <View style={[UserChatHeaderStyle.headerView]}>
-      <View style={[UserChatHeaderStyle.leftview]}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack()
-          }}>
-          <Icons.FontAwesome5
-            name="arrow-left"
-            size={wp('5.5%')}
-            color={AppColors.black}
-            style={{marginTop: hp('2.7%')}}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <View
-            style={[UserChatHeaderStyle.leftInnerView]}>
-            <View style={[UserChatHeaderStyle.dpContainerView]}>
-              <Image
-                source={item.dpImage}
-                style={[UserChatHeaderStyle.dpImageStyle]}
+      <View style={[UserChatHeaderStyle.headerView]}>
+        <View style={[UserChatHeaderStyle.leftview]}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <Icons.FontAwesome5
+              name="arrow-left"
+              size={wp('5.5%')}
+              color={AppColors.black}
+              style={{ marginTop: hp('2.7%') }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={[UserChatHeaderStyle.leftInnerView]}>
+              <View style={[UserChatHeaderStyle.dpContainerView]}>
+                <Image
+                  source={item.dpImage}
+                  style={[UserChatHeaderStyle.dpImageStyle]}
+                />
+              </View>
+              <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
+                <Text style={[UserChatHeaderStyle.profileNameTextStyle]}>
+                  {item.profileName}
+                </Text>
+                <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
+                  Online
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[UserChatHeaderStyle.rightView]}>
+          {videoCall ? (
+            <View style={{flex:1}}>
+            <AgoraUIKit
+              connectionData={connectionData}
+              rtcCallbacks={rtcCallbacks}
+            />
+             </View>
+          ) : (
+            <TouchableOpacity
+              style={{ alignSelf: 'center' }}
+              onPress={() => {
+                setVideoCall(true);
+              }}>
+              <Icons.FontAwesome5
+                name="video"
+                size={wp('6%')}
+                color={AppColors.black}
               />
-            </View>
-            <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
-              <Text style={[UserChatHeaderStyle.profileNameTextStyle]}>{item.profileName}</Text>
-              <Text style={[UserChatHeaderStyle.profileStatusStyle ]}>Online</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('rejected', { item: item });
+            }}
+            style={{ alignSelf: 'center' }}>
+            <Icons.FontAwesome
+              name="phone"
+              size={wp('7%')}
+              color={AppColors.black}
+              style={{ paddingLeft: wp('4%') }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            // onPress={toggleModal}
+            style={{ alignSelf: 'center' }}>
+            <Icons.Feather
+              name="more-vertical"
+              size={wp('7%')}
+              color={AppColors.black}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View
-        style={[UserChatHeaderStyle.rightView]}>
-        <TouchableOpacity style={{alignSelf: 'center'}}>
-          <Icons.FontAwesome5 name="video" size={wp('6%')} color={AppColors.black} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{
-          navigation.navigate('rejected',{item:item})
-        }} style={{alignSelf: 'center'}}>
-          <Icons.FontAwesome
-            name="phone"
-            size={wp('7%')}
-          color={AppColors.black}
-            style={{paddingLeft: wp('4%')}}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          // onPress={toggleModal}
-          style={{alignSelf: 'center'}}>
-          <Icons.Feather name="more-vertical" size={wp('7%')} color={AppColors.black}/>
-        </TouchableOpacity>
-      </View>
-    </View>
-    {/* <Modal
+      {/* <Modal
       isVisible={isModalVisible}
       onBackdropPress={() => {
         setModalVisible(false);
@@ -137,9 +171,8 @@ const UserChatHeader = ({item,navigation}) => {
         </TouchableOpacity>
       </View>
     </Modal> */}
-  </View>
+    </View>
+  );
+};
 
-  )
-}
-
-export default UserChatHeader
+export default UserChatHeader;
