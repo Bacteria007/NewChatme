@@ -401,31 +401,14 @@ const App = () => {
       <SafeAreaProvider style={{ flex: 1 }}>
 
 
-          />
-          <Stack.Screen
-            name="AfterSignUpProfileScreen"
-            component={AfterSignUpProfileScreen}
-
-            options={{ headerShown: false }}
-
-
-          />
-          <Stack.Screen
-            name="LogInScreen"
-            component={LogInScreen}
-            options={{ headerShown: false }}
-
-          />
-          <Stack.Screen
-            name="UserChat"
-            component={UserChat}
-
-        <NavigationContainer>
+      <NavigationContainer>
           <Stack.Navigator
 
             options={{ headerShown: false }}
             initialRouteName="DrawerScreens"
           >
+              
+        
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
@@ -461,6 +444,12 @@ const App = () => {
               component={ChatBot}
               options={{ headerShown: false }}
             />
+                    <Stack.Screen
+            name="AfterSignUpProfileScreen"
+            component={AfterSignUpProfileScreen}
+
+            options={{ headerShown: false }}
+ />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

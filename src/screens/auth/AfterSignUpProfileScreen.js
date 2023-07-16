@@ -1,11 +1,14 @@
+import React, { useState } from 'react';
 import { View ,Text,SafeAreaView,Image,ImageBackground,TouchableOpacity} from "react-native";
 import AfterSignUpStyleSheet from "../../assets/styles/AuthStyleSheet/AfterSignUpStyleSheet/AfterSignUpStyleSheet";
 import Primary_StatusBar from "../../components/statusbars/Primary_StatusBar";
 import Appcolors from "../../assets/colors/Appcolors";
 import { widthPercentageToDP as wp , heightPercentageToDP as hp } from "react-native-responsive-screen";
-import AppColors from "../../assets/colors/Appcolors";
+import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { Icons } from "../../assets/Icons";
+
 const AfterSignUpProfileScreen = () =>{
+  const [phone, setPhone] = useState('');
     return(
         <SafeAreaView style={AfterSignUpStyleSheet.container}>
         <Primary_StatusBar
@@ -13,7 +16,7 @@ const AfterSignUpProfileScreen = () =>{
           lightModeBgColor={Appcolors.primary}
         />
   
-        {/* *****************           HEADER OF WELCOME SCREEN   ************** */}
+        {/* *****************           HEADER OF  SCREEN   ************** */}
         <View style={AfterSignUpStyleSheet.TopView}>
           <View style={AfterSignUpStyleSheet.TopInnerView1}>
             <Image
@@ -64,7 +67,47 @@ const AfterSignUpProfileScreen = () =>{
                          </ImageBackground>
           </TouchableOpacity>
         </View>
+      
+        <Text style={AfterSignUpStyleSheet.displyNameText}>Enter your display name</Text>
+        {/* *********************************************************************************************** */}
+
+        <View style={{ padding: 50, flex: 1, backgroundColor: '#fff' }}>
+      <FloatingLabelInput
+        label="Phone"
+        value={phone}
+        staticLabel
+        hintTextColor={'#aaa'}
+        mask="99 (99) 99999-9999"
+        hint="55 (22) 98765-4321"
+        containerStyles={{
+          borderWidth: 2,
+          paddingHorizontal: 10,
+          backgroundColor: '#fff',
+          borderColor: 'blue',
+          borderRadius: 8,
+        }}
+        customLabelStyles={{
+          colorFocused: 'red',
+          fontSizeFocused: 12,
+        }}
+        labelStyles={{
+          backgroundColor: '#fff',
+          paddingHorizontal: 5,
+        }}
+        inputStyles={{
+          color: 'blue',
+          paddingHorizontal: 10,
+        }}
+        onChangeText={value => {
+          setPhone(value);
+        }}
+      />
+    </View>
+
+        {/* ************************************************************************************************ */}
+
         </View>
+        
           </SafeAreaView>
     )
 }
