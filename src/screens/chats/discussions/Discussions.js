@@ -5,24 +5,19 @@ import {
   Text,
   TouchableOpacity,
   View,
-  StatusBar,
-  Animated, StyleSheet, Alert, ScrollView
+  
+   StyleSheet, Alert,
 } from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
-import AppColors from '../../../assets/colors/Appcolors';
-import AppContext from '../../../context/AppContext';
 import { Neomorph, Shadow } from 'react-native-neomorph-shadows-fixes';
-import { Card } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext } from '../../../context/ThemeContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import Custom_StatusBar from '../../../components/statusbars/Primary_StatusBar';
 import TermsStyle from '../../../assets/styles/tremsAndConditions/TermsStyle';
 import { Icons } from '../../../assets/Icons';
+import Animated from "react-native-reanimated";
 const Discussions = ({ navigation }) => {
 
   //            **************                    USE STATES      *****************
@@ -31,17 +26,18 @@ const Discussions = ({ navigation }) => {
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
 
-  
+// for aniated Header
 
   // Animated Variables
-  const scrollY = React.useRef(new Animated.Value(0)).current;
-  const headerHeight = hp('16%')
-  const myDiffClamp = Animated.diffClamp(scrollY, 0, headerHeight)
-  const myTranslateY = myDiffClamp.interpolate({
-    inputRange: [0, headerHeight], outputRange: [0, -headerHeight]
-  });
+  // const scrollY = React.useRef(new Animated.Value(0)).current;
+  // const headerHeight = hp('16%')
+  // const myDiffClamp = Animated.diffClamp(scrollY, 0, headerHeight)
+  // const myTranslateY = myDiffClamp.interpolate({
+  //   inputRange: [0, headerHeight], outputRange: [0, -headerHeight]
+  // });
+
   const scrollToTop = () => {
-    flatListRef.current.scrollToOffset({ offset: 0, animated: true });
+    flatListRef.current.scrollToOffset({ offset: 0, animated: false });
   };
 
   const [allChats, setAllChats] = useState([
@@ -72,57 +68,57 @@ const Discussions = ({ navigation }) => {
     },
     {
       dpImage: require('../../../assets/imges/w11.jpg'),
-      profileName: 'Aqsa',
+      profileName: 'Aqsa 6',
       lastMsg: 'Hello Aqsa', id: '0e7fdd30-b307-5088-976e-fde17a2a3381'
     },
     {
       dpImage: require('../../../assets/imges/bacteria.jpeg'),
-      profileName: 'Rabia',
+      profileName: 'Rabia 7',
       lastMsg: 'Hello Rabia', id: 'acb7c970-f2a9-5528-ac6d-b3c089b42264'
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
-      profileName: 'Hina',
+      profileName: 'Hina 8',
       lastMsg: 'Hello Hina', id: '61969e85-a20e-5548-9db5-81cdb8d41bdb'
     },
     {
       dpImage: require('../../../assets/imges/bacteria.jpeg'),
-      profileName: 'Rabia',
+      profileName: 'Rabia 9',
       lastMsg: 'Hello Afshan', id: 'bc42bb34-e9d6-5710-a941-48833bdbad5c'
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
-      profileName: 'Hina',
+      profileName: 'Hina 10',
       lastMsg: 'Hello Afshan', id: '2c6a1ce5-9f7a-55f9-82e2-292f5336dc9c'
     },
     {
       dpImage: require('../../../assets/imges/bacteria.jpeg'),
-      profileName: 'Rabia',
+      profileName: 'Rabia 11',
       lastMsg: 'Hello Afshan', id: 'db5db6d2-c48f-5423-922e-163915fb1ef2'
     },
     {
       dpImage: require('../../../assets/imges/w11.jpg'),
-      profileName: 'Aqsa',
+      profileName: 'Aqsa 12',
       lastMsg: 'Hello Afshan', id: '2d19e477-ab85-5993-923b-d140b3f6925a'
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
-      profileName: 'Hina',
+      profileName: 'Hina 13',
       lastMsg: 'Hello Afshan', id: 'cff01137-1f9d-50b0-98ee-cea5c99e2e0b'
     },
     {
       dpImage: require('../../../assets/imges/mic.jpg'),
-      profileName: 'Hina',
+      profileName: 'Hina 14',
       lastMsg: 'Hello Afshan', id: 'bbc280e7-0e81-5b71-a86f-93bddeebfef9'
     },
     {
       dpImage: require('../../../assets/imges/w11.jpg'),
-      profileName: 'Aqsa',
+      profileName: 'Aqsa 15',
       lastMsg: 'Hello Afshan', id: '1c62e987-6974-527f-a18d-313ebb0965b0'
     },
     {
       dpImage: require('../../../assets/imges/bacteria.jpeg'),
-      profileName: 'Rabia',
+      profileName: 'Rabia 16',
       lastMsg: 'Hello Afshan', id: 'b4af84ef-146c-578f-b0ad-601bdedd6687'
     },
     {
@@ -226,19 +222,36 @@ const Discussions = ({ navigation }) => {
     );
   };
   const renderFooter = () => {
-    return (
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            scrollToTop();
-          }}
-          style={[TermsStyle.arrowupStyle,{backgroundColor:theme.discussionsCardColor,elevation:0}]}
-        >
-        <Icons.AntDesign name="arrowup" size={20} color={theme.profileName} />
-        </TouchableOpacity>
+    if (allChats.length > 10) {
+      return (
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              scrollToTop();
+            }}
+            style={[TermsStyle.arrowupStyle, { backgroundColor: theme.discussionsCardColor, elevation: 0 }]}
+          >
+            <Icons.AntDesign name="arrowup" size={20} color={theme.profileName} />
+          </TouchableOpacity>
 
-      </View>
-    );
+        </View>
+      );
+    }
+    else {
+      return (
+        <View style={[TermsStyle.arrowupStyle, { opacity: 0, }]}>
+          <TouchableOpacity
+            onPress={() => {
+              scrollToTop();
+            }}
+            style={[TermsStyle.arrowupStyle, { backgroundColor: theme.discussionsCardColor, elevation: 0, display: 'none' }]}
+          >
+            <Icons.AntDesign name="arrowup" size={20} color={theme.profileName} />
+          </TouchableOpacity>
+
+        </View>
+      );
+    }
   };
   return (
     <View style={HomeNeoCards.wholeScreenContainer}>
@@ -252,17 +265,17 @@ const Discussions = ({ navigation }) => {
       {/* <Animated.View style={[HomeNeoCards.animatedHeader, {
           transform: [{ translateY: myTranslateY }],
         }]}> */}
-
-      <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+      {/* <Animated.View style={[{ backgroundColor: 'blue' }, headerStyle]}> */}
+        <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       {/* </Animated.View> */}
-        <FlatList
-          ref={flatListRef}
-          showsVerticalScrollIndicator={false}
-          data={searchedChat == '' ? allChats : searchedChat}
-          renderItem={renderItem}
-          keyExtractor={(item) => { item.id.toString() }}
-          ListFooterComponent={renderFooter}
-        // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
+       
+      <FlatList
+        ref={flatListRef}
+        showsVerticalScrollIndicator={false}
+        data={searchedChat == '' ? allChats : searchedChat}
+        renderItem={renderItem}
+        keyExtractor={(item) => { item.id.toString() }}
+        ListFooterComponent={renderFooter}
         />
       {/* </LinearGradient> */}
       {/* </SafeAreaView> */}
@@ -277,3 +290,16 @@ export default Discussions;
           //   [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           //   { useNativeDriver: true },
           // )}
+
+          // <View
+          //     style={{
+          //       height: hp('5%'),
+          //       width: wp('27%'),
+          //       borderRadius: hp('5%'),
+          //       backgroundColor: AppColors.coolgray,
+          //       justifyContent: 'center',
+          //       alignItems: 'center',
+          //       // marginLeft:20
+          //     }}>
+          //     <Text style={{ color: 'white',letterSpacing:1 }}>My Uploads</Text>
+          //   </View>

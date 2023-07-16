@@ -51,6 +51,14 @@ const AppHeaderStyle = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor:'red'
   },
+  botBgStyle:{
+      height: hp('4.5%'),
+      width: hp('4.5%'),
+      backgroundColor: AppColors.coolgray,
+      borderRadius: hp('4.5'),
+      justifyContent:'center',alignItems:'center'
+  },
+  botImgStyle:{ height: hp('4.5%'), width: hp('4.5%') },
 });
 
 export default AppHeaderStyle;

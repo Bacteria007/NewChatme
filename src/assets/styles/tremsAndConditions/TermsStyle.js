@@ -8,11 +8,9 @@ import AppColors from '../../colors/Appcolors';
 
 const TermsStyle = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: AppColors.bgprimary,
       },
       content: {
-        flex: 1,
         paddingHorizontal: 20,
         paddingVertical: 40,
       },
