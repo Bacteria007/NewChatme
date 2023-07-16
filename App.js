@@ -50,9 +50,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext } from './src/context/ThemeContext';
 import { AppProvider } from './src/context/AppContext';
 import Theme from './src/screens/settings/accountPreferences/Theme';
-import { LogBox } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();//Ignore all log notifications
 
