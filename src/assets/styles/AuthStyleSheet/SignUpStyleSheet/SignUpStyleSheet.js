@@ -11,10 +11,18 @@ const SignUpStyleSheet = StyleSheet.create({
     alignItems: 'center',
     paddingTop: hp('1'),
   },
-  // container1: {
-  //   flex: 1,
-  //   justifyContent:'flex-end'
-  // },
+  scrollContainer: {
+    paddingBottom: hp('5%'), // Adjust the value based on your content's bottom padding
+  },
+  BelowHeadercontainer: {
+    flex:1,
+    //  backgroundColor:'red',
+    paddingHorizontal:wp('4'),
+    height:hp('70'),
+    width:wp('100%'),
+    // backgroundColor:'red'
+   
+  },
   title: {
     fontSize: hp('3'),
     fontFamily: 'Poppins-Medium',
@@ -104,8 +112,8 @@ const SignUpStyleSheet = StyleSheet.create({
     textAlignVertical: 'center',
     color: AppColors.gray,
   },
-  text:{
-    textAlign:'center'
-  }
+  text: {
+    textAlign: 'center',
+  },
 });
 export default SignUpStyleSheet;
