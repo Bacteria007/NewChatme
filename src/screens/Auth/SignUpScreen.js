@@ -7,8 +7,7 @@ import {
   Image,
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import SignUpStyleSheet from '../../assets/styles/AuthStyleSheet/SignUpStyleSheet/SignUpStyleSheet';
@@ -37,6 +36,9 @@ const SignUpScreen = ({ navigation }) => {
   const [passwordSnackWidth, setPasswordSnackWidth] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
+  
+// Regular expression to check for special characters
+const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
 
   const showSnackbar = message => {
     setSnackbarMessage(message);
@@ -97,130 +99,149 @@ const SignUpScreen = ({ navigation }) => {
         darkModeBgColor={'black'}
         lightModeBgColor={AppColors.primary}
       />
-      {/* <KeyboardAvoidingView style={[SignUpStyleSheet.container1]} behavior={Platform.OS === 'android' ?'padding':'height'}>
-<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-<> */}
-      <Image
-        source={require('../../assets/imges/AuthScreenPictures/SignUpPic/SignUpPic.png')}
-        style={[SignUpStyleSheet.image]}
-      />
-      <Text style={[SignUpStyleSheet.title]}>
-        {TranslationFile[language].Enter_Your_Phone_Number}
-      </Text>
-      <View style={[SignUpStyleSheet.countryContainer]}>
-        <CountryPicker
-          withFilter
-          withFlag
-          withCountryNameButton
-          withCallingCode
-          countryCode={selectedCountry?.cca2}
-          onSelect={handleCountrySelect}
-          // translation="eng"
-        />
-      </View>
+    
 
-      <View style={[SignUpStyleSheet.phoneNumberContainer]}>
-        <Text style={[SignUpStyleSheet.countryCode]}>+{countryCode}</Text>
-        <TextInput
-          style={[SignUpStyleSheet.phoneNumberInput]}
-          placeholder={TranslationFile[language].Phone_Number}
-          onChangeText={text => setPhoneNumber(text)}
-          keyboardType="numeric"
-          maxLength={15}
-          value={phoneNumber}
-        />
-      </View>
-
-      <View style={[SignUpStyleSheet.passwordContainer]}>
-        <TextInput
-          style={[SignUpStyleSheet.passwordInput]}
-          secureTextEntry={passwordVisible}
-          placeholder={TranslationFile[language].Password}
-          onChangeText={text => setPassword(text)}
-        />
-        <TouchableOpacity
-          onPress={() => {
-            setPasswordVisible(!passwordVisible);
-          }}>
-          <Icons.Feather
-            name={passwordVisible === true ? 'eye-off' : 'eye'}
-            style={[SignUpStyleSheet.passwordIcon]}
+      <KeyboardAvoidingView
+      
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
+      >
+        <ScrollView
+          contentContainerStyle={SignUpStyleSheet.scrollContainer}
+          showsVerticalScrollIndicator={false}>
+          <Image
+            source={require('../../assets/imges/AuthScreenPictures/SignUpPic/SignUpPic.png')}
+            style={[SignUpStyleSheet.image]}
           />
-        </TouchableOpacity>
-      </View>
-      <Snackbar
-        visible={visible}
-        onDismiss={() => setVisible(false)}
-        duration={2000}
-        style={
-          passwordSnackWidth === true
-            ? {
-                backgroundColor: '#D3D3D3',
-                width: wp('80'),
-                marginBottom: hp('6'),
-                alignSelf: 'center',
-              }
-            : {
-                backgroundColor: '#D3D3D3',
-                width: wp('55'),
-                marginBottom: hp('6'),
-                alignSelf: 'center',
-              }
-        }>
-        <Text style={[SignUpStyleSheet.text]}>{snackbarMessage}</Text>
-      </Snackbar>
-      <TouchableOpacity
-        onPress={() => {
-          Keyboard.dismiss;
-          if ((phoneNumber == '') & (password == '')) {
-            setPasswordSnackWidth(!false);
-            showSnackbar(
-              TranslationFile[language].Enter_Phone_Number_and_Password,
-            );
-            return;
-          }
-          if (!isValidPhoneNumber()) {
-            if (phoneNumber === '') {
-              setPasswordSnackWidth(!false);
-              showSnackbar(
-                TranslationFile[language].Phone_number_must_not_be_empty,
-              );
-              return;
-            } else {
-              setPasswordSnackWidth(!true);
-              showSnackbar(TranslationFile[language].Phone_number_is_not_valid);
-              return;
-            }
-          }
-          if (password.length < 8) {
-            if (password === '') {
-              setPasswordSnackWidth(!false);
-              showSnackbar(
-                TranslationFile[language].Password_must_not_be_empty,
-              );
-              return;
-            } else {
-              setPasswordSnackWidth(!false);
-              showSnackbar(
-                TranslationFile[language].Password_contain_atLeast_8_character,
-              );
-              return;
-            }
-          } else {
-            navigation.navigate('DrawerScreens');
-          }
+          <Text style={[SignUpStyleSheet.title]}>
+            {TranslationFile[language].Enter_Your_Phone_Number}
+          </Text>
+          <View style={[SignUpStyleSheet.countryContainer]}>
+            <CountryPicker
+              withFilter
+              withFlag
+              withCountryNameButton
+              withCallingCode
+              countryCode={selectedCountry?.cca2}
+              onSelect={handleCountrySelect}
+              // translation="eng"
+            />
+          </View>
 
-          // handleSubmit();
-          // handleSignUp({navigation})
-        }}
-        style={[SignUpStyleSheet.TouchableButtonStyle]}>
-        <Text style={[SignUpStyleSheet.TouchableTextStyle]}>
-          {TranslationFile[language].Next}
-        </Text>
-      </TouchableOpacity>
-      {/* </>
-    </TouchableWithoutFeedback>
-    </KeyboardAvoidingView > */}
+          <View style={[SignUpStyleSheet.phoneNumberContainer]}>
+            <Text style={[SignUpStyleSheet.countryCode]}>+{countryCode}</Text>
+            <TextInput
+              style={[SignUpStyleSheet.phoneNumberInput]}
+              placeholder={TranslationFile[language].Phone_Number}
+              onChangeText={text => setPhoneNumber(text)}
+              keyboardType="numeric"
+              maxLength={15}
+              value={phoneNumber}
+            />
+          </View>
+
+          <View style={[SignUpStyleSheet.passwordContainer]}>
+            <TextInput
+              style={[SignUpStyleSheet.passwordInput]}
+              secureTextEntry={passwordVisible}
+              placeholder={TranslationFile[language].Password}
+              onChangeText={text => setPassword(text)}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                setPasswordVisible(!passwordVisible);
+              }}>
+              <Icons.Feather
+                name={passwordVisible === true ? 'eye' : 'eye-off'}
+                style={[SignUpStyleSheet.passwordIcon]}
+              />
+            </TouchableOpacity>
+          </View>
+         
+          <TouchableOpacity
+            onPress={() => {
+              Keyboard.dismiss;
+              if ((phoneNumber == '') & (password == '')) {
+                setPasswordSnackWidth(!false);
+                showSnackbar(
+                  TranslationFile[language].Enter_Phone_Number_and_Password,
+                );
+                return;
+              }
+              if (!isValidPhoneNumber()) {
+                if (phoneNumber === '') {
+                  setPasswordSnackWidth(!false);
+                  showSnackbar(
+                    TranslationFile[language].Phone_number_must_not_be_empty,
+                  );
+                  return;
+                } else {
+                  setPasswordSnackWidth(!true);
+                  showSnackbar(
+                    TranslationFile[language].Phone_number_is_not_valid,
+                  );
+                  return;
+                }
+              }
+              if (password.length < 8) {
+                if (password === '') {
+                  setPasswordSnackWidth(!false);
+                  showSnackbar(
+                    TranslationFile[language].Password_must_not_be_empty,
+                  );
+                  return;
+                } else {
+
+                  setPasswordSnackWidth(!false);
+                  showSnackbar(
+                    TranslationFile[language]
+                      .Password_contain_atLeast_8_character,
+                  );
+
+                  if (!specialCharRegex.test(password)) {
+                    setPasswordSnackWidth(!false);
+                    showSnackbar(TranslationFile[language].Password_must_contain_at_least_one_special_character);
+                    return;
+                  }
+
+                  return;
+
+                }
+              } else {
+                navigation.replace('AfterSignUpProfileScreen');
+              }
+
+              // handleSubmit();
+              // handleSignUp({navigation})
+            }}
+            style={[SignUpStyleSheet.TouchableButtonStyle]}>
+            <Text style={[SignUpStyleSheet.TouchableTextStyle]}>
+              {TranslationFile[language].Next}
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
+      <Snackbar
+            visible={visible}
+            onDismiss={() => setVisible(false)}
+            duration={2000}
+            style={
+              passwordSnackWidth === true
+                ? {
+                    backgroundColor: '#D3D3D3',
+                    width: wp('80'),
+                    marginBottom: hp('6'),
+                    alignSelf: 'center',
+                  }
+                : {
+                    backgroundColor: '#D3D3D3',
+                    width: wp('55'),
+                    marginBottom: hp('6'),
+                    alignSelf: 'center',
+                  }
+            }>
+            <Text style={[SignUpStyleSheet.text]}>{snackbarMessage}</Text>
+          </Snackbar>
     </View>
   );
 };

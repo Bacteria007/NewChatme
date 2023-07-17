@@ -1,11 +1,14 @@
 import 'react-native-gesture-handler';
 import React, { useContext } from 'react';
-import { Image, View, Text, SafeAreaView, } from 'react-native';
+import { Image, View, Text, SafeAreaView } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from 'react-native-responsive-screen'
-import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
+} from 'react-native-responsive-screen';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 // SCREENS
 import Reels from './src/screens/reels/Reels';
 import Contacts from './src/screens/contacts/Contacts';
@@ -53,21 +56,20 @@ import { AppProvider } from './src/context/AppContext';
 import Theme from './src/screens/settings/accountPreferences/Theme';
 import { LogBox } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import ForgetPasswordScreen from './src/screens/auth/ForgetPasswordScreen';
 
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-LogBox.ignoreAllLogs();//Ignore all log notifications
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const App = () => {
-
   const { darkThemeActivator, theme } = useContext(ThemeContext);
 
   let iconSize = 20;
   const TabScreens = () => {
-
     let progress = useDrawerProgress();
     console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
@@ -75,7 +77,9 @@ const App = () => {
         { perspective: 1000 },
         { scale: interpolate(progress.value, [0, 1], [1, 0.7], 'clamp') },
         // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
-        { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') },
+        {
+          translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp'),
+        },
       ],
       overflow: 'hidden',
       // borderRadius:progress.value===1?12:0
@@ -84,15 +88,16 @@ const App = () => {
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
         <Tab.Navigator
-          initialRouteName='Chats'
+          initialRouteName="Chats"
           screenOptions={({ route, focused }) => ({
-
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
             tabBarStyle: {
               height: hp('8%'),
               borderTopWidth: 0,
-              borderTopColor: darkThemeActivator ? AppColors.darkTheme : AppColors.transparent,
+              borderTopColor: darkThemeActivator
+                ? AppColors.darkTheme
+                : AppColors.transparent,
               // flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
@@ -108,7 +113,6 @@ const App = () => {
               fontSize: wp('3.5%'),
               marginBottom: hp('1%'),
               marginTop: hp('0%'),
-             
             },
             // tabBarLabelPosition:'beside-icon',
             // tabBarShowLabel:false,
@@ -118,7 +122,6 @@ const App = () => {
             //   marginBottom: hp('1%')}}>{focused ? route.name : route.name}</Text>
             // },
             tabBarBackground: () => (
-
               <LinearGradient
                 //---1
                 // colors={["rgba(255, 182, 193,0.1)", "rgba(255, 182, 193,1)"]}  // pink only
@@ -129,7 +132,8 @@ const App = () => {
                 // locations={[0.1, 0.4]}
                 //---3
                 // colors={["rgba(255, 255, 255,0.1)", "rgba(255, 255, 255,1)"]}  // white only
-                start={{ x: 1, y: 0.0 }} end={{ x: 1, y: 1 }} // horizontal
+                start={{ x: 1, y: 0.0 }}
+                end={{ x: 1, y: 1 }} // horizontal
                 //  locations={[0.1, 0.3]}
                 //---
                 //--------
@@ -148,45 +152,68 @@ const App = () => {
             tabBarIcon: ({ focused }) => {
               if (route.name === 'Chats') {
                 return (
-                  <TabIcons focused={focused} size={19} type={Icons.Ionicons} name={focused ? 'ios-chatbubbles-sharp' : 'ios-chatbubbles-outline'} />
+                  <TabIcons
+                    focused={focused}
+                    size={19}
+                    type={Icons.Ionicons}
+                    name={
+                      focused
+                        ? 'ios-chatbubbles-sharp'
+                        : 'ios-chatbubbles-outline'
+                    }
+                  />
                 );
               } else if (route.name === 'Calls') {
                 return (
-                  <TabIcons focused={focused} size={19} type={Icons.Ionicons} name={focused ? 'call-sharp' : 'call-outline'} />
+                  <TabIcons
+                    focused={focused}
+                    size={19}
+                    type={Icons.Ionicons}
+                    name={focused ? 'call-sharp' : 'call-outline'}
+                  />
                 );
               } else if (route.name === 'Contacts') {
                 return (
-                  <TabIcons focused={focused} size={19} type={Icons.MaterialCommunityIcons} name={focused ? 'contacts' : 'contacts-outline'} />
-
+                  <TabIcons
+                    focused={focused}
+                    size={19}
+                    type={Icons.MaterialCommunityIcons}
+                    name={focused ? 'contacts' : 'contacts-outline'}
+                  />
                 );
               } else if (route.name === 'Reels') {
-                return (
-                  focused ?
-                    <TabIcons type={Icons.FontAwesome5} name="stream" size={16} focused={focused} /> :
-                    (darkThemeActivator) ? <StreamOutlineBlack /> : <StreamOutlineWhite />
-
+                return focused ? (
+                  <TabIcons
+                    type={Icons.FontAwesome5}
+                    name="stream"
+                    size={16}
+                    focused={focused}
+                  />
+                ) : darkThemeActivator ? (
+                  <StreamOutlineBlack />
+                ) : (
+                  <StreamOutlineWhite />
                 );
               } else if (route.name === 'Groups') {
                 return (
-                  <TabIcons focused={focused} size={19} type={Icons.Ionicons} name={focused ? 'people-sharp' : 'people-outline'} />
-
-
+                  <TabIcons
+                    focused={focused}
+                    size={19}
+                    type={Icons.Ionicons}
+                    name={focused ? 'people-sharp' : 'people-outline'}
+                  />
                 );
               }
             },
-
-          })
-          }
-        >
+          })}>
           <Tab.Screen name="Chats" component={Discussions} />
           <Tab.Screen name="Groups" component={Groups} />
           <Tab.Screen name="Calls" component={Calls} />
           <Tab.Screen name="Reels" component={Reels} />
           <Tab.Screen name="Contacts" component={Contacts} />
-
         </Tab.Navigator>
       </Animated.View>
-    )
+    );
   };
   const SettingStack = () => {
     return (
@@ -247,7 +274,6 @@ const App = () => {
     );
   };
   const DrawerScreens = () => {
-
     return (
       <View style={{ flex: 1 }}>
         <Drawer.Navigator
@@ -264,10 +290,10 @@ const App = () => {
             drawerLabelStyle: { marginLeft: wp('-6%') },
             drawerActiveBackgroundColor: AppColors.white,
             sceneContainerStyle: {
-              backgroundColor: theme.drawerColor
+              backgroundColor: theme.drawerColor,
             },
             // drawerHideStatusBarOnOpen: true,
-            // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen 
+            // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen
           }}
           // backBehavior='history'
           initialRouteName="Home"
@@ -277,7 +303,6 @@ const App = () => {
                 <DrawerContentScrollView {...props}>
                   <Animated.View
                     style={[Containers.centerContainer, { height: hp('25%') }]}>
-
                     <Image
                       source={require('./src/assets/imges/w11.jpg')}
                       style={{
@@ -286,22 +311,20 @@ const App = () => {
                         borderRadius: wp('100%'),
                       }}
                     />
-                    <Text style={{ fontSize: hp('3%'), color: AppColors.black }}>
+                    <Text
+                      style={{ fontSize: hp('3%'), color: AppColors.black }}>
                       User Name
                     </Text>
                   </Animated.View>
                   <DrawerItemList {...props} />
                 </DrawerContentScrollView>
               </View>
-
             );
           }}>
           <Drawer.Screen
             name="Home"
             component={TabScreens}
-
             options={{
-
               drawerIcon: ({ focused }) => (
                 <Icons.MaterialCommunityIcons
                   name={'home'}
@@ -394,21 +417,14 @@ const App = () => {
       </View>
     );
   };
-  console.log('darkthemeactivator', darkThemeActivator)
+  console.log('darkthemeactivator', darkThemeActivator);
   return (
-
     <AppProvider>
       <SafeAreaProvider style={{ flex: 1 }}>
-
-
-      <NavigationContainer>
+        <NavigationContainer>
           <Stack.Navigator
-
             options={{ headerShown: false }}
-            initialRouteName="DrawerScreens"
-          >
-              
-        
+            initialRouteName="DrawerScreens">
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
@@ -422,6 +438,11 @@ const App = () => {
             <Stack.Screen
               name="LogInScreen"
               component={LogInScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ForgetPassword"
+              component={ForgetPasswordScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -440,21 +461,19 @@ const App = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name='ChatBot'
+              name="ChatBot"
               component={ChatBot}
               options={{ headerShown: false }}
             />
-                    <Stack.Screen
-            name="AfterSignUpProfileScreen"
-            component={AfterSignUpProfileScreen}
-
-            options={{ headerShown: false }}
- />
+            <Stack.Screen
+              name="AfterSignUpProfileScreen"
+              component={AfterSignUpProfileScreen}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
     </AppProvider>
-
   );
 };
 

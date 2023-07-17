@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+} from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/LogInStyleSheet';
 import Status_bar from '../../components/statusbars/Primary_StatusBar';
@@ -58,112 +66,126 @@ const LogInScreen = ({ navigation }) => {
         lightModeBgColor={AppColors.primary}
       />
 
-      <Image
-        source={require('../../assets/imges/AuthScreenPictures/LOgInPic/LogInPic.png')}
-        style={[LogInStyleSheet.image]}
-      />
-      <Text style={[LogInStyleSheet.title]}>LogIn to Continue!</Text>
-      <View style={[LogInStyleSheet.countryContainer]}>
-        <CountryPicker
-          withFilter
-          withFlag
-          withCountryNameButton
-          withCallingCode
-          countryCode={selectedCountry?.cca2}
-          onSelect={handleCountrySelect}
-          // translation="eng"
-        />
-      </View>
-
-      <View style={[LogInStyleSheet.phoneNumberContainer]}>
-        <Text style={[LogInStyleSheet.countryCode]}>+{countryCode}</Text>
-        <TextInput
-          style={[LogInStyleSheet.phoneNumberInput]}
-          placeholder="Phone Number"
-          onChangeText={text => setPhoneNumber(text)}
-          keyboardType="numeric"
-          maxLength={15}
-          value={phoneNumber}
-        />
-      </View>
-
-      <View style={[LogInStyleSheet.passwordContainer]}>
-        <TextInput
-          style={[LogInStyleSheet.passwordInput]}
-          secureTextEntry={passwordVisible}
-          placeholder="Password"
-          onChangeText={text => setPassword(text)}
-        />
-        <TouchableOpacity
-          onPress={() => {
-            setPasswordVisible(!passwordVisible);
-          }}>
-          <Icons.Feather
-            name={passwordVisible === true ? 'eye-off' : 'eye'}
-            style={[LogInStyleSheet.passwordIcon]}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
+      >
+        <ScrollView
+          contentContainerStyle={LogInStyleSheet.scrollContainer}
+          showsVerticalScrollIndicator={false}>
+          <Image
+            source={require('../../assets/imges/AuthScreenPictures/LOgInPic/LogInPic.png')}
+            style={[LogInStyleSheet.image]}
           />
-        </TouchableOpacity>
-      </View>
-      {/* <Text style={[LogInStyleSheet.forgotpasswordText]}>Forgot Password?</Text> */}
-      <Snackbar
-        visible={visible}
-        onDismiss={() => setVisible(false)}
-        duration={2000}
-        style={
-          passwordSnackWidth === true
-            ? {
-                backgroundColor: '#D3D3D3',
-                width: wp('80'),
-                marginBottom: hp('6'),
-                alignSelf: 'center',
-              }
-            : {
-                backgroundColor: '#D3D3D3',
-                width: wp('55'),
-                marginBottom: hp('6'),
-                alignSelf: 'center',
-              }
-        }>
-        <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
-      </Snackbar>
-      <TouchableOpacity
-        onPress={() => {
-          if ((phoneNumber == '') & (password == '')) {
-            setPasswordSnackWidth(!false);
-            showSnackbar('Enter Phone Number and Password');
-            return;
-          }
-          if (!isValidPhoneNumber()) {
-            if (phoneNumber === '') {
-              setPasswordSnackWidth(!false);
-              showSnackbar('Phone number must not be empty');
-              return;
-            } else {
-              setPasswordSnackWidth(!true);
-              showSnackbar('Phone number is not valid');
-              return;
-            }
-          }
-          if (password.length < 8) {
-            if (password === '') {
-              setPasswordSnackWidth(!false);
-              showSnackbar('Password must not be empty');
-              return;
-            } else {
-              setPasswordSnackWidth(!false);
-              showSnackbar('Password contain atLeast 8 character');
-              return;
-            }
-          } else {
-            navigation.navigate('DrawerScreens');
-          }
+          <Text style={[LogInStyleSheet.title]}>LogIn to Continue!</Text>
 
-          // handleSubmit();
-          // handleSignUp({navigation})
-        }}
-        style={[LogInStyleSheet.TouchableButtonStyle]}>
-        <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
-      </TouchableOpacity>
+          <View style={[LogInStyleSheet.countryContainer]}>
+            <CountryPicker
+              withFilter
+              withFlag
+              withCountryNameButton
+              withCallingCode
+              countryCode={selectedCountry?.cca2}
+              onSelect={handleCountrySelect}
+              // translation="eng"
+            />
+          </View>
+
+          <View style={[LogInStyleSheet.phoneNumberContainer]}>
+            <Text style={[LogInStyleSheet.countryCode]}>+{countryCode}</Text>
+            <TextInput
+              style={[LogInStyleSheet.phoneNumberInput]}
+              placeholder="Phone Number"
+              onChangeText={text => setPhoneNumber(text)}
+              keyboardType="numeric"
+              maxLength={15}
+              value={phoneNumber}
+            />
+          </View>
+
+          <View style={[LogInStyleSheet.passwordContainer]}>
+            <TextInput
+              style={[LogInStyleSheet.passwordInput]}
+              secureTextEntry={passwordVisible}
+              placeholder="Password"
+              onChangeText={text => setPassword(text)}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                setPasswordVisible(!passwordVisible);
+              }}>
+              <Icons.Feather
+                name={passwordVisible === true ? 'eye' : 'eye-off'}
+                style={[LogInStyleSheet.passwordIcon]}
+              />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate('ForgetPassword')
+          }}>
+          <Text style={[LogInStyleSheet.forgotpasswordText]}>Forgot Password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              if ((phoneNumber == '') & (password == '')) {
+                setPasswordSnackWidth(!false);
+                showSnackbar('Enter Phone Number and Password');
+                return;
+              }
+              if (!isValidPhoneNumber()) {
+                if (phoneNumber === '') {
+                  setPasswordSnackWidth(!false);
+                  showSnackbar('Phone number must not be empty');
+                  return;
+                } else {
+                  setPasswordSnackWidth(!true);
+                  showSnackbar('Phone number is not valid');
+                  return;
+                }
+              }
+              if (password.length < 8) {
+                if (password === '') {
+                  setPasswordSnackWidth(!false);
+                  showSnackbar('Password must not be empty');
+                  return;
+                } else {
+                  setPasswordSnackWidth(!false);
+                  showSnackbar('Password contain atLeast 8 character');
+                  return;
+                }
+              } else {
+                navigation.navigate('DrawerScreens');
+              }
+
+              // handleSubmit();
+              // handleSignUp({navigation})
+            }}
+            style={[LogInStyleSheet.TouchableButtonStyle]}>
+            <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
+      <Snackbar
+            visible={visible}
+            onDismiss={() => setVisible(false)}
+            duration={2000}
+            style={
+              passwordSnackWidth === true
+                ? {
+                    backgroundColor: '#D3D3D3',
+                    width: wp('80'),
+                    marginBottom: hp('6'),
+                    alignSelf: 'center',
+                  }
+                : {
+                    backgroundColor: '#D3D3D3',
+                    width: wp('55'),
+                    marginBottom: hp('6'),
+                    alignSelf: 'center',
+                  }
+            }>
+            <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
+          </Snackbar>
     </View>
   );
 };
