@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react'
 import { View, Text, StyleSheet, Image, ImageBackground, FlatList, TouchableOpacity, Alert, } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import FontStyle from '../../assets/styles/FontStyle';
+
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import CallsScreenHeader from '../../components/Headers/CallsHeader/CallsScreenHeader';
-import { Shadow } from 'react-native-neomorph-shadows-fixes';
+import { Neomorph } from 'react-native-neomorph-shadows-fixes';
+import { Card } from "react-native-paper";
 import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { ThemeContext } from '../../context/ThemeContext';
 import { Icons } from '../../assets/Icons';
@@ -12,7 +13,7 @@ import AppColors from '../../assets/colors/Appcolors';
 
 const Contacts = ({ navigation }) => {
   //STATES
-  const { theme } = useContext(ThemeContext);
+  const { theme, darkThemeActivator } = useContext(ThemeContext);
   const [searchedCalls, setSearchedCalls] = useState([]); // USE STATE FOR SEARCHING TEXT
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [allContacts, setAllContacts] = useState([
@@ -122,17 +123,17 @@ const Contacts = ({ navigation }) => {
         <View
           style={HomeNeoCards.flatlistItemContainer}>
           {/* discussion content container */}
-          <Shadow swapShadows style={[HomeNeoCards.shadowStyle, { backgroundColor: theme.discussionsCardColor }]}>
-            {/* <Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[HomeNeoCards.neomorphStyle,{backgroundColor:theme.discussionsCardColor}]} > */}
-            <View style={HomeNeoCards.dpImageView}>
-              <TouchableOpacity>
-                <Image
-                  source={item.contactDpImage}
-                  style={HomeNeoCards.dpImage}
-                />
-              </TouchableOpacity>
-            </View>
-            {/* msg view */}
+          {!darkThemeActivator ?
+            <Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[HomeNeoCards.neomorphStyle, { backgroundColor: theme.discussionsCardColor }]} >
+              <View style={HomeNeoCards.dpImageView}>
+                <TouchableOpacity>
+                  <Image
+                    source={item.contactDpImage}
+                    style={HomeNeoCards.dpImage}
+                  />
+                </TouchableOpacity>
+              </View>
+              {/* msg view */}
               <View style={HomeNeoCards.nameAndMsgContainer}>
                 <Text
                   style={[HomeNeoCards.profileName, { color: theme.profileName }]}>
@@ -140,14 +141,38 @@ const Contacts = ({ navigation }) => {
                 </Text>
                 <Text
                   style={[HomeNeoCards.lastMsg, { color: theme.profileName }]}>
-                  {(item.contactBio).substring(0,35)}....
+                  {(item.contactBio).substring(0, 35)}....
                 </Text>
-                            
-            </View>
 
-          </Shadow>
-          {/* </Neomorph> */}
+              </View>
 
+            </Neomorph>
+            :
+            <Card style={HomeNeoCards.cardStyle}>
+              <View style={HomeNeoCards.cardView}>
+                <View style={HomeNeoCards.dpImageView}>
+                  <TouchableOpacity>
+                    <Image
+                      source={item.contactDpImage}
+                      style={HomeNeoCards.dpImage}
+                    />
+                  </TouchableOpacity>
+                </View>
+                {/* msg view */}
+                <View style={HomeNeoCards.nameAndMsgContainer}>
+                  <Text
+                    style={[HomeNeoCards.profileName, { color: theme.profileName }]}>
+                    {item.contactName}
+                  </Text>
+                  <Text
+                    style={[HomeNeoCards.lastMsg, { color: theme.headerSearchText }]}>
+                    {(item.contactBio).substring(0, 35)}....
+                  </Text>
+
+                </View>
+
+              </View></Card>
+          }
         </View>
       </TouchableOpacity>
 

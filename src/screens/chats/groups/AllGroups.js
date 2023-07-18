@@ -25,9 +25,8 @@ import TermsStyle from '../../../assets/styles/tremsAndConditions/TermsStyle';
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
-  const{theme}=useContext(ThemeContext)
+  const{theme,darkThemeActivator}=useContext(ThemeContext)
   const flatListRef = useRef(null);
-  const { darkThemeActivator } = useContext(AppContext);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedGroups, setSearchedGroups] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -218,8 +217,8 @@ const AllGroups = ({ navigation }) => {
         <View
           style={HomeNeoCards.flatlistItemContainer}>
           {/* discussion content container */}
-          <Shadow swapShadows style={[HomeNeoCards.shadowStyle,{backgroundColor:theme.discussionsCardColor}]}  >
-          {/* <Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[HomeNeoCards.neomorphStyle,{backgroundColor:theme.discussionsCardColor}]} > */}
+     { !darkThemeActivator ?
+          (<Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[HomeNeoCards.neomorphStyle,{backgroundColor:theme.discussionsCardColor}]} >
             <View style={[HomeNeoCards.iconView,{backgroundColor:theme.groupDpCircle}]}>
               <TouchableOpacity>
                 {/* <Image
@@ -240,8 +239,33 @@ const AllGroups = ({ navigation }) => {
                 {item.lastMsg}
               </Text>
             </View>
-            </Shadow>
-          {/* </Neomorph> */}
+          </Neomorph>)
+          :
+(<Card style={HomeNeoCards.cardStyle}>
+              <View style={HomeNeoCards.cardView}>
+                            <View style={[HomeNeoCards.iconView,{backgroundColor:theme.groupDpCircle}]}>
+              <TouchableOpacity>
+                {/* <Image
+                 source={item.dpImage}
+                  style={[HomeNeoCards.dpIcon]}
+                /> */}
+                <Icons.Ionicons name={'people'} size={25} color={theme.groupDpIconColor}/>
+              </TouchableOpacity>
+            </View>
+            {/* msg view */}
+            <View style={HomeNeoCards.nameAndMsgContainer}>
+              <Text
+                style={[HomeNeoCards.profileName,{color:theme.profileName}]}>
+                {item.profileName}
+              </Text>
+              <Text
+                style={[HomeNeoCards.lastMsg,{color:theme.lastMsg}]}>
+                {item.lastMsg}
+              </Text>
+            </View>
+        </View></Card>
+          )
+  }
         </View>
       </TouchableOpacity>
 

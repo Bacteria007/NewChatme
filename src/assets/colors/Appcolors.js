@@ -9,7 +9,7 @@ const AppColors = {
   bgprimary:'#FAFBFF',
   transparent: 'transparent',
   lightGrey: "rgb(239, 239, 239)",
-  lightBlack: "rgba(0, 0, 0,0.1)",
+  lightBlack: "rgba(0,0,0,0.1)",
   lightBlack2: "rgba(0,0,0,0.7)",
   inActiveIconsColor: "rgba(0,0,0,0.6)",
   lightwhite: "rgba(255, 255, 255,0.7)",
@@ -39,7 +39,9 @@ const AppColors = {
   homeCards:'rgba(255,255,255,0.4)',
 
   linearGradient:{
-    blue:'#c4ddfe',pink:'#ffb6c1',
+    // blue:'#c4ddfe',pink:'#ffb6c1',
+    blue:'rgba(217, 228, 254, 1)',pink:'rgba(255, 211, 219, 1)', //light shade
+
   },
   // purple shades
   Lavender: '#E6E6FA',//3
