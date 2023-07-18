@@ -4,22 +4,23 @@ import LinearGradient from 'react-native-linear-gradient';
 import FontStyle from '../../assets/styles/FontStyle';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import CallsScreenHeader from '../../components/Headers/CallsHeader/CallsScreenHeader';
-import { Shadow } from 'react-native-neomorph-shadows-fixes';
+import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { ThemeContext } from '../../context/ThemeContext';
 import { Icons } from '../../assets/Icons';
 import AppColors from '../../assets/colors/Appcolors';
+import { Card } from "react-native-paper";
 
 const Calls = ({ navigation }) => {
   //STATES
-  const { theme } = useContext(ThemeContext);
+  const { theme, darkThemeActivator } = useContext(ThemeContext);
   const [searchedCalls, setSearchedCalls] = useState([]); // USE STATE FOR SEARCHING TEXT
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [allCalls, setAllCalls] = useState([
     {
       callerDpImage: require('../../assets/imges/w11.jpg'),
       callerName: 'Edgar',
-      callCategory:'audio',
+      callCategory: 'audio',
       callType: 'outgoing',
       callStatus: 'accepted',
       callTime: '9/24/2112',
@@ -28,7 +29,7 @@ const Calls = ({ navigation }) => {
     {
       callerDpImage: require('../../assets/imges/w11.jpg'),
       callerName: 'Edgar Ellon',
-      callCategory:'video',
+      callCategory: 'video',
       callType: 'incoming',
       callStatus: 'accepted',
       callTime: '9/24/2112',
@@ -37,7 +38,7 @@ const Calls = ({ navigation }) => {
     {
       callerDpImage: require('../../assets/imges/w11.jpg'),
       callerName: 'Edgar Ellon',
-      callCategory:'video',
+      callCategory: 'video',
       callType: 'incoming',
       callStatus: 'rejected',
       callTime: '9/24/2112',
@@ -46,7 +47,7 @@ const Calls = ({ navigation }) => {
     {
       callerDpImage: require('../../assets/imges/mic.jpg'),
       callerName: 'Victor',
-      callCategory:'video',
+      callCategory: 'video',
       callType: 'incoming',
       callStatus: 'accepted',
       callTime: '5/15/2104',
@@ -63,7 +64,7 @@ const Calls = ({ navigation }) => {
     {
       callerDpImage: require('../../assets/imges/girlGuitar.jpg'),
       callerName: 'Cynthia',
-      callCategory:'video',
+      callCategory: 'video',
       callType: 'incoming',
       callStatus: 'rejected',
       callTime: '9/19/2110',
@@ -72,7 +73,7 @@ const Calls = ({ navigation }) => {
     {
       callerDpImage: require('../../assets/imges/mic.jpg'),
       callerName: 'James',
-      callCategory:'audio',
+      callCategory: 'audio',
       callType: 'outgoing',
       callStatus: 'accepted',
       callTime: '12/15/2034',
@@ -82,7 +83,7 @@ const Calls = ({ navigation }) => {
       callerDpImage: require('../../assets/imges/mic.jpg'),
       callerName: 'Medicine Jhon',
       callType: 'outgoing',
-      callCategory:'video',
+      callCategory: 'video',
       callStatus: 'rejected',
       callTime: '12/15/2034',
       callerId: '0ba5b1c4-f29b-5d57-be16-4932366aef21'
@@ -91,7 +92,7 @@ const Calls = ({ navigation }) => {
       callerDpImage: require('../../assets/imges/mic.jpg'),
       callerName: 'Medicine Jhon',
       callType: 'outgoing',
-      callCategory:'video',
+      callCategory: 'video',
       callStatus: 'rejected',
       callTime: '12/15/2034',
       callerId: '0ba5b1c4-f29b-5d57-be16-4932366aef21'
@@ -100,7 +101,7 @@ const Calls = ({ navigation }) => {
       callerDpImage: require('../../assets/imges/mic.jpg'),
       callerName: 'Medicine Jhon',
       callType: 'outgoing',
-      callCategory:'video',
+      callCategory: 'video',
       callStatus: 'rejected',
       callTime: '12/15/2034',
       callerId: '0ba5b1c4-f29b-5d57-be16-4932366aef21'
@@ -108,7 +109,7 @@ const Calls = ({ navigation }) => {
     {
       callerDpImage: require('../../assets/imges/mic.jpg'),
       callerName: 'Aristotle',
-      callCategory:'audio',
+      callCategory: 'audio',
       callType: 'outgoing',
       callStatus: 'accepted',
       callTime: '12/15/2034',
@@ -117,7 +118,7 @@ const Calls = ({ navigation }) => {
     {
       callerDpImage: require('../../assets/imges/mic.jpg'),
       callerName: 'Aristotle',
-      callCategory:'audio',
+      callCategory: 'audio',
       callType: 'outgoing',
       callStatus: 'accepted',
       callTime: '12/15/2034',
@@ -126,7 +127,7 @@ const Calls = ({ navigation }) => {
     {
       callerDpImage: require('../../assets/imges/mic.jpg'),
       callerName: 'Aristotle',
-      callCategory:'audio',
+      callCategory: 'audio',
       callType: 'outgoing',
       callStatus: 'accepted',
       callTime: '12/15/2034',
@@ -161,16 +162,16 @@ const Calls = ({ navigation }) => {
     }
   };
   const callIcon = (item) => {
-   const iconSize=hp('2.5%')
+    const iconSize = hp('2.5%')
     if ((item.callType === 'incoming') && (item.callStatus === 'accepted')) {
-      return( <Icons.MaterialCommunityIcons
+      return (<Icons.MaterialCommunityIcons
         name='call-received'
         color={'green'}
         size={iconSize}
       />)
-    } else if ((item.callType === 'incoming') && (item.callStatus ==='rejected')) {
+    } else if ((item.callType === 'incoming') && (item.callStatus === 'rejected')) {
 
-      return (  <Icons.MaterialCommunityIcons
+      return (<Icons.MaterialCommunityIcons
         name='call-received'
         color={'red'}
         size={iconSize}
@@ -178,7 +179,7 @@ const Calls = ({ navigation }) => {
 
     } else if ((item.callType === 'outgoing') && (item.callStatus === 'accepted')) {
 
-      return ( <Icons.MaterialCommunityIcons
+      return (<Icons.MaterialCommunityIcons
         name='call-made'
         color={'green'}
         size={iconSize}
@@ -186,7 +187,7 @@ const Calls = ({ navigation }) => {
 
     } else if ((item.callType === 'outgoing') && (item.callStatus === 'rejected')) {
 
-      return ( <Icons.MaterialCommunityIcons
+      return (<Icons.MaterialCommunityIcons
         name='call-made'
         color={'red'}
         size={iconSize}
@@ -207,41 +208,75 @@ const Calls = ({ navigation }) => {
         <View
           style={HomeNeoCards.flatlistItemContainer}>
           {/* discussion content container */}
-          <Shadow swapShadows style={[HomeNeoCards.shadowStyle, { backgroundColor: theme.discussionsCardColor }]}>
-            {/* <Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[HomeNeoCards.neomorphStyle,{backgroundColor:theme.discussionsCardColor}]} > */}
-            <View style={HomeNeoCards.dpImageView}>
-              <TouchableOpacity>
-                <Image
-                  source={item.callerDpImage}
-                  style={HomeNeoCards.dpImage}
-                />
-              </TouchableOpacity>
-            </View>
-            {/* msg view */}
-            <View style={HomeNeoCards.name_CallIcon_Container}>
-              <View style={HomeNeoCards.nameAndTimeContainer}>
-                <Text
-                  style={[HomeNeoCards.profileName, { color: theme.profileName }]}>
-                  {item.callerName}
-                </Text>
-                <View style={HomeNeoCards.timeAndCallType}>
-                {callIcon(item)}
-                <Text
-                  style={[HomeNeoCards.lastMsg, { color: theme.lastMsg }]}>
-                  {item.callTime}
-                </Text>
-                
+          {!darkThemeActivator ?
+            <Neomorph lightShadowColor="#e2e2e2" darkShadowColor='#000' inner style={[HomeNeoCards.neomorphStyle, { backgroundColor: theme.discussionsCardColor }]} >
+              <View style={HomeNeoCards.dpImageView}>
+                <TouchableOpacity>
+                  <Image
+                    source={item.callerDpImage}
+                    style={HomeNeoCards.dpImage}
+                  />
+                </TouchableOpacity>
+              </View>
+              {/* msg view */}
+              <View style={HomeNeoCards.name_CallIcon_Container}>
+                <View style={HomeNeoCards.nameAndTimeContainer}>
+                  <Text
+                    style={[HomeNeoCards.profileName, { color: theme.profileName }]}>
+                    {item.callerName}
+                  </Text>
+                  <View style={HomeNeoCards.timeAndCallType}>
+                    {callIcon(item)}
+                    <Text
+                      style={[HomeNeoCards.lastMsg, { color: theme.lastMsg }]}>
+                      {item.callTime}
+                    </Text>
+
+                  </View>
+                </View>
+                <View style={HomeNeoCards.callIconView}>
+                  {item.callCategory === 'audio' ? <Icons.Ionicons name='call-sharp' size={wp('6%')} color={AppColors.black} /> : <Icons.FontAwesome5 name="video" size={wp('5%')} color={AppColors.black} />
+                  }
                 </View>
               </View>
-              <View style={HomeNeoCards.callIconView}>
-                {item.callCategory==='audio'?<Icons.Ionicons name='call-sharp' size={wp('6%')} color={AppColors.black}/>:<Icons.FontAwesome5 name="video" size={wp('5%')} color={AppColors.black} />
-}
+
+
+            </Neomorph>
+            :
+            <Card style={HomeNeoCards.cardStyle}>
+              <View style={HomeNeoCards.cardView}>
+                <View style={HomeNeoCards.dpImageView}>
+                  <TouchableOpacity>
+                    <Image
+                      source={item.callerDpImage}
+                      style={HomeNeoCards.dpImage}
+                    />
+                  </TouchableOpacity>
+                </View>
+                {/* msg view */}
+                <View style={HomeNeoCards.name_CallIcon_Container}>
+                  <View style={HomeNeoCards.nameAndTimeContainer}>
+                    <Text
+                      style={[HomeNeoCards.profileName, { color: theme.profileName }]}>
+                      {item.callerName}
+                    </Text>
+                    <View style={HomeNeoCards.timeAndCallType}>
+                      {callIcon(item)}
+                      <Text
+                        style={[HomeNeoCards.lastMsg, { color: theme.lastMsg }]}>
+                        {item.callTime}
+                      </Text>
+
+                    </View>
+                  </View>
+                  <View style={HomeNeoCards.callIconView}>
+                    {item.callCategory === 'audio' ? <Icons.Ionicons name='call-sharp' size={wp('6%')} color={AppColors.gray} /> : <Icons.FontAwesome5 name="video" size={wp('5%')} color={AppColors.gray} />
+                    }
+                  </View>
+                </View>
               </View>
-            </View>
-
-          </Shadow>
-          {/* </Neomorph> */}
-
+              </Card>
+          }
         </View>
       </TouchableOpacity>
 
@@ -259,7 +294,7 @@ const Calls = ({ navigation }) => {
 
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={searchedCalls == '' ?  allCalls : searchedCalls}
+        data={searchedCalls == '' ? allCalls : searchedCalls}
         renderItem={renderItem}
         keyExtractor={(item) => { item.callerId.toString() }}
       // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}

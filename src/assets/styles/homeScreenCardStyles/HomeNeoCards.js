@@ -39,7 +39,8 @@ const HomeNeoCards = StyleSheet.create({
     borderRadius: 10,
     height: hp('10%'),
     width: wp('95%'),
-    //
+    justifyContent: 'space-around',
+
   },
   shadowStyle: {
     flexDirection: 'row',
@@ -49,10 +50,10 @@ const HomeNeoCards = StyleSheet.create({
     // backgroundColor: 'rgba(255, 255, 255,1)', //swap
     borderRadius: 10,
     height: hp('10%'),
-    width: wp('94.5%'),
+    width: wp('94%'),
     shadowOpacity: 0.1,
-    shadowRadius: 20,
-    shadowColor: 'rgba(0,0,0,1)',
+    shadowRadius: 30,
+    shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: { height: hp('10%'), width: wp('0%') },
   },
 
@@ -99,10 +100,15 @@ const HomeNeoCards = StyleSheet.create({
   },
   cardStyle: {
     height: hp('10%'),
-    width: wp('95%'),
+    width: wp('93%'),
     borderRadius: 10,
-    backgroundColor: AppColors.homeCards,
-    elevation: 0,
+    backgroundColor:AppColors.darkThemeColors.bgColor,
+    justifyContent:'center',alignItems:'center',
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    shadowColor: '#fff',
+    shadowOffset: { height: hp('10%'), width: wp('0%') },
+    marginBottom:10
   },
   cardView: {
     flexDirection: 'row',
@@ -110,6 +116,7 @@ const HomeNeoCards = StyleSheet.create({
     width: wp('95%'),
     borderRadius: 10,
     alignItems: 'center',
+    justifyContent:'space-around',
     // backgroundColor: 'rgba(255,255,255,0.1)',
   },
 

@@ -9,7 +9,6 @@ const AboutUs = ({navigation}) => {
    <DrawerScreenswrapper>
     <InnerScreensHeader screenName={"AboutUs"} navigation={navigation}/>
     <View style={{height: hp('100%'), backgroundColor: '#F1F1F5'}}>
-
       <Text>AboutUs</Text>
       <Text>AboutUs</Text>
       <Text>AboutUs</Text>
@@ -34,4 +33,4 @@ const AboutUs = ({navigation}) => {
   )
 }
 
-export default AboutUs
+export default AboutUs;

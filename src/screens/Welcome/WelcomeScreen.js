@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity, SafeAreaView, Image} from 'react-native';
 import WelcomeScreenStyles from '../../assets/styles/WelcomeScreenStyle/WelcomeScreenStyleSheet';
 import Appcolors from '../../assets/colors/Appcolors';
 import Status_bar from '../../components/statusbars/Primary_StatusBar';
-import TranslationFile from '../../assets/translation/TranslationFile';
+import TranslationFile from '../../assets/translation/TranslationFile.js';
 import AppContext from '../../context/AppContext';
 
 const WelcomeScreen = ({navigation}) => {

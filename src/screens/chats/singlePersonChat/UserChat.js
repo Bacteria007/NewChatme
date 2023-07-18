@@ -72,7 +72,7 @@ const UserChat = props => {
   return (
 <View styles={styles.contianer}>
       <Status_bar darkModeBgColor={AppColors.black} lightModeBgColor={AppColors.linearGradient.blue} content={'light-content'}/>
-      <ImageBackground source={require('../../../assets/imges/svgBackgroungs/chatswavy.png')} style={{height:hp('100%'),width:wp('100%')}} resizeMode='cover' blurRadius={10}>
+      <ImageBackground source={require('../../../assets/imges/userChatImages/img6.jpg')} style={{height:hp('100%'),width:wp('100%')}} resizeMode='cover'>
       <UserChatHeader item={item} navigation={props.navigation}/>
       <UserChatInput/>
       {/* <View style={[UserChatStyle.containerView]}>
