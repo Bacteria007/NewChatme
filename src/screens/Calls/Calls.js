@@ -270,7 +270,7 @@ const Calls = ({ navigation }) => {
                     </View>
                   </View>
                   <View style={HomeNeoCards.callIconView}>
-                    {item.callCategory === 'audio' ? <Icons.Ionicons name='call-sharp' size={wp('6%')} color={AppColors.coolgray} /> : <Icons.FontAwesome5 name="video" size={wp('5%')} color={AppColors.coolgray} />
+                    {item.callCategory === 'audio' ? <Icons.Ionicons name='call-sharp' size={wp('6%')} color={AppColors.gray} /> : <Icons.FontAwesome5 name="video" size={wp('5%')} color={AppColors.gray} />
                     }
                   </View>
                 </View>
