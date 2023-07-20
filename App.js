@@ -56,7 +56,7 @@ import { AppProvider } from './src/context/AppContext';
 import Theme from './src/screens/settings/accountPreferences/Theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ForgetPasswordScreen from './src/screens/auth/ForgetPasswordScreen';
-
+import VideoCal from './src/components/VideoCallScreen/VideoCal';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
@@ -428,6 +428,11 @@ const App = () => {
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
+              options={{ headerShown: false }}
+            />
+             <Stack.Screen
+              name="videoCal"
+              component={VideoCal}
               options={{ headerShown: false }}
             />
             <Stack.Screen

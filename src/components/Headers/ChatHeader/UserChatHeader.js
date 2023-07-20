@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import UserChatHeaderStyle from '../../../assets/styles/UserChatHeaderStyle';
 import { Icons } from '../../../assets/Icons';
 import {
@@ -7,16 +7,20 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import AppColors from '../../../assets/colors/Appcolors';
-import AgoraUIKit from 'agora-rn-uikit';
+
 
 const UserChatHeader = ({ item, navigation }) => {
-  const [videoCall, setVideoCall] = useState(false);
-  const connectionData = {
-    appId: '83d6cd3997e244c9bb3aa8c280fde5f4',
-    channel: 'chatme-room',
-  };
+//  const { videoCall,storeVideoCall} = useContext(AppContext);
+const [videoCall , setVideoCall] = useState(false)
+ const connectionData = {
+  appId: '83d6cd3997e244c9bb3aa8c280fde5f4',
+  channel: 'chatme-room',
+};
   const rtcCallbacks = {
-    EndCall: () => setVideoCall(false),
+    EndCall: () => {setVideoCall(false)
+      navigation.navigate('UserChat', { item: item });
+    }
+
   };
   
   // const {item}=props.route.params;
@@ -55,13 +59,8 @@ const UserChatHeader = ({ item, navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={[UserChatHeaderStyle.rightView]}>
-          {videoCall ? (
-            <View style={{flex:1}}>
-            <AgoraUIKit
-              connectionData={connectionData}
-              rtcCallbacks={rtcCallbacks}
-            />
-             </View>
+          {videoCall ?
+           (navigation.navigate('videoCal',{rtcCallbacks,connectionData})
           ) : (
             <TouchableOpacity
               style={{ alignSelf: 'center' }}
