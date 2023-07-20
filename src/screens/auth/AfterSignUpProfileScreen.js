@@ -9,7 +9,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   ScrollView,
-  Keyboard,
+  Keyboard,PermissionsAndroid
 } from 'react-native';
 import AfterSignUpStyleSheet from '../../assets/styles/AuthStyleSheet/AfterSignUpStyleSheet/AfterSignUpStyleSheet';
 import Primary_StatusBar from '../../components/statusbars/Primary_StatusBar';
@@ -22,12 +22,18 @@ import { Icons } from '../../assets/Icons';
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import TranslationFile from '../../assets/translation/TranslationFile';
 import AppContext from '../../context/AppContext';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { requestCameraPermission } from '../../components/Permission/Permission';
 
 const AfterSignUpProfileScreen = ({ navigation }) => {
   const { language } = useContext(AppContext);
   const [name, setName] = useState('');
   const [ques1, setQues1] = useState('');
   const [ques2, setQues2] = useState('');
+  
+  
+  
+
 
   return (
     <SafeAreaView style={AfterSignUpStyleSheet.container}>
@@ -57,9 +63,9 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
         <ScrollView
           contentContainerStyle={AfterSignUpStyleSheet.scrollContainer}
           showsVerticalScrollIndicator={false}>
-          <Text style={AfterSignUpStyleSheet.Text1}>
+          {/* <Text style={AfterSignUpStyleSheet.Text1}>
             {TranslationFile[language].Complete_your_profile}
-          </Text>
+          </Text> */}
           <View style={AfterSignUpStyleSheet.ImageContainer}>
             <TouchableOpacity
               activeOpacity={0.9}
@@ -78,8 +84,17 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
                 <TouchableOpacity
                   activeOpacity={0.9}
                   onPress={() => {
-                    console.log('Select from gallery');
-                  }}>
+                    requestCameraPermission() 
+                    launchCamera(
+                      {
+                        mediaType: 'photo',
+                        // Other options if needed
+                      },
+                      response => {
+                        console.log('Camera Access');
+                      }
+                    );
+                    }}>
                   {/* Icon ka view */}
                   <View style={AfterSignUpStyleSheet.CameraIconView}>
                     <Icons.MaterialIcons
