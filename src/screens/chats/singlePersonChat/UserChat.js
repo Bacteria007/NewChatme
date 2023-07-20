@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
-  View,StyleSheet,TouchableOpacity,Image,TextInput,FlatList,ImageBackground} from 'react-native';
-import { heightPercentageToDP as hp,widthPercentageToDP as wp} from 'react-native-responsive-screen';
+  View, StyleSheet, TouchableOpacity, Image, TextInput, FlatList, ImageBackground, KeyboardAvoidingView
+} from 'react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import FontStyle from '../../../assets/styles/FontStyle';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {Item} from 'react-native-paper/lib/typescript/src/components/Drawer/Drawer';
+import { Item } from 'react-native-paper/lib/typescript/src/components/Drawer/Drawer';
 // import AppColors from '../../asset/colors/AppColors';
 // import Modal from 'react-native-modal';
 import Colors from '../../../assets/colors/Appcolors';
@@ -68,14 +69,14 @@ const UserChat = props => {
     setInnerModalVisible(!isInnerModalVisible);
   };
 
-  const {item} = props.route.params;
+  const { item } = props.route.params;
   return (
-<View styles={styles.contianer}>
-      <Status_bar darkModeBgColor={AppColors.black} lightModeBgColor={AppColors.linearGradient.blue} content={'light-content'}/>
-      <ImageBackground source={require('../../../assets/imges/userChatImages/img6.jpg')} style={{height:hp('100%'),width:wp('100%')}} resizeMode='cover'>
-      <UserChatHeader item={item} navigation={props.navigation}/>
-      <UserChatInput/>
-      {/* <View style={[UserChatStyle.containerView]}>
+    <View styles={styles.contianer}>
+      <Status_bar darkModeBgColor={AppColors.black} lightModeBgColor={AppColors.linearGradient.blue} content={'light-content'} />
+        <UserChatHeader item={item} navigation={props.navigation} />
+      <ImageBackground source={require('../../../assets/imges/userChatImages/img6.jpg')} style={{ height: hp('92%'), width: wp('100%'),justifyContent:'flex-end' }} resizeMode='cover'>
+        <UserChatInput />
+        {/* <View style={[UserChatStyle.containerView]}>
         <View style={[UserChatStyle.headerView]}>
           <View style={[UserChatStyle.leftview]}>
             <TouchableOpacity
@@ -198,8 +199,8 @@ const UserChat = props => {
             </TouchableOpacity>
           </View>
         </Modal> */}
-      {/* </View> */} 
-      {/* <View
+        {/* </View> */}
+        {/* <View
         style={[UserChatStyle.bottomActionContainerView]}>
         <View
           style={[UserChatStyle.bottomLeftContainer]}>
@@ -225,14 +226,19 @@ const UserChat = props => {
         </TouchableOpacity>
       </View> */}
       </ImageBackground>
-      </View>
+    </View>
   );
 };
 
 export default UserChat;
 
 const styles = StyleSheet.create({
-  contianer:{flex:1,justifyContent:'center',alignItems:'center' },
+  contianer: {
+    flex: 1,
+    height:hp('100%'),
+    justifyContent: 'center',
+    alignItems: 'center'
+    },
   header: {
     backgroundColor: Colors.primary,
     height: hp('8%'),
