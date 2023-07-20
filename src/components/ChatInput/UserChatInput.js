@@ -14,7 +14,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import AppColors from '../../assets/colors/Appcolors';
-import EmojiPicker from 'rn-emoji-keyboard';
+// import EmojiPicker from 'rn-emoji-keyboard';
 
 const UserChatInput = () => {
   
