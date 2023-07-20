@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -7,38 +7,54 @@ import {
 import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
-
 const UserChatInputStyle = StyleSheet.create({
-  bottomActionContainerView:{flexDirection: 'row', position: 'absolute', top: hp('84%'),bottom:20},
-  bottomLeftContainer:{
+  main_input_and_mic: {
     flexDirection: 'row',
-    backgroundColor: AppColors.white,
-    borderRadius: wp('5.5%'),
-    height: hp('6%'),
-    justifyContent: 'space-between',
+    width: wp('100%'),
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-end',
+    // backgroundColor: AppColors.black,
+  },
+  input_and_all_icons: {
+    flexDirection: 'row',
     width: wp('83%'),
-    marginHorizontal: wp('1.3%'),
-    paddingHorizontal: wp('2.8%'),
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    borderRadius: wp('8%'),
+    borderColor: AppColors.linearGradient.blue,
+    borderWidth: 1,
+    backgroundColor: AppColors.white,
+    marginBottom: hp('1%'),
+    paddingHorizontal:hp('1%')
   },
-  textInputStyle:{
-    // fontSize: wp('4%'),
-    // backgroundColor:'lightgray',
-    width: wp('45%'),
-    // borderRadius:wp('4%'),
-    // marginHorizontal:wp('5%'),
-    // position:"absolute",top:hp('78%')
-    
+  
+  input:(height)=>({
+    width: wp('58%'),
+    height:height,
+    alignItems: 'center',
+    paddingLeft: wp('3%'),
+    alignSelf:'center'
+    // backgroundColor: 'red',
+
+  }),
+  scroll_inputText:{flex:1,alignSelf:'center'},
+  camera_and_papercliper: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: wp('20%'),
+    alignItems: 'center',
+    paddingVertical: hp('1.5%'),
+
   },
-  microphoneContainerView:{
-    height: hp('6.5%'),
-    width: hp('6.5%'),
-  // backgroundColor:gradientStyle,
-    borderRadius: 100,
-    paddingVertical: hp('1.9%'),
-    paddingHorizontal: wp('4.6%'),
+  microphoneContainerView: {
+    height: hp('6%'),
+    width: hp('6%'),
+    backgroundColor: AppColors.coolgray,
+    borderRadius: hp('6%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: hp('1'),
   }
 });
 
 export default UserChatInputStyle;
-
-

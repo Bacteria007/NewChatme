@@ -9,7 +9,7 @@ import {
   TextInput,
   Image,
   ImageBackground,
-
+KeyboardAvoidingView
 } from 'react-native';
 import Icon, { Icons } from '../../../assets/Icons';
 import {
@@ -91,7 +91,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
     <View>
       {/* <Wave style={{ position: 'absolute' }}  /> */}
       <View style={[AppHeaderStyle.mainHeader, {
-        backgroundColor: theme.chatsHeaderBg
+        // backgroundColor: AppColors.transparent
       }]}>
         <Primary_StatusBar />
         <View style={[AppHeaderStyle.headerView]}>
@@ -140,7 +140,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
             </TouchableOpacity>
           </View>
         </View>
-
+        
         <SearchBar
           lightTheme
           onChangeText={handleSearchOnChange}      // YE AIK FUNCTION LY RAHA HAI DISCUSSION WALI SCREEN SY 
