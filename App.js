@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useContext } from 'react';
-import { Image, View, Text, SafeAreaView } from 'react-native';
+import { Image, View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -25,7 +25,7 @@ import Settings from './src/screens/settings/Settings';
 import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
 
 import { Icons } from './src/assets/Icons'; // Navigation
-import { NavigationContainer, useIsFocused } from '@react-navigation/native';
+import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -58,6 +58,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ForgetPasswordScreen from './src/screens/auth/ForgetPasswordScreen';
 import VideoCal from './src/components/VideoCallScreen/VideoCal';
 import { LogBox } from 'react-native';
+import AddContact from './src/screens/contacts/AddContact';
+import FontStyle from './src/assets/styles/FontStyle';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -65,8 +68,13 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const App = () => {
+const App = (props) => {
   const { darkThemeActivator, theme } = useContext(ThemeContext);
+  const loggedInUser=AsyncStorage.getItem('user')
+  const logoutUser = ({navigation}) => {
+    AsyncStorage.removeItem(loggedInUser._id);
+    navigation.navigate("LogInScreen");
+  };
 
   let iconSize = 20;
   const TabScreens = () => {
@@ -210,7 +218,7 @@ const App = () => {
           <Tab.Screen name="Groups" component={Groups} />
           <Tab.Screen name="Calls" component={Calls} />
           <Tab.Screen name="Reels" component={Reels} />
-          <Tab.Screen name="Contacts" component={Contacts} />
+          <Tab.Screen name="Contacts" component={AddContact} />
         </Tab.Navigator>
       </Animated.View>
     );
@@ -318,6 +326,15 @@ const App = () => {
                   </Animated.View>
                   <DrawerItemList {...props} />
                 </DrawerContentScrollView>
+                <TouchableOpacity 
+                // onPress={logoutUser(props)}
+                >
+                <View style={{paddingLeft:wp('5%'),paddingBottom:hp('4%'),flexDirection:'row'}}>
+                  <Icons.AntDesign name='logout' color={AppColors.black} size={iconSize}
+                   />
+                <Text style={{fontSize:wp('4%'),fontFamily:FontStyle.regularFont,color:AppColors.black,marginLeft:wp('3.5%')}}>Logout</Text>
+                </View>
+                </TouchableOpacity>
               </View>
             );
           }}>
@@ -424,7 +441,7 @@ const App = () => {
         <NavigationContainer>
           <Stack.Navigator
             options={{ headerShown: false }}
-            initialRouteName="DrawerScreens">
+            initialRouteName="WelcomeScreen">
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}

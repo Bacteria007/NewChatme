@@ -24,6 +24,7 @@ import {
 import { Icons } from '../../assets/Icons';
 import TranslationFile from '../../assets/translation/TranslationFile';
 import AppContext from '../../context/AppContext';
+import RNFS, { read } from 'react-native-fs';
 
 const SignUpScreen = ({ navigation }) => {
   const { language } = useContext(AppContext);
@@ -36,8 +37,9 @@ const SignUpScreen = ({ navigation }) => {
   const [passwordSnackWidth, setPasswordSnackWidth] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
-  
-// Regular expression to check for special characters
+
+
+  // Regular expression to check for special characters
 const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
 
   const showSnackbar = message => {
@@ -63,29 +65,43 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
   };
 
   const handleSignUp = ({ navigation }) => {
+
     const formdata = new FormData();
     formdata.append('name', '');
     formdata.append('phoneNo', phoneNumber);
     formdata.append('password', password);
+    // formdata.append('avatar', base64Image);
+
+  
     axios({
       method: 'post',
-      url: 'http://192.168.10.14:8888/signup',
+      url: 'http://192.168.43.122:8888/signup',
       data: formdata,
       headers: { 'Content-Type': 'multipart/form-data' },
     })
       .then(function (response) {
         if (response.data.save === true) {
-          AsyncStorage.setItem('user', JSON.stringify(response.data.newUser));
-          navigation.navigate('DrawerScreens');
-        } else {
-          alert('Account cannot be created!Please try again later.');
-        }
-      })
+          console.log("asyncSignup",AsyncStorage.setItem('user', JSON.stringify(response.data.newUser._id)))
+          AsyncStorage.setItem('user', JSON.stringify(response.data.newUser))
+          .then(() => {
+            console.log('User ID stored successfully:', response.data.newUser._id);
+            navigation.navigate('DrawerScreens');
+          })
+          .catch((error) => {
+            console.log('Error while storing user ID:', error);
+            navigation.navigate('DrawerScreens'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
+          });
+      } else {
+        alert('Account cannot be created! Please try again later.');
+      }
+    })
       .catch(function (response) {
         //handle error
         console.log(response);
       });
-  };
+  }
+//   )
+// }
 
   useEffect(() => {
     // Set default country as Pakistan
@@ -212,7 +228,7 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
               }
 
               // handleSubmit();
-              // handleSignUp({navigation})
+              handleSignUp({navigation})
             }}
             style={[SignUpStyleSheet.TouchableButtonStyle]}>
             <Text style={[SignUpStyleSheet.TouchableTextStyle]}>
