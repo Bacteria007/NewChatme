@@ -1,11 +1,14 @@
+import { useContext } from "react";
+import { ThemeContext } from "../../context/ThemeContext";
+
 const AppColors = {
+
 
   // primary:"dodgerblue",
   primary: "#BA68C8",
   white: 'white',
   black: 'black',
   gray: 'gray',
-
   bgprimary:'#FAFBFF',
   transparent: 'transparent',
   lightGrey: "rgb(239, 239, 239)",
@@ -39,8 +42,12 @@ const AppColors = {
   homeCards:'rgba(255,255,255,0.4)',
 
   linearGradient:{
-    // blue:'#c4ddfe',pink:'#ffb6c1',
-    blue:'rgba(217, 228, 254, 1)',pink:'rgba(255, 211, 219, 1)', //light shade
+    // blue:'#9CECFB',pink:'#0052D4', // orange green
+    // blue:'#659999',pink:'#f4791f', // orange green--
+    // blue:'#f5af19',pink:'#f12711', // orange red 
+    // blue:'#1f4037',pink:'#99f2c8', // green light green
+    blue:'#c4ddfe',pink:'#ffb6c1',
+    // blue:'rgba(217, 228, 254, 1)',pink:'rgba(255, 211, 219, 1)', //light shade
 
   },
   // purple shades
