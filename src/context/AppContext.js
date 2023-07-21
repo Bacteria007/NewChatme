@@ -6,6 +6,7 @@ const AppContext = React.createContext();
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
   const [userName, setUserName] = useState();
+  const [currentUserId, setCurrentUserId] = useState('');
   const [language, setLanguage] = useState('English');
   const [darkThemeActivator, setDarkThemeActivator] = useState(false)
   const changeTheme = () => {
@@ -18,6 +19,30 @@ export const AppProvider = ({ children }) => {
   const storeLanguage = val => {
     setLanguage(val);
   };
+  const getUserID = async () => {
+    try{
+    const userData = await AsyncStorage.getItem('user');
+    if (userData !== null) {
+      // Check if the retrieved data is not undefined before parsing
+      if (userData !== undefined) {
+        const user = JSON.parse(userData);
+        setCurrentUserId(user)
+        const userID = user._id;
+        console.log('User ID get context:', user);
+        return userID;
+      } else {
+        console.log('User data is undefined in async storage.');
+        return null;
+      }
+    } else {
+      console.log('User information not found in async storage.');
+      return null;
+    }
+  } catch (error) {
+    console.log('Error while retrieving user information:', error);
+    return null;
+  }}
+  
 
   // ********************************************     USE EFFECT FOR LANGUAGE RETRIVE FROM ASYNC STORAGE   ***************
 
@@ -36,6 +61,7 @@ export const AppProvider = ({ children }) => {
       .catch(error => {
         console.log('Error retrieving selected language:', error);
       });
+      getUserID()
   }, []);
 
   return (
@@ -43,6 +69,7 @@ export const AppProvider = ({ children }) => {
       value={{
         appName,
         userName,
+        currentUserId,
         storeUserName,
         storeLanguage,
         language,

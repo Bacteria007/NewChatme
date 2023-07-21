@@ -37,15 +37,15 @@ const UserChatHeader = ({ item, navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity>
             <View style={[UserChatHeaderStyle.leftInnerView]}>
-              <View style={[UserChatHeaderStyle.dpContainerView]}>
+              {/* <View style={[UserChatHeaderStyle.dpContainerView]}>
                 <Image
                   source={item.dpImage}
                   style={[UserChatHeaderStyle.dpImageStyle]}
                 />
-              </View>
+              </View> */}
               <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
                 <Text style={[UserChatHeaderStyle.profileNameTextStyle]}>
-                  {item.profileName}
+                  {item.name}
                 </Text>
                 <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
                   Online

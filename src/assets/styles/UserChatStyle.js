@@ -8,6 +8,64 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const UserChatStyle = StyleSheet.create({
+  contianer:{flex:1,justifyContent:'center',alignItems:'center' },
+  container2: {
+    flex: 1,
+    padding: 10,
+  },
+  messagesContainer: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+  },
+  userMessageContainer: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#DCF8C6',
+    borderRadius: 8,
+    padding: 8,
+    marginBottom: 8,
+    maxWidth: '70%',
+  },
+  userMessageText: {
+    color: 'black',
+  },
+  timestampText:{color:'black',fontSize:10},
+  otherMessageContainer: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#E5E5EA',
+    borderRadius: 8,
+    padding: 8,
+    marginBottom: 8,
+    maxWidth: '70%',
+  },
+  otherMessageText: {
+    color: 'black',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#CCCCCC',
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    paddingHorizontal: 10,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 8,
+  },
+  sendButton: {
+    marginLeft: 8,
+    padding: 8,
+    backgroundColor: '#007BFF',
+    borderRadius: 8,
+  },
+  sendButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+////////////////
   containerView: {
     backgroundColor: AppColors.primary,
     height: hp('8%'),

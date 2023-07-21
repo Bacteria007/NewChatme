@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef,useState} from 'react';
+import io from 'socket.io-client';
+import moment from 'moment';
 import {
-  View,StyleSheet,TouchableOpacity,Image,TextInput,FlatList,ImageBackground} from 'react-native';
+  View,StyleSheet,TouchableOpacity,Image,TextInput,Text,FlatList,ImageBackground, KeyboardAvoidingView, Platform} from 'react-native';
 import { heightPercentageToDP as hp,widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import FontStyle from '../../../assets/styles/FontStyle';
 import Feather from 'react-native-vector-icons/Feather';
@@ -16,6 +18,10 @@ import UserChatStyle from '../../../assets/styles/UserChatStyle';
 import AppColors from '../../../assets/colors/Appcolors';
 import UserChatHeader from '../../../components/Headers/ChatHeader/UserChatHeader';
 import UserChatInput from '../../../components/ChatInput/UserChatInput';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+
+const socket = io.connect('http://192.168.43.122:8888'); 
+
 
 const UserChat = props => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -68,13 +74,139 @@ const UserChat = props => {
     setInnerModalVisible(!isInnerModalVisible);
   };
 
-  const {item} = props.route.params;
+  // const {item} = props.route.params;
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [messageList, setMessageList] = useState([]);
+  const flatListRef = useRef(null);
+const {itm} = props.route.params;
+const recieverId=itm.recieverId
+console.log("item",itm)
+
+  const sendMessage = async () => {
+    if (currentMessage.trim() !== '') {
+      const messageData = {
+            content: currentMessage.trim(),
+            name:itm.name, 
+            senderId:itm.userId,
+            recieverId:recieverId,
+            // timestamps:moment().format('LT')
+            //  timestamps :new Date().toLocaleTimeString([], {
+            //   hour: '2-digit',
+            //   minute: '2-digit',
+            // })
+          // new Date(Date.now()).getHours() +
+          // ":" +
+          // new Date(Date.now()).getMinutes(),
+      };
+      console.log("frontend",messageData)
+
+      // await socket.emit("send_message", messageData);
+      // setMessageList((list) => [...list, messageData]);
+      // setCurrentMessage("");
+      await socket.emit("send_message", messageData);
+            setMessageList((list) => [...list, messageData]);
+      setCurrentMessage("");
+    }
+  };
+  const DeleteMessage= async(msgId)=>{
+    const formData = new FormData();
+    formData.append("_id", msgId);
+
+
+    try {
+      const response = await fetch('http://192.168.0.206:8888/deleteMessage', {
+        method: 'POST',
+        // headers: {
+        //   'Content-Type': 'application/json',
+        // },
+        body: formData,
+
+      });
+   
+      const data = await response.json(); // Parse the response body as JSON
+      setMessageList(data)
+      console.log('After Message deleted:', data);
+      // Reset the new contact input
+    
+
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+
+  }
+
+  useEffect(() => {
+    socket.on('receive_message', (data) => {
+      setMessageList((list) => [...list, data]);
+    });
+
+    // Fetch data from the server
+    fetch('http://192.168.43.122:8888/messages')
+      .then((response) => response.json())
+      .then((data) => setMessageList(data))
+      .catch((error) => console.error(error));
+
+    // Join the room based on the user's ID
+    socket.emit('join_room', recieverId);
+
+    return () => {
+      socket.off('receive_message');
+    };
+  }, [recieverId]);
+
+  useEffect(() => {
+    // Scroll to the end when messageList changes
+    flatListRef.current.scrollToEnd({ animated: true });
+  }, [messageList]);
+
+  const filteredMessages = messageList.filter(
+    (message) =>
+      (message.senderId === itm.userId && message.recieverId === recieverId) ||
+      (message.senderId === recieverId && message.recieverId === itm.userId)
+  );
+
   return (
-<View styles={styles.contianer}>
+<View styles={[UserChatStyle.contianer]}>
       <Status_bar darkModeBgColor={AppColors.black} lightModeBgColor={AppColors.linearGradient.blue} content={'light-content'}/>
       <ImageBackground source={require('../../../assets/imges/userChatImages/img6.jpg')} style={{height:hp('100%'),width:wp('100%')}} resizeMode='cover'>
-      <UserChatHeader item={item} navigation={props.navigation}/>
-      <UserChatInput/>
+      <UserChatHeader item={itm} navigation={props.navigation}/>
+      <KeyboardAvoidingView
+         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+         style={{ flex: 1 }}
+         contentContainerStyle={{ flexGrow: 1 }}
+        >
+        
+      <View style={[UserChatStyle.container2]}>
+      <FlatList
+           ref={flatListRef}
+          data={filteredMessages}
+          renderItem={({ item }) => (
+            <TouchableOpacity>
+            <View style={[item.senderId === itm.userId ? UserChatStyle.userMessageContainer : UserChatStyle.otherMessageContainer]}>
+              <Text style={[item.senderId === itm.userId ? UserChatStyle.userMessageText : UserChatStyle.otherMessageText]}>{item.content}</Text>
+              <Text style={[item.senderId === itm.userId ? UserChatStyle.timestampText : UserChatStyle.timestampText]}>{moment(item.createdAt).format('hh:mm A')}</Text>
+            </View>
+            </TouchableOpacity>
+          )}
+          contentContainerStyle={[UserChatStyle.messagesContainer]}
+           keyExtractor={(item, index) => index.toString()}
+          onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
+          onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
+        />
+      <View style={[UserChatStyle.inputContainer]}>
+        <TextInput
+          style={[UserChatStyle.input]}
+          placeholder="Type a message..."
+          value={currentMessage}
+          onChangeText={(txt)=>{setCurrentMessage(txt)}}
+        />
+        <TouchableOpacity style={[UserChatStyle.sendButton]} onPress={sendMessage}>
+          <Text style={[UserChatStyle.sendButtonText]}>Send</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+      {/* <UserChatInput/> */}
+
       {/* <View style={[UserChatStyle.containerView]}>
         <View style={[UserChatStyle.headerView]}>
           <View style={[UserChatStyle.leftview]}>
@@ -224,6 +356,7 @@ const UserChat = props => {
           </View>
         </TouchableOpacity>
       </View> */}
+       </KeyboardAvoidingView>
       </ImageBackground>
       </View>
   );
@@ -231,19 +364,3 @@ const UserChat = props => {
 
 export default UserChat;
 
-const styles = StyleSheet.create({
-  contianer:{flex:1,justifyContent:'center',alignItems:'center' },
-  header: {
-    backgroundColor: Colors.primary,
-    height: hp('8%'),
-  },
-  headerView: {
-    flexDirection: 'row',
-    paddingHorizontal: wp('3%'),
-    justifyContent: 'space-between',
-  },
-  userName: {
-    fontSize: wp('5.5%'),
-    color: 'white',
-  },
-});
