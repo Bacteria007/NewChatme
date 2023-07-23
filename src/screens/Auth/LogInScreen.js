@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -19,8 +19,12 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Icons } from '../../assets/Icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import AppContext from '../../context/AppContext';
 
 const LogInScreen = ({ navigation }) => {
+  const {baseUrl,storeLoggedinStatus}=useContext(AppContext)
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -53,10 +57,43 @@ const LogInScreen = ({ navigation }) => {
     setCountryCode(country.callingCode);
   };
 
+  const userLogin = ({navigation})=>{
+    const formdata = new FormData();
+    formdata.append('name', '');
+    formdata.append('phoneNo', phoneNumber);
+    formdata.append('password', password);
+    axios({
+      method: 'post',
+      url:  `${baseUrl}/login`,
+      data: formdata,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+      .then(function (response) {
+        if(response.data.match == true)
+        {
+          console.log("login",response.data.loggedInUser._id)
+          AsyncStorage.setItem("user",JSON.stringify(response.data.loggedInUser._id));
+          storeLoggedinStatus(true)
+          navigation.navigate('DrawerScreens');
+        }else
+        {
+          alert("No User found with this number and password");
+        }
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+      });
+  }
+
   useEffect(() => {
     // Set default country as Pakistan
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
     setCountryCode('92');
+    // let currentUserStatus = AsyncStorage.getItem('user');
+    // if(currentUserStatus){
+    //  navigation.navigate('DrawerScreens');
+    //     }
   }, []);
 
   return (
@@ -154,7 +191,9 @@ const LogInScreen = ({ navigation }) => {
                   return;
                 }
               } else {
-                navigation.navigate('DrawerScreens');
+                console.log("clicked")
+                userLogin({navigation})
+                // navigation.navigate('DrawerScreens');
               }
 
               // handleSubmit();

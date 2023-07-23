@@ -24,7 +24,7 @@ const Discussions = ({ navigation }) => {
 
   //            **************                    USE STATES      *****************
   const { theme,darkThemeActivator } = useContext(ThemeContext)
-  const {currentUserId}  = useContext(AppContext);
+  const {currentUserId,baseUrl}  = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
@@ -160,8 +160,9 @@ const Discussions = ({ navigation }) => {
 
 
   const fetchContactList = async () => {
+    console.log("desc",currentUserId)
       try {
-        const response=await fetch(`http://192.168.43.122:8888/?userId=${currentUserId._id}`, {
+        const response=await fetch(`${baseUrl}/allChats?userId=${currentUserId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

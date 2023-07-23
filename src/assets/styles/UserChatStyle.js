@@ -28,7 +28,9 @@ const UserChatStyle = StyleSheet.create({
   userMessageText: {
     color: 'black',
   },
-  timestampText:{color:'black',fontSize:10},
+  userTimestampText:{color:'black',fontSize:10,
+  alignSelf: 'flex-end',
+},
   otherMessageContainer: {
     alignSelf: 'flex-start',
     backgroundColor: '#E5E5EA',
@@ -40,6 +42,9 @@ const UserChatStyle = StyleSheet.create({
   otherMessageText: {
     color: 'black',
   },
+  otherTimestampText:{color:'black',fontSize:10,
+  alignSelf: 'flex-start',
+},
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
