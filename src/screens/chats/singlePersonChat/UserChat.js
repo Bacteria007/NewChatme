@@ -1,5 +1,5 @@
 
-import React, {useEffect, useRef,useState} from 'react';
+import React, {useContext, useEffect, useRef,useState} from 'react';
 import io from 'socket.io-client';
 import moment from 'moment';
 import {
@@ -14,12 +14,13 @@ import AppColors from '../../../assets/colors/Appcolors';
 import UserChatHeader from '../../../components/Headers/ChatHeader/UserChatHeader';
 import UserChatInput from '../../../components/ChatInput/UserChatInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import AppContext from '../../../context/AppContext';
 
-const socket = io.connect('http://192.168.43.122:8888'); 
+const socket = io.connect('http://192.168.1.107:8888'); 
 
 
 const UserChat = props => {
-
+  const {baseUrl}=useContext(AppContext)
   const [isModalVisible, setModalVisible] = useState(false);
   const [isInnerModalVisible, setInnerModalVisible] = useState(false);
   const [outerModal, setOuterModal] = useState([
@@ -76,7 +77,7 @@ const UserChat = props => {
   const flatListRef = useRef(null);
 const {itm} = props.route.params;
 const recieverId=itm.recieverId
-console.log("item",itm)
+// console.log("item",itm)
 
   const sendMessage = async () => {
     if (currentMessage.trim() !== '') {
@@ -107,7 +108,7 @@ console.log("item",itm)
 
 
     try {
-      const response = await fetch('http://192.168.0.206:8888/deleteMessage', {
+      const response = await fetch(`${baseUrl}/deleteMessage`, {
         method: 'POST',
         // headers: {
         //   'Content-Type': 'application/json',
@@ -134,7 +135,7 @@ console.log("item",itm)
     });
 
     // Fetch data from the server
-    fetch('http://192.168.43.122:8888/messages')
+    fetch(`${baseUrl}/messages`)
       .then((response) => response.json())
       .then((data) => setMessageList(data))
       .catch((error) => console.error(error));
@@ -177,7 +178,7 @@ console.log("item",itm)
             <TouchableOpacity>
             <View style={[item.senderId === itm.userId ? UserChatStyle.userMessageContainer : UserChatStyle.otherMessageContainer]}>
               <Text style={[item.senderId === itm.userId ? UserChatStyle.userMessageText : UserChatStyle.otherMessageText]}>{item.content}</Text>
-              <Text style={[item.senderId === itm.userId ? UserChatStyle.timestampText : UserChatStyle.timestampText]}>{moment(item.createdAt).format('hh:mm A')}</Text>
+              <Text style={[item.senderId === itm.userId ? UserChatStyle.userTimestampText : UserChatStyle.otherTimestampText]}>{moment(item.createdAt).format('hh:mm a ')}</Text>
             </View>
             </TouchableOpacity>
           )}

@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useId } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as RNLocalize from 'react-native-localize';
 const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
+  const baseUrl='http://192.168.1.107:8888'
   const [userName, setUserName] = useState();
   const [currentUserId, setCurrentUserId] = useState('');
   const [language, setLanguage] = useState('English');
+  const [isUserLoggedin, setIsUserLoggedin] = useState(false)
   const [darkThemeActivator, setDarkThemeActivator] = useState(false)
   const changeTheme = () => {
     setDarkThemeActivator(!darkThemeActivator)
@@ -19,17 +21,19 @@ export const AppProvider = ({ children }) => {
   const storeLanguage = val => {
     setLanguage(val);
   };
+  const storeLoggedinStatus=val=>{
+    setIsUserLoggedin(val)
+  }
   const getUserID = async () => {
     try{
     const userData = await AsyncStorage.getItem('user');
     if (userData !== null) {
       // Check if the retrieved data is not undefined before parsing
       if (userData !== undefined) {
-        const user = JSON.parse(userData);
-        setCurrentUserId(user)
-        const userID = user._id;
-        console.log('User ID get context:', user);
-        return userID;
+        console.log('User ID get context:', typeof userData);
+        console.log('User ID get context parse:', JSON.parse(userData));
+        setCurrentUserId(userData)
+        return userData;
       } else {
         console.log('User data is undefined in async storage.');
         return null;
@@ -42,10 +46,18 @@ export const AppProvider = ({ children }) => {
     console.log('Error while retrieving user information:', error);
     return null;
   }}
-  
+  console.log("after storing new id",currentUserId)
+  const updateCurrentUserId = (value) => {
+    setCurrentUserId('');
+    console.log("called context")
+  };
 
   // ********************************************     USE EFFECT FOR LANGUAGE RETRIVE FROM ASYNC STORAGE   ***************
 
+  useEffect(()=>{
+    getUserID()
+    console.log("conditional effect")
+  },[currentUserId])
   useEffect(() => {
     // Retrieve the selected language from AsyncStorage
     AsyncStorage.getItem('selectedLanguage')
@@ -54,8 +66,8 @@ export const AppProvider = ({ children }) => {
           storeLanguage(selectedLanguage);
           console.log('store lang:');
         } else {
-          storeLanguage(RNLocalize.getLocales()[0].languageCode);
-          console.log('store lang else case:');
+          storeLanguage('English');
+          console.log('store lang else case:English');
         }
       })
       .catch(error => {
@@ -68,13 +80,17 @@ export const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={{
         appName,
+        baseUrl,
         userName,
         currentUserId,
+        isUserLoggedin,
         storeUserName,
         storeLanguage,
         language,
         darkThemeActivator,
-        changeTheme
+        changeTheme,
+        updateCurrentUserId,
+        storeLoggedinStatus
       }}>
       {children}
     </AppContext.Provider>
