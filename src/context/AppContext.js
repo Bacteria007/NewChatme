@@ -54,10 +54,10 @@ export const AppProvider = ({ children }) => {
 
   // ********************************************     USE EFFECT FOR LANGUAGE RETRIVE FROM ASYNC STORAGE   ***************
 
-  useEffect(()=>{
-    getUserID()
-    console.log("conditional effect")
-  },[currentUserId])
+  // useEffect(()=>{
+  //   getUserID()
+  //   console.log("conditional effect")
+  // },[currentUserId])
   useEffect(() => {
     // Retrieve the selected language from AsyncStorage
     AsyncStorage.getItem('selectedLanguage')
@@ -73,7 +73,9 @@ export const AppProvider = ({ children }) => {
       .catch(error => {
         console.log('Error retrieving selected language:', error);
       });
-      getUserID()
+      getUserID().then(userId => {
+        console.log('conditional effect', userId);
+      });
   }, []);
 
   return (
