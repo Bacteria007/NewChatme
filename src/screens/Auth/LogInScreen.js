@@ -73,7 +73,7 @@ const LogInScreen = ({ navigation }) => {
         {
           console.log("login",response.data.loggedInUser._id)
           AsyncStorage.setItem("user",JSON.stringify(response.data.loggedInUser._id));
-          storeLoggedinStatus(true)
+          // storeLoggedinStatus(true)
           navigation.navigate('DrawerScreens');
         }else
         {

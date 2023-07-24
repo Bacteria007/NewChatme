@@ -9,9 +9,13 @@ const AddContact = () => {
   const [newContactName, setNewContactName] = useState('');
   const {currentUserId,baseUrl}  = useContext(AppContext);
   const handleAddContact = async () => {
+    const userid=await AsyncStorage.getItem('user')
+
+    console.log("login",JSON.parse(userid))
+    const parseId=JSON.parse(userid)
     const formData = new FormData();
     console.log("currentUser",currentUserId)
-    formData.append("userId", currentUserId);
+    formData.append("userId", parseId);
     formData.append('name',newContactName);
     formData.append("phoneNumber",newContact);
 
