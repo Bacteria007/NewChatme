@@ -16,7 +16,7 @@ import UserChatInput from '../../../components/ChatInput/UserChatInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import AppContext from '../../../context/AppContext';
 
-const socket = io.connect('http://192.168.1.107:8888'); 
+const socket = io.connect('http://192.168.2.238:8888'); 
 
 
 const UserChat = props => {
