@@ -7,16 +7,20 @@ import AppContext from '../../context/AppContext';
 const AddContact = () => {
   const [newContact, setNewContact] = useState('');
   const [newContactName, setNewContactName] = useState('');
-  const {currentUserId}  = useContext(AppContext);
-
+  const {currentUserId,baseUrl}  = useContext(AppContext);
   const handleAddContact = async () => {
+    const userid=await AsyncStorage.getItem('user')
+
+    console.log("login",JSON.parse(userid))
+    const parseId=JSON.parse(userid)
     const formData = new FormData();
-    formData.append("userId", currentUserId._id);
+    console.log("currentUser",currentUserId)
+    formData.append("userId", parseId);
     formData.append('name',newContactName);
     formData.append("phoneNumber",newContact);
 
     try {
-      const response = await fetch('http://192.168.43.122:8888/contacts', {
+      const response = await fetch(`${baseUrl}/addContacts`, {
         method: 'POST',
         // headers: {
         //   'Content-Type': 'application/json',

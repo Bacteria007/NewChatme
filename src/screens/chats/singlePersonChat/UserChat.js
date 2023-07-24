@@ -1,33 +1,26 @@
 
-import React, {useEffect, useRef,useState} from 'react';
+import React, {useContext, useEffect, useRef,useState} from 'react';
 import io from 'socket.io-client';
 import moment from 'moment';
 import {
   View,StyleSheet,TouchableOpacity,Image,TextInput,Text,FlatList,ImageBackground, KeyboardAvoidingView, Platform} from 'react-native';
 import { heightPercentageToDP as hp,widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import FontStyle from '../../../assets/styles/FontStyle';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Entypo from 'react-native-vector-icons/Entypo';
-import {Item} from 'react-native-paper/lib/typescript/src/components/Drawer/Drawer';
 // import AppColors from '../../asset/colors/AppColors';
 // import Modal from 'react-native-modal';
-import Colors from '../../../assets/colors/Appcolors';
 import Status_bar from '../../../components/statusbars/Primary_StatusBar';
 import UserChatStyle from '../../../assets/styles/UserChatStyle';
 import AppColors from '../../../assets/colors/Appcolors';
 
 import UserChatHeader from '../../../components/Headers/ChatHeader/UserChatHeader';
-import AppColors from '../../../assets/colors/Appcolors';
 import UserChatInput from '../../../components/ChatInput/UserChatInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import AppContext from '../../../context/AppContext';
 
-const socket = io.connect('http://192.168.43.122:8888'); 
+const socket = io.connect('http://192.168.1.107:8888'); 
 
 
 const UserChat = props => {
-
+  const {baseUrl}=useContext(AppContext)
   const [isModalVisible, setModalVisible] = useState(false);
   const [isInnerModalVisible, setInnerModalVisible] = useState(false);
   const [outerModal, setOuterModal] = useState([
@@ -84,7 +77,7 @@ const UserChat = props => {
   const flatListRef = useRef(null);
 const {itm} = props.route.params;
 const recieverId=itm.recieverId
-console.log("item",itm)
+// console.log("item",itm)
 
   const sendMessage = async () => {
     if (currentMessage.trim() !== '') {
@@ -104,9 +97,6 @@ console.log("item",itm)
       };
       console.log("frontend",messageData)
 
-      // await socket.emit("send_message", messageData);
-      // setMessageList((list) => [...list, messageData]);
-      // setCurrentMessage("");
       await socket.emit("send_message", messageData);
             setMessageList((list) => [...list, messageData]);
       setCurrentMessage("");
@@ -118,7 +108,7 @@ console.log("item",itm)
 
 
     try {
-      const response = await fetch('http://192.168.0.206:8888/deleteMessage', {
+      const response = await fetch(`${baseUrl}/deleteMessage`, {
         method: 'POST',
         // headers: {
         //   'Content-Type': 'application/json',
@@ -145,7 +135,7 @@ console.log("item",itm)
     });
 
     // Fetch data from the server
-    fetch('http://192.168.43.122:8888/messages')
+    fetch(`${baseUrl}/messages`)
       .then((response) => response.json())
       .then((data) => setMessageList(data))
       .catch((error) => console.error(error));
@@ -188,7 +178,7 @@ console.log("item",itm)
             <TouchableOpacity>
             <View style={[item.senderId === itm.userId ? UserChatStyle.userMessageContainer : UserChatStyle.otherMessageContainer]}>
               <Text style={[item.senderId === itm.userId ? UserChatStyle.userMessageText : UserChatStyle.otherMessageText]}>{item.content}</Text>
-              <Text style={[item.senderId === itm.userId ? UserChatStyle.timestampText : UserChatStyle.timestampText]}>{moment(item.createdAt).format('hh:mm A')}</Text>
+              <Text style={[item.senderId === itm.userId ? UserChatStyle.userTimestampText : UserChatStyle.otherTimestampText]}>{moment(item.createdAt).format('hh:mm a ')}</Text>
             </View>
             </TouchableOpacity>
           )}
@@ -235,9 +225,9 @@ console.log("item",itm)
                   />
                </View>
             {/* </ImageBackground> */}
-        </View>
+        {/* </View> */}
 
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <View
             style={[UserChatStyle.microphoneContainerView]}>
             <FontAwesome name="microphone" size={wp('5.7%')} color={AppColors.white} />

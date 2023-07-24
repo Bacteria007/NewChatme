@@ -26,10 +26,15 @@ import {
 } from 'react-native-responsive-screen';
 import FontStyle from '../../assets/styles/FontStyle';
 import Animated from 'react-native-reanimated';
+import ReelHeader from '../../components/Headers/ReelHeader/ReelHeader';
+import ReelscreenStyle from '../../assets/styles/ReelStyleSheet/ReelscreenStyle';
+import ReelFooter from '../../components/Headers/ReelHeader/ReelFooter';
 
 const {height, width} = Dimensions.get('window');
 const Reals = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+
   const videoRef = useRef(null);
   const onBuffer = e => {
     console.log('buffering....', e);
@@ -37,7 +42,6 @@ const Reals = () => {
   const onError = e => {
     console.log('error raised', e);
   };
-  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [colors, setColors] = useState([
     {
       uri: require('../../assets/video/Whatsapp_20220923125145.mp4'),
@@ -79,80 +83,83 @@ const Reals = () => {
   const changeIndex = ({index}) => {
     setCurrentIndex(index);
   };
-  const renderHeader = () => {
-    return (
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingHorizontal: wp('3%'),
-          paddingTop: hp('1%'),
-        }}>
-        <Text
-          style={{
-            fontSize: wp('6.3%'),
-            fontFamily: FontStyle.regularFont,
-            color: AppColors.white,
-            textShadowColor: AppColors.purple,
-            textShadowOffset: {width: wp('0.7%'), height: wp('0.7%')},
-            textShadowRadius: wp('0.5%'),
-          }}>
-          Reels
-        </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: wp('31%'),
-          }}>
-          <TouchableOpacity>
-            <AntDesign
-              name="pluscircleo"
-              size={wp('7.5%')}
-              color={AppColors.white}
-            />
-          </TouchableOpacity>
-          {/* <TouchableOpacity>
-            <AntDesign
-              name="appstore-o"
-              size={wp('7.2%')}
-              color={AppColors.white}
-            />
-          </TouchableOpacity> */}
-          <TouchableOpacity>
-            <Feather
-              name="activity"
-              size={wp('8.2%')}
-              color={AppColors.white}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
+  // const renderHeader = () => {
+  //   return (
+  //     <View
+  //       style={{
+  //         position: 'absolute',
+  //         top: 0,
+  //         left: 0,
+  //         right: 0,
+  //         zIndex: 1,
+  //         flexDirection: 'row',
+  //         justifyContent: 'space-between',
+  //         alignItems: 'center',
+  //         paddingHorizontal: wp('3%'),
+  //         paddingTop: hp('1%'),
+  //       }}>
+  //       <Text
+  //         style={{
+  //           fontSize: wp('6.3%'),
+  //           fontFamily: FontStyle.regularFont,
+  //           color: AppColors.white,
+  //           textShadowColor: AppColors.purple,
+  //           textShadowOffset: {width: wp('0.7%'), height: wp('0.7%')},
+  //           textShadowRadius: wp('0.5%'),
+  //         }}>
+  //         Reels
+  //       </Text>
+  //       <View
+  //         style={{
+  //           flexDirection: 'row',
+  //           justifyContent: 'space-between',
+  //           alignItems: 'center',
+  //           width: wp('31%'),
+  //         }}>
+  //         <TouchableOpacity>
+  //           <AntDesign
+  //             name="pluscircleo"
+  //             size={wp('7.5%')}
+  //             color={AppColors.white}
+  //           />
+  //         </TouchableOpacity>
+  //         {/* <TouchableOpacity>
+  //           <AntDesign
+  //             name="appstore-o"
+  //             size={wp('7.2%')}
+  //             color={AppColors.white}
+  //           />
+  //         </TouchableOpacity> */}
+  //         <TouchableOpacity>
+  //           <Feather
+  //             name="activity"
+  //             size={wp('8.2%')}
+  //             color={AppColors.white}
+  //           />
+  //         </TouchableOpacity>
+  //       </View>
+  //     </View>
+  //   );
+  // };
   useEffect(() => {
     if (!videoRef.current) {
       videoRef.current.seek(0);
     }
   }, [currentIndex]);
   return (
-    <View style={{height: height, backgroundColor: AppColors.black}}>
-      {renderHeader()}
+    <View style={[ReelscreenStyle.containerStyle]}>
+      {/* {renderHeader()} */}
+      <ReelHeader/>
       <SwiperFlatList
         vertical={true}
         data={colors}
+        onChangeIndex={changeIndex}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
           return (
-            <View style={{flex: 1, height: height}}>
+            <View style={[ReelscreenStyle.flatlistContainerView]}>
               <TouchableOpacity
-                style={{width: width, height: height, position: 'absolute'}}
+                style={[ReelscreenStyle.TouchableOpacityStyle]}
                 activeOpacity={1}
                 onPress={toggleVideoPlayback}>
                 <Video
@@ -164,7 +171,7 @@ const Reals = () => {
                   repeat={true}
                   onBuffer={onBuffer} // Callback when remote video is buffering
                   onError={onError} // Callback when video cannot be loaded
-                  style={styles.backgroundVideo}
+                  style={[ReelscreenStyle.backgroundVideo]}
                 />
               </TouchableOpacity>
               <FontAwesome5
@@ -176,8 +183,8 @@ const Reals = () => {
                   left: width / 2.1,
                 }}
               />
-
-              <View
+              <ReelFooter/>
+              {/* <View
                 style={{
                   flex: 1,
                   justifyContent: 'space-between',
@@ -223,21 +230,6 @@ const Reals = () => {
                       User name
                     </Text>
                   </View>
-                  {/* <View > */}
-                  {/* <TouchableOpacity>
-                    <Text
-                      numberOfLines={1}
-                      style={{color: AppColors.white, fontSize: wp('4.5%')}}>
-                      {item.desc}
-                    </Text>
-                    </TouchableOpacity> */}
-                    {/* 
-                      <Text
-                        style={{color: AppColors.white, fontSize: wp('4%')}}>
-                        More
-                      </Text>
-                    </TouchableOpacity> */}
-                  {/* </View> */}
                 </Animated.View>
                 <View style={{justifyContent:'center'}}>
                   <TouchableOpacity>
@@ -248,23 +240,13 @@ const Reals = () => {
                     // style={{backgroundColor:AppColors.black}}
                   /></TouchableOpacity>
                 </View>
-              </View>
+              </View> */}
             </View>
           );
         }}
-        onChangeIndex={changeIndex}
-        keyExtractor={(item, index) => index.toString()}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  backgroundVideo: {
-    position: 'absolute',
-    width: width,
-    height: height,
-  },
-});
 
 export default Reals;

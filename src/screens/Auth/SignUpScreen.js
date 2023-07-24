@@ -27,7 +27,7 @@ import AppContext from '../../context/AppContext';
 import RNFS, { read } from 'react-native-fs';
 
 const SignUpScreen = ({ navigation }) => {
-  const { language } = useContext(AppContext);
+  const { language,baseUrl,storeLoggedinStatus } = useContext(AppContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -71,20 +71,23 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
     formdata.append('phoneNo', phoneNumber);
     formdata.append('password', password);
     // formdata.append('avatar', base64Image);
-
   
     axios({
       method: 'post',
-      url: 'http://192.168.43.122:8888/signup',
+      url: `${baseUrl}/signup`,
       data: formdata,
       headers: { 'Content-Type': 'multipart/form-data' },
     })
       .then(function (response) {
         if (response.data.save === true) {
-          console.log("asyncSignup",AsyncStorage.setItem('user', JSON.stringify(response.data.newUser._id)))
-          AsyncStorage.setItem('user', JSON.stringify(response.data.newUser))
+          console.log("respose aya",response.data)
+          const uId=response.data.newUser._id
+          console.log("type of",typeof uId)
+          // console.log("asyncSignup",AsyncStorage.setItem('user', uId))
+          AsyncStorage.setItem('user', JSON.stringify(response.data.newUser._id))
+          storeLoggedinStatus(true)
           .then(() => {
-            console.log('User ID stored successfully:', response.data.newUser._id);
+            console.log('User ID stored successfully:', response.data.newUser);
             navigation.navigate('DrawerScreens');
           })
           .catch((error) => {

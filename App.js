@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useContext } from 'react';
-import { Image, View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Image, View, Text, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -52,7 +52,7 @@ import StreamOutlineWhite from './src/assets/imges/footerIcons/streamOutlineBlac
 import StreamOutlineBlack from './src/assets/imges/footerIcons/streamOutlineWhite.svg';
 import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext } from './src/context/ThemeContext';
-import { AppProvider } from './src/context/AppContext';
+import AppContext, { AppProvider } from './src/context/AppContext';
 import Theme from './src/screens/settings/accountPreferences/Theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ForgetPasswordScreen from './src/screens/auth/ForgetPasswordScreen';
@@ -69,14 +69,25 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const App = (props) => {
-  const { darkThemeActivator, theme } = useContext(ThemeContext);
-  const loggedInUser=AsyncStorage.getItem('user')
-  const logoutUser = ({navigation}) => {
-    AsyncStorage.removeItem(loggedInUser._id);
-    navigation.navigate("LogInScreen");
+  const { darkThemeActivator, theme,storeLoggedinStatus } = useContext(ThemeContext,AppContext);
+  // const {updateCurrentUserId}=useContext(AppContext);
+  const blank=''
+  // const loggedInUser=AsyncStorage.getItem('user')
+  const logoutUser = async ({ navigation }) => {
+    try {
+      await AsyncStorage.removeItem('user');
+      // storeLoggedinStatus(false)
+      console.log('User removed from storage');
+      // updateCurrentUserId(''); // Clear the currentUserId in the context
+      navigation.replace('LogInScreen');
+    } catch (error) {
+      console.log('Error while removing user from storage:', error);
+      Alert.alert("You are unable to logout, try again later!");
+      // updateCurrentUserId(blank); // Clear the currentUserId in the context
+      // navigation.navigate('LogInScreen'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
+    }
   };
-
-  let iconSize = 20;
+    let iconSize = 20;
   const TabScreens = () => {
     let progress = useDrawerProgress();
     console.log('progress', progress);
@@ -327,7 +338,7 @@ const App = (props) => {
                   <DrawerItemList {...props} />
                 </DrawerContentScrollView>
                 <TouchableOpacity 
-                // onPress={logoutUser(props)}
+                onPress={()=>{logoutUser(props)}}
                 >
                 <View style={{paddingLeft:wp('5%'),paddingBottom:hp('4%'),flexDirection:'row'}}>
                   <Icons.AntDesign name='logout' color={AppColors.black} size={iconSize}

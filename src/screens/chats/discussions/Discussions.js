@@ -5,8 +5,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  KeyboardAvoidingView,
-  StyleSheet, Alert,
+  
+   StyleSheet, Alert,
 } from 'react-native';
 import { Card } from "react-native-paper";
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
@@ -23,17 +23,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Discussions = ({ navigation }) => {
 
   //            **************                    USE STATES      *****************
-
   const { theme,darkThemeActivator } = useContext(ThemeContext)
-  const {currentUserId}  = useContext(AppContext);
-
- 
-
+  const {currentUserId,baseUrl}  = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
 
-  // for aniated Header
+// for aniated Header
 
   // Animated Variables
   // const scrollY = React.useRef(new Animated.Value(0)).current;
@@ -164,8 +160,12 @@ const Discussions = ({ navigation }) => {
 
 
   const fetchContactList = async () => {
+    const userid=await AsyncStorage.getItem('user')
+
+    console.log("desc",JSON.parse(userid))
+    const parseId=JSON.parse(userid)
       try {
-        const response=await fetch(`http://192.168.43.122:8888/?userId=${currentUserId._id}`, {
+        const response=await fetch(`${baseUrl}/allChats?userId=${parseId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -224,7 +224,6 @@ const Discussions = ({ navigation }) => {
         <View
           style={HomeNeoCards.flatlistItemContainer}>
           {/* discussion content container */}
-
   {!darkThemeActivator?         
            ( <Neomorph lightShadowColor="#000" darkShadowColor='#fff' inner style={[HomeNeoCards.neomorphStyle,{backgroundColor:theme.discussionsCardColor}]} >
             {/* <View style={HomeNeoCards.dpImageView}>
@@ -273,7 +272,6 @@ const Discussions = ({ navigation }) => {
           </Card>
           )
   }
-
         </View>
       </TouchableOpacity>
 
@@ -319,31 +317,27 @@ const Discussions = ({ navigation }) => {
     <View style={HomeNeoCards.wholeScreenContainer}>
       {  /*start  top itny %, left %  ---  end bottom , left */}
       <LinearGradient colors={[theme.linearBlue, theme.linearPink]} start={{ x: 0.0, y: 0.0 }} end={{ x: 1, y: 1 }} locations={[0.3, 0.9]}
-      // style={StyleSheet.absoluteFillObject}
-      >
-        {/*vertical*/}
-        {/* <LinearGradient colors={[theme.linearBlue, theme.linearPink]} start={{ x: 0.9, y: 0.5 }} end={{ x: 0.1, y: 0.5 }}
-      style={StyleSheet.absoluteFillObject}
-      />   */}
-        <Custom_StatusBar />
-        {/* <Animated.View style={[HomeNeoCards.animatedHeader, {
+        style={StyleSheet.absoluteFillObject}
+      />
+      <Custom_StatusBar />
+      {/*vertical*/}
+      {/* <LinearGradient colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} start={{ x: 0.9, y: 0.5 }} end={{ x: 0.1, y: 0.5 }}>   */}
+      {/* <Animated.View style={[HomeNeoCards.animatedHeader, {
           transform: [{ translateY: myTranslateY }],
         }]}> */}
-        {/* <Animated.View style={[{ backgroundColor: 'blue' }, headerStyle]}> */}
+      {/* <Animated.View style={[{ backgroundColor: 'blue' }, headerStyle]}> */}
         <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
-
-        {/* </Animated.View> */}
-
-        <FlatList
-          ref={flatListRef}
-          showsVerticalScrollIndicator={false}
-          data={searchedChat == '' ? allChats : searchedChat}
-          renderItem={renderItem}
-          keyExtractor={(item) => { item.id.toString() }}
-          ListFooterComponent={renderFooter}
-
+      {/* </Animated.View> */}
+       
+      <FlatList
+        ref={flatListRef}
+        showsVerticalScrollIndicator={false}
+        data={searchedChat == '' ? contactList : searchedChat}
+        renderItem={renderItem}
+        // keyExtractor={(item) => { item.id.toString() }}
+        ListFooterComponent={renderFooter}
         />
-      </LinearGradient>
+      {/* </LinearGradient> */}
       {/* </SafeAreaView> */}
     </View>
 
