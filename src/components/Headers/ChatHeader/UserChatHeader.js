@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext ,useEffect} from 'react';
 import UserChatHeaderStyle from '../../../assets/styles/UserChatHeaderStyle';
 import { Icons } from '../../../assets/Icons';
 import {
@@ -7,22 +7,37 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import AppColors from '../../../assets/colors/Appcolors';
+import ZegoUIKitPrebuiltCallService, { ZegoSendCallInvitationButton, ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
 
 
 const UserChatHeader = ({ item, navigation }) => {
-//  const { videoCall,storeVideoCall} = useContext(AppContext);
-const [videoCall , setVideoCall] = useState(false)
- const connectionData = {
-  appId: '83d6cd3997e244c9bb3aa8c280fde5f4',
-  channel: 'chatme-room',
-};
-  const rtcCallbacks = {
-    EndCall: () => {setVideoCall(false)
-      navigation.navigate('UserChat', { item: item });
-    }
-
+  useEffect(() => {
+    a();
+  }, []);
+  const a = () => {
+    return ZegoUIKitPrebuiltCallService.init(
+      1432799538, // You can get it from ZEGOCLOUD's console
+      "d2d1b8a8f15ad602e020ba7e97236f8cd1030bdd3fa31ab1770c02aecc65bd14", // You can get it from ZEGOCLOUD's console
+      item.userId,
+      'Ali',
+      [ZIM, ZPNs],
+      {
+        ringtoneConfig: {
+          incomingCallFileName: 'my_file_name.mp3',
+          outgoingCallFileName: 'zego_outgoing.mp3',
+        },
+        notifyWhenAppRunningInBackgroundOrQuit: true,
+        isIOSSandboxEnvironment: true,
+        androidNotificationConfig: {
+          channelID: "ZegoUIKit",
+          channelName: "ZegoUIKit",
+        },
+      },
+    );
   };
-  
+
   // const {item}=props.route.params;
   return (
     <View style={[UserChatHeaderStyle.containerView]}>
@@ -59,10 +74,10 @@ const [videoCall , setVideoCall] = useState(false)
           </TouchableOpacity>
         </View>
         <View style={[UserChatHeaderStyle.rightView]}>
-          {videoCall ?
+          {/* {videoCall ?
            (navigation.navigate('videoCal',{rtcCallbacks,connectionData})
-          ) : (
-            <TouchableOpacity
+          ) : ( */}
+            {/* <TouchableOpacity
               style={{ alignSelf: 'center' }}
               onPress={() => {
                 setVideoCall(true);
@@ -72,9 +87,19 @@ const [videoCall , setVideoCall] = useState(false)
                 size={wp('6%')}
                 color={AppColors.black}
               />
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity
+            </TouchableOpacity> */}
+            <ZegoSendCallInvitationButton
+        invitees={[
+          {
+            userID: item.recieverId,
+            userName: 'user_64be835bbbf03ea2ef5a9d61',
+          },
+        ]}
+        isVideoCall={true}
+        resourceID={"incoming123"} // Please fill in the resource ID name that has been configured in the ZEGOCLOUD's console here.
+      />
+          {/* )} */}
+          {/* <TouchableOpacity
             onPress={() => {
               navigation.navigate('rejected', { item: item });
             }}
@@ -85,7 +110,17 @@ const [videoCall , setVideoCall] = useState(false)
               color={AppColors.black}
               style={{ paddingLeft: wp('4%') }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+           <ZegoSendCallInvitationButton
+        invitees={[
+          {
+            userID: item.recieverId,
+            userName: 'user_64be835bbbf03ea2ef5a9d61',
+          },
+        ]}
+        isVideoCall={false}
+        resourceID={"incoming123"} // Please fill in the resource ID name that has been configured in the ZEGOCLOUD's console here.
+      />
           <TouchableOpacity
             // onPress={toggleModal}
             style={{ alignSelf: 'center' }}>
