@@ -64,11 +64,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
+import {
+  ZegoCallInvitationDialog, ZegoUIKitPrebuiltCallWaitingScreen, ZegoUIKitPrebuiltCallInCallScreen
+} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const App = (props) => {
+  
   const { darkThemeActivator, theme,storeLoggedinStatus } = useContext(ThemeContext,AppContext);
   // const {updateCurrentUserId}=useContext(AppContext);
   const blank=''
@@ -450,6 +455,7 @@ const App = (props) => {
     <AppProvider>
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
+           <ZegoCallInvitationDialog />
           <Stack.Navigator
             options={{ headerShown: false }}
             initialRouteName="WelcomeScreen">
@@ -458,6 +464,7 @@ const App = (props) => {
               component={WelcomeScreen}
               options={{ headerShown: false }}
             />
+            
              <Stack.Screen
               name="videoCal"
               component={VideoCal}
@@ -503,6 +510,19 @@ const App = (props) => {
               component={AfterSignUpProfileScreen}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+          options={{ headerShown: false }}
+          // DO NOT change the name 
+          name="ZegoUIKitPrebuiltCallWaitingScreen"
+          component={ZegoUIKitPrebuiltCallWaitingScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          // DO NOT change the name
+          name="ZegoUIKitPrebuiltCallInCallScreen"
+          component={ZegoUIKitPrebuiltCallInCallScreen}
+        />
+
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

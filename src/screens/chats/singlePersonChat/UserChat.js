@@ -15,14 +15,22 @@ import UserChatHeader from '../../../components/Headers/ChatHeader/UserChatHeade
 import UserChatInput from '../../../components/ChatInput/UserChatInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import AppContext from '../../../context/AppContext';
+import ZegoUIKitPrebuiltCallService, {
+  ZegoCallInvitationDialog, ZegoUIKitPrebuiltCallWaitingScreen, ZegoUIKitPrebuiltCallInCallScreen, ZegoSendCallInvitationButton,
+} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import * as ZIM from 'zego-zim-react-native';
+import * as ZPNs from 'zego-zpns-react-native';
 
 const socket = io.connect('http://192.168.2.238:8888'); 
 
 
 const UserChat = props => {
-  const {baseUrl}=useContext(AppContext)
+  const {baseUrl,currentUserId}=useContext(AppContext)
   const [isModalVisible, setModalVisible] = useState(false);
   const [isInnerModalVisible, setInnerModalVisible] = useState(false);
+
+  
+ 
   const [outerModal, setOuterModal] = useState([
     {
       text: 'View contact',
