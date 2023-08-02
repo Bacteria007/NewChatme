@@ -24,7 +24,7 @@ import axios from 'axios';
 import AppContext from '../../context/AppContext';
 
 const LogInScreen = ({ navigation }) => {
-  const {baseUrl,storeLoggedinStatus}=useContext(AppContext)
+  const { baseUrl, storeLoggedinStatus } = useContext(AppContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -57,34 +57,34 @@ const LogInScreen = ({ navigation }) => {
     setCountryCode(country.callingCode);
   };
 
-  const userLogin = ({navigation})=>{
+  const userLogin = ({ navigation }) => {
     const formdata = new FormData();
-    formdata.append('name', '');
     formdata.append('phoneNo', phoneNumber);
     formdata.append('password', password);
     axios({
       method: 'post',
-      url:  `${baseUrl}/login`,
+      url: `${baseUrl}/login`,
       data: formdata,
       headers: { 'Content-Type': 'multipart/form-data' },
     })
       .then(function (response) {
-        if(response.data.match == true)
-        {
-          console.log("login",response.data.loggedInUser._id)
-          AsyncStorage.setItem("user",JSON.stringify(response.data.loggedInUser._id));
+        if (response.data.match == true) {
+          console.log('login', response.data.loggedInUser._id);
+          AsyncStorage.setItem(
+            'user',
+            JSON.stringify(response.data.loggedInUser._id),
+          );
           // storeLoggedinStatus(true)
           navigation.navigate('DrawerScreens');
-        }else
-        {
-          alert("No User found with this number and password");
+        } else {
+          alert('No User found with this number and password');
         }
       })
       .catch(function (response) {
         //handle error
         console.log(response);
       });
-  }
+  };
 
   useEffect(() => {
     // Set default country as Pakistan
@@ -157,10 +157,13 @@ const LogInScreen = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={()=>{
-            navigation.navigate('ForgetPassword')
-          }}>
-          <Text style={[LogInStyleSheet.forgotpasswordText]}>Forgot Password?</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ForgetPassword');
+            }}>
+            <Text style={[LogInStyleSheet.forgotpasswordText]}>
+              Forgot Password?
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -191,8 +194,8 @@ const LogInScreen = ({ navigation }) => {
                   return;
                 }
               } else {
-                console.log("clicked")
-                userLogin({navigation})
+                console.log('clicked');
+                userLogin({ navigation });
                 // navigation.navigate('DrawerScreens');
               }
 
@@ -205,26 +208,26 @@ const LogInScreen = ({ navigation }) => {
         </ScrollView>
       </KeyboardAvoidingView>
       <Snackbar
-            visible={visible}
-            onDismiss={() => setVisible(false)}
-            duration={2000}
-            style={
-              passwordSnackWidth === true
-                ? {
-                    backgroundColor: '#D3D3D3',
-                    width: wp('80'),
-                    marginBottom: hp('6'),
-                    alignSelf: 'center',
-                  }
-                : {
-                    backgroundColor: '#D3D3D3',
-                    width: wp('55'),
-                    marginBottom: hp('6'),
-                    alignSelf: 'center',
-                  }
-            }>
-            <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
-          </Snackbar>
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        duration={2000}
+        style={
+          passwordSnackWidth === true
+            ? {
+                backgroundColor: '#D3D3D3',
+                width: wp('80'),
+                marginBottom: hp('6'),
+                alignSelf: 'center',
+              }
+            : {
+                backgroundColor: '#D3D3D3',
+                width: wp('55'),
+                marginBottom: hp('6'),
+                alignSelf: 'center',
+              }
+        }>
+        <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
+      </Snackbar>
     </View>
   );
 };

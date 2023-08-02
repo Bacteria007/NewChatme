@@ -15,13 +15,10 @@ import UserChatHeader from '../../../components/Headers/ChatHeader/UserChatHeade
 import UserChatInput from '../../../components/ChatInput/UserChatInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import AppContext from '../../../context/AppContext';
-import ZegoUIKitPrebuiltCallService, {
-  ZegoCallInvitationDialog, ZegoUIKitPrebuiltCallWaitingScreen, ZegoUIKitPrebuiltCallInCallScreen, ZegoSendCallInvitationButton,
-} from '@zegocloud/zego-uikit-prebuilt-call-rn';
-import * as ZIM from 'zego-zim-react-native';
-import * as ZPNs from 'zego-zpns-react-native';
 
-const socket = io.connect('http://192.168.2.238:8888'); 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const socket = io.connect('http://192.168.16.238:8888'); 
 
 
 const UserChat = props => {
@@ -85,6 +82,13 @@ const UserChat = props => {
   const flatListRef = useRef(null);
 const {itm} = props.route.params;
 const recieverId=itm.recieverId
+AsyncStorage.setItem('receiverId', recieverId)
+  .then(() => {
+    console.log("Receiver ID stored successfully");
+  })
+  .catch((error) => {
+    console.error("Error storing receiver ID:", error);
+  });
 // console.log("item",itm)
 
   const sendMessage = async () => {
@@ -108,6 +112,9 @@ const recieverId=itm.recieverId
       await socket.emit("send_message", messageData);
             setMessageList((list) => [...list, messageData]);
       setCurrentMessage("");
+      await socket.on('receive_message', (data) => {
+        setMessageList((list) => [...list, data]);
+      });
     }
   };
   const DeleteMessage= async(msgId)=>{

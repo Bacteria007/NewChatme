@@ -1,6 +1,13 @@
 import 'react-native-gesture-handler';
 import React, { useContext } from 'react';
-import { Image, View, Text, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
+import {
+  Image,
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -25,7 +32,11 @@ import Settings from './src/screens/settings/Settings';
 import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
 
 import { Icons } from './src/assets/Icons'; // Navigation
-import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -44,7 +55,6 @@ import DeleteAccount from './src/screens/settings/accountPreferences/DeleteAccou
 import MyActivity from './src/screens/settings/accountPreferences/MyActivity';
 import LogInScreen from './src/screens/auth/LogInScreen';
 import Notification from './src/screens/settings/notification/Notification';
-import OutgoingCall from './src/screens/calls/OutgoingCall';
 import ChatBot from './src/screens/chats/chatBot/ChatBot';
 import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
 import TabIcons from './src/components/TabIcons';
@@ -56,7 +66,6 @@ import AppContext, { AppProvider } from './src/context/AppContext';
 import Theme from './src/screens/settings/accountPreferences/Theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ForgetPasswordScreen from './src/screens/auth/ForgetPasswordScreen';
-import VideoCal from './src/components/VideoCallScreen/VideoCal';
 import { LogBox } from 'react-native';
 import AddContact from './src/screens/contacts/AddContact';
 import FontStyle from './src/assets/styles/FontStyle';
@@ -65,18 +74,22 @@ LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 import {
-  ZegoCallInvitationDialog, ZegoUIKitPrebuiltCallWaitingScreen, ZegoUIKitPrebuiltCallInCallScreen
+  ZegoCallInvitationDialog,
+  ZegoUIKitPrebuiltCallWaitingScreen,
+  ZegoUIKitPrebuiltCallInCallScreen,
 } from '@zegocloud/zego-uikit-prebuilt-call-rn';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const App = (props) => {
-  
-  const { darkThemeActivator, theme,storeLoggedinStatus } = useContext(ThemeContext,AppContext);
+const App = props => {
+  const { darkThemeActivator, theme, storeLoggedinStatus } = useContext(
+    ThemeContext,
+    AppContext,
+  );
   // const {updateCurrentUserId}=useContext(AppContext);
-  const blank=''
+  const blank = '';
   // const loggedInUser=AsyncStorage.getItem('user')
   const logoutUser = async ({ navigation }) => {
     try {
@@ -87,12 +100,12 @@ const App = (props) => {
       navigation.replace('LogInScreen');
     } catch (error) {
       console.log('Error while removing user from storage:', error);
-      Alert.alert("You are unable to logout, try again later!");
+      Alert.alert('You are unable to logout, try again later!');
       // updateCurrentUserId(blank); // Clear the currentUserId in the context
       // navigation.navigate('LogInScreen'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
     }
   };
-    let iconSize = 20;
+  let iconSize = 20;
   const TabScreens = () => {
     let progress = useDrawerProgress();
     console.log('progress', progress);
@@ -342,14 +355,31 @@ const App = (props) => {
                   </Animated.View>
                   <DrawerItemList {...props} />
                 </DrawerContentScrollView>
-                <TouchableOpacity 
-                onPress={()=>{logoutUser(props)}}
-                >
-                <View style={{paddingLeft:wp('5%'),paddingBottom:hp('4%'),flexDirection:'row'}}>
-                  <Icons.AntDesign name='logout' color={AppColors.black} size={iconSize}
-                   />
-                <Text style={{fontSize:wp('4%'),fontFamily:FontStyle.regularFont,color:AppColors.black,marginLeft:wp('3.5%')}}>Logout</Text>
-                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    logoutUser(props);
+                  }}>
+                  <View
+                    style={{
+                      paddingLeft: wp('5%'),
+                      paddingBottom: hp('4%'),
+                      flexDirection: 'row',
+                    }}>
+                    <Icons.AntDesign
+                      name="logout"
+                      color={AppColors.black}
+                      size={iconSize}
+                    />
+                    <Text
+                      style={{
+                        fontSize: wp('4%'),
+                        fontFamily: FontStyle.regularFont,
+                        color: AppColors.black,
+                        marginLeft: wp('3.5%'),
+                      }}>
+                      Logout
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             );
@@ -455,21 +485,16 @@ const App = (props) => {
     <AppProvider>
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
-           <ZegoCallInvitationDialog />
+          <ZegoCallInvitationDialog />
           <Stack.Navigator
             options={{ headerShown: false }}
-            initialRouteName="WelcomeScreen">
+            initialRouteName="DrawerScreens">
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
               options={{ headerShown: false }}
             />
-            
-             <Stack.Screen
-              name="videoCal"
-              component={VideoCal}
-              options={{ headerShown: false }}
-            />
+
             <Stack.Screen
               name="SignUpScreen"
               component={SignUpScreen}
@@ -490,11 +515,7 @@ const App = (props) => {
               component={UserChat}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name="rejected"
-              component={OutgoingCall}
-              options={{ headerShown: false }}
-            />
+            
             <Stack.Screen
               name="DrawerScreens"
               component={DrawerScreens}
@@ -511,18 +532,17 @@ const App = (props) => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-          options={{ headerShown: false }}
-          // DO NOT change the name 
-          name="ZegoUIKitPrebuiltCallWaitingScreen"
-          component={ZegoUIKitPrebuiltCallWaitingScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          // DO NOT change the name
-          name="ZegoUIKitPrebuiltCallInCallScreen"
-          component={ZegoUIKitPrebuiltCallInCallScreen}
-        />
-
+              options={{ headerShown: false }}
+              // DO NOT change the name
+              name="ZegoUIKitPrebuiltCallWaitingScreen"
+              component={ZegoUIKitPrebuiltCallWaitingScreen}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              // DO NOT change the name
+              name="ZegoUIKitPrebuiltCallInCallScreen"
+              component={ZegoUIKitPrebuiltCallInCallScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

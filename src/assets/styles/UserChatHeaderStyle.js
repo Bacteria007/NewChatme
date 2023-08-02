@@ -32,7 +32,7 @@ const UserChatHeaderStyle = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: hp('1%'),
     height: hp('8%'),
-    width: wp('25.5%'),
+    width: wp('60%'),
   },
   dpContainerView: {
     height: hp('5%'),
@@ -48,7 +48,7 @@ const UserChatHeaderStyle = StyleSheet.create({
   },
   profileNameContainerStyle: {marginLeft: wp('2%')},
   profileNameTextStyle: {
-    fontSize: wp('5.5%'),
+    fontSize: wp('2.5%'),
     color: AppColors.black,
   },
   profileStatusStyle: {
