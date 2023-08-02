@@ -138,12 +138,12 @@ const HomeNeoCards = StyleSheet.create({
 
   },
   callIconView: {
-    height: hp('5%'),
-    width: hp('5%'),
-    // backgroundColor: AppColors.white,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: hp('5%'),
+    height: hp('6.5%'),
+    // width: hp('5%'),
+    // backgroundColor: AppColors.Plum,
+    justifyContent: 'space-evenly',
+    alignItems:'flex-end',
+    // borderRadius: hp('5%'),
   },
 });
 
