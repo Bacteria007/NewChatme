@@ -1,178 +1,150 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
-  KeyboardAvoidingView,
-  ScrollView,
-  SafeAreaView,
-  FlatList,
-  StyleSheet,
-  Text,
-  Image,
-  TextInput,
+  ActivityIndicator,
   TouchableOpacity,
   View,
   Dimensions,
 } from 'react-native';
 import Video from 'react-native-video';
 import AppColors from '../../assets/colors/Appcolors';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import {SwiperFlatList} from 'react-native-swiper-flatlist';
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import FontStyle from '../../assets/styles/FontStyle';
-import Animated from 'react-native-reanimated';
 import ReelHeader from '../../components/Headers/ReelHeader/ReelHeader';
 import ReelscreenStyle from '../../assets/styles/ReelStyleSheet/ReelscreenStyle';
 import ReelFooter from '../../components/Headers/ReelHeader/ReelFooter';
+import AppContext from '../../context/AppContext';
+import Share from 'react-native-share';
 
-const {height, width} = Dimensions.get('window');
-const Reals = () => {
+const Reals = props => {
+  //   **********************************           VARIABLES               ****************************
+  const { height, width } = Dimensions.get('window');
+  const { baseUrl } = useContext(AppContext);
+
+  //   **********************************          USE STATE               ****************************
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [uploadedReels, setUploadedReels] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  //   **********************************          USE REF               ****************************
   const videoRef = useRef(null);
+
+  //   **********************************          FUNCTIONS               ****************************
+  const shareVideo = async () => {
+    const videoUri = `${baseUrl}${uploadedReels[currentIndex]?.uri.uri}`;
+
+    try {
+      const options = {
+        message: 'Check out this awesome video!', // Message to share
+        url: videoUri, // Video URL
+      };
+
+      await Share.open(options);
+    } catch (error) {
+      console.log('Error sharing video:', error);
+    }
+  };
+
+  // ------------------------
   const onBuffer = e => {
     console.log('buffering....', e);
   };
+
+  // ------------------------
   const onError = e => {
     console.log('error raised', e);
   };
-  const [colors, setColors] = useState([
-    {
-      uri: require('../../assets/video/Whatsapp_20220923125145.mp4'),
-      desc: 'description description description description description description description descdescription ription description description description description description description ',
-    },
-    {
-      uri: require('../../assets/video/Whatsapp_20220923051345.mp4'),
-      desc: 'description description description description description description description descdescription ription description description description description description description ',
-    },
-    {
-      uri: require('../../assets/video/Whatsapp_20220923125145.mp4'),
-      desc: 'description description description description description description description descdescription ription description description description description description description ',
-    },
-    {
-      uri: require('../../assets/video/Whatsapp_20220923051345.mp4'),
-      desc: 'description description description description description description description descdescription ription description description description description description description ',
-    },
-    {
-      uri: require('../../assets/video/Whatsapp_20220923125145.mp4'),
-      desc: 'description description description description description description description descdescription ription description description description description description description ',
-    },
-    {
-      uri: require('../../assets/video/Whatsapp_20220923051345.mp4'),
-      desc: 'description description description description description description description descdescription ription description description description description description description ',
-    },
-    {
-      uri: require('../../assets/video/Whatsapp_20220923125145.mp4'),
-      desc: 'description description description description description description description descdescription ription description description description description description description ',
-    },
-    {
-      uri: require('../../assets/video/Whatsapp_20220923051345.mp4'),
-      desc: 'description description description description description description description descdescription ription description description description description description description ',
-    },
-  ]);
+
+  // ------------------------
+  const UploadedReels = async () => {
+    fetch(`${baseUrl}/uploadedReels`, {
+      method: 'POST',
+    })
+      .then(response => response.json())
+      .then(data => {
+        const videosWithSources = data.UploadedVideos.map(video => ({
+          uri: { uri: video.video }, // Convert the path to a source object
+          desc: video.name,
+        }));
+
+        setUploadedReels(videosWithSources);
+      })
+      .catch(error => console.log(error));
+  };
+
+  // ------------------------
 
   const toggleVideoPlayback = () => {
     setIsVideoPlaying(!isVideoPlaying);
   };
-  const changeIndex = ({index}) => {
+
+  // ------------------------
+
+  const changeIndex = ({ index }) => {
     setCurrentIndex(index);
   };
-  // const renderHeader = () => {
-  //   return (
-  //     <View
-  //       style={{
-  //         position: 'absolute',
-  //         top: 0,
-  //         left: 0,
-  //         right: 0,
-  //         zIndex: 1,
-  //         flexDirection: 'row',
-  //         justifyContent: 'space-between',
-  //         alignItems: 'center',
-  //         paddingHorizontal: wp('3%'),
-  //         paddingTop: hp('1%'),
-  //       }}>
-  //       <Text
-  //         style={{
-  //           fontSize: wp('6.3%'),
-  //           fontFamily: FontStyle.regularFont,
-  //           color: AppColors.white,
-  //           textShadowColor: AppColors.purple,
-  //           textShadowOffset: {width: wp('0.7%'), height: wp('0.7%')},
-  //           textShadowRadius: wp('0.5%'),
-  //         }}>
-  //         Reels
-  //       </Text>
-  //       <View
-  //         style={{
-  //           flexDirection: 'row',
-  //           justifyContent: 'space-between',
-  //           alignItems: 'center',
-  //           width: wp('31%'),
-  //         }}>
-  //         <TouchableOpacity>
-  //           <AntDesign
-  //             name="pluscircleo"
-  //             size={wp('7.5%')}
-  //             color={AppColors.white}
-  //           />
-  //         </TouchableOpacity>
-  //         {/* <TouchableOpacity>
-  //           <AntDesign
-  //             name="appstore-o"
-  //             size={wp('7.2%')}
-  //             color={AppColors.white}
-  //           />
-  //         </TouchableOpacity> */}
-  //         <TouchableOpacity>
-  //           <Feather
-  //             name="activity"
-  //             size={wp('8.2%')}
-  //             color={AppColors.white}
-  //           />
-  //         </TouchableOpacity>
-  //       </View>
-  //     </View>
-  //   );
-  // };
+
+  //   **********************************          USE EFFECTS               ****************************
+
   useEffect(() => {
-    if (!videoRef.current) {
+    UploadedReels();
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    if (videoRef.current) {
       videoRef.current.seek(0);
     }
-  }, [currentIndex]);
+  }, [currentIndex, videoRef.current]);
+
+  // RETURN
   return (
     <View style={[ReelscreenStyle.containerStyle]}>
-      {/* {renderHeader()} */}
-      <ReelHeader/>
+      {/* HEADER COMPONENT OF REEL */}
+      <ReelHeader navigation={props.navigation} />
+
       <SwiperFlatList
         vertical={true}
-        data={colors}
+        data={uploadedReels}
         onChangeIndex={changeIndex}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           return (
             <View style={[ReelscreenStyle.flatlistContainerView]}>
               <TouchableOpacity
                 style={[ReelscreenStyle.TouchableOpacityStyle]}
                 activeOpacity={1}
                 onPress={toggleVideoPlayback}>
-                <Video
-                  source={item.uri} // Can be a URL or a local file.
-                  ref={videoRef} // Store reference
-                  resizeMode="cover"
-                  // autoplayLoop
-                  paused={currentIndex !== index || !isVideoPlaying}
-                  repeat={true}
-                  onBuffer={onBuffer} // Callback when remote video is buffering
-                  onError={onError} // Callback when video cannot be loaded
-                  style={[ReelscreenStyle.backgroundVideo]}
-                />
+                {isLoading ? (
+                  <View style={ReelscreenStyle.LoaderView}>
+                    <ActivityIndicator
+                      size="large"
+                      color={AppColors.white}
+                      style={ReelscreenStyle.LoaderStyle}
+                    />
+                  </View>
+                ) : (
+                  <Video
+                    source={{ uri: `${baseUrl}${item.uri.uri}` }}
+                    ref={videoRef}
+                    resizeMode="cover"
+                    paused={currentIndex !== index || !isVideoPlaying}
+                    repeat={true}
+                    onBuffer={onBuffer}
+                    onError={onError}
+                    onLoad={() => setIsLoading(false)} // Set isLoading to false when video is loaded
+                    style={[ReelscreenStyle.backgroundVideo]}
+                  />
+                )}
               </TouchableOpacity>
               <FontAwesome5
                 name="play"
@@ -183,64 +155,10 @@ const Reals = () => {
                   left: width / 2.1,
                 }}
               />
-              <ReelFooter/>
-              {/* <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'space-between',
-                  paddingHorizontal: wp('3.5%'),
-                  paddingVertical: hp('12%'),
-                  flexDirection: 'row',
-                  // backgroundColor:AppColors.greenBlue,
-                  position:'absolute',
-                  bottom:0,
-                  right:0,left:0
-                }}>
-                <Animated.View style={{
-                      width: wp('65%'),
-                      // backgroundColor:AppColors.greenBlue
-                }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      // width: wp('50%')
-                    }}>
-                    <View
-                      style={{
-                        height: hp('4.5%'),
-                        width: hp('4.5%'),
-                        backgroundColor: AppColors.white,
-                        borderRadius: 100,
-                      }}>
-                        <Image source={require('../../assets/imges/landscaper-homepage-work-01-600x351.jpg')} style={{height: hp('4.5%'),
-                        borderRadius: 100,
-                        width: hp('4.5%'),}}/>
-                      </View>
-                    <Text
-                      style={{
-                        fontSize: wp('4.5%'),
-                        marginLeft: wp('1.5%'),
-                        // textAlign:'center',
-                        marginTop: wp('1%'),
-                        fontFamily: FontStyle.semiBoldFont,
-                        color: AppColors.white,
-                        // backgroundColor:AppColors.white
-                      }}>
-                      User name
-                    </Text>
-                  </View>
-                </Animated.View>
-                <View style={{justifyContent:'center'}}>
-                  <TouchableOpacity>
-                  <MaterialCommunityIcons
-                    name="share"
-                    size={wp('9%')}
-                    color={AppColors.white}
-                    // style={{backgroundColor:AppColors.black}}
-                  /></TouchableOpacity>
-                </View>
-              </View> */}
+
+              {/* FOOTER COMPONENT OF REEL */}
+
+              <ReelFooter onPressShare={() => shareVideo()} />
             </View>
           );
         }}
