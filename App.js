@@ -511,11 +511,16 @@ const App = props => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="activity"
+              component={MyActivity}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="UserChat"
               component={UserChat}
               options={{ headerShown: false }}
             />
-            
+
             <Stack.Screen
               name="DrawerScreens"
               component={DrawerScreens}

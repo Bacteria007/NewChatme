@@ -2552,16 +2552,6 @@ acorn-jsx@^5.3.2:
   resolved "https://registry.npmjs.org/acorn/-/acorn-8.9.0.tgz"
   integrity sha512-jaVNAFBHNLXspO543WnNNPZFRtavh3skAkITqD0/2aeMkKZTN+254PyhwxFYrk3vQ1xfY+2wbesJMs/JC8/PwQ==
 
-agora-react-native-rtm@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.npmjs.org/agora-react-native-rtm/-/agora-react-native-rtm-1.5.1.tgz"
-  integrity sha512-docAyX6O5J0eX8RCRAjtn7wUcks/Fq1v3S0w40fR9zf9k3mm+GLCP5kYiCy16p4h2o6v9JUaDQgUsTP/wv/s4g==
-
-agora-rn-uikit@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.npmjs.org/agora-rn-uikit/-/agora-rn-uikit-5.0.1.tgz"
-  integrity sha512-S/HVSb9rMdScfH9V2yc5h29mfFGvgREwsZ0S2xGuFkc1lih32/ICE7X9p451AWuYBs9jBO1oaexVl1byxEy3BA==
-
 ajv@^6.10.0, ajv@^6.12.4:
   version "6.12.6"
   resolved "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz"
@@ -3385,11 +3375,6 @@ big-integer@1.6.x:
   resolved "https://registry.npmjs.org/big-integer/-/big-integer-1.6.51.tgz"
   integrity sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==
 
-bignumber.js@^9.0.0:
-  version "9.1.1"
-  resolved "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.1.1.tgz"
-  integrity sha512-pHm4LsMJ6lzgNGVfZHjMoO8sdoRhOzOH4MLmY65Jg70bpxCKu5iOHNJyfF6OyvYw7t8Fpf35RuzUyqnQsj8Vig==
-
 bl@^4.1.0:
   version "4.1.0"
   resolved "https://registry.npmjs.org/bl/-/bl-4.1.0.tgz"
@@ -3478,14 +3463,6 @@ buffer@^5.5.0:
   dependencies:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
-
-buffer@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.npmjs.org/buffer/-/buffer-6.0.3.tgz"
-  integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
-  dependencies:
-    base64-js "^1.3.1"
-    ieee754 "^1.2.1"
 
 bytes@3.0.0:
   version "3.0.0"
@@ -4660,11 +4637,6 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   resolved "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
-eventemitter3@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-5.0.1.tgz"
-  integrity sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==
-
 exec-sh@^0.3.2:
   version "0.3.6"
   resolved "https://registry.npmjs.org/exec-sh/-/exec-sh-0.3.6.tgz"
@@ -5354,7 +5326,7 @@ iconv-lite@^0.6.2:
   dependencies:
     safer-buffer ">= 2.1.2 < 3.0.0"
 
-ieee754@^1.1.13, ieee754@^1.2.1:
+ieee754@^1.1.13:
   version "1.2.1"
   resolved "https://registry.npmjs.org/ieee754/-/ieee754-1.2.1.tgz"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
@@ -6364,13 +6336,6 @@ jsesc@~0.5.0:
   resolved "https://registry.npmjs.org/jsesc/-/jsesc-0.5.0.tgz"
   integrity sha512-uZz5UnB7u4T9LvwmFqXii7pZSouaRPorGs5who1Ip7VO0wxanFvBL7GkM6dTHlgX+jhBApRetaWpnDabOeTcnA==
 
-json-bigint@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/json-bigint/-/json-bigint-1.0.0.tgz"
-  integrity sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==
-  dependencies:
-    bignumber.js "^9.0.0"
-
 json-parse-better-errors@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz"
@@ -6579,6 +6544,11 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1, loose-envify@^1.4
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
+
+lottie-react-native@^6.1.2:
+  version "6.1.2"
+  resolved "https://registry.npmjs.org/lottie-react-native/-/lottie-react-native-6.1.2.tgz"
+  integrity sha512-OXBTJVahCPEZvd89g4BCzZb96sy060qToBKJPaZM/A0Q+ebHF2YaAXBflkgjiMFOmUWXxlKmg6fabMrOgbgeYQ==
 
 lru-cache@^5.1.1:
   version "5.1.1"
@@ -8213,16 +8183,6 @@ react-is@^18.2.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-native-agora@^4.1.0, react-native-agora@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.npmjs.org/react-native-agora/-/react-native-agora-4.2.1.tgz"
-  integrity sha512-GkGd7mguex8OUGeKDzuaFOKf313FiPjtncW/Gyk4VNp2faoYcylJHoJrOXp/XafpLzwjFbSY5Mgm3bxbxfUN9Q==
-  dependencies:
-    buffer "^6.0.3"
-    eventemitter3 "^5.0.1"
-    json-bigint "^1.0.0"
-    ts-interface-checker "^1.0.2"
-
 react-native-animatable@1.3.3:
   version "1.3.3"
   resolved "https://registry.npmjs.org/react-native-animatable/-/react-native-animatable-1.3.3.tgz"
@@ -8399,6 +8359,11 @@ react-native-screens@^3.18.2, react-native-screens@^3.22.1, "react-native-screen
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
+react-native-share@^9.2.3:
+  version "9.2.3"
+  resolved "https://registry.npmjs.org/react-native-share/-/react-native-share-9.2.3.tgz"
+  integrity sha512-y6ju4HS6ydJoPVoacZ/Hp3i47AfI9W4e76Jv00r01dVbr6SCCcuqk37kIbn+kYivdTxOW77UGEbhtBHHtXnhzg==
+
 react-native-size-matters@^0.4.0:
   version "0.4.0"
   resolved "https://registry.npmjs.org/react-native-size-matters/-/react-native-size-matters-0.4.0.tgz"
@@ -8482,7 +8447,7 @@ react-native-wind@^1.2.0:
   resolved "https://registry.npmjs.org/react-native-wind/-/react-native-wind-1.2.0.tgz"
   integrity sha512-y3UkZeFaBK1JCFDDn+oZ0u4ukLuYFg4xGBY6H2ZAalooQAlLDhqsH41aHNWjGTS4y8qmEhR7LQeamLbmcs421A==
 
-react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", react-native@>=0.35, react-native@>=0.40.0, react-native@>=0.59.0, react-native@>=0.60, react-native@>=0.62.2, react-native@>=0.63.3, react-native@>=0.65.0, react-native@>=0.70.0, react-native@>=0.8.0, react-native@0.71.10:
+react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", react-native@>=0.35, react-native@>=0.40.0, react-native@>=0.46, react-native@>=0.59.0, react-native@>=0.60, react-native@>=0.63.3, react-native@>=0.65.0, react-native@>=0.70.0, react-native@>=0.8.0, react-native@0.71.10:
   version "0.71.10"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.71.10.tgz"
   integrity sha512-O+sWH9ln7euxhHdooVL8is2FiVc7CfAp2zsKgIRhbq/8lGbJr5ZyT6QkCQK0M8Sx1zNe9puebr+BE8uBFsartg==
@@ -9640,11 +9605,6 @@ tr46@~0.0.3:
   version "0.0.3"
   resolved "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
-
-ts-interface-checker@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/ts-interface-checker/-/ts-interface-checker-1.0.2.tgz"
-  integrity sha512-4IKKvhZRXhvtYF/mtu+OCfBqJKV6LczUq4kQYcpT+iSB7++R9+giWnp2ecwWMIcnG16btVOkXFnoxLSYMN1Q1g==
 
 tslib@^1.8.1:
   version "1.14.1"
