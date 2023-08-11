@@ -13,6 +13,7 @@ const UserChatInputStyle = StyleSheet.create({
     width: wp('100%'),
     justifyContent: 'space-evenly',
     alignItems: 'flex-end',
+    alignSelf:'flex-end'
     // backgroundColor: AppColors.black,
   },
   input_and_all_icons: {
@@ -38,14 +39,14 @@ const UserChatInputStyle = StyleSheet.create({
 
   }),
   scroll_inputText:{flex:1,alignSelf:'center'},
-  camera_and_papercliper: {
+  camera_and_papercliper: (width)=>({
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: wp('20%'),
+    width: width,
     alignItems: 'center',
     paddingVertical: hp('1.5%'),
 
-  },
+  }),
   microphoneContainerView: {
     height: hp('6%'),
     width: hp('6%'),

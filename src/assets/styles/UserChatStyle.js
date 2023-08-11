@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -8,7 +8,11 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const UserChatStyle = StyleSheet.create({
-  contianer:{flex:1,justifyContent:'center',alignItems:'center' },
+  contianer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
   container2: {
     flex: 1,
     padding: 10,
@@ -28,9 +32,10 @@ const UserChatStyle = StyleSheet.create({
   userMessageText: {
     color: 'black',
   },
-  userTimestampText:{color:'black',fontSize:10,
-  alignSelf: 'flex-end',
-},
+  userTimestampText: {
+    color: 'black', fontSize: 10,
+    alignSelf: 'flex-end',
+  },
   otherMessageContainer: {
     alignSelf: 'flex-start',
     backgroundColor: '#E5E5EA',
@@ -42,9 +47,10 @@ const UserChatStyle = StyleSheet.create({
   otherMessageText: {
     color: 'black',
   },
-  otherTimestampText:{color:'black',fontSize:10,
-  alignSelf: 'flex-start',
-},
+  otherTimestampText: {
+    color: 'black', fontSize: 10,
+    alignSelf: 'flex-start',
+  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -70,7 +76,7 @@ const UserChatStyle = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-////////////////
+  ////////////////
   containerView: {
     backgroundColor: AppColors.primary,
     height: hp('8%'),
@@ -86,12 +92,12 @@ const UserChatStyle = StyleSheet.create({
     height: hp('8%'),
     justifyContent: 'space-between',
   },
-  rightView:{
+  rightView: {
     flexDirection: 'row',
     width: wp('33%'),
     justifyContent: 'space-between',
   },
-  leftInnerView:{
+  leftInnerView: {
     flexDirection: 'row',
     paddingTop: hp('1%'),
     height: hp('8%'),
@@ -109,7 +115,7 @@ const UserChatStyle = StyleSheet.create({
     width: hp('5%'),
     borderRadius: 100,
   },
-  profileNameContainerStyle: {marginLeft: wp('2%')},
+  profileNameContainerStyle: { marginLeft: wp('2%') },
   profileNameTextStyle: {
     fontSize: wp('5.5%'),
     color: AppColors.white,
@@ -118,8 +124,8 @@ const UserChatStyle = StyleSheet.create({
     color: AppColors.white,
     fontSize: wp('3'),
   },
-  bottomActionContainerView:{flexDirection: 'row', position: 'absolute', top: hp('85.8%')},
-  bottomLeftContainer:{
+  bottomActionContainerView: { flexDirection: 'row', position: 'absolute', top: hp('85.8%') },
+  bottomLeftContainer: {
     flexDirection: 'row',
     backgroundColor: AppColors.white,
     borderRadius: wp('5.5%'),
@@ -129,7 +135,7 @@ const UserChatStyle = StyleSheet.create({
     marginHorizontal: wp('1.3%'),
     paddingHorizontal: wp('2.8%'),
   },
-  textInputStyle:{
+  textInputStyle: {
     // fontSize: wp('4%'),
     // backgroundColor:'lightgray',
     width: wp('45%'),
@@ -137,7 +143,7 @@ const UserChatStyle = StyleSheet.create({
     // marginHorizontal:wp('5%'),
     // position:"absolute",top:hp('78%')
   },
-  microphoneContainerView:{
+  microphoneContainerView: {
     height: hp('6.5%'),
     width: hp('6.5%'),
     backgroundColor: AppColors.primary,

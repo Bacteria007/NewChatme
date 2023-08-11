@@ -26,17 +26,17 @@ const TermsStyle = StyleSheet.create({
         fontFamily: FontStyle.regularFont,
         lineHeight: 25,
       },
-      arrowupStyle: {
+      arrowupStyle:(bgColor)=>({
+        shadowRadius:1,
         height: hp('6%'),
         width: hp('6%'),
         borderRadius: hp('6%'),
-        backgroundColor: AppColors.bgprimary,
+        backgroundColor: bgColor,
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'flex-end',
-        elevation:4,
         margin:hp('4%')
-      },
+      }),
 });
 
 export default TermsStyle;

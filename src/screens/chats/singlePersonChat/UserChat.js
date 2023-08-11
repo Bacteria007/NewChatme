@@ -30,7 +30,7 @@ import AppContext from '../../../context/AppContext';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const socket = io.connect('http://192.168.83.238:8888');
+const socket = io.connect('http://192.168.10.15:8888');
 
 const UserChat = props => {
   const { baseUrl, currentUserId } = useContext(AppContext);

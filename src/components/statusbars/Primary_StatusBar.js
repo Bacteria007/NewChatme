@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { ThemeContext } from '../../context/ThemeContext';
+import AppColors from '../../assets/colors/Appcolors';
 
 const Primary_StatusBar = () => {
   const { theme } = useContext(ThemeContext)

@@ -9,21 +9,18 @@ import AppColors from '../colors/Appcolors';
 
 const AppSubHeaderStyle = StyleSheet.create({
 
-  container: {
-    backgroundColor:AppColors.transparent,
+  container:(color)=>({
+    backgroundColor:color,
     borderTopWidth: 0,
     borderBottomWidth: 0,
-    // backgroundColor:'red'
-  },
+  }),
   inputContainer: {
     height: hp('6%'),
     width: wp('95%'),
-    // backgroundColor: "rgba(255,255,255,0.3)", //dark theme
     borderRadius: 25,
   },
   searchText: {
-    // color: 'rgba(255,255,255,0.5)' //dark
-    color: AppColors.coolgray //light
+    color: AppColors.coolgray 
   },
   iconContainer: {
     paddingLeft: 4,
@@ -36,7 +33,6 @@ const AppSubHeaderStyle = StyleSheet.create({
      
   },
 crossStyle:{
-  // color: AppColors.lightwhite, //dar
     color: AppColors.coolgray, //light,
   
   size: 23,

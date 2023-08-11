@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 
 import {
   View,
@@ -7,7 +7,7 @@ import {
   Image,
   TextInput,
   FlatList,
- LayoutAnimation
+  LayoutAnimation
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'react-native-axios';
@@ -19,34 +19,35 @@ import {
 import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
 import BotChatHeader from '../../../components/Headers/ChatHeader/BotChatHeader';
 import BotScreenStyleSheet from '../../../assets/styles/BotStyleSheet/BotScreenStyleSheet';
+import AppContext from '../../../context/AppContext';
 
 const ChatBot = props => {
 
-   //***********************************      USE STATE    ************************* */
-
-
+  //***********************************      USE STATE    ************************* */
+  const { baseUrl, curentUser } = useContext(AppContext)
   const [data, setData] = useState([]);
+  const [msgHistory, setMessageHistory] = useState([]);
   const [textInput, setTextInput] = useState('');
+  const [userMsg, setUserMsg] = useState('');
+  const [botMsg, setBotMsg] = useState('');
 
- //***********************************     VARIABLES   ************************* */
- const flatListRef = useRef(null);
 
+  //***********************************     VARIABLES   ************************* */
+  const flatListRef = useRef(null);
   const apiKey = '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';
   const apiURL =
     'https://api.openai.com/v1/engines/text-davinci-003/completions';
 
+  //***********************************      FUNCTIONS    ************************* */
 
-
-    //***********************************      FUNCTIONS    ************************* */
- 
   const handleSend = async () => {
     const prompt = textInput;
     const response = await axios.post(
       apiURL,
       {
         prompt: prompt,
-        max_tokens: 1024,
-        temperature: 0.5,
+        max_tokens: 900,
+        temperature: 1.0,
       },
       {
         headers: {
@@ -56,14 +57,17 @@ const ChatBot = props => {
       },
     );
     const text = response.data.choices[0].text;
+    setBotMsg(text)
     const timestamp = new Date().toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
     });
+
+    setUserMsg(textInput)
     setData(prevData => [
       ...prevData,
       { type: 'user', text: textInput, timestamp: timestamp },
-  
+
     ]);
     setTextInput('');
     setTimeout(() => {
@@ -72,51 +76,70 @@ const ChatBot = props => {
         { type: 'bot', text: text, timestamp: timestamp },
       ]);
     }, 1000);
+
   };
 
+  const storeInDb = async () => {
+    const userid = await JSON.parse(curentUser._j)
+    console.log("userid in bot", userid)
+    const formData = new FormData();
+    formData.append("user_id", userid);
+    formData.append("user_msg", userMsg);
+    formData.append("bot_msg", botMsg);
+    // formData.append("timestamp", timestamp);
+    const response = await fetch(`${baseUrl}/store_msg`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        // 'Content-Type': 'application/json',
+      },
+      body: formData,
 
+    });
+
+    const data = await response.json(); // Parse the response body as JSON
+    // setMessageHistory(data)
+    console.log('after msg send:', data);
+  }
+  useEffect(() => {
+    storeInDb()
+  }, [])
 
   //***********************************      FLATLIST FUNCTION    ************************* */
-
-
   const renderMessage = ({ item }) => {
     if (item.type === 'bot') {
       const messageLines = item.text.split('\n');
       const remainingLines = messageLines.slice(2); // Exclude the first line
-
       return (
         <View style={BotScreenStyleSheet.botView}>
-        <Text style={BotScreenStyleSheet.botImage}>
-          {item.type === 'user' ? (
-            'Maryam:  '
-          ) : (
-            <View style={{ borderRadius: hp('5') }}>
-              <Image
-                source={require('../../../assets/imges/BotScreenImg/botPic.png')}
-                style={BotScreenStyleSheet.dpImageStyle}
-              />
-            </View>
-          )}
-        </Text>
-        <View style={BotScreenStyleSheet.botMsgContainer}>
-          {remainingLines.map((line, lineIndex) => (
-            <View key={lineIndex}>
-              <Text style={BotScreenStyleSheet.messageText}>{line}</Text>
-            </View>
-          ))}
-          <Text style={BotScreenStyleSheet.timestamp}>{item.timestamp}</Text>
-            
-        </View>
+          <Text style={BotScreenStyleSheet.botImage}>
+            {item.type === 'user' ? (
+              'Maryam:  '
+            ) : (
+              <View style={{ borderRadius: hp('5') }}>
+                <Image
+                  source={require('../../../assets/imges/BotScreenImg/botPic.png')}
+                  style={BotScreenStyleSheet.dpImageStyle}
+                />
+              </View>
+            )}
+          </Text>
+          <View style={BotScreenStyleSheet.botMsgContainer}>
+            {remainingLines.map((line, lineIndex) => (
+              <View key={lineIndex}>
+                <Text style={BotScreenStyleSheet.messageText}>{line}</Text>
+              </View>
+            ))}
+            <Text style={BotScreenStyleSheet.timestamp}>{item.timestamp}</Text>
+          </View>
         </View>
       );
     } else {
       return (
-        
         <View style={BotScreenStyleSheet.userMsgContainer}>
-        <Text style={BotScreenStyleSheet.messageText}>{item.text}</Text>
-        <Text style={BotScreenStyleSheet.timestamp}>{item.timestamp}</Text>
+          <Text style={BotScreenStyleSheet.messageText}>{item.text}</Text>
+          <Text style={BotScreenStyleSheet.timestamp}>{item.timestamp}</Text>
         </View>
-      
       );
     }
   };
@@ -125,27 +148,20 @@ const ChatBot = props => {
   useEffect(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [data]);
-
   useEffect(() => {
     if (flatListRef && flatListRef.current) {
       flatListRef.current.scrollToEnd({ animated: true });
     }
   }, [data]);
-
-
   //***********************************      DEWSIGNING OF SCREEN    ************************* */
   return (
     <View style={BotScreenStyleSheet.container}>
-      <Primary_StatusBar
-        darkModeBgColor={AppColors.black}
-        lightModeBgColor={AppColors.linearGradient.blue}
-        content={'light-content'}
-      />
+      <Primary_StatusBar />
       <BotChatHeader navigation={props.navigation} />
-      
+
 
       <FlatList
-          ref={flatListRef}
+        ref={flatListRef}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         data={data}
@@ -158,16 +174,16 @@ const ChatBot = props => {
         onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
       />
 
-<View style={BotScreenStyleSheet.inputContainer}>
+      <View style={BotScreenStyleSheet.inputContainer}>
         <TextInput
-            style={BotScreenStyleSheet.input}
+          style={BotScreenStyleSheet.input}
           value={textInput}
           onChangeText={text => setTextInput(text)}
           placeholder="Ask me Anything"
           placeholderTextColor={AppColors.gray}
         />
-        
-    
+
+
         {textInput === '' ? (
           <TouchableOpacity disabled={true}>
             <MaterialCommunityIcons
@@ -187,7 +203,7 @@ const ChatBot = props => {
             />
           </TouchableOpacity>
         )}
-          </View>
+      </View>
     </View>
   );
 };

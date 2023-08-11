@@ -1,11 +1,6 @@
-import { useContext } from "react";
-import { ThemeContext } from "../../context/ThemeContext";
-
 const AppColors = {
-
-
-  // primary:"dodgerblue",
   primary: "#BA68C8",
+  purple: "purple",
   white: 'white',
   black: 'black',
   gray: 'gray',
@@ -23,15 +18,17 @@ const AppColors = {
   tomato: '#dd5f56',
   red: 'red',
   darkThemeColors:{
-    bgColor:'rgb(15, 15, 15)',
+    bgColor:'rgb(0, 0, 0)',
+    // bgColor:'rgb(15, 15, 15)',
     groupDpIcon:"rgba(0,0,0,0.9)",
-    groupDpCircle:"rgba(255, 255, 255,0.7)",
-    darkHomeCards:"rgba(255,255,255,0.1)",
+    dpCircleColor:"rgba(255, 255, 255,0.7)",
+    darkHomeCards:"rgba(0,0,0,1)",
   },
   lightThemeColors:{
     bgColor:'rgb(15, 15, 15)',
-    groupDpIcon:'#383949',
-    groupDpCircle:"rgba(255, 255, 255,1)",
+    groupDpIcon:'#fff',
+    // groupDpIcon:'#383949',
+    dpCircleColor:"rgba(0, 0, 0,0.3)",
     darkHomeCards:"rgba(255,255,255,0.1)",
   },
   coolgray: '#383949', //pehlywala
@@ -44,7 +41,7 @@ const AppColors = {
   linearGradient:{
     // blue:'#9CECFB',pink:'#0052D4', // orange green
     // blue:'#659999',pink:'#f4791f', // orange green--
-    // blue:'#f5af19',pink:'#f12711', // orange red 
+    // blue:'#f5af19',pink:'#f12711', // orange red
     // blue:'#1f4037',pink:'#99f2c8', // green light green
     blue:'#c4ddfe',pink:'#ffb6c1',
     // blue:'rgba(217, 228, 254, 1)',pink:'rgba(255, 211, 219, 1)', //light shade
@@ -62,7 +59,7 @@ const AppColors = {
   periWinkle:"#BFA9E0",
 
   //  PURPLE COLOR VARIANT
-  // p1:  #BA68CB , #AB47BC , #9C27B0 , #8E24AA , #7B1FA2 , #6A1B9A , #4A148C 
+  // p1:  #BA68CB , #AB47BC , #9C27B0 , #8E24AA , #7B1FA2 , #6A1B9A , #4A148C
   // dEEP pURPLE :  #9575CD , 7E57C2 , 673AB7 , 5835B1 , 512DA8 , 4527A0 , 311B92 , B388FF
 
 
