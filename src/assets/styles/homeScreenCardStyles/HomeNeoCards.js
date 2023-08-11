@@ -89,8 +89,9 @@ const HomeNeoCards = StyleSheet.create({
 
   profileName: textColor => ({
     fontFamily: FontStyle.regularFont,
-    fontSize: 17,
+    fontSize: 16,
     color: textColor,
+    letterSpacing:0.3,
   }),
   lastMsg: textColor => ({
     fontFamily: FontStyle.regularFont,
