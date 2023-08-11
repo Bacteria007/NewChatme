@@ -37,10 +37,10 @@ const Settings2 = ({ navigation }) => {
     };
     const { language } = useContext(AppContext);
     const gloabalFunctions = GlobalFunction();
-    const iconName = 'arrow-right';
+    const arrow_icon = 'chevron-right';
     const iconSize = wp('9%');
     const iconSizeSmall = wp('5%');
-    const iconColor = AppColors.black;
+    const arrowColor = AppColors.black;
     const arrowSize = 17;
     const textColor = theme.profileNameColor;
 
@@ -51,7 +51,7 @@ const Settings2 = ({ navigation }) => {
             <View style={styles.container}>
                 {/* <Text style={styles.sectionHeadText}>Security</Text> */}
                 {/* Security */}
-                <View style={styles.sectionsStyle}>
+                <Card style={styles.sectionsStyle}>
                     <TouchableOpacity
                         onPress={() => {
                             navigation.navigate('changePassword');
@@ -61,19 +61,19 @@ const Settings2 = ({ navigation }) => {
                                 size={iconSize}
                                 icon="key"
                                 style={{ backgroundColor: 'transparent' }}
-                                color="blue"
+                                color="steelblue"
                             />
                             <View style={{ flex: 1 }}>
                                 <Text style={styles.itemName(textColor)}>Change Password</Text>
                             </View>
                             <Icons.Entypo
-                                name="chevron-right"
+                                name={arrow_icon}
                                 size={arrowSize}
-                                color={iconColor}
+                                color={arrowColor}
                             />
                         </View>
                         <View style={styles.dividerContainer}>
-                        <Divider />
+                            <Divider />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -91,9 +91,9 @@ const Settings2 = ({ navigation }) => {
                                 <Text style={styles.itemName(textColor)}>Change Number</Text>
                             </View>
                             <Icons.Entypo
-                                name="chevron-right"
+                                name={arrow_icon}
                                 size={arrowSize}
-                                color={iconColor}
+                                color={arrowColor}
                             />
                         </View>
                         <View style={styles.dividerContainer}>
@@ -115,15 +115,15 @@ const Settings2 = ({ navigation }) => {
                                 <Text style={styles.itemName(textColor)}>Blocked Contacts</Text>
                             </View>
                             <Icons.Entypo
-                                name="chevron-right"
+                                name={arrow_icon}
                                 size={arrowSize}
-                                color={iconColor}
+                                color={arrowColor}
                             />
                         </View>
                     </TouchableOpacity>
-                </View>
+                </Card>
                 {/*  Account preferences */}
-                <View style={styles.sectionsStyle}>
+                <Card style={styles.sectionsStyle}>
                     <TouchableOpacity
                         onPress={() => {
                             toggleModal();
@@ -133,19 +133,19 @@ const Settings2 = ({ navigation }) => {
                                 size={iconSize}
                                 icon="palette"
                                 style={{ backgroundColor: 'transparent' }}
-                                color="orchid"
+                                color="fuchsia"
                             />
                             <View style={{ flex: 1 }}>
                                 <Text style={styles.itemName(textColor)}>Theme</Text>
                             </View>
                             <Icons.Entypo
-                                name="chevron-right"
+                                name={arrow_icon}
                                 size={arrowSize}
-                                color={iconColor}
+                                color={arrowColor}
                             />
                         </View>
                         <View style={styles.dividerContainer}>
-                        <Divider />
+                            <Divider />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -155,17 +155,17 @@ const Settings2 = ({ navigation }) => {
                         <View style={styles.itemStyle}>
                             <Avatar.Icon
                                 size={iconSize}
-                                icon="activity"
+                                icon="play-circle"
                                 style={{ backgroundColor: 'transparent' }}
-                                color="green"
+                                color="lightseagreen"
                             />
                             <View style={{ flex: 1 }}>
-                                <Text style={styles.itemName(textColor)}>My Activity</Text>
+                                <Text style={styles.itemName(textColor)}>My Uploads</Text>
                             </View>
                             <Icons.Entypo
-                                name="chevron-right"
+                                name={arrow_icon}
                                 size={arrowSize}
-                                color={iconColor}
+                                color={arrowColor}
                             />
                         </View>
                         <View style={styles.dividerContainer}>
@@ -187,25 +187,25 @@ const Settings2 = ({ navigation }) => {
                                 <Text style={styles.itemName(textColor)}>Delete Account</Text>
                             </View>
                             <Icons.Entypo
-                                name="chevron-right"
+                                name={arrow_icon}
                                 size={arrowSize}
-                                color={iconColor}
+                                color={arrowColor}
                             />
                         </View>
                     </TouchableOpacity>
-                </View>
+                </Card>
                 {/*  App language */}
-                <View style={styles.sectionsStyle}>
+                <Card style={styles.sectionsStyle}>
                     <TouchableOpacity
                         onPress={() => {
                             navigation.navigate('appLanguage');
                         }}>
                         <View style={styles.itemStyle}>
                             <Avatar.Icon
-                                size={6}
-                                icon={()=><Icons.SimpleLineIcons name="globe" size={iconSizeSmall} color="blue" />}
-                                style={{ backgroundColor: 'red' }}
-                                color="blue"
+                                size={iconSize}
+                                icon={() => <Icons.SimpleLineIcons name="globe" size={iconSizeSmall} color="grey" />}
+                                style={{ backgroundColor: "transparent" }}
+                                color="grey"
                             />
                             <View style={{ flex: 1 }}>
                                 <Text style={styles.itemName(textColor)}>
@@ -214,13 +214,64 @@ const Settings2 = ({ navigation }) => {
                                 </Text>
                             </View>
                             <Icons.Entypo
-                                name="chevron-right"
+                                name={arrow_icon}
                                 size={arrowSize}
-                                color={iconColor}
+                                color={arrowColor}
                             />
                         </View>
+                        <View style={styles.dividerContainer}>
+                            <Divider />
+                        </View>
+
                     </TouchableOpacity>
-                </View>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('notification');
+                        }}>
+                        <View style={styles.itemStyle}>
+                            <Avatar.Icon
+                                size={iconSize}
+                                icon="bell"
+                                style={{ backgroundColor: 'transparent' }}
+                                color="tomato"
+                            />
+                            <View style={{ flex: 1 }}>
+                                <Text style={styles.itemName(textColor)}>Notifications</Text>
+                            </View>
+                            <Icons.Entypo
+                                name={arrow_icon}
+                                size={arrowSize}
+                                color={arrowColor}
+                            />
+                        </View>
+                        <View style={styles.dividerContainer}>
+                            <Divider />
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('changePassword');
+                        }}>
+                        <View style={styles.itemStyle}>
+                            <Avatar.Icon
+                                size={iconSize}
+                                icon={() => <Icons.MaterialCommunityIcons name="star" size={20} color="gold" />}
+                                style={{ backgroundColor: 'transparent' }}
+                                color="gold"
+                            />
+                            <View style={{ flex: 1 }}>
+                                <Text style={styles.itemName(textColor)}>Requests</Text>
+                            </View>
+                            <Icons.Entypo
+                                name={arrow_icon}
+                                size={arrowSize}
+                                color={arrowColor}
+                            />
+                        </View>
+                        
+                    </TouchableOpacity>
+                </Card>
+                {/* notifications */}
             </View>
         </DrawerScreenswrapper>
     );
@@ -231,17 +282,20 @@ export default Settings2;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: AppColors.bgprimary,
+        backgroundColor: "#fff",
         height: hp('100'),
         width: wp('100'),
+        // justifyContent: 'center', 
+        alignItems: 'center'
+
     },
     sectionsStyle: {
         width: wp('100'),
-        borderRadius: 10,
+        borderRadius: 17,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        elevation: 4,
+        // elevation: 2,
         marginTop: 10
     },
     itemStyle: {

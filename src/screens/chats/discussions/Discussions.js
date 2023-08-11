@@ -25,7 +25,12 @@ const Discussions = ({ navigation }) => {
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const globalFunctions = GlobalFunction()
   const [contactList, setContactList] = useState([]);
+ const u=globalFunctions.fetchUserId();
 
+ useEffect(()=>{
+  console.log("-------------",u)
+  u
+ },[u])
 
   const fetchContactList = async () => {
     const userid = await AsyncStorage.getItem('user')

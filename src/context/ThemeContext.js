@@ -19,15 +19,13 @@ const initialTheme = {
     headerSearchBarIcons: AppColors.coolgray,
     chatsHeaderBg:AppColors.linearGradient.blue,
     statusBarBg:AppColors.bgprimary,
-      statusBarText: 'dark-content',
+    statusBarText: 'dark-content',
     drawerColor:AppColors.Mauve,
-     backgroundColor:AppColors.bgprimary,
-     buttonsColor:AppColors.purple,
-     buttonsTextColor:AppColors.white,
-     addBtnColor:AppColors.black,
-     addBtnTextColor:AppColors.white,
-
-
+    backgroundColor:AppColors.bgprimary,
+    buttonsColor:AppColors.purple,
+    buttonsTextColor:AppColors.white,
+    addBtnColor:AppColors.black,
+    addBtnTextColor:AppColors.white,
 };
 
 // Create the theme context

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
-  View, Alert, TouchableOpacity, Image
+  View, Alert, TouchableOpacity, Image, StyleSheet
 } from 'react-native';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
@@ -18,6 +18,7 @@ import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import AppColors from '../../../assets/colors/Appcolors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Text } from 'react-native';
+import FontStyle from '../../../assets/styles/FontStyle';
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
@@ -104,37 +105,28 @@ const AllGroups = ({ navigation }) => {
       >
         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
           <Neomorph
-            omorph
-            darkShadowColor={AppColors.purple} // <- set this
-            lightShadowColor={AppColors.purple}// <- this
+
+            darkShadowColor={AppColors.purple}
+            lightShadowColor={AppColors.purple}
             swapShadows
             style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
           >
-            <Neomorph
-              darkShadowColor={AppColors.primary}
-              lightShadowColor={AppColors.primary}
-              swapShadows
-              style={{
-                height: hp('5.5'),
-                width: hp('5.5'),
-                borderRadius: hp('5'),
-                backgroundColor: theme.homeCardColor,
-                justifyContent: 'center',
-                alignItems: 'center',
-                shadowOpacity: 1, // <- and this or yours opacity
-                shadowRadius: 1,
-              }}
-            >
-              <Icons.AntDesign name='pluscircle' size={hp('4')} color={AppColors.purple} />
-            </Neomorph>
-            <Text style={[HomeNeoCards.profileName(theme.profileNameColor), { marginLeft: 10 }]}>New Group</Text>
+            <View style={styles.container}>
+              <View style={styles.button(theme.dpCircleColor)}>
+                <Icons.Ionicons name={'people'} size={25} color={theme.groupDpIconColor} />
+              </View>
+              <TouchableOpacity style={styles.plusButton}>
+                <Icons.MaterialCommunityIcons name="plus" size={wp('3.8%')} color="white" />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.gNameStyle(darkThemeActivator)}>New Group</Text>
           </Neomorph>
-          {/* <View style={{justifyContent:'center',alignItems:'center',flexDirection:'row'}}>
+
+        </View>
+        {/* FFF8F8 */}
+        {/* <View style={{justifyContent:'center',alignItems:'center',flexDirection:'row'}}>
             <Image source={require('../../../assets/imges/groups/createGroup.jpg')} style={{height:heightPercentageToDP('6%'),width:heightPercentageToDP('6'),borderRadius:heightPercentageToDP('6'),borderColor:'grey',borderWidth:2}}/>
             </View> */}
-
-          {/* FFF8F8 */}
-        </View>
       </TouchableOpacity>
       <FlatList
         style={{ marginTop: 10 }}
@@ -151,3 +143,46 @@ const AllGroups = ({ navigation }) => {
   );
 };
 export default AllGroups;
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: AppColors.transparent
+  },
+  button: (color) => ({
+    width: wp('12%'),
+    height: wp('12%'),
+    borderRadius: wp('7.5%'),
+    backgroundColor: color,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }),
+  plusButton: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: wp('4.8%'),
+    height: wp('4.8%'),
+    borderRadius: wp('2.4%'),
+    backgroundColor: 'purple', // WhatsApp green color
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  gNameStyle: darkThemeActivator => ({
+    fontFamily: FontStyle.regularFont,
+    fontSize: 17,
+    color: darkThemeActivator ? "white" : "purple",
+    marginLeft: 10,
+    letterSpacing: 1,
+    textShadowColor: darkThemeActivator ? "white" : 'rgba(255, 0, 0, 0.2)',
+    textShadowOffset: { width: 2, height: 2 }, // Shadow offset
+    textShadowRadius: 2, // Shadow radius
+
+  }),
+});

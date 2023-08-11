@@ -23,14 +23,14 @@ const DrawerHeaderStyle = StyleSheet.create({
     alignItems: 'center',
     justifyContent:'flex-start',
     // backgroundColor:'red',
-    paddingHorizontal:wp('1%')
+    paddingHorizontal:wp('3%')
     
   },
   screenNameStyle: {
     fontSize: wp('5.5%'),
     color: AppColors.white,
     fontFamily: FontStyle.regularFont,
-    marginLeft:wp('1%')
+    marginLeft:wp('3%')
   },
 
 });

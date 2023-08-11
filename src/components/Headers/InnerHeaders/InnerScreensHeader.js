@@ -25,12 +25,12 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
 
       <Primary_StatusBar />
       {/* <Surface> */}
-      <Appbar.Header style={{backgroundColor:theme.backgroundColor}}>
+      {/* <Appbar.Header style={{backgroundColor:theme.backgroundColor}}>
         <Appbar.BackAction onPress={() => { navigation.goBack() }} />
         <Appbar.Content title={screenName} style={{ paddingTop: 7 }} />
-      </Appbar.Header>
+      </Appbar.Header> */}
       {/* </Surface> */}
-      {/* <View style={[DrawerHeaderStyle.headerView, { backgroundColor: theme.statusBarBg }]}>
+      <View style={[DrawerHeaderStyle.headerView, { backgroundColor: theme.backgroundColor }]}>
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();
@@ -43,7 +43,7 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
           />
         </TouchableOpacity>
         <Text style={[DrawerHeaderStyle.screenNameStyle, { color: theme.headerIconsColor }]}>{screenName}</Text>
-      </View> */}
+      </View>
     </View>
 
   );
