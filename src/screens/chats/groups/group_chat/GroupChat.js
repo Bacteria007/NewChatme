@@ -38,7 +38,7 @@ import moment from 'moment';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import GroupChatInput from './GroupChatInput';
 
-const socket = io.connect('http://192.168.43.145:8888');
+const socket = io.connect('http://192.168.10.15:8888');
 
 const GroupChat = props => {
     // VARIABLES

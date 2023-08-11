@@ -507,11 +507,11 @@ const App = props => {
               component={Theme}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               name="activity"
               component={MyActivity}
               options={{ headerShown: false }}
-            />
+            /> */}
             <Stack.Screen
               name="appLanguage"
               component={LanguageChangeScreen}

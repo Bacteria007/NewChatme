@@ -95,9 +95,7 @@ const Discussions = ({ navigation }) => {
         renderItem={({ item }) => <RenderComponent name={item.name} dp={null} callingScreen={"Discussions"} discussions_item={item} navigation={navigation} />}
         ListFooterComponent={globalFunctions.renderFooter(flatListRef, contactList)}
       />
-
     </View>
-
   );
 };
 
