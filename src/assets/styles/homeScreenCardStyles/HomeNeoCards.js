@@ -25,14 +25,14 @@ const HomeNeoCards = StyleSheet.create({
     zIndex: 100,
   },
   flatlistItemContainer: {
-    marginBottom: 10,
+    marginBottom: 11,
     marginTop: 1,
     justifyContent: 'center',
     alignItems: 'center',
     // top: 115,
   },
   neomorphStyle: cardColor => ({
-    shadowRadius: 1,
+    shadowRadius: 1.5,
     borderRadius: wp('1.5'),
     flexDirection: 'row',
     alignItems: 'center',

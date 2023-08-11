@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Icons } from '../assets/Icons';
 import TermsStyle from '../assets/styles/tremsAndConditions/TermsStyle';
 import { ThemeContext } from '../context/ThemeContext';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import AppColors from '../assets/colors/Appcolors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GlobalFunction = () => {
   const { theme } = useContext(ThemeContext);
@@ -25,17 +26,17 @@ const GlobalFunction = () => {
           onPress={() => {
             scrollToTop(flatListRef);
           }}>
-            <View style={{alignItems:'flex-end'}}>
-          <Neomorph
-            darkShadowColor={AppColors.purple}
-            swapShadows
-            style={[TermsStyle.arrowupStyle(theme.homeCardColor)]}>
-            <Icons.AntDesign
-              name="arrowup"
-              size={20}
-              color={theme.profileNameColor}
-            />
-          </Neomorph>
+          <View style={{ alignItems: 'flex-end' }}>
+            <Neomorph
+              darkShadowColor={AppColors.purple}
+              swapShadows
+              style={[TermsStyle.arrowupStyle(theme.homeCardColor)]}>
+              <Icons.AntDesign
+                name="arrowup"
+                size={20}
+                color={theme.profileNameColor}
+              />
+            </Neomorph>
           </View>
         </TouchableOpacity>
       );
@@ -57,11 +58,20 @@ const GlobalFunction = () => {
     //   );
     // }
   };
-
+  const fetchUserId = async () => {
+    const user = await AsyncStorage.getItem('user');
+    const userId= await JSON.parse(user);
+    console.log("user id in all gloabl", JSON.parse(userId));
+    return userId;
+  }
+  // useEffect(()=>{
+  //   fetchUserId()
+  // },[fetchUserId])
   return {
     getRandomColor,
     scrollToTop,
     renderFooter,
+    fetchUserId,
   };
 };
 

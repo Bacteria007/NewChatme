@@ -50,7 +50,7 @@ const GroupChat = props => {
     const adminId = item.group_admin;
     const groupId = item._id;
     // console.log('groups ite', item.members);
-    console.log('curentUser==================', currentId);
+    console.log('curentUser ID==================', currentId);
     const [newMsg, setNewMsg] = useState('');
     const [msgList, setMsgList] = useState([]);
     const [height, setHeight] = useState(hp('7%')); // Initialize height with a default value
@@ -72,13 +72,14 @@ const GroupChat = props => {
     };
     const getSenderDetails = async () => {
         const userDetails = groupMembers.find(member => member._id === currentId);
-        console.log("current logged in user--^^^^^^^^^", userDetails)
+        // const udeatils= await JSON.parse(userDetails)
+        console.log("current logged in user in group chat--^^^^^^^^^", userDetails);
         return userDetails; // This will return the matching user details or undefined if not found
     };
     const sendMessage = async () => {
 
         const user_details = await getSenderDetails();
-        console.log('user_details===========', user_details);
+        console.log('user_details===in send message of group chat========', user_details);
         const msgData = {
             text: newMsg,
             sender_id: user_details._id,
@@ -92,9 +93,9 @@ const GroupChat = props => {
         setNewMsg('')
     }
     const handleGetCurrentMsg = (msgData) => {
-        // console.log(
-        //     `Received message: ${msgData.text} from sender: ${msgData.sender_name}`, 'backgroud:orange;color:black'
-        // );
+        console.log(
+            `Received message: ${msgData.text} from sender: ${msgData.sender_name}`, 'backgroud:orange;color:black'
+        );
         setMsgList([...msgList, msgData]);
     };
     //   msg history using group id ab pta chaly ga
@@ -110,7 +111,7 @@ const GroupChat = props => {
         }).then(async (res) => {
             const msgs = await res.json()
             setMsgList(msgs)
-            // console.log("msgs resposne after fetch db", msgs)
+            console.log("msgs resposne after fetch db", msgs)
             // console.log("histor mn msglist state ", msgList)
         }).catch((err) => {
             console.log(err)

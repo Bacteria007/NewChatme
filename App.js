@@ -86,20 +86,36 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const App = props => {
-  let iconSize = 18
-  let reelsIconSize = 19
-  const { darkThemeActivator, theme } = useContext(ThemeContext);
+  const { darkThemeActivator, theme, isUserLoggedin } =
+    useContext(ThemeContext);
+  let iconSize = 18;
+  //Tab Variables Start
+  const reelsIconSize = 19;
+  const focusedColor = theme.focusedTabIconsColor;
+  const notfocusedColor = theme.notfocusedColor;
+  const tabColor = theme.tabColor;
+  const tabFont = FontStyle.boldFont;
+  //Tab Variables End
+  //Drawer Variables Start
+  const myFontFamily = FontStyle.regularFont;
+  const drawerBackgroungColor = theme.drawerColor;
+  const activeTintColor = AppColors.black;
+  const inActiveTintColor = AppColors.black;
+  const activeBgColor = AppColors.white;
+  const inActiveBgColor = AppColors.transparent;
+  //Drawer Variables End
+
   // const {  curentUser } = useContext(AppContext);
   // const userid=async (()=>{
 
   // })
-  const loggedInUserId = AsyncStorage.getItem("user")
+  const loggedInUserId = AsyncStorage.getItem('user');
   // const {updateCurrentUserId}=useContext(AppContext);
   const blank = '';
   // const loggedInUser=AsyncStorage.getItem('user')
   const logoutUser = async ({ navigation }) => {
     try {
-      console.log("isUserLoggedin ", isUserLoggedin)
+      console.log('isUserLoggedin ', isUserLoggedin);
       await AsyncStorage.removeItem('user');
       // storeLoggedinStatus(false)
       console.log('User removed from storage');
@@ -113,10 +129,8 @@ const App = props => {
     }
   };
 
-
-
   const TabScreens = () => {
-
+    // Animated
     let progress = useDrawerProgress();
     console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
@@ -147,23 +161,21 @@ const App = props => {
                 : AppColors.transparent,
               justifyContent: 'flex-end',
               alignItems: 'center',
-              backgroundColor: AppColors.tab,
-
+              backgroundColor: tabColor,
             },
-            tabBarItemStyle: { backgroundColor: theme.tabColor },
             tabBarLabelStyle: {
-              fontWeight: 'bold',
-              fontSize: wp('3.5%'),
+              fontSize: wp('2.8%'),
               marginBottom: hp('1%'),
               marginTop: hp('0%'),
+              fontFamily: tabFont,
             },
-            tabBarActiveTintColor: theme.focusedTabIconsColor,
-            tabBarInactiveTintColor: theme.notFocusedTabIconsColor,
+            tabBarItemStyle: { backgroundColor: tabColor },
+            tabBarActiveTintColor: focusedColor,
+            tabBarInactiveTintColor: notfocusedColor,
             tabBarHideOnKeyboard: 'true',
             tabBarPressColor: 'rgba(255,255,255,0.6)',
             tabBarIcon: ({ focused }) => {
-              let iconColor = focused ? theme.focusedTabIconsColor : theme.notFocusedTabIconsColor
-
+              let iconColor = focused ? focusedColor : notfocusedColor;
               if (route.name === 'Chats') {
                 return (
                   <Icons.Ionicons
@@ -174,7 +186,6 @@ const App = props => {
                         : 'ios-chatbubbles-outline'
                     }
                     color={iconColor}
-
                   />
                 );
               } else if (route.name === 'Calls') {
@@ -183,7 +194,6 @@ const App = props => {
                     size={iconSize}
                     name={focused ? 'call-sharp' : 'call-outline'}
                     color={iconColor}
-
                   />
                 );
               } else if (route.name === 'Contacts') {
@@ -192,7 +202,6 @@ const App = props => {
                     size={iconSize}
                     name={focused ? 'contacts' : 'contacts-outline'}
                     color={iconColor}
-
                   />
                 );
               } else if (route.name === 'Reels') {
@@ -201,7 +210,6 @@ const App = props => {
                     name="stream"
                     size={reelsIconSize}
                     color={iconColor}
-
                   />
                 ) : darkThemeActivator ? (
                   <StreamOutlineBlack />
@@ -214,7 +222,6 @@ const App = props => {
                     size={iconSize}
                     name={focused ? 'people-sharp' : 'people-outline'}
                     color={iconColor}
-
                   />
                 );
               }
@@ -238,16 +245,16 @@ const App = props => {
             headerShown: false,
             overlayColor: 'transparent',
             drawerType: 'slide',
-            drawerActiveTintColor: AppColors.black,
-            drawerInactiveTintColor: AppColors.black,
+            drawerActiveTintColor: activeTintColor,
+            drawerInactiveTintColor: inActiveTintColor,
             drawerStyle: {
               width: wp('50%'),
-              backgroundColor: theme.drawerColor,
+              backgroundColor: drawerBackgroungColor,
             },
             drawerLabelStyle: { marginLeft: wp('-6%') },
-            drawerActiveBackgroundColor: AppColors.white,
+            drawerActiveBackgroundColor: activeBgColor,
             sceneContainerStyle: {
-              backgroundColor: theme.drawerColor,
+              backgroundColor: drawerBackgroungColor,
             },
             // drawerHideStatusBarOnOpen: true,
             // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen
@@ -408,7 +415,9 @@ const App = props => {
           <ZegoCallInvitationDialog />
           <Stack.Navigator
             options={{ headerShown: false }}
-            initialRouteName={loggedInUserId ? "DrawerScreens" : "DrawerScreens"}>
+            initialRouteName={
+              loggedInUserId ? 'DrawerScreens' : 'DrawerScreens'
+            }>
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
@@ -435,7 +444,7 @@ const App = props => {
               component={UserChat}
               options={{ headerShown: false }}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="activity"
               component={MyActivity}
               options={{ headerShown: false }}
