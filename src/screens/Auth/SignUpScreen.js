@@ -71,7 +71,7 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
     formdata.append('phoneNo', phoneNumber);
     formdata.append('password', password);
     // formdata.append('avatar', base64Image);
-  
+
     axios({
       method: 'post',
       url: `${baseUrl}/signup`,
@@ -118,10 +118,7 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
         darkModeBgColor={'black'}
         lightModeBgColor={AppColors.primary}
       />
-    
-
       <KeyboardAvoidingView
-      
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
       >
@@ -146,7 +143,6 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
               // translation="eng"
             />
           </View>
-
           <View style={[SignUpStyleSheet.phoneNumberContainer]}>
             <Text style={[SignUpStyleSheet.countryCode]}>+{countryCode}</Text>
             <TextInput
@@ -158,7 +154,6 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
               value={phoneNumber}
             />
           </View>
-
           <View style={[SignUpStyleSheet.passwordContainer]}>
             <TextInput
               style={[SignUpStyleSheet.passwordInput]}
@@ -176,7 +171,6 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
               />
             </TouchableOpacity>
           </View>
-         
           <TouchableOpacity
             onPress={() => {
               Keyboard.dismiss;
@@ -210,26 +204,21 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
                   );
                   return;
                 } else {
-
                   setPasswordSnackWidth(!false);
                   showSnackbar(
                     TranslationFile[language]
                       .Password_contain_atLeast_8_character,
                   );
-
                   if (!specialCharRegex.test(password)) {
                     setPasswordSnackWidth(!false);
                     showSnackbar(TranslationFile[language].Password_must_contain_at_least_one_special_character);
                     return;
                   }
-
                   return;
-
                 }
               } else {
                 navigation.replace('AfterSignUpProfileScreen');
               }
-
               // handleSubmit();
               handleSignUp({navigation})
             }}

@@ -18,7 +18,7 @@ ZegoUIKitPrebuiltCallService.useSystemCallingUI([ZIM, ZPNs]);
 const Root = () => (
     <ThemeProvider>
       <App />
-    </ThemeProvider>
+      </ThemeProvider>
   );
   
   AppRegistry.registerComponent(appName, () => Root);

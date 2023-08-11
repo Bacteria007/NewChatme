@@ -25,6 +25,7 @@ import { Card } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppContext from '../../context/AppContext';
 import moment from 'moment';
+import HeaderNew from '../../components/Headers/AppHeaders/HeaderNew';
 
 const Calls = ({ navigation }) => {
   const { baseUrl } = useContext(AppContext);
@@ -271,32 +272,23 @@ const Calls = ({ navigation }) => {
   };
 
   return (
-    <View style={HomeNeoCards.wholeScreenContainer}>
-      {/*start  top itny %, left %  ---  end bottom , left */}
-      <LinearGradient
-        colors={[theme.linearBlue, theme.linearPink]}
-        start={{ x: 0.0, y: 0.0 }}
-        end={{ x: 1, y: 1 }}
-        locations={[0.3, 0.9]}
-        style={StyleSheet.absoluteFillObject}
-      />
-      <CallsScreenHeader
+    <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
+      {/* <CallsScreenHeader
         navigation={navigation}
         headerTitle={'Calls'}
         handleSearchOnChange={handleSearch}
         searchQuery={searchText}
-      />
-
+      /> */}
+      <HeaderNew navigation={navigation} headerTitle={'Calls'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       <FlatList
+        style={{ marginTop: 10 }}
         showsVerticalScrollIndicator={false}
         data={searchedCalls == '' ? reversedData : searchedCalls}
         renderItem={renderItem}
-        // keyExtractor={(item) => { item.callerId.toString() }}
-        // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
+      // keyExtractor={(item) => { item.callerId.toString() }}
+      // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
       />
 
-      {/* </LinearGradient> */}
-      {/* </SafeAreaView> */}
     </View>
   );
 };

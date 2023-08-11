@@ -4,15 +4,17 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import InnerScreensHeader from '../components/Headers/InnerHeaders/InnerScreensHeader';
 import { Icons } from '../assets/Icons';
 import TermsStyle from '../assets/styles/tremsAndConditions/TermsStyle';
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
 import { useDrawerProgress } from '@react-navigation/drawer'
+import { ThemeContext } from '../context/ThemeContext';
 
 const TermsAndConditions = ({ navigation }) => {
   const scrollViewRef = useRef(null);
+  const{theme}=useContext(ThemeContext)
   const scrollToTop = () => {
     scrollViewRef.current.scrollTo({ y: 0, animated: true });
   };
@@ -74,9 +76,9 @@ const TermsAndConditions = ({ navigation }) => {
           onPress={() => {
             scrollToTop();
           }}
-        style={TermsStyle.arrowupStyle}
+        style={TermsStyle.arrowupStyle(theme.homeCardColor)}
         >
-            <Icons.AntDesign name="arrowup" size={20} color={'black'} />
+            <Icons.AntDesign name="arrowup" size={20} color={theme.profileNameColor} />
         </TouchableOpacity>
       </View>
     </Animated.ScrollView>
