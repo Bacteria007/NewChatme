@@ -89,14 +89,14 @@ const CreateGroup = () => {
             setSelectedMembers(prevSelected => [...prevSelected, item]);
           } else {
             // selected member wali array mn agr wo item pehly sy hy or user ny phr sy click kiya mtlab cross pr click kiya to wo usko remove krdy ga selecetd member wali array sy
-          // If deselecting, remove from selectedMembers
+            // If deselecting, remove from selectedMembers
             setSelectedMembers(prevSelected =>
-              prevSelected.filter( selectedUser => selectedUser._id !== item._id),
+              prevSelected.filter(selectedUser => selectedUser._id !== item._id),
             );
           }
           return { ...user, isSelected: !user.isSelected };
         }
-        console.log("all ",allUsers)
+        console.log("all ", allUsers)
         return user;
       }),
     );
@@ -148,54 +148,65 @@ const CreateGroup = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <View style={[HomeNeoCards.flatlistItemContainer]}>
-        {/* discussion content container */}
+      <View
+        style={HomeNeoCards.flatlistItemContainer}>
         <Neomorph
-        darkShadowColor={AppColors.purple}
+          darkShadowColor={AppColors.purple} // <- set this
+          lightShadowColor={AppColors.purple}// <- this
           swapShadows
-          style={{
-            shadowRadius: 0.6,
-            borderRadius: wp('1.5'),
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-            height: hp('10%'),
-            width: wp('95%'),
-            backgroundColor: theme.homeCardColor,
-          }}>
-          <View style={HomeNeoCards.nameAndMsgContainer}>
-            <Text
-              style={HomeNeoCards.profileName(theme.profileNameColor)}>
-              {item.name}
-            </Text>
-            <Text style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
-              {item.phoneNo}
-            </Text>
-          </View>
-          {/* select member*/}
-          <TouchableOpacity
-            onPress={() => toggleSelection(item)}
-            style={{
-              height: hp('5%'),
-              width: wp('13%'),
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            {item.isSelected ? (
-              // <Neomorph  swapShadows style={[HomeNeoCards.addUserinGroup,{width:wp('17')}]}>
-              //   <Text style={{ color: "black" }}>Remove</Text>
-              // </Neomorph>
-              <View style={styles.doneButton(theme.addBtnColor)}>
-                <Icons.Entypo name="cross" size={23} color={theme.addBtnTextColor} />
+          style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
+        >
+          {item.dp == null ?
+            <View style={HomeNeoCards.dpVew}>
+              <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
+                <TouchableOpacity>
+                  {/* <Image
+                            source={item.dpImage}
+                            style={[HomeNeoCards.dpIcon]}
+                            /> */}
+
+                  <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
+                </TouchableOpacity>
               </View>
-            ) : (
-              // <Avatar.Icon size={30} icon={"cross"} color='white' style={{backgroundColor:'red'}}/>
-              <Neomorph swapShadows style={HomeNeoCards.addUserinGroup(theme.addBtnColor)}>
-                <Text style={{ color: theme.addBtnTextColor }}>Add</Text>
-                {/* <Icons.Ionicons name='person-add-sharp' size={20} color={theme.addBtnTextColor} /> */}
-              </Neomorph>
-            )}
-          </TouchableOpacity>
+            </View>
+            :
+            // jo backend sy aye ga wo is null ki jga pr rkhna hy
+            null
+          }
+
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
+            <View style={HomeNeoCards.nameAndMsgContainer}>
+              <Text
+                style={HomeNeoCards.profileName(theme.profileNameColor)}>
+                {item.name}
+              </Text>
+            </View>
+
+            {/* select member*/}
+            <TouchableOpacity
+              onPress={() => toggleSelection(item)}
+              style={{
+                height: hp('5%'),
+                width: wp('13%'),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {item.isSelected ? (
+                // <Neomorph  swapShadows style={[HomeNeoCards.addUserinGroup,{width:wp('17')}]}>
+                //   <Text style={{ color: "black" }}>Remove</Text>
+                // </Neomorph>
+                <View style={styles.doneButton(theme.addBtnColor)}>
+                  <Icons.Entypo name="cross" size={23} color={theme.addBtnTextColor} />
+                </View>
+              ) : (
+                // <Avatar.Icon size={30} icon={"cross"} color='white' style={{backgroundColor:'red'}}/>
+                <Neomorph swapShadows style={HomeNeoCards.addUserinGroup(theme.addBtnColor)}>
+                  <Text style={{ color: theme.addBtnTextColor }}>Add</Text>
+                  {/* <Icons.Ionicons name='person-add-sharp' size={20} color={theme.addBtnTextColor} /> */}
+                </Neomorph>
+              )}
+            </TouchableOpacity>
+          </View>
         </Neomorph>
       </View>
     );
@@ -215,8 +226,9 @@ const CreateGroup = () => {
     <Provider>
       <View style={styles.container}>
         <Surface>
-          {selectedMembers.length > 0 ? (
-            <View style={styles.memberlistContainer}>
+          <Text style={HomeNeoCards.profileName(theme.profileNameColor)}>Select Members</Text>
+          <View style={styles.memberlistContainer}>
+            {selectedMembers.length > 0 ? (
               <ScrollView horizontal>
                 {selectedMembers.map(member => {
                   return (
@@ -227,15 +239,26 @@ const CreateGroup = () => {
                   );
                 })}
               </ScrollView>
-            </View>
-          ) : null}
+            ) : null}
+          </View>
         </Surface>
         <FlatList
           showsVerticalScrollIndicator={false}
           data={allUsers.length > 0 ? allUsers : null}
           renderItem={renderItem}
         />
-        <FAB
+        <Button
+          mode="contained"
+          style={{
+            width: wp('40'),
+            alignSelf: 'center',
+            margin: 10,
+            backgroundColor: theme.buttonsColor,
+          }}
+          onPress={() => toggleModal()}>
+          <Text>Create Now</Text>
+        </Button>
+        {/* <FAB
           buttonColor={theme.buttonsColor}
           iconTextColor={theme.buttonsTextColor}
           onClickAction={() => {
@@ -244,7 +267,8 @@ const CreateGroup = () => {
           }}
           visible={visible ? false : true}
           iconTextComponent={<Icons.AntDesign name="arrowright" />}
-        />
+        /> */}
+
         <Portal>
           <Modal
             visible={visible}
@@ -274,11 +298,11 @@ const CreateGroup = () => {
                 width: wp('40'),
                 alignSelf: 'center',
                 margin: 10,
-                backgroundColor:theme.buttonsColor,
+                backgroundColor: theme.buttonsColor,
               }}
-              onPress={() => createNewGroup(groupName).then(()=>{hideModal(),setgroupName('')})}>
+              onPress={() => createNewGroup(groupName).then(() => { hideModal(), setgroupName('') })}>
               <Text
-                style={{ color:theme.buttonsTextColor, fontFamily: FontStyle.regularFont }}>
+                style={{ color: theme.buttonsTextColor, fontFamily: FontStyle.regularFont }}>
                 Create Group
               </Text>
             </Button>
@@ -327,11 +351,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  doneButton:(btnColor)=>({
+  doneButton: (btnColor) => ({
     height: hp('4.5'),
     width: hp('4.5'),
     borderRadius: hp('4.5'),
-    backgroundColor: btnColor ,
+    backgroundColor: btnColor,
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',

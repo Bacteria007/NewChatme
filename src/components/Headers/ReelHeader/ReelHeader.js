@@ -70,7 +70,7 @@ const ReelHeader = ({navigation}) => {
                   res.assets[0].type === 'video/swf' ||
                   res.assets[0].type === 'video/ogv' ||
                   res.assets[0].type === 'video/mpeg' ||
-                  res.assets[0].type === 'video/m2ts'
+                  res.assets[0].type === 'video/m2ts' 
                 ) {
                   uploadVideo(res.assets[0]);
                 } else {
