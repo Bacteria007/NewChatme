@@ -30,13 +30,13 @@ import AppContext from '../../../context/AppContext';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const socket = io.connect('http://192.168.10.15:8888');
+const socket = io.connect('http://192.168.83.238:8888');
 
 const UserChat = props => {
   const { baseUrl, currentUserId } = useContext(AppContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isInnerModalVisible, setInnerModalVisible] = useState(false);
-  const [mood, setMood] = useState('');
+  
   const apiKey = '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';
   const [isSending, setIsSending] = useState(false);
 
@@ -87,13 +87,16 @@ const UserChat = props => {
   const toggleInnerModal = () => {
     setInnerModalVisible(!isInnerModalVisible);
   };
-
+useEffect(()=>{
+console.log('data')
+},[isSending])
   // const {item} = props.route.params;
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
   const flatListRef = useRef(null);
   const { itm } = props.route.params;
   const recieverId = itm.recieverId;
+
   AsyncStorage.setItem('receiverId', recieverId)
     .then(() => {
       // console.log('Receiver ID stored successfully');
@@ -104,13 +107,11 @@ const UserChat = props => {
   // console.log("item",itm)
 
   const sendMessage = async () => {
-      console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-      setIsSending(true);
-      // try {
-        const response = await axios.post(
+     setIsSending(true);
+       await axios.post(
           'https://api.openai.com/v1/engines/text-davinci-003/completions',
           {
-            prompt: `Detect the mood of the following text: "${currentMessage.trim()}"`,
+            prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
             max_tokens: 1024,
             temperature: 0.5,
           },
@@ -119,20 +120,18 @@ const UserChat = props => {
               Authorization: `Bearer ${apiKey}`,
             },
           },
-        ).then(async()=>{
-          console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-          console.log("TRY CALLED");
-          console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-          const moodDetection = response.data.choices[0].text.trim();
-          setMood(moodDetection);
+        ).then(async(response)=>{
+        
+          const moodOfUser = response.data.choices[0].text.trim();
+         
   
-          if (mood != '') {
+          if (moodOfUser != '') {
             const messageData = {
               content: currentMessage.trim(),
               name: itm.name,
               senderId: itm.userId,
               recieverId: recieverId,
-              mood: mood,
+              mood: moodOfUser,
             };
             console.log('frontend', messageData);
   
@@ -143,9 +142,7 @@ const UserChat = props => {
           }
           setIsSending(false);
         }).catch(async(error)=>{
-          console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-        console.log("CATCH CALLED");
-        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+         
         console.error('Error detecting mood:', error);
         const messageData = {
           content: currentMessage.trim(),
@@ -161,9 +158,7 @@ const UserChat = props => {
         setCurrentMessage('');
         setIsSending(false);
         })
-      // finally {
-      //   setIsSending(false); // Activity Indicator band karo
-      // }
+    
   };
 
   const DeleteMessage = async msgId => {
