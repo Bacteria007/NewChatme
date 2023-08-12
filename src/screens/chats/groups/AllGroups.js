@@ -19,6 +19,7 @@ import AppColors from '../../../assets/colors/Appcolors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Text } from 'react-native';
 import FontStyle from '../../../assets/styles/FontStyle';
+import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroups';
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
@@ -111,15 +112,15 @@ const AllGroups = ({ navigation }) => {
             swapShadows
             style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
           >
-            <View style={styles.container}>
-              <View style={styles.button(theme.dpCircleColor)}>
+            <View style={GroupStyles.plusButnContainer}>
+              <View style={GroupStyles.button(theme.dpCircleColor)}>
                 <Icons.Ionicons name={'people'} size={25} color={theme.groupDpIconColor} />
               </View>
-              <TouchableOpacity style={styles.plusButton}>
+              <TouchableOpacity style={GroupStyles.plusButton}>
                 <Icons.MaterialCommunityIcons name="plus" size={wp('3.8%')} color="white" />
               </TouchableOpacity>
             </View>
-            <Text style={styles.gNameStyle(darkThemeActivator)}>New Group</Text>
+            <Text style={GroupStyles.newGroupNameStyle(darkThemeActivator)}>New Group</Text>
           </Neomorph>
 
         </View>
@@ -143,46 +144,3 @@ const AllGroups = ({ navigation }) => {
   );
 };
 export default AllGroups;
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: AppColors.transparent
-  },
-  button: (color) => ({
-    width: wp('12%'),
-    height: wp('12%'),
-    borderRadius: wp('7.5%'),
-    backgroundColor: color,
-    justifyContent: 'center',
-    alignItems: 'center',
-  }),
-  plusButton: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    width: wp('4.8%'),
-    height: wp('4.8%'),
-    borderRadius: wp('2.4%'),
-    backgroundColor: 'purple', // WhatsApp green color
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
-  gNameStyle: darkThemeActivator => ({
-    fontFamily: FontStyle.regularFont,
-    fontSize: 17,
-    color: darkThemeActivator ? "white" : "purple",
-    marginLeft: 10,
-    letterSpacing: 1,
-    textShadowColor: darkThemeActivator ? "white" : 'rgba(255, 0, 0, 0.2)',
-    textShadowOffset: { width: 2, height: 2 }, // Shadow offset
-    textShadowRadius: 2, // Shadow radius
-
-  }),
-});

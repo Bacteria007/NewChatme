@@ -5,7 +5,7 @@ const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
-  const baseUrl='http://192.168.83.238:8888'
+  const baseUrl='http://192.168.43.145:8888'
   const [userName, setUserName] = useState();
   const [currentUserId, setCurrentUserId] = useState('');
   const [language, setLanguage] = useState('English');

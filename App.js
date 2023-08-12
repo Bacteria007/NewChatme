@@ -4,7 +4,6 @@ import {
   Image,
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -18,7 +17,6 @@ import Animated, {
 } from 'react-native-reanimated';
 // SCREENS
 import Reels from './src/screens/reels/Reels';
-import Contacts from './src/screens/contacts/Contacts';
 import Calls from './src/screens/calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
 import SignUpScreen from './src/screens/auth/SignUpScreen';
@@ -28,14 +26,12 @@ import Groups from './src/screens/chats/groups/AllGroups';
 import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
 import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
-import Settings from './src/screens/settings/Settings';
 import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
 
 import { Icons } from './src/assets/Icons'; // Navigation
 import {
   NavigationContainer,
-  useIsFocused,
-  useNavigation,
+ 
 } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -59,7 +55,7 @@ import ChatBot from './src/screens/chats/chatBot/ChatBot';
 import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
 import StreamOutlineWhite from './src/assets/imges/footerIcons/streamOutlineBlack.svg';
 import StreamOutlineBlack from './src/assets/imges/footerIcons/streamOutlineWhite.svg';
-import { ThemeContext, ThemeProvider } from './src/context/ThemeContext';
+import { ThemeContext } from './src/context/ThemeContext';
 import AppContext, { AppProvider } from './src/context/AppContext';
 import Theme from './src/screens/settings/accountPreferences/Theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -92,9 +88,10 @@ const App = props => {
   //Tab Variables Start
   const reelsIconSize = 19;
   const focusedColor = theme.focusedTabIconsColor;
-  const notfocusedColor = theme.notfocusedColor;
+  const notfocusedColor = theme.notFocusedTabIconsColor;
   const tabColor = theme.tabColor;
-  const tabFont = FontStyle.boldFont;
+  const tabFontBold = FontStyle.boldFont;
+  const tabFontSemiBold = FontStyle.semiBoldFont;
   //Tab Variables End
   //Drawer Variables Start
   const myFontFamily = FontStyle.regularFont;
@@ -167,7 +164,7 @@ const App = props => {
               fontSize: wp('2.8%'),
               marginBottom: hp('1%'),
               marginTop: hp('0%'),
-              fontFamily: tabFont,
+              fontFamily: tabFontSemiBold,
             },
             tabBarItemStyle: { backgroundColor: tabColor },
             tabBarActiveTintColor: focusedColor,
@@ -464,7 +461,6 @@ const App = props => {
               component={Apis}
               options={{ headerShown: false }}
             />
-
             <Stack.Screen
               name="DrawerScreens"
               component={DrawerScreens}
