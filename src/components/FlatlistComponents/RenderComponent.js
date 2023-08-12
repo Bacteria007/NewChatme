@@ -15,7 +15,7 @@ const RenderComponent = ({ name, dp,callingScreen,discussions_item,groups_item,c
             onPress={() => {
                 if(callingScreen==="Discussions"){
                     console.log("Comming form Discussions")
-                    navigation.navigate('UserChat', { item: discussions_item });
+                    navigation.navigate('UserChat', { itm: discussions_item });
                 }
                else if(callingScreen==="Groups"){
                     console.log("Comming form Groups")

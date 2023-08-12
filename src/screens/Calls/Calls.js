@@ -136,7 +136,7 @@ const Calls = ({ navigation }) => {
                         {item.OutgoingCall == 'outgoing' ? (
                           <Icons.MaterialCommunityIcons
                             name="call-made"
-                            color={'red'}
+                            color='red'
                             size={iconSize}
                           />
                         ) : (
