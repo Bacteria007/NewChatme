@@ -111,7 +111,9 @@ const UserChat = props => {
     const formData = new FormData();
     formData.append('userId', itm.userId);
     formData.append('name', itm.name);
-    formData.append('phoneNumber', itm.phoneNo);
+    formData.append('phoneNumber', itm.phoneNumber);
+    formData.append('recieverId', itm.recieverId);
+    
     // Call the addContact API
     await fetch(`${baseUrl}/addContacts`, {
       method: 'POST',
