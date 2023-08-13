@@ -43,23 +43,29 @@ const AddContact = ({ navigation }) => {
 
     console.log("desc", JSON.parse(userid))
     const parseId = JSON.parse(userid)
-    try {
-      const response = await fetch(`${baseUrl}/allUsers?userId=${parseId}`, {
+    await fetch(`${baseUrl}/allUsers?userId=${parseId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-      })
-      const data = await response.json();
-      const filteredChats = data.filter(user =>
-        user._id != parseId,         // NAME KI BASE PR SEARCH HO RAHI HAI
-      );
-      setSearchedChat(filteredChats);
-      setContactList(filteredChats);
-      console.log('contacts list', filteredChats)
-    } catch (error) {
+      }).then(async(response)=>{
+        const data = await response.json();
+          const contactInformation = data.contactList.map(item => ({  // ye iss liye kiya hai q k backend sy just id , name or phone number mil raha tha jb k mein id ko as a receiver id or sender id ko b bejna chahti thi jis k liye ye approach use ki mein ny 
+            recieverId: item._id,
+            name: item.name,
+            userId:parseId,
+            phoneNo: item.phoneNo,
+          }));
+        const filteredChats = contactInformation.filter(user =>
+          user.recieverId != parseId,         // NAME KI BASE PR SEARCH HO RAHI HAI
+          
+        );
+        setSearchedChat(filteredChats);
+        setContactList(filteredChats);
+        console.log('contacts list', filteredChats)
+      }).catch((error)=>{
       console.error('Error fetching contact list:', error);
-    }
+    })
   }
 
   useEffect(() => {

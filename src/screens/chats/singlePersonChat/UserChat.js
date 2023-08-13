@@ -36,7 +36,7 @@ const UserChat = props => {
   const { baseUrl, currentUserId } = useContext(AppContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isInnerModalVisible, setInnerModalVisible] = useState(false);
-  
+
   const apiKey = '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';
   const [isSending, setIsSending] = useState(false);
 
@@ -87,9 +87,9 @@ const UserChat = props => {
   const toggleInnerModal = () => {
     setInnerModalVisible(!isInnerModalVisible);
   };
-useEffect(()=>{
-console.log('data')
-},[isSending])
+  useEffect(() => {
+    console.log('data');
+  }, [isSending]);
   // const {item} = props.route.params;
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
@@ -106,48 +106,68 @@ console.log('data')
     });
   // console.log("item",itm)
 
+  const addContact = async () => {
+    //ye backend mein contact ko add krta
+    const formData = new FormData();
+    formData.append('userId', itm.userId);
+    formData.append('name', itm.name);
+    formData.append('phoneNumber', itm.phoneNo);
+    // Call the addContact API
+    await fetch(`${baseUrl}/addContacts`, {
+      method: 'POST',
+      body: formData,
+    })
+      .then(() => {
+        console.log('Data added successfully');
+      })
+      .catch(error => {
+        console.error('Error adding contact:', error);
+      });
+  };
+
   const sendMessage = async () => {
-     setIsSending(true);
-       await axios.post(
-          'https://api.openai.com/v1/engines/text-davinci-003/completions',
-          {
-            prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
-            max_tokens: 1024,
-            temperature: 0.5,
+    setIsSending(true);
+    addContact();
+    await axios
+      .post(
+        'https://api.openai.com/v1/engines/text-davinci-003/completions',
+        {
+          prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
+          max_tokens: 1024,
+          temperature: 0.5,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${apiKey}`,
-            },
-          },
-        ).then(async(response)=>{
-        
-          const moodOfUser = response.data.choices[0].text.trim();
-         
-  
-          if (moodOfUser != '') {
-            const messageData = {
-              content: currentMessage.trim(),
-              name: itm.name,
-              senderId: itm.userId,
-              recieverId: recieverId,
-              mood: moodOfUser,
-            };
-            console.log('frontend', messageData);
-  
-            await socket.emit('send_message', messageData);
-            setMessageList(list => [...list, messageData]);
-            setCurrentMessage('');
-            setIsSending(false);
-          }
+        },
+      )
+      .then(async response => {
+        const moodOfUser = response.data.choices[0].text.trim();
+
+        if (moodOfUser != '') {
+          const messageData = {
+            content: currentMessage.trim(),
+            name: itm.name,
+            senderId: itm.userId,
+            recieverId: recieverId,
+            mood: moodOfUser,
+          };
+          console.log('frontend', messageData);
+
+          await socket.emit('send_message', messageData);
+          setMessageList(list => [...list, messageData]);
+          setCurrentMessage('');
           setIsSending(false);
-        }).catch(async(error)=>{
-         
+        }
+        setIsSending(false);
+      })
+      .catch(async error => {
         console.error('Error detecting mood:', error);
         const messageData = {
           content: currentMessage.trim(),
           name: itm.name,
-          senderId: itm.userId, 
+          senderId: itm.userId,
           recieverId: recieverId,
           mood: 'normal',
         };
@@ -157,8 +177,7 @@ console.log('data')
         setMessageList(list => [...list, messageData]);
         setCurrentMessage('');
         setIsSending(false);
-        })
-    
+      });
   };
 
   const DeleteMessage = async msgId => {
@@ -282,12 +301,11 @@ console.log('data')
               />
               <TouchableOpacity
                 style={[UserChatStyle.sendButton]}
-                onPress={()=>{
-                  if(currentMessage.trim() !=null)
-                  {
+                onPress={() => {
+                  if (currentMessage.trim() != null) {
                     sendMessage();
                   }
-                  }}>
+                }}>
                 {/* <Text style={[UserChatStyle.sendButtonText]}>Send</Text> */}
                 {isSending ? (
                   <ActivityIndicator size="small" color="#ffffff" /> // Show loading animation
