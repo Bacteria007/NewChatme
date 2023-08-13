@@ -15,6 +15,7 @@ const RenderComponent = ({ name, dp,callingScreen,discussions_item,groups_item,c
             onPress={() => {
                 if(callingScreen==="Discussions"){
                     console.log("Comming form Discussions")
+                    console.log('CONTACT INFOOOOOOOOOOOOOOOOOOOOOO',discussions_item)
                     navigation.navigate('UserChat', { itm: discussions_item });
                 }
                else if(callingScreen==="Groups"){
@@ -23,7 +24,8 @@ const RenderComponent = ({ name, dp,callingScreen,discussions_item,groups_item,c
                 }
                else if(callingScreen==="Contacts"){
                     console.log("Comming form Contacts")
-                    navigation.navigate('UserChat', { itm: contacts_item});
+                    console.log('CONTACT INFOOOOOOOOOOOOOOOOOOOOOO',contacts_item)
+                    navigation.navigate('UserChat', { itm: contacts_item });
                 }
               
             }}
