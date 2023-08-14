@@ -17,7 +17,6 @@ import FontStyle from '../../assets/styles/FontStyle';
 import Containers from '../../assets/styles/Containers';
 import WebView from 'react-native-webview';
 import GenerateVideoHtml from './ReelsHtmlVideo';
-import { Image } from 'react-native-paper/lib/typescript/src/components/Avatar/Avatar';
 
 const Reals = props => {
   //   **********************************           VARIABLES               ****************************
