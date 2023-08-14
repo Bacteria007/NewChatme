@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Alert,
   Text,
+  ScrollView
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -17,6 +18,8 @@ import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IconButton, Modal, PaperProvider, Portal, TouchableRipple } from 'react-native-paper';
 import axios from 'react-native-axios';
+import WebView from 'react-native-webview';
+import ActivityVideoHtml from '../../reels/ActivityVideoHtml';
 
 const MyActivity = ({ navigation }) => {
   const { baseUrl } = useContext(AppContext);
@@ -38,13 +41,13 @@ const MyActivity = ({ navigation }) => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("##### all reels response ####",data.UploadedVideos)
-       
+        console.log("##### all reels response ####", data.UploadedVideos)
+
         const videosWithSources = data.UploadedVideos.map(video => ({
           _id: video._id,
           uri: { uri: video.video },
           desc: video.name,
-          user:video.userId
+          user: video.userId
         }));
         const myuploads = videosWithSources.filter(
           user => user.userId === parseId, // id KI BASE PR SEARCH HO RAHI HAI
@@ -92,8 +95,8 @@ const MyActivity = ({ navigation }) => {
     }, 1000);
   }, []);
   useEffect(() => {
-    console.log("reel id useefect",reelid)
-  }, [allUploads,reelid]);
+    console.log("reel id useefect", reelid)
+  }, [allUploads, reelid]);
 
   return (
 
@@ -151,29 +154,55 @@ const MyActivity = ({ navigation }) => {
             ) : (
               <FlatList
                 data={allUploads}
-                numColumns={3}
-                renderItem={({ item, index }) => (
-                  <View style={{ height: wp('34%'), width: wp('34%') }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setCurrentVideo(item);
-                        setCurrentIndex(index);
-                        setIsModalVisible(true);
-                        setReelid(item._id)
-                        console.log("reel id",item._id)
-                      }}
-
-                    >
-                      <Video
-                        source={{ uri: `${baseUrl}${item.uri.uri}` }}
-                        resizeMode="cover"
-                        muted={true}
-                        style={{ height: wp('33%'), width: wp('33%') }}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                )}
+                key={1}
                 keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => {
+                  // Calculate the dimensions for each video in the grid
+                  const numColumns = 2;
+                  const spacing = 10; // Adjust the spacing between videos
+                  const videoWidth = (wp('100%') - (spacing * (numColumns - 1))) / numColumns;
+                  const videoHeight = (videoWidth * 16) / 16; // Assuming a 16:9 aspect ratio
+
+                  // ...
+                  const HtmlVideo = ActivityVideoHtml(baseUrl, item);
+                  console.log("video html", HtmlVideo)
+                  return (
+                    // <TouchableOpacity
+                    //   onPress={() => {
+                    //     setCurrentVideo(item);
+                    //     setCurrentIndex(index);
+                    //     setIsModalVisible(true);
+                    //     setReelid(item._id)
+                    //     console.log("reel id", item._id)
+                    //   }}
+                    //   style={{flex:1}}
+                    // >
+                    <>
+                      <View style={{ height: hp('7%'), width: wp('100%'), backgroundColor: 'rgba(0,0,0,0.5)', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <TouchableRipple
+                          onPress={() => {
+                          
+                            deleteReel(allUploads[currentIndex])
+                          }}
+                          rippleColor="rgba(0, 0, 0, 0.6)"
+
+                        >
+                          <IconButton
+                            icon="delete"
+                            iconColor={"black"}
+                            size={20}
+                          />
+                        </TouchableRipple>
+                      </View>
+                      <WebView
+                        originWhitelist={['*']}
+                        source={{ html: `${HtmlVideo}` }}
+                        style={{ width: wp('100'), height: hp('35'), }}
+                        
+                      />
+                    </>
+                  )
+                }}
               />
             )}
           </View>

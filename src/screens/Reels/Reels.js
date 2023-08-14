@@ -4,25 +4,20 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
-  Alert,
 } from 'react-native';
-import Video from 'react-native-video';
 import AppColors from '../../assets/colors/Appcolors';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
 import ReelHeader from '../../components/Headers/ReelHeader/ReelHeader';
 import ReelscreenStyle from '../../assets/styles/ReelStyleSheet/ReelscreenStyle';
 import ReelFooter from '../../components/Headers/ReelHeader/ReelFooter';
 import AppContext from '../../context/AppContext';
 import Share from 'react-native-share';
-import LottieView from 'lottie-react-native';
 import { Text } from 'react-native-paper';
 import FontStyle from '../../assets/styles/FontStyle';
 import Containers from '../../assets/styles/Containers';
+import WebView from 'react-native-webview';
+import GenerateVideoHtml from './reelsHtml';
+import { Image } from 'react-native-paper/lib/typescript/src/components/Avatar/Avatar';
 
 const Reals = props => {
   //   **********************************           VARIABLES               ****************************
@@ -109,7 +104,7 @@ const Reals = props => {
   }, []);
 
   useEffect(() => {
-    if (videoRef.current) {
+    if (videoRef?.current) {
       videoRef.current.seek(0);
     }
   }, [currentIndex, videoRef.current]);
@@ -126,6 +121,7 @@ const Reals = props => {
           onChangeIndex={changeIndex}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => {
+            const HtmlVideo=GenerateVideoHtml(baseUrl,item)
             return (
               <View style={[ReelscreenStyle.flatlistContainerView]}>
                 <TouchableOpacity
@@ -146,32 +142,14 @@ const Reals = props => {
                       />
                     </View>
                   ) : (
-                    <Video
-                      source={{ uri: `${baseUrl}${item.uri.uri}` }}
-                      ref={videoRef}
-                      resizeMode="cover"
-                      paused={currentIndex !== index || !isVideoPlaying}
-                      repeat={true}
-                      onBuffer={onBuffer}
-                      onError={onError}
-                      onLoad={() => setIsLoading(false)} // Set isLoading to false when video is loaded
+                    <WebView
+                      originWhitelist={['*']}
+                      source={{
+                        html: `${HtmlVideo}` }}
                       style={[ReelscreenStyle.backgroundVideo]}
                     />
                   )}
                 </TouchableOpacity>
-                <FontAwesome5
-                  name="play"
-                  color={"rgba(255,255,255,0.7)"}
-                  style={{
-                    fontSize: isVideoPlaying ? 0 : wp('12%'),
-                    position: 'absolute',
-                    top: height / 2.4,
-                    left: width / 2.1,
-                  }}
-                />
-
-                {/* FOOTER COMPONENT OF REEL */}
-
                 <ReelFooter onPressShare={() => shareVideo()} />
               </View>
             );
@@ -180,17 +158,17 @@ const Reals = props => {
         />
         :
         <View style={Containers.centerContainer}>
-                
-                <Text
-                  style={{
-                    fontSize: 25,
-                    color: 'white',
-                    textAlign: 'center',
-                    fontFamily:FontStyle.boldFont,
-                  }}>
-                 Upload a new one by clicking that plus icon ↗️
-                </Text>
-              </View>
+
+          <Text
+            style={{
+              fontSize: 25,
+              color: 'white',
+              textAlign: 'center',
+              fontFamily: FontStyle.boldFont,
+            }}>
+            Upload a new one by clicking that plus icon ↗️
+          </Text>
+        </View>
       }
     </View>
   );

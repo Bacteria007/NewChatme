@@ -86,6 +86,7 @@ const LogInScreen = ({ navigation }) => {
       });
   };
 
+ 
   useEffect(() => {
     // Set default country as Pakistan
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
@@ -124,7 +125,7 @@ const LogInScreen = ({ navigation }) => {
               withCallingCode
               countryCode={selectedCountry?.cca2}
               onSelect={handleCountrySelect}
-              // translation="eng"
+            // translation="eng"
             />
           </View>
 
@@ -214,17 +215,17 @@ const LogInScreen = ({ navigation }) => {
         style={
           passwordSnackWidth === true
             ? {
-                backgroundColor: '#D3D3D3',
-                width: wp('80'),
-                marginBottom: hp('6'),
-                alignSelf: 'center',
-              }
+              backgroundColor: '#D3D3D3',
+              width: wp('80'),
+              marginBottom: hp('6'),
+              alignSelf: 'center',
+            }
             : {
-                backgroundColor: '#D3D3D3',
-                width: wp('55'),
-                marginBottom: hp('6'),
-                alignSelf: 'center',
-              }
+              backgroundColor: '#D3D3D3',
+              width: wp('55'),
+              marginBottom: hp('6'),
+              alignSelf: 'center',
+            }
         }>
         <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
       </Snackbar>

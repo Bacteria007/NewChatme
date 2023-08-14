@@ -16,6 +16,7 @@ const ReelscreenStyle = StyleSheet.create({
     position: 'absolute',
     width: width,
     height: height,
+    flex:1
   },
   LoaderStyle: { height: hp('4'), width: wp('10') },
   LoaderView: { flex: 1, justifyContent: 'center', alignItems: 'center' },

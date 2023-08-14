@@ -20,6 +20,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { Text } from 'react-native';
 import FontStyle from '../../../assets/styles/FontStyle';
 import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroups';
+import PushNotification ,{Importance} from "react-native-push-notification";
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
@@ -91,7 +92,26 @@ const AllGroups = ({ navigation }) => {
       console.log("error fetching groups")
     }
   }
+
+  const createPushNotificatioon = () => {
+    PushNotification.createChannel(
+      {
+        channelId: "1233",
+        channelName: "channel",
+        // soundName: "in_ring123.mp3",
+        // sound: "android.resource://com.chatme/raw/in_ring123", // Use the correct Android asset URI
+        // importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+        // vibrate: true, // (optional),
+        // color:'skyblue',
+        // id:""  to replace the old notifi with new
+      }
+    )
+    console.log('soud=========',)
+  }
   // EFFECTS
+  useEffect(() => {
+    createPushNotificatioon()
+  }, [])
   useEffect(() => {
     fetchAllGroups()
   }, [])
@@ -101,7 +121,7 @@ const AllGroups = ({ navigation }) => {
       <HeaderNew navigation={navigation} headerTitle={'Groups'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("CreateGroup")
+          navigation.navigate("CreateGroup");
         }}
       >
         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
@@ -133,12 +153,12 @@ const AllGroups = ({ navigation }) => {
         style={{ marginTop: 10 }}
         showsVerticalScrollIndicator={false}
         data={searchedGroups == '' ? allGroups.length > 0 ? allGroups : [] : searchedGroups}
-        renderItem={({ item }) => <RenderComponent name={item.group_name} dp={null} callingScreen={"Groups"} groups_item={item} navigation={navigation} />}
+        renderItem={({ item }) => <RenderComponent name={item.group_name} dp={null} callingScreen={"Groups"} groups_item={item} navigation={navigation} noti={(val) => handleNotification(val)} />}
         ref={flatListRef}
         ListFooterComponent={gloabalFunctions.renderFooter(flatListRef, allGroups)}
       />
 
-      {/* <FAB buttonColor={theme.buttonsColor} iconTextColor={theme.buttonsTextColor} onClickAction={() => { navigation.navigate("CreateGroup") }} visible={true} iconTextComponent={<Icons.Ionicons name="create" color={theme.buttonTextColor} />} /> */}
+
     </View>
 
   );
