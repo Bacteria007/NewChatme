@@ -5,13 +5,15 @@ const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
-  const baseUrl='http://192.168.43.145:8888'
+  const baseUrl='http://192.168.1.106:8888'
   const [userName, setUserName] = useState();
-  const [currentUserId, setCurrentUserId] = useState('');
+  const [currentUserId, setCurrentUserId] = useState(AsyncStorage.getItem('user'));
   const [language, setLanguage] = useState('English');
   const [isUserLoggedin, setIsUserLoggedin] = useState(false)
   const [darkThemeActivator, setDarkThemeActivator] = useState(false);
   const [curentUser, setCurentUser] = useState(AsyncStorage.getItem('user'));
+  const [selectedImageUri, setSelectedImageUri] = useState('');
+
   
   const fetchUserId = async () => {
     const user = await AsyncStorage.getItem('user');
@@ -23,6 +25,9 @@ export const AppProvider = ({ children }) => {
   const changeTheme = () => {
     setDarkThemeActivator(!darkThemeActivator)
   }
+  const storeImageUri = val => {
+    setSelectedImageUri(val);
+  };
   const storeUserName = val => {
     setUserName(val);
   };
@@ -33,59 +38,46 @@ export const AppProvider = ({ children }) => {
   const storeLoggedinStatus=val=>{
     setIsUserLoggedin(val)
   }
-  const getUserID = async () => {
-    try{
+  const getUserID2 = async () => {
     const userData = await AsyncStorage.getItem('user');
-    if (userData !== null) {
-      // Check if the retrieved data is not undefined before parsing
-      if (userData !== undefined) {
+    console.log("asyncUser",userData)
         console.log('User ID get context:', typeof userData);
         console.log('User ID get context parse:', JSON.parse(userData));
-        setCurrentUserId(userData)
-        return userData;
-      } else {
-        console.log('User data is undefined in async storage.');
-        return null;
-      }
-    } else {
-      console.log('User information not found in async storage.');
-      return null;
-    }
-  } catch (error) {
-    console.log('Error while retrieving user information:', error);
-    return null;
-  }}
-  console.log("after storing new id",currentUserId)
-  const updateCurrentUserId = (value) => {
-    setCurrentUserId('');
-    console.log("called context")
+        const pid= await JSON.parse(userData)
+        setCurrentUserId(pid)
+        console.log("pid",pid.userId)
+        return pid;
+     
   };
 
+  useEffect(()=>{
+    getUserID2()
+  },[])
   // ********************************************     USE EFFECT FOR LANGUAGE RETRIVE FROM ASYNC STORAGE   ***************
 
   // useEffect(()=>{
   //   getUserID()
   //   console.log("conditional effect")
   // },[currentUserId])
-  useEffect(() => {
-    // Retrieve the selected language from AsyncStorage
-    AsyncStorage.getItem('selectedLanguage')
-      .then(selectedLanguage => {
-        if (selectedLanguage) {
-          storeLanguage(selectedLanguage);
-          console.log('store lang:');
-        } else {
-          storeLanguage('English');
-          console.log('store lang else case:English');
-        }
-      })
-      .catch(error => {
-        console.log('Error retrieving selected language:', error);
-      });
-      getUserID().then(userId => {
-        console.log('conditional effect', userId);
-      });
-  }, []);
+  // useEffect(() => {
+  //   // Retrieve the selected language from AsyncStorage
+  //   AsyncStorage.getItem('selectedLanguage')
+  //     .then(selectedLanguage => {
+  //       if (selectedLanguage) {
+  //         storeLanguage(selectedLanguage);
+  //         console.log('store lang:');
+  //       } else {
+  //         storeLanguage('English');
+  //         console.log('store lang else case:English');
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log('Error retrieving selected language:', error);
+  //     });
+  //     getUserID().then(userId => {
+  //       console.log('conditional effect', userId);
+  //     });
+  // }, []);
 
   return (
     <AppContext.Provider
@@ -95,16 +87,19 @@ export const AppProvider = ({ children }) => {
         userName,
         currentUserId,
         isUserLoggedin,
+        selectedImageUri,
         storeUserName,
         storeLanguage,
         language,
         darkThemeActivator,
         curentUser,
         changeTheme,
-        updateCurrentUserId,
+        // updateCurrentUserId,
         storeLoggedinStatus,
-        getUserID,
+        // getUserID,
         fetchUserId,
+        storeImageUri,
+        getUserID2,
       }}>
       {children}
     </AppContext.Provider>
