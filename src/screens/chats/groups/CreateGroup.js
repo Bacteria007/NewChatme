@@ -33,7 +33,7 @@ import {
   Surface,
 } from 'react-native-paper';
 import FontStyle from '../../../assets/styles/FontStyle';
-
+import PushNotification from "react-native-push-notification";
 const CreateGroup = () => {
   // STATES
   const { baseUrl } = useContext(AppContext);
@@ -145,7 +145,6 @@ const CreateGroup = () => {
       Alert.alert('pleaes add at least one member');
     }
   };
-
   const renderItem = ({ item }) => {
     return (
       <View
@@ -196,7 +195,7 @@ const CreateGroup = () => {
                 //   <Text style={{ color: "black" }}>Remove</Text>
                 // </Neomorph>
                 <View style={styles.doneButton(theme.addBtnColor)}>
-                  <Icons.Entypo name="cross" size={23} color={theme.addBtnTextColor} />
+                  <Icons.AntDesign name="close" size={21} color={theme.addBtnTextColor} />
                 </View>
               ) : (
                 // <Avatar.Icon size={30} icon={"cross"} color='white' style={{backgroundColor:'red'}}/>
@@ -258,6 +257,7 @@ const CreateGroup = () => {
           onPress={() => toggleModal()}>
           <Text>Create Now</Text>
         </Button>
+        
         {/* <FAB
           buttonColor={theme.buttonsColor}
           iconTextColor={theme.buttonsTextColor}

@@ -76,6 +76,7 @@ import CreateGroup from './src/screens/chats/groups/CreateGroup';
 import Apis from './src/utils/Apis';
 import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
 import Settings2 from './src/screens/settings/Settings2';
+import MyWebViews from './src/screens/reels/webviews';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -112,14 +113,14 @@ const App = props => {
   // const loggedInUser=AsyncStorage.getItem('user')
   const logoutUser = async ({ navigation }) => {
     try {
-      console.log('isUserLoggedin ', isUserLoggedin);
+      // console.log('isUserLoggedin ', isUserLoggedin);
       await AsyncStorage.removeItem('user');
       // storeLoggedinStatus(false)
-      console.log('User removed from storage');
+      // console.log('User removed from storage');
       // updateCurrentUserId(''); // Clear the currentUserId in the context
       navigation.replace('LogInScreen');
     } catch (error) {
-      console.log('Error while removing user from storage:', error);
+      // console.log('Error while removing user from storage:', error);
       Alert.alert('You are unable to logout, try again later!');
       // updateCurrentUserId(blank); // Clear the currentUserId in the context
       // navigation.navigate('LogInScreen'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
@@ -129,7 +130,7 @@ const App = props => {
   const TabScreens = () => {
     // Animated
     let progress = useDrawerProgress();
-    console.log('progress', progress);
+    // console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
       transform: [
         { perspective: 1000 },
@@ -404,7 +405,7 @@ const App = props => {
       </View>
     );
   };
-  console.log('user id App.js-----------------', loggedInUserId);
+  // console.log('user id App.js-----------------', loggedInUserId);
   return (
     <AppProvider>
       <SafeAreaProvider style={{ flex: 1 }}>
@@ -415,6 +416,11 @@ const App = props => {
             initialRouteName={
               loggedInUserId ? 'DrawerScreens' : 'DrawerScreens'
             }>
+            <Stack.Screen
+              name="WebViews"
+              component={MyWebViews}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
