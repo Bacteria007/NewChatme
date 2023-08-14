@@ -19,7 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IconButton, Modal, PaperProvider, Portal, TouchableRipple } from 'react-native-paper';
 import axios from 'react-native-axios';
 import WebView from 'react-native-webview';
-import ActivityVideoHtml from '../../reels/ActivityVideoHtml';
+import ActivityVideoHtml from '../../reels/ActivityHtmlVideo';
 
 const MyActivity = ({ navigation }) => {
   const { baseUrl } = useContext(AppContext);
