@@ -96,9 +96,9 @@ const App = props => {
   //Drawer Variables Start
   const myFontFamily = FontStyle.regularFont;
   const drawerBackgroungColor = theme.drawerColor;
-  const activeTintColor = AppColors.black;
+  const activeTintColor = AppColors.white;
   const inActiveTintColor = AppColors.black;
-  const activeBgColor = AppColors.white;
+  const activeBgColor = 'rgba(0,0,0,0.2)';
   const inActiveBgColor = AppColors.transparent;
   //Drawer Variables End
 
@@ -146,7 +146,7 @@ const App = props => {
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
         <Tab.Navigator
-          initialRouteName="Groups"
+          initialRouteName="Reels"
           screenOptions={({ route, focused }) => ({
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
@@ -314,19 +314,11 @@ const App = props => {
             options={{
               drawerIcon: ({ focused }) => (
                 <Icons.MaterialCommunityIcons
-                  name={'home'}
-                  color={AppColors.black}
-                  // name={focused ? 'ios-home' : 'ios-home-outline'}
-                  // color={focused ? AppColors.white : AppColors.black}
+                  color={focused?activeTintColor:inActiveTintColor}
+                  name={focused ? 'home' : 'ios-home-outline'}
                   size={iconSize}
                 />
-                // <Icons.Ionicons
-                //   name={'ios-home'}
-                //   color={AppColors.black}
-                //   // name={focused ? 'ios-home' : 'ios-home-outline'}
-                //   // color={focused ? AppColors.white : AppColors.black}
-                //   size={iconSize}
-                // />
+              
               ),
             }}
           />
@@ -337,9 +329,7 @@ const App = props => {
               drawerIcon: ({ focused }) => (
                 <Icons.MaterialIcons
                   name={'person'}
-                  color={AppColors.black}
-                  // name={focused ? 'person' : 'person-outline'}
-                  // color={focused ? AppColors.white : AppColors.black}
+                  color={focused?activeTintColor:inActiveTintColor}
                   size={iconSize}
                 />
               ),
@@ -352,13 +342,7 @@ const App = props => {
               drawerIcon: ({ focused }) => (
                 <Icons.Ionicons
                   name={'ios-information-circle-sharp'}
-                  color={AppColors.black}
-                  // name={
-                  //   focused
-                  //     ? 'ios-information-circle-sharp'
-                  //     : 'ios-information-circle-outline'
-                  // }
-                  // color={focused ? AppColors.white : AppColors.black}
+                  color={focused?activeTintColor:inActiveTintColor}
                   size={iconSize}
                 />
               ),
@@ -371,9 +355,7 @@ const App = props => {
               drawerIcon: ({ focused }) => (
                 <Icons.Ionicons
                   name={'ios-settings-sharp'}
-                  color={AppColors.black}
-                  // name={focused ? 'ios-settings-sharp' : 'ios-settings-outline'}
-                  // color={focused ? AppColors.white : AppColors.black}
+                  color={focused?activeTintColor:inActiveTintColor}
                   size={iconSize}
                 />
               ),
@@ -384,21 +366,12 @@ const App = props => {
             component={TermsAndConditions}
             options={{
               drawerIcon: ({ focused }) => (
-                // focused ? (
                 <Icons.FontAwesome5
                   name="file-signature"
-                  color={AppColors.black}
+                  color={focused?activeTintColor:inActiveTintColor}
                   size={iconSize}
                 />
-              ),
-              // ) : (
-              //   <Icons.MaterialCommunityIcons
-              //     name="file-sign"
-              //     color={focused ? AppColors.white : AppColors.black}
-              //     size={iconSize}
-              //   />
-              // ),
-            }}
+    )}}
           />
         </Drawer.Navigator>
       </View>
