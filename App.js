@@ -76,7 +76,6 @@ import CreateGroup from './src/screens/chats/groups/CreateGroup';
 import Apis from './src/utils/Apis';
 import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
 import Settings2 from './src/screens/settings/Settings2';
-import MyWebViews from './src/screens/reels/webviews';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -416,11 +415,7 @@ const App = props => {
             initialRouteName={
               loggedInUserId ? 'DrawerScreens' : 'DrawerScreens'
             }>
-            <Stack.Screen
-              name="WebViews"
-              component={MyWebViews}
-              options={{ headerShown: false }}
-            />
+           
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
