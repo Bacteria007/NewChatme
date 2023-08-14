@@ -71,7 +71,6 @@ const GroupMsgItem = ({ msgData }) => {
   return (
     <Swipeable
       ref={swipeableRef}
-      renderLeftActions={renderLeftActions}
       onSwipeableOpen={handleSwipeableOpen}
       onSwipeableClose={handleSwipeableClose}
       overshootLeft={false}
@@ -79,6 +78,7 @@ const GroupMsgItem = ({ msgData }) => {
       overshootFriction={4}
       onEnded={closeSwipeable}
       onCancelled={closeSwipeable}
+      renderLeftActions={renderLeftActions}
     >
       <View style={{ width: wp('100') }}>
         <View style={styles.wholeMsgBox(isCurrentUser)}>
