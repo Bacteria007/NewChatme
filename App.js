@@ -1,6 +1,12 @@
 import 'react-native-gesture-handler';
-import React, { useContext } from 'react';
-import { Image, View, Text, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import {
+  Image,
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -11,7 +17,6 @@ import Animated, {
 } from 'react-native-reanimated';
 // SCREENS
 import Reels from './src/screens/reels/Reels';
-import Contacts from './src/screens/contacts/Contacts';
 import Calls from './src/screens/calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
 import SignUpScreen from './src/screens/auth/SignUpScreen';
@@ -21,11 +26,13 @@ import Groups from './src/screens/chats/groups/AllGroups';
 import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
 import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
-import Settings from './src/screens/settings/Settings';
 import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
 
 import { Icons } from './src/assets/Icons'; // Navigation
-import { NavigationContainer, useIsFocused, useNavigation } from '@react-navigation/native';
+import {
+  NavigationContainer,
+ 
+} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -44,19 +51,15 @@ import DeleteAccount from './src/screens/settings/accountPreferences/DeleteAccou
 import MyActivity from './src/screens/settings/accountPreferences/MyActivity';
 import LogInScreen from './src/screens/auth/LogInScreen';
 import Notification from './src/screens/settings/notification/Notification';
-import OutgoingCall from './src/screens/calls/OutgoingCall';
 import ChatBot from './src/screens/chats/chatBot/ChatBot';
 import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
-import TabIcons from './src/components/TabIcons';
 import StreamOutlineWhite from './src/assets/imges/footerIcons/streamOutlineBlack.svg';
 import StreamOutlineBlack from './src/assets/imges/footerIcons/streamOutlineWhite.svg';
-import LinearGradient from 'react-native-linear-gradient';
 import { ThemeContext } from './src/context/ThemeContext';
 import AppContext, { AppProvider } from './src/context/AppContext';
 import Theme from './src/screens/settings/accountPreferences/Theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ForgetPasswordScreen from './src/screens/auth/ForgetPasswordScreen';
-import VideoCal from './src/components/VideoCallScreen/VideoCal';
 import { LogBox } from 'react-native';
 import AddContact from './src/screens/contacts/AddContact';
 import FontStyle from './src/assets/styles/FontStyle';
@@ -65,37 +68,68 @@ LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 import {
-  ZegoCallInvitationDialog, ZegoUIKitPrebuiltCallWaitingScreen, ZegoUIKitPrebuiltCallInCallScreen
+  ZegoCallInvitationDialog,
+  ZegoUIKitPrebuiltCallWaitingScreen,
+  ZegoUIKitPrebuiltCallInCallScreen,
 } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import CreateGroup from './src/screens/chats/groups/CreateGroup';
+import Apis from './src/utils/Apis';
+import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
+import Settings2 from './src/screens/settings/Settings2';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const App = (props) => {
-  
-  const { darkThemeActivator, theme,storeLoggedinStatus } = useContext(ThemeContext,AppContext);
+const App = props => {
+  const { darkThemeActivator, theme, isUserLoggedin } =
+    useContext(ThemeContext);
+  let iconSize = 18;
+  //Tab Variables Start
+  const reelsIconSize = 19;
+  const focusedColor = theme.focusedTabIconsColor;
+  const notfocusedColor = theme.notFocusedTabIconsColor;
+  const tabColor = theme.tabColor;
+  const tabFontBold = FontStyle.boldFont;
+  const tabFontSemiBold = FontStyle.semiBoldFont;
+  //Tab Variables End
+  //Drawer Variables Start
+  const myFontFamily = FontStyle.regularFont;
+  const drawerBackgroungColor = theme.drawerColor;
+  const activeTintColor = AppColors.white;
+  const inActiveTintColor = AppColors.black;
+  const activeBgColor = 'rgba(0,0,0,0.2)';
+  const inActiveBgColor = AppColors.transparent;
+  //Drawer Variables End
+
+  // const {  curentUser } = useContext(AppContext);
+  // const userid=async (()=>{
+
+  // })
+  const loggedInUserId = AsyncStorage.getItem('user');
   // const {updateCurrentUserId}=useContext(AppContext);
-  const blank=''
+  const blank = '';
   // const loggedInUser=AsyncStorage.getItem('user')
   const logoutUser = async ({ navigation }) => {
     try {
+      // console.log('isUserLoggedin ', isUserLoggedin);
       await AsyncStorage.removeItem('user');
       // storeLoggedinStatus(false)
-      console.log('User removed from storage');
+      // console.log('User removed from storage');
       // updateCurrentUserId(''); // Clear the currentUserId in the context
       navigation.replace('LogInScreen');
     } catch (error) {
-      console.log('Error while removing user from storage:', error);
-      Alert.alert("You are unable to logout, try again later!");
+      // console.log('Error while removing user from storage:', error);
+      Alert.alert('You are unable to logout, try again later!');
       // updateCurrentUserId(blank); // Clear the currentUserId in the context
       // navigation.navigate('LogInScreen'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
     }
   };
-    let iconSize = 20;
+
   const TabScreens = () => {
+    // Animated
     let progress = useDrawerProgress();
-    console.log('progress', progress);
+    // console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
       transform: [
         { perspective: 1000 },
@@ -112,7 +146,7 @@ const App = (props) => {
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
         <Tab.Navigator
-          initialRouteName="Chats"
+          initialRouteName="Reels"
           screenOptions={({ route, focused }) => ({
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
@@ -122,96 +156,57 @@ const App = (props) => {
               borderTopColor: darkThemeActivator
                 ? AppColors.darkTheme
                 : AppColors.transparent,
-              // flex: 0.12,
               justifyContent: 'flex-end',
               alignItems: 'center',
-              // backgroundColor: AppColors.lightwhite,
-              // backgroundColor:"rgba(255, 182, 193,0.7)", //pink
-              // backgroundColor:"rgba (196,221,254,0.4)", //blue
-              // elevation: 0,  // <-- this is the solution
-              // position: 'absolute',
+              backgroundColor: tabColor,
             },
-            // tabBarItemStyle: { backgroundColor: AppColors.tab },
             tabBarLabelStyle: {
-              fontWeight: 'bold',
-              fontSize: wp('3.5%'),
+              fontSize: wp('2.8%'),
               marginBottom: hp('1%'),
               marginTop: hp('0%'),
+              fontFamily: tabFontSemiBold,
             },
-            // tabBarLabelPosition:'beside-icon',
-            // tabBarShowLabel:false,
-            // tabBarLabel:({ focused }) => {
-            //   return <Text style={{fontSize: hp('1.7%'), fontWeight: 'bold', color:focused? AppColors.black:AppColors.inActiveIconsColor,
-
-            //   marginBottom: hp('1%')}}>{focused ? route.name : route.name}</Text>
-            // },
-            tabBarBackground: () => (
-              <LinearGradient
-                //---1
-                // colors={["rgba(255, 182, 193,0.1)", "rgba(255, 182, 193,1)"]}  // pink only
-                // start={{ x: 1, y: 0.0 }} end={{ x: 1, y: 1 }} // horizontal
-                // locations={[0.1, 0.4]}
-                //---2
-                // colors={["rgba(196,221,254,0.2)", "rgba(196,221,254,0.9)"]} // blue
-                // locations={[0.1, 0.4]}
-                //---3
-                // colors={["rgba(255, 255, 255,0.1)", "rgba(255, 255, 255,1)"]}  // white only
-                start={{ x: 1, y: 0.0 }}
-                end={{ x: 1, y: 1 }} // horizontal
-                //  locations={[0.1, 0.3]}
-                //---
-                //--------
-                // start={{ x: 0.5, y: 0.5 }} end={{ x: 0.2, y: 0.5 }} // for vertical colors
-                // colors={["rgba(196,221,254,1)", "rgba(255, 182, 193,1)"]} //pink blue
-                colors={[theme.linearPink, theme.linearBlue]} //pink blue
-                // colors={[AppColors.linearGradient.blue, AppColors.linearGradient.pink]} //pink blue
-                style={{ height: hp('9%') }}
-              />
-            ),
-            tabBarActiveTintColor: theme.focusedTabIconsColor,
-            tabBarInactiveTintColor: theme.notFocusedTabIconsColor,
+            tabBarItemStyle: { backgroundColor: tabColor },
+            tabBarActiveTintColor: focusedColor,
+            tabBarInactiveTintColor: notfocusedColor,
             tabBarHideOnKeyboard: 'true',
             tabBarPressColor: 'rgba(255,255,255,0.6)',
-
             tabBarIcon: ({ focused }) => {
+              let iconColor = focused ? focusedColor : notfocusedColor;
               if (route.name === 'Chats') {
                 return (
-                  <TabIcons
-                    focused={focused}
-                    size={19}
-                    type={Icons.Ionicons}
+                  <Icons.Ionicons
+                    size={iconSize}
                     name={
                       focused
                         ? 'ios-chatbubbles-sharp'
                         : 'ios-chatbubbles-outline'
                     }
+                    color={iconColor}
                   />
                 );
               } else if (route.name === 'Calls') {
                 return (
-                  <TabIcons
-                    focused={focused}
-                    size={19}
-                    type={Icons.Ionicons}
+                  <Icons.Ionicons
+                    size={iconSize}
                     name={focused ? 'call-sharp' : 'call-outline'}
+                    color={iconColor}
                   />
                 );
               } else if (route.name === 'Contacts') {
                 return (
-                  <TabIcons
-                    focused={focused}
-                    size={19}
-                    type={Icons.MaterialCommunityIcons}
+                  <Icons.MaterialCommunityIcons
+                    size={iconSize}
                     name={focused ? 'contacts' : 'contacts-outline'}
+                    color={iconColor}
                   />
                 );
               } else if (route.name === 'Reels') {
                 return focused ? (
-                  <TabIcons
-                    type={Icons.FontAwesome5}
+                  <Icons.FontAwesome5
                     name="stream"
-                    size={16}
-                    focused={focused}
+                    size={reelsIconSize}
+                    color={iconColor}
                   />
                 ) : darkThemeActivator ? (
                   <StreamOutlineBlack />
@@ -220,11 +215,10 @@ const App = (props) => {
                 );
               } else if (route.name === 'Groups') {
                 return (
-                  <TabIcons
-                    focused={focused}
-                    size={19}
-                    type={Icons.Ionicons}
+                  <Icons.Ionicons
+                    size={iconSize}
                     name={focused ? 'people-sharp' : 'people-outline'}
+                    color={iconColor}
                   />
                 );
               }
@@ -239,64 +233,7 @@ const App = (props) => {
       </Animated.View>
     );
   };
-  const SettingStack = () => {
-    return (
-      <Stack.Navigator
-        options={{ headerShown: false }}
-        initialRouteName="mainScreen">
-        <Stack.Screen
-          name="mainScreen"
-          component={Settings}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="changeNumber"
-          component={ChangeNumber}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="changeNumberInfo"
-          component={ChangeNumberInfo}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="changePassword"
-          component={ChangePassword}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="blocked"
-          component={BlockContacts}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="deleteAccount"
-          component={DeleteAccount}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="theme"
-          component={Theme}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="activity"
-          component={MyActivity}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="appLanguage"
-          component={LanguageChangeScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="notification"
-          component={Notification}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    );
-  };
+
   const DrawerScreens = () => {
     return (
       <View style={{ flex: 1 }}>
@@ -305,16 +242,16 @@ const App = (props) => {
             headerShown: false,
             overlayColor: 'transparent',
             drawerType: 'slide',
-            drawerActiveTintColor: AppColors.black,
-            drawerInactiveTintColor: AppColors.black,
+            drawerActiveTintColor: activeTintColor,
+            drawerInactiveTintColor: inActiveTintColor,
             drawerStyle: {
               width: wp('50%'),
-              backgroundColor: theme.drawerColor,
+              backgroundColor: drawerBackgroungColor,
             },
             drawerLabelStyle: { marginLeft: wp('-6%') },
-            drawerActiveBackgroundColor: AppColors.white,
+            drawerActiveBackgroundColor: activeBgColor,
             sceneContainerStyle: {
-              backgroundColor: theme.drawerColor,
+              backgroundColor: drawerBackgroungColor,
             },
             // drawerHideStatusBarOnOpen: true,
             // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen
@@ -342,14 +279,31 @@ const App = (props) => {
                   </Animated.View>
                   <DrawerItemList {...props} />
                 </DrawerContentScrollView>
-                <TouchableOpacity 
-                onPress={()=>{logoutUser(props)}}
-                >
-                <View style={{paddingLeft:wp('5%'),paddingBottom:hp('4%'),flexDirection:'row'}}>
-                  <Icons.AntDesign name='logout' color={AppColors.black} size={iconSize}
-                   />
-                <Text style={{fontSize:wp('4%'),fontFamily:FontStyle.regularFont,color:AppColors.black,marginLeft:wp('3.5%')}}>Logout</Text>
-                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    logoutUser(props);
+                  }}>
+                  <View
+                    style={{
+                      paddingLeft: wp('5%'),
+                      paddingBottom: hp('4%'),
+                      flexDirection: 'row',
+                    }}>
+                    <Icons.AntDesign
+                      name="logout"
+                      color={AppColors.black}
+                      size={iconSize}
+                    />
+                    <Text
+                      style={{
+                        fontSize: wp('4%'),
+                        fontFamily: FontStyle.regularFont,
+                        color: AppColors.black,
+                        marginLeft: wp('3.5%'),
+                      }}>
+                      Logout
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             );
@@ -360,19 +314,11 @@ const App = (props) => {
             options={{
               drawerIcon: ({ focused }) => (
                 <Icons.MaterialCommunityIcons
-                  name={'home'}
-                  color={AppColors.black}
-                  // name={focused ? 'ios-home' : 'ios-home-outline'}
-                  // color={focused ? AppColors.white : AppColors.black}
+                  color={focused?activeTintColor:inActiveTintColor}
+                  name={focused ? 'home' : 'ios-home-outline'}
                   size={iconSize}
                 />
-                // <Icons.Ionicons
-                //   name={'ios-home'}
-                //   color={AppColors.black}
-                //   // name={focused ? 'ios-home' : 'ios-home-outline'}
-                //   // color={focused ? AppColors.white : AppColors.black}
-                //   size={iconSize}
-                // />
+              
               ),
             }}
           />
@@ -383,9 +329,7 @@ const App = (props) => {
               drawerIcon: ({ focused }) => (
                 <Icons.MaterialIcons
                   name={'person'}
-                  color={AppColors.black}
-                  // name={focused ? 'person' : 'person-outline'}
-                  // color={focused ? AppColors.white : AppColors.black}
+                  color={focused?activeTintColor:inActiveTintColor}
                   size={iconSize}
                 />
               ),
@@ -398,13 +342,7 @@ const App = (props) => {
               drawerIcon: ({ focused }) => (
                 <Icons.Ionicons
                   name={'ios-information-circle-sharp'}
-                  color={AppColors.black}
-                  // name={
-                  //   focused
-                  //     ? 'ios-information-circle-sharp'
-                  //     : 'ios-information-circle-outline'
-                  // }
-                  // color={focused ? AppColors.white : AppColors.black}
+                  color={focused?activeTintColor:inActiveTintColor}
                   size={iconSize}
                 />
               ),
@@ -412,14 +350,12 @@ const App = (props) => {
           />
           <Drawer.Screen
             name="Settings"
-            component={SettingStack}
+            component={Settings2}
             options={{
               drawerIcon: ({ focused }) => (
                 <Icons.Ionicons
                   name={'ios-settings-sharp'}
-                  color={AppColors.black}
-                  // name={focused ? 'ios-settings-sharp' : 'ios-settings-outline'}
-                  // color={focused ? AppColors.white : AppColors.black}
+                  color={focused?activeTintColor:inActiveTintColor}
                   size={iconSize}
                 />
               ),
@@ -430,46 +366,35 @@ const App = (props) => {
             component={TermsAndConditions}
             options={{
               drawerIcon: ({ focused }) => (
-                // focused ? (
                 <Icons.FontAwesome5
                   name="file-signature"
-                  color={AppColors.black}
+                  color={focused?activeTintColor:inActiveTintColor}
                   size={iconSize}
                 />
-              ),
-              // ) : (
-              //   <Icons.MaterialCommunityIcons
-              //     name="file-sign"
-              //     color={focused ? AppColors.white : AppColors.black}
-              //     size={iconSize}
-              //   />
-              // ),
-            }}
+    )}}
           />
         </Drawer.Navigator>
       </View>
     );
   };
-  console.log('darkthemeactivator', darkThemeActivator);
+  // console.log('user id App.js-----------------', loggedInUserId);
   return (
     <AppProvider>
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
-           <ZegoCallInvitationDialog />
+          <ZegoCallInvitationDialog />
           <Stack.Navigator
             options={{ headerShown: false }}
-            initialRouteName="WelcomeScreen">
+            initialRouteName={
+              loggedInUserId ? 'DrawerScreens' : 'DrawerScreens'
+            }>
+           
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
               options={{ headerShown: false }}
             />
-            
-             <Stack.Screen
-              name="videoCal"
-              component={VideoCal}
-              options={{ headerShown: false }}
-            />
+
             <Stack.Screen
               name="SignUpScreen"
               component={SignUpScreen}
@@ -491,8 +416,23 @@ const App = (props) => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="rejected"
-              component={OutgoingCall}
+              name="activity"
+              component={MyActivity}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="GroupChat"
+              component={GroupChat}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CreateGroup"
+              component={CreateGroup}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Utils"
+              component={Apis}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -510,19 +450,69 @@ const App = (props) => {
               component={AfterSignUpProfileScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-          options={{ headerShown: false }}
-          // DO NOT change the name 
-          name="ZegoUIKitPrebuiltCallWaitingScreen"
-          component={ZegoUIKitPrebuiltCallWaitingScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          // DO NOT change the name
-          name="ZegoUIKitPrebuiltCallInCallScreen"
-          component={ZegoUIKitPrebuiltCallInCallScreen}
-        />
 
+            <Stack.Screen
+              name="mainScreen"
+              component={Settings2}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="changeNumber"
+              component={ChangeNumber}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="changeNumberInfo"
+              component={ChangeNumberInfo}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="changePassword"
+              component={ChangePassword}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="blocked"
+              component={BlockContacts}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="deleteAccount"
+              component={DeleteAccount}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="theme"
+              component={Theme}
+              options={{ headerShown: false }}
+            />
+            {/* <Stack.Screen
+              name="activity"
+              component={MyActivity}
+              options={{ headerShown: false }}
+            /> */}
+            <Stack.Screen
+              name="appLanguage"
+              component={LanguageChangeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="notification"
+              component={Notification}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              // DO NOT change the name
+              name="ZegoUIKitPrebuiltCallWaitingScreen"
+              component={ZegoUIKitPrebuiltCallWaitingScreen}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              // DO NOT change the name
+              name="ZegoUIKitPrebuiltCallInCallScreen"
+              component={ZegoUIKitPrebuiltCallInCallScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

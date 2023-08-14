@@ -14,7 +14,7 @@ import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 import { Icons } from '../../../assets/Icons';
 import Primary_StatusBar from '../../statusbars/Primary_StatusBar';
 import { ThemeContext } from '../../../context/ThemeContext';
-import LinearGradient from 'react-native-linear-gradient';
+import { Appbar, Surface } from 'react-native-paper';
 
 
 const InnerScreensHeader = ({ navigation, screenName }) => {
@@ -24,7 +24,13 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
     <View style={[DrawerHeaderStyle.containerView]}>
 
       <Primary_StatusBar />
-            <View style={[DrawerHeaderStyle.headerView, { backgroundColor: theme.statusBarBg }]}>
+      {/* <Surface> */}
+      {/* <Appbar.Header style={{backgroundColor:theme.backgroundColor}}>
+        <Appbar.BackAction onPress={() => { navigation.goBack() }} />
+        <Appbar.Content title={screenName} style={{ paddingTop: 7 }} />
+      </Appbar.Header> */}
+      {/* </Surface> */}
+      <View style={[DrawerHeaderStyle.headerView, { backgroundColor: theme.backgroundColor }]}>
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();

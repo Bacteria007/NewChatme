@@ -17,9 +17,9 @@ import { BgTheme } from "./BgTheme";
 const AppHeaderStyle = StyleSheet.create({
   mainHeader: {
     // flex:1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: hp('16%'),
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // height: hp('16%'),
     // position:'absolute',
 
   },
@@ -47,9 +47,10 @@ const AppHeaderStyle = StyleSheet.create({
   iconContainerStyle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: wp('20%'),
+    // width: wp('20%'),
     alignItems: 'center',
     // backgroundColor:'red'
+    padding:6
   },
   botBgStyle:{
       height: hp('4.5%'),

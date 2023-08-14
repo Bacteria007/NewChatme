@@ -8,55 +8,50 @@ import FontStyle from '../FontStyle';
 import AppColors from '../../colors/Appcolors';
 
 const HomeNeoCards = StyleSheet.create({
-  wholeScreenContainer: {
+  wholeScreenContainer: bgColor => ({
     flex: 1,
     height: hp('100%'),
-    // backgroundColor: AppColors.transparent,
-  },
+    backgroundColor: bgColor,
+    
+  }),
   contentcontainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: AppColors.red,
+    // backgroundColor: AppColors.red,
     flex: 1,
   },
   animatedHeader: {
     elevation: 4,
     zIndex: 100,
-    // top: 0,
   },
   flatlistItemContainer: {
-    marginTop: 10,
+    marginBottom: 11,
+    marginTop: 1,
     justifyContent: 'center',
     alignItems: 'center',
     // top: 115,
-    // backgroundColor:'red',
   },
-  neomorphStyle: {
+  neomorphStyle: cardColor => ({
+    shadowRadius: 1.5,
+    borderRadius: wp('1.5'),
     flexDirection: 'row',
     alignItems: 'center',
-    // backgroundColor: AppColors.homeCards, //innner
-    // backgroundColor: 'rgba(255, 255, 255,0.4)', //swap
-    borderRadius: 10,
     height: hp('10%'),
-    width: wp('95%'),
-    justifyContent: 'space-around',
-
-  },
-  shadowStyle: {
+    width: wp('93%'),
+    backgroundColor: cardColor,
+    paddingHorizontal:14
+  }),
+  addUserinGroup: (bgColor)=>({
+    shadowRadius: 0.5,
+    borderRadius: wp('1.5'),
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    // backgroundColor: AppColors.homeCards, //innner
-    // backgroundColor: 'rgba(255, 255, 255,1)', //swap
-    borderRadius: 10,
-    height: hp('10%'),
-    width: wp('94%'),
-    shadowOpacity: 0.1,
-    shadowRadius: 30,
-    shadowColor: 'rgba(0,0,0,0.5)',
-    shadowOffset: { height: hp('10%'), width: wp('0%') },
-  },
-
+    justifyContent: 'center',
+    backgroundColor: bgColor,
+    height: hp('4%'),
+    width: wp('14s%'),
+    // padding:wp('2%')
+  }),
   dpImage: {
     height: hp('6%'),
     width: hp('6%'),
@@ -67,57 +62,49 @@ const HomeNeoCards = StyleSheet.create({
     width: hp('3.5%'),
     borderRadius: hp('4%'),
   },
-  iconView: {
-    marginLeft: 10,
+  dpVew: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'cyan',
+    paddingBottom: 5,
+  },
+  iconView: bgColor => ({
+    // marginLeft: 10,
     height: hp('5.5%'),
     width: hp('5.5%'),
     borderRadius: hp('5.5%'),
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor:'orange',
-  },
+    backgroundColor: bgColor,
+  }),
   dpImageView: {
-    marginLeft: 10,
+    // marginLeft: 10,
     height: hp('6%'),
     width: hp('6%'),
     borderRadius: hp('6%'),
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'red',
   },
-  profileName: {
+
+  profileName: textColor => ({
     fontFamily: FontStyle.regularFont,
-    fontSize: 17,
-  },
-  lastMsg: {
+    fontSize: 16,
+    color: textColor,
+    letterSpacing:0.3,
+  }),
+  lastMsg: textColor => ({
     fontFamily: FontStyle.regularFont,
     fontSize: 11,
-  },
+    color: textColor,
+  }),
   nameAndMsgContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'center',
-    width: wp('75%'),
-  },
-  cardStyle: {
-    height: hp('10%'),
-    width: wp('93%'),
-    borderRadius: 10,
-    backgroundColor:AppColors.darkThemeColors.bgColor,
-    justifyContent:'center',alignItems:'center',
-    shadowOpacity: 1,
-    shadowRadius: 1,
-    shadowColor: '#fff',
-    shadowOffset: { height: hp('10%'), width: wp('0%') },
-    marginBottom:10
-  },
-  cardView: {
-    flexDirection: 'row',
-    height: hp('10%'),
-    width: wp('95%'),
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent:'space-around',
-    // backgroundColor: 'rgba(255,255,255,0.1)',
+    width: "auto",
+    // backgroundColor: 'green',
+    paddingHorizontal:14
   },
 
   // CALLS SCREEN
@@ -135,15 +122,11 @@ const HomeNeoCards = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-
   },
   callIconView: {
-    height: hp('5%'),
-    width: hp('5%'),
-    // backgroundColor: AppColors.white,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: hp('5%'),
+    height: hp('6.5%'),
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-end',
   },
 });
 

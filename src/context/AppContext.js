@@ -5,12 +5,21 @@ const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
-  const baseUrl='http://192.168.2.238:8888'
+  const baseUrl='http://192.168.43.145:8888'
   const [userName, setUserName] = useState();
   const [currentUserId, setCurrentUserId] = useState('');
   const [language, setLanguage] = useState('English');
   const [isUserLoggedin, setIsUserLoggedin] = useState(false)
-  const [darkThemeActivator, setDarkThemeActivator] = useState(false)
+  const [darkThemeActivator, setDarkThemeActivator] = useState(false);
+  const [curentUser, setCurentUser] = useState(AsyncStorage.getItem('user'));
+  
+  const fetchUserId = async () => {
+    const user = await AsyncStorage.getItem('user');
+    const userId= await JSON.parse(user);
+    console.log("user id in all gloabl", JSON.parse(userId));
+    return userId;
+  }
+  console.log('user context mn',curentUser)
   const changeTheme = () => {
     setDarkThemeActivator(!darkThemeActivator)
   }
@@ -90,9 +99,12 @@ export const AppProvider = ({ children }) => {
         storeLanguage,
         language,
         darkThemeActivator,
+        curentUser,
         changeTheme,
         updateCurrentUserId,
-        storeLoggedinStatus
+        storeLoggedinStatus,
+        getUserID,
+        fetchUserId,
       }}>
       {children}
     </AppContext.Provider>

@@ -35,7 +35,6 @@ const CallsScreenHeader = ({ navigation, headerTitle, searchQuery, handleSearchO
   const { theme, darkThemeActivator, } = useContext(ThemeContext);
 
   return (
-
     <View>
       {/* <Wave style={{ position: 'absolute' }}  /> */}
       <View style={[styles.mainContainer, {
@@ -46,20 +45,17 @@ const CallsScreenHeader = ({ navigation, headerTitle, searchQuery, handleSearchO
           <TouchableOpacity
             style={{ flexDirection: 'row' }}
             onPress={() => { navigation.toggleDrawer() }}>
-
             {darkThemeActivator ? <MenuLeftWhite /> : <MenuLeftBlack />}
           </TouchableOpacity>
-
           <Text style={[AppHeaderStyle.appNameStyle, { color: theme.headerIconsColor}]}>{headerTitle}</Text>
-          
         </View>
         <SearchBar
           lightTheme
-          onChangeText={handleSearchOnChange}      // YE AIK FUNCTION LY RAHA HAI DISCUSSION WALI SCREEN SY 
+          onChangeText={handleSearchOnChange}      // YE AIK FUNCTION LY RAHA HAI DISCUSSION WALI SCREEN SY
           value={searchQuery}                     // ISS MEIN WO VALUE AIY GI JO K HUM SEARCH KR RAHY HAIN VALUE MREIN DATA DISCUSSION WALI SCREEN SY AA RAHA HAI
           elevation={0}
           underlineColorAndroid="transparent"
-          placeholder="Search Chats"
+          placeholder={`Search ${headerTitle}`}
           placeholderTextColor={theme.headerSearchText} //light
           round
           showCancel
@@ -72,7 +68,6 @@ const CallsScreenHeader = ({ navigation, headerTitle, searchQuery, handleSearchO
           rightIconContainerStyle={AppSubHeaderStyle.iconContainer}
           clearTextOnFocus={true}
         />
-        
       </View>
     </View>
   );
@@ -88,6 +83,6 @@ export default CallsScreenHeader;
         flexDirection: 'row',
         paddingHorizontal: wp('3.5%'),
         alignItems:'center',
-        width:wp('100%'),    
+        width:wp('100%'),
       },
  })

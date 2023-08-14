@@ -19,6 +19,7 @@ const ReelHeaderStyle = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: wp('3%'),
     paddingTop: hp('1%'),
+    backgroundColor:'rgba(0,0,0,0.2)'
   },
   screenNameStyle:{
     fontSize: wp('6.3%'),
