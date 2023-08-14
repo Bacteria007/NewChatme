@@ -91,49 +91,26 @@ const MyActivity = ({ navigation }) => {
       console.error('Failed to delete reel');
     }
   }
-  // SWIPE  STRT
+// SWIPE  STRT
 
-  const swipeableRef = useRef(null);
-  const [swipeOpen, setSwipeOpen] = useState(false);
+const swipeableRef = useRef(null);
+const [swipeOpen, setSwipeOpen] = useState(false);
 
-  const closeSwipeable = () => {
-    if (swipeableRef.current) {
-      swipeableRef.current.close();
-    }
-  };
+const closeSwipeable = () => {
+  if (swipeableRef.current) {
+    swipeableRef.current.close();
+  }
+};
 
-  const handleSwipeableOpen = () => {
-    closeSwipeable();
-    setSwipeOpen(true);
-  };
+const handleSwipeableOpen = () => {
+  closeSwipeable();
+  setSwipeOpen(true);
+};
 
-  const handleSwipeableClose = () => {
-    setSwipeOpen(false);
-  };
-  // SWIPE FUNCTIONS END
-  const renderRightActions = (progress, dragX, item) => {
-    if (swipeOpen) {
-      return null
-    }
-    else {
-      return (
-        <TouchableHighlight
-          onPress={() => {
-            deleteReel(item)
-            closeSwipeable();
-          }}
-          underlayColor="transparent"
-          style={{ backgroundColor: AppColors.white, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <IconButton
-            icon="delete"
-            iconColor={"black"}
-            size={20}
-          />
-        </TouchableHighlight>
-      );
-    }
-  };
+const handleSwipeableClose = () => {
+  setSwipeOpen(false);
+};
+// SWIPE FUNCTIONS END
 
   // EFFECTS
   useEffect(() => {
@@ -146,133 +123,136 @@ const MyActivity = ({ navigation }) => {
     console.log("reel id useefect", reelid)
   }, [allUploads, reelid]);
 
-  useEffect(() => {
-    // console.log("swipopen",swipeOpen)
-  }, [swipeOpen, closeSwipeable, handleSwipeableClose, handleSwipeableOpen])
-  useEffect(() => {
-    // console.log("swipopen",swipeOpen)
-  }, [deleteReel])
-  // 
+
+  const renderRightActions = (progress, dragX, item) => {
+
+    return (
+      <TouchableHighlight
+        onPress={() => deleteReel(item)}
+        underlayColor="transparent"
+        style={{ backgroundColor: AppColors.white, justifyContent: 'center', alignItems: 'center' }}
+      >
+       <IconButton
+        icon="delete"
+        iconColor={"black"}
+        size={20}
+        />
+      </TouchableHighlight>
+    );
+  };
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={{ flex: 1, backgroundColor: AppColors.white }}>
-        <InnerScreensHeader navigation={navigation} screenName="My uploads" />
-        <View style={Containers.centerContainer}>
-          {isLoading ? (
-            <View style={Containers.centercontent}>
-              <LottieView
-                source={require('../../../assets/animations/Lottieanimations/loading2.json')}
-                autoPlay
-                loop
-                style={{
-                  height: hp('30'),
-                  width: wp('60'),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: 'orange',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                Loading! Please Wait
-              </Text>
-            </View>
-          ) : (
-            <View>
-              {allUploads.length === 0 ? (
-                <View>
-                  <LottieView
-                    source={require('../../../assets/animations/Lottieanimations/oops3.json')}
-                    autoPlay
-                    loop
-                    style={{
-                      height: hp('60'),
-                      width: wp('80'),
-                      left: 50,
-                      marginTop: -20,
-                    }}
-                  />
-                  <Text
-                    style={{
-                      marginTop: -100,
-                      fontSize: 20,
-                      color: 'black',
-                      textAlign: 'center',
-                    }}>
-                    You don't have any uploads.
-                  </Text>
-                </View>
-              ) : (
-                <FlatList
-                  data={allUploads}
-                  key={1}
-                  numColumns={2}
-                  showsVerticalScrollIndicator={false}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item, index }) => {
-                    // Calculate the dimensions for each video in the grid
-                    const numColumns = 2;
-                    const spacing = 10; // Adjust the spacing between videos
-                    const videoWidth = (wp('100%') - (spacing * (numColumns - 1))) / numColumns;
-                    const videoHeight = (videoWidth * 16) / 16; // Assuming a 16:9 aspect ratio
-                    // ...
-                    const HtmlVideo = ActivityVideoHtml(baseUrl, item);
-                    console.log("video html", HtmlVideo)
-                    return (
-                      <Swipeable
-                        ref={swipeableRef}
-                        onSwipeableOpen={handleSwipeableOpen}
-                        onSwipeableClose={handleSwipeableClose}
-                        overshootLeft={false}
-                        overshootRight={false}
-                        overshootFriction={4}
-                        renderRightActions={(progress, dragX) => renderRightActions(progress, dragX, item)}>
-                        <View>
-                          <View style={[Containers.centerContainer, { padding: 10 }]}>
-                            <Neomorph
-                              darkShadowColor={AppColors.black}
-                              style={{
-                                shadowRadius: 3,
-                                width: wp('42'),
-                                height: hp('25'),
-                                backgroundColor: AppColors.white,
-                                shadowOpacity: 1,
-                                shadowOffset: { width: 2, height: 2 },
-                                shadowColor: 'blue'
-                              }}
-                            >
-                              <WebView
-                                originWhitelist={['*']}
-                                source={{ html: `${HtmlVideo}` }}
-                                style={{
-                                  width: wp('42'), height: hp('25'),
-                                }}
-                                scrollEnabled={false}
-                                showsVerticalScrollIndicator={false}
-                                showsHorizontalScrollIndicator={false}
-                                setDisplayZoomControls={false}
-                                setBuiltInZoomControls={false}
-                              />
-                            </Neomorph>
-                          </View>
-                        </View>
-                      </Swipeable>
-                    )
+<GestureHandlerRootView style={{flex:1}}>
+  <View style={{flex:1,backgroundColor:AppColors.white}}>
+      <InnerScreensHeader navigation={navigation} screenName="My uploads" />
+      <View style={Containers.centerContainer}>
+        {isLoading ? (
+          <View style={Containers.centercontent}>
+            <LottieView
+              source={require('../../../assets/animations/Lottieanimations/loading2.json')}
+              autoPlay
+              loop
+              style={{
+                height: hp('30'),
+                width: wp('60'),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            />
+            <Text
+              style={{
+                fontSize: 20,
+                color: 'orange',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              Loading! Please Wait
+            </Text>
+          </View>
+        ) : (
+          <View>
+            {allUploads.length === 0 ? (
+              <View>
+                <LottieView
+                  source={require('../../../assets/animations/Lottieanimations/oops3.json')}
+                  autoPlay
+                  loop
+                  style={{
+                    height: hp('60'),
+                    width: wp('80'),
+                    left: 50,
+                    marginTop: -20,
                   }}
                 />
-              )}
-            </View>
-          )}
-
-        </View>
-
+                <Text
+                  style={{
+                    marginTop: -100,
+                    fontSize: 20,
+                    color: 'black',
+                    textAlign: 'center',
+                  }}>
+                  You don't have any uploads.
+                </Text>
+              </View>
+            ) : (
+              <FlatList
+                data={allUploads}
+                key={1}
+                numColumns={2}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => {
+                  // Calculate the dimensions for each video in the grid
+                  const numColumns = 2;
+                  const spacing = 10; // Adjust the spacing between videos
+                  const videoWidth = (wp('100%') - (spacing * (numColumns - 1))) / numColumns;
+                  const videoHeight = (videoWidth * 16) / 16; // Assuming a 16:9 aspect ratio
+                  // ...
+                  const HtmlVideo = ActivityVideoHtml(baseUrl, item);
+                  console.log("video html", HtmlVideo)
+                  return (
+                    <Swipeable overshootFriction={3}  renderRightActions={(progress, dragX) => renderRightActions(progress, dragX, item)}>
+                    <View>
+                      <View style={[Containers.centerContainer, { padding: 10 }]}>
+                        <Neomorph
+                          darkShadowColor={AppColors.black}
+                          style={{
+                            shadowRadius: 3,
+                            width: wp('42'),
+                            height: hp('25'),
+                            backgroundColor: AppColors.white,
+                            shadowOpacity: 1,
+                            shadowOffset: { width: 2, height: 2 },
+                            shadowColor: 'blue'
+                          }}
+                        >
+                          <WebView
+                            originWhitelist={['*']}
+                            source={{ html: `${HtmlVideo}` }}
+                            style={{
+                              width: wp('42'), height: hp('25'),
+                            }}
+                            scrollEnabled={false}
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                            setDisplayZoomControls={false}
+                            setBuiltInZoomControls={false}
+                          />
+                        </Neomorph>
+                      </View>
+                    </View>
+                    </Swipeable>
+                  )
+                }}
+              />
+            )}
+          </View>
+        )}
+      
       </View>
-    </GestureHandlerRootView>
-
+     
+      </View>
+      </GestureHandlerRootView>
+   
   );
 };
 
@@ -287,7 +267,7 @@ export default MyActivity;
 //     console.log("reel id", item._id)
 //   }}
 //   style={{flex:1}}
-//
+// 
 
 // ======================
 //   <Modal
@@ -295,7 +275,7 @@ export default MyActivity;
 // // onDismiss={() => setIsModalVisible(false)}
 // >
 //   <View
-//     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>        
 //     {currentIndex !== null && allUploads[currentIndex] ? (
 //       <>
 //         <View style={{ height: hp('7%'), width: wp('90%'), backgroundColor: 'white', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -305,7 +285,7 @@ export default MyActivity;
 //               console.log("cur============", allUploads[currentIndex])
 //               deleteReel(allUploads[currentIndex])
 //             }}
-//             rippleColor="rgba(0, 0, 0, 0.6)"
+//             rippleColor="rgba(0, 0, 0, 0.6)"        
 //           >
 //             <IconButton
 //               icon="delete"
@@ -315,7 +295,7 @@ export default MyActivity;
 //           </TouchableRipple>
 //           <TouchableRipple
 //             onPress={() => setIsModalVisible(false)}
-//             rippleColor="rgba(0, 0, 0, .6)"
+//             rippleColor="rgba(0, 0, 0, .6)"        
 //           >
 //             <IconButton
 //               icon="close"
@@ -332,7 +312,7 @@ export default MyActivity;
 //           repeat={true}
 //           ref={videoRef}
 //         />
-//       </>
+//       </>  
 //     ) : null}
 //   </View>
 // </Modal>

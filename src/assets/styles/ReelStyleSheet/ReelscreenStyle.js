@@ -7,7 +7,8 @@ import {
 import AppColors from '../../colors/Appcolors';
 
 const { height, width } = Dimensions.get('window');
-
+// const height=hp('50')
+// const width=wp('100')
 const ReelscreenStyle = StyleSheet.create({
   containerStyle: { height: height, backgroundColor: AppColors.black },
   flatlistContainerView: { flex: 1, height: height },
