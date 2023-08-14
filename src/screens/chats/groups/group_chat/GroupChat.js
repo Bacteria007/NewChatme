@@ -45,18 +45,14 @@ const GroupChat = props => {
     // VARIABLES
     const { item } = props.route.params;
     const { baseUrl, curentUser } = useContext(AppContext)
-    // const cur = AsyncStorage.getItem("user");
     let currentId = JSON.parse(curentUser._j);
     const groupMembers = item.members;
     const adminId = item.group_admin;
     const groupId = item._id;
-    // console.log('groups ite', item.members);
-    // console.log('curentUser ID==================', currentId);
     const [newMsg, setNewMsg] = useState('');
     const [msgList, setMsgList] = useState([]);
     const [height, setHeight] = useState(hp('7%')); // Initialize height with a default value
     const [visible, setVisible] = React.useState(false);
-    const [swipeToReply, setSwipeToReply] = useState(false);
 
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
@@ -75,14 +71,11 @@ const GroupChat = props => {
     };
     const getSenderDetails = async () => {
         const userDetails = groupMembers.find(member => member._id === currentId);
-        // const udeatils= await JSON.parse(userDetails)
-        // console.log("current logged in user in group chat--^^^^^^^^^", userDetails);
         return userDetails; // This will return the matching user details or undefined if not found
     };
     const sendMessage = async () => {
 
         const user_details = await getSenderDetails();
-        // console.log('user_details===in send message of group chat========', user_details);
         const msgData = {
             text: newMsg,
             sender_id: user_details._id,
@@ -106,44 +99,31 @@ const GroupChat = props => {
                 // bigText:`${item.sender_name} = ${item.text}`
             })
         }
-        // console.log(`handleNotification item============== ${item.text}`)
     }
     const handleGetCurrentMsg = (msgData) => {
-        // console.log(
-        //     `Received message: ${msgData.text} from sender: ${msgData.sender_name}`, 'backgroud:orange;color:black'
-        // );
+        
         if (msgData.sender_id != currentId) {
             handleNotification(msgData)
         } else {
-            // console.log(`${msgData} is from me`)
         }
         setMsgList([...msgList, msgData]);
     };
-    //   msg history using group id ab pta chaly ga
     const receivePreviousMessagesFromDb = async () => {
-
         await fetch(`${baseUrl}/message_history/?groupId=${groupId}`, {
-
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
-
         }).then(async (res) => {
             const msgs = await res.json()
             setMsgList(msgs)
-            // console.log("msgs resposne after fetch db", msgs)
-            // console.log("histor mn msglist state ", msgList)
         }).catch((err) => {
             console.log(err)
         })
     }
 
     // EFFECTS  
-
-
     // get currently sent message
-    // agr useeefect k andr likhon to 2 times chalta two times messgae show hota
     useEffect(() => {
         // Listen for the "getCurrentMsg" event
         socket.on('getCurrentMsg', handleGetCurrentMsg);
@@ -154,7 +134,6 @@ const GroupChat = props => {
     }, [handleGetCurrentMsg]);
 
     useEffect(() => {
-        // console.log('==================>>>>>>>>>>>> RECEIVING PREVIOUS MESSAGES>>>>>>>>>>>==================', 'background:yello; color:purple')
         receivePreviousMessagesFromDb()
     }, [])
     const initialize_socket = async () => {
@@ -164,7 +143,6 @@ const GroupChat = props => {
         const name = user_details.name;
         socket.emit('user_connected', name);
         // Clean up when component unmounts
-        // console.log('initializing socket=================================', 'background:blue; color:white')
         return () => {
             socket.disconnect();
         };
@@ -174,7 +152,6 @@ const GroupChat = props => {
     }, []);
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-
             <Provider>
                 <View styles={[UserChatStyle.contianer]}>
                     <Primary_StatusBar />
@@ -184,7 +161,6 @@ const GroupChat = props => {
                             <Appbar.Content title={item.group_name} style={{ paddingTop: 7 }} />
                             <Appbar.Action
                                 icon={() => <Icons.Ionicons name="people" size={24} />}
-
                                 color="purple"
                             />
                             {/* <Appbar.Action icon="dots-vertical" onPress={console.log('dots pressed')} /> */}
@@ -196,7 +172,7 @@ const GroupChat = props => {
                             <FlatList
                                 data={msgList.length != 0 ? msgList : []}
                                 // ref={flatListRef}
-                                renderItem={({ item }) => { return <GroupMsgItem msgData={item} onSwipeEnabled={(val) => { setSwipeToReply(val) }} /> }}
+                                renderItem={({ item }) => { return <GroupMsgItem msgData={item} /> }}
                                 keyExtractor={(item, index) => index.toString()} // Use a unique key for each item
                             />
                             :

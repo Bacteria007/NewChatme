@@ -1,67 +1,59 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import moment from 'moment';
 import AppContext from '../../context/AppContext';
-import Animated, {
-  interpolateColor,
-  useAnimatedGestureHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
-import {
-  Directions,
-  FlingGestureHandler,
-  State,
-} from 'react-native-gesture-handler';
+import { Swipeable } from 'react-native-gesture-handler';
 import { Icons } from '../../assets/Icons';
 
-const GroupMsgItem = ({ msgData, onSwipeEnabled }) => {
+const GroupMsgItem = ({ msgData }) => {
   const { curentUser } = useContext(AppContext);
   const currentId = JSON.parse(curentUser._j);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
-  const [showTick, setShowTick] = useState(false);
-  const getRandomColor = () => {
-    const colors = ['yellow', 'black', 'orange', 'white', 'skyblue']; // List of possible colors
-    const randomIndex = Math.floor(Math.random() * colors.length); // Generate a random index
-    return colors[randomIndex]; // Return the random color
+  // reply
+  const swipeableRef = useRef(null);
+  const [swipeOpen, setSwipeOpen] = useState(false);
+
+  const closeSwipeable = () => {
+    if (swipeableRef.current) {
+      swipeableRef.current.close();
+    }
   };
-  const randomColor = getRandomColor();
-  // ################################## swipe work start
-  let startingPoint = 0;
-  let dir = 'right';
-  const x = useSharedValue(startingPoint);
-  const textColor = useSharedValue('black'); // Initialize with default color
-  // --------------------
-  const gestureHandler = useAnimatedGestureHandler({
-    onStart: (event, ctx) => {},
-    onActive: (event, ctx) => {
-      x.value = dir === 'left' ? -180 : 60;
-      textColor.value = dir === 'left' ? 'white' : 'orange';
-    },
-    onEnd: (event, ctx) => {
-      x.value = withSpring(startingPoint);
-      textColor.value = withSpring('black');
-    },
-  });
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: x.value }],
-    };
-  });
+  const handleSwipeableOpen = () => {
+    closeSwipeable();
+    setSwipeOpen(true);
+  };
 
-  const textAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      color: textColor.value,
-    };
-  });
-  //######################################## swipe work end
+  const handleSwipeableClose = () => {
+    setSwipeOpen(false);
+  };
+
+  const renderLeftActions = (progress, dragX, item) => {
+    if (swipeOpen) {
+      return null;
+    }
+    
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          closeSwipeable();
+          // Handle reply action
+        }}
+        style={{ justifyContent: 'center', alignItems: 'center', width: wp('40')}}
+      >
+        <Icons.Entypo name='reply' color="black" size={24} />
+      </TouchableOpacity>
+    );
+  };
+
+  useEffect(()=>{
+// console.log("swipopen",swipeOpen)
+  },[swipeOpen,closeSwipeable,handleSwipeableClose,handleSwipeableOpen])
+// Checking  User
   const isCurrentUserFunc = async () => {
     const senderid = await msgData.sender_id;
     return senderid === currentId;
@@ -75,52 +67,31 @@ const GroupMsgItem = ({ msgData, onSwipeEnabled }) => {
     checkIsCurrentUser();
   }, [checkIsCurrentUser]);
 
-  useEffect(() => {
-    if (msgData.deliveryStatus === true) {
-      const tickTimeout = setTimeout(() => {
-        setShowTick(true);
-      }, 100); // Adjust the delay time as needed (in milliseconds)
 
-      return () => clearTimeout(tickTimeout);
-    }
-  }, [msgData.deliverStatus]);
   return (
-    <FlingGestureHandler
-      direction={dir == 'left' ? Directions.LEFT : Directions.RIGHT}
-      onGestureEvent={gestureHandler}
-      onHandlerStateChange={({ nativeEvent }) => {
-        if (nativeEvent.state == State.ACTIVE) {
-          // add logic when you swipe what to do
-          console.log('active');
-          onSwipeEnabled(true);
-        }
-        if (nativeEvent.state == State.CANCELLED) {
-          // add logic when you swipe what to do
-          console.log('cancel');
-          onSwipeEnabled(false);
-        }
-      }}>
-      <Animated.View style={[animatedStyle, { width: wp('100') }]}>
+    <Swipeable
+      ref={swipeableRef}
+      renderLeftActions={renderLeftActions}
+      onSwipeableOpen={handleSwipeableOpen}
+      onSwipeableClose={handleSwipeableClose}
+      overshootLeft={false}
+      overshootRight={false}
+      overshootFriction={4}
+      onEnded={closeSwipeable}
+      onCancelled={closeSwipeable}
+    >
+      <View style={{ width: wp('100') }}>
         <View style={styles.wholeMsgBox(isCurrentUser)}>
-          <Text style={{ color: randomColor }}>
+          <Text style={{ color: "black" }}>
             {!isCurrentUser ? msgData.sender_name : 'You'}
           </Text>
           <Text style={[{ color: 'white', fontSize: 15, textAlign: 'right' }]}>
             {msgData.text}
           </Text>
-          <Animated.Text
-            style={[textAnimatedStyle, { fontSize: 10, textAlign: 'right' }]}>
+          <Text style={{ fontSize: 10, textAlign: 'right' }}>
             {moment(msgData.createdAt).format('hh:mm a ')}
-          </Animated.Text>
-          {/* // {showTick ? */}
-          {msgData.deliverStatus ? (
-            <Icons.MaterialIcons
-              name="done"
-              size={15}
-              color={'cyan'}
-              style={{ alignSelf: 'flex-end' }}
-            />
-          ) : null}
+          </Text>
+
           {isCurrentUser ? (
             <>
               <View style={styles.rightArrow}></View>
@@ -133,8 +104,8 @@ const GroupMsgItem = ({ msgData, onSwipeEnabled }) => {
             </>
           )}
         </View>
-      </Animated.View>
-    </FlingGestureHandler>
+      </View>
+    </Swipeable>
   );
 };
 
@@ -153,7 +124,6 @@ const styles = StyleSheet.create({
   }),
   rightArrow: {
     position: 'absolute',
-    // backgroundColor: "#0078fe",
     backgroundColor: 'grey',
     width: 20,
     height: 25,
@@ -165,7 +135,6 @@ const styles = StyleSheet.create({
   rightArrowOverlap: {
     position: 'absolute',
     backgroundColor: '#eeeeee',
-    //backgroundColor:"green",
     width: 20,
     height: 35,
     bottom: -6,
@@ -195,3 +164,11 @@ const styles = StyleSheet.create({
     left: -20,
   },
 });
+
+
+  // const getRandomColor = () => {
+  //   const colors = ['yellow', 'black', 'orange', 'white', 'skyblue']; // List of possible colors
+  //   const randomIndex = Math.floor(Math.random() * colors.length); // Generate a random index
+  //   return colors[randomIndex]; // Return the random color
+  // };
+  // const randomColor = getRandomColor();

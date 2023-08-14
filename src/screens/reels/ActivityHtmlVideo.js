@@ -17,11 +17,7 @@ const ActivityVideoHtml = (baseUrl,item) => `
     position: absolute;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
-   
+    object-fit: cover;   
   }
  
   </style>
