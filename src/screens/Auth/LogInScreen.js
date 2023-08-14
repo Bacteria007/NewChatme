@@ -22,9 +22,10 @@ import { Icons } from '../../assets/Icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import AppContext from '../../context/AppContext';
+import FontStyle from '../../assets/styles/FontStyle';
 
 const LogInScreen = ({ navigation }) => {
-  const { baseUrl, storeLoggedinStatus } = useContext(AppContext);
+  const {baseUrl,storeLoggedinStatus,currentUserId,getUserID2}=useContext(AppContext)
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -57,36 +58,40 @@ const LogInScreen = ({ navigation }) => {
     setCountryCode(country.callingCode);
   };
 
-  const userLogin = ({ navigation }) => {
+  const userLogin = ({navigation})=>{
     const formdata = new FormData();
     formdata.append('phoneNo', phoneNumber);
     formdata.append('password', password);
     axios({
       method: 'post',
-      url: `${baseUrl}/login`,
+      url:  `${baseUrl}/login`,
       data: formdata,
       headers: { 'Content-Type': 'multipart/form-data' },
     })
       .then(function (response) {
-        if (response.data.match == true) {
-          console.log('login', response.data.loggedInUser._id);
-          AsyncStorage.setItem(
-            'user',
-            JSON.stringify(response.data.loggedInUser._id),
-          );
+        if(response.data.match == true)
+        {
+          console.log("login",response.data)
+          let res=response.data.loggedInUser
+          AsyncStorage.setItem('user', JSON.stringify({userId:res._id,phoneNumber:res.phoneNo,profileImage: res.profileImage,name:res.name}))
           // storeLoggedinStatus(true)
+          console.log("async login",currentUserId)
           navigation.navigate('DrawerScreens');
-        } else {
-          alert('No User found with this number and password');
+        }
+        else{
+            if (response.data.message === 'Invalid phone number or password') {
+              alert("Invalid phone number or password");
+            } else {
+              alert("There was an issue in logging in,try again",
+              "No user found with this phone number or password");
+            }
         }
       })
       .catch(function (response) {
-        //handle error
         console.log(response);
       });
-  };
+  }
 
- 
   useEffect(() => {
     // Set default country as Pakistan
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
@@ -95,6 +100,7 @@ const LogInScreen = ({ navigation }) => {
     // if(currentUserStatus){
     //  navigation.navigate('DrawerScreens');
     //     }
+    getUserID2()
   }, []);
 
   return (
@@ -125,7 +131,7 @@ const LogInScreen = ({ navigation }) => {
               withCallingCode
               countryCode={selectedCountry?.cca2}
               onSelect={handleCountrySelect}
-            // translation="eng"
+              // translation="eng"
             />
           </View>
 
@@ -146,6 +152,7 @@ const LogInScreen = ({ navigation }) => {
               style={[LogInStyleSheet.passwordInput]}
               secureTextEntry={passwordVisible}
               placeholder="Password"
+              autoCapitalize='none'
               onChangeText={text => setPassword(text)}
             />
             <TouchableOpacity
@@ -158,13 +165,10 @@ const LogInScreen = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('ForgetPassword');
-            }}>
-            <Text style={[LogInStyleSheet.forgotpasswordText]}>
-              Forgot Password?
-            </Text>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate('ForgetPassword')
+          }}>
+          <Text style={[LogInStyleSheet.forgotpasswordText]}>Forgot Password?</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -195,8 +199,8 @@ const LogInScreen = ({ navigation }) => {
                   return;
                 }
               } else {
-                console.log('clicked');
-                userLogin({ navigation });
+                console.log("clicked")
+                userLogin({navigation})
                 // navigation.navigate('DrawerScreens');
               }
 
@@ -206,29 +210,35 @@ const LogInScreen = ({ navigation }) => {
             style={[LogInStyleSheet.TouchableButtonStyle]}>
             <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
           </TouchableOpacity>
+          <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',margin:wp('3%')}}>
+          <Text style={{fontFamily:FontStyle.mediumFont}}>Don't have an account?</Text>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate('SignUpScreen')
+          }}><Text style={{color:AppColors.primary,fontFamily:FontStyle.mediumFont}}>Signup</Text></TouchableOpacity>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
       <Snackbar
-        visible={visible}
-        onDismiss={() => setVisible(false)}
-        duration={2000}
-        style={
-          passwordSnackWidth === true
-            ? {
-              backgroundColor: '#D3D3D3',
-              width: wp('80'),
-              marginBottom: hp('6'),
-              alignSelf: 'center',
-            }
-            : {
-              backgroundColor: '#D3D3D3',
-              width: wp('55'),
-              marginBottom: hp('6'),
-              alignSelf: 'center',
-            }
-        }>
-        <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
-      </Snackbar>
+            visible={visible}
+            onDismiss={() => setVisible(false)}
+            duration={2000}
+            style={
+              passwordSnackWidth === true
+                ? {
+                    backgroundColor: '#D3D3D3',
+                    width: wp('80'),
+                    marginBottom: hp('6'),
+                    alignSelf: 'center',
+                  }
+                : {
+                    backgroundColor: '#D3D3D3',
+                    width: wp('55'),
+                    marginBottom: hp('6'),
+                    alignSelf: 'center',
+                  }
+            }>
+            <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
+          </Snackbar>
     </View>
   );
 };

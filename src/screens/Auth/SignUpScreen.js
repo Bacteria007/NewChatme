@@ -25,6 +25,7 @@ import { Icons } from '../../assets/Icons';
 import TranslationFile from '../../assets/translation/TranslationFile';
 import AppContext from '../../context/AppContext';
 import RNFS, { read } from 'react-native-fs';
+import FontStyle from '../../assets/styles/FontStyle';
 
 const SignUpScreen = ({ navigation }) => {
   const { language,baseUrl,storeLoggedinStatus } = useContext(AppContext);
@@ -37,6 +38,9 @@ const SignUpScreen = ({ navigation }) => {
   const [passwordSnackWidth, setPasswordSnackWidth] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
+  const [alreadyExist, setAlreadyExist] = useState('')
+  const [errorMessage, setErrorMessage] = useState(false)
+
 
 
   // Regular expression to check for special characters
@@ -67,11 +71,9 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
   const handleSignUp = ({ navigation }) => {
 
     const formdata = new FormData();
-    formdata.append('name', '');
     formdata.append('phoneNo', phoneNumber);
     formdata.append('password', password);
-    // formdata.append('avatar', base64Image);
-
+    
     axios({
       method: 'post',
       url: `${baseUrl}/signup`,
@@ -84,16 +86,23 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
           const uId=response.data.newUser._id
           console.log("type of",typeof uId)
           // console.log("asyncSignup",AsyncStorage.setItem('user', uId))
-          AsyncStorage.setItem('user', JSON.stringify(response.data.newUser._id))
+          if(response.data.newUser==="A user with the same phone number already exists."){
+            setErrorMessage(true)
+            setAlreadyExist(response.data.newUser)
+          }else{
+            AsyncStorage.setItem('user', JSON.stringify({userId:response.data.newUser._id,phoneNumber:response.data.newUser.phoneNo}))
           storeLoggedinStatus(true)
-          .then(() => {
-            console.log('User ID stored successfully:', response.data.newUser);
-            navigation.navigate('DrawerScreens');
-          })
-          .catch((error) => {
-            console.log('Error while storing user ID:', error);
-            navigation.navigate('DrawerScreens'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
-          });
+          navigation.navigate('AfterSignUpProfileScreen');
+          }
+      
+          // .then(() => {
+          //   console.log('User ID stored successfully:', response.data.newUser);
+          //   navigation.navigate('DrawerScreens');
+          // })
+          // .catch((error) => {
+          //   console.log('Error while storing user ID:', error);
+          //   navigation.navigate('DrawerScreens'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
+          // });
       } else {
         alert('Account cannot be created! Please try again later.');
       }
@@ -118,7 +127,10 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
         darkModeBgColor={'black'}
         lightModeBgColor={AppColors.primary}
       />
+    
+
       <KeyboardAvoidingView
+      
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
       >
@@ -143,6 +155,7 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
               // translation="eng"
             />
           </View>
+
           <View style={[SignUpStyleSheet.phoneNumberContainer]}>
             <Text style={[SignUpStyleSheet.countryCode]}>+{countryCode}</Text>
             <TextInput
@@ -154,11 +167,15 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
               value={phoneNumber}
             />
           </View>
+          {errorMessage&&
+            <Text style={{color:AppColors.red,marginBottom:hp('1%'),marginTop:hp('-1%')}}>{alreadyExist}</Text>}
+
           <View style={[SignUpStyleSheet.passwordContainer]}>
             <TextInput
               style={[SignUpStyleSheet.passwordInput]}
               secureTextEntry={passwordVisible}
               placeholder={TranslationFile[language].Password}
+              autoCapitalize='none'
               onChangeText={text => setPassword(text)}
             />
             <TouchableOpacity
@@ -171,6 +188,7 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
               />
             </TouchableOpacity>
           </View>
+         
           <TouchableOpacity
             onPress={() => {
               Keyboard.dismiss;
@@ -204,29 +222,40 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
                   );
                   return;
                 } else {
+
                   setPasswordSnackWidth(!false);
                   showSnackbar(
                     TranslationFile[language]
                       .Password_contain_atLeast_8_character,
                   );
+
                   if (!specialCharRegex.test(password)) {
                     setPasswordSnackWidth(!false);
                     showSnackbar(TranslationFile[language].Password_must_contain_at_least_one_special_character);
                     return;
                   }
+
                   return;
+
                 }
               } else {
-                navigation.replace('AfterSignUpProfileScreen');
+                // navigation.replace('AfterSignUpProfileScreen');
+                handleSignUp({navigation})
               }
+
               // handleSubmit();
-              handleSignUp({navigation})
             }}
             style={[SignUpStyleSheet.TouchableButtonStyle]}>
             <Text style={[SignUpStyleSheet.TouchableTextStyle]}>
               {TranslationFile[language].Next}
             </Text>
           </TouchableOpacity>
+          <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',margin:wp('3%')}}>
+          <Text style={{fontFamily:FontStyle.mediumFont}}>Have an account?</Text>
+          <TouchableOpacity onPress={()=>{
+            navigation.navigate('LogInScreen')
+          }}><Text style={{color:AppColors.primary,fontFamily:FontStyle.mediumFont}}>Login</Text></TouchableOpacity>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
       <Snackbar
