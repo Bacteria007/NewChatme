@@ -91,27 +91,8 @@ const MyActivity = ({ navigation }) => {
       console.error('Failed to delete reel');
     }
   }
-// SWIPE  STRT
 
-const swipeableRef = useRef(null);
-const [swipeOpen, setSwipeOpen] = useState(false);
-
-const closeSwipeable = () => {
-  if (swipeableRef.current) {
-    swipeableRef.current.close();
-  }
-};
-
-const handleSwipeableOpen = () => {
-  closeSwipeable();
-  setSwipeOpen(true);
-};
-
-const handleSwipeableClose = () => {
-  setSwipeOpen(false);
-};
-// SWIPE FUNCTIONS END
-
+  
   // EFFECTS
   useEffect(() => {
     fetchUploadedVideos(); // Call the new function to fetch uploaded videos
@@ -125,7 +106,7 @@ const handleSwipeableClose = () => {
 
 
   const renderRightActions = (progress, dragX, item) => {
-
+    // Define the swipe content for deleting the video
     return (
       <TouchableHighlight
         onPress={() => deleteReel(item)}
