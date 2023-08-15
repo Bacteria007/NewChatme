@@ -29,64 +29,20 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import AppContext from '../../../context/AppContext';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
+import RenderChats from '../../../components/RenderAllChats/RenderChats';
 
-const socket = io.connect('http://192.168.83.238:8888');
+const socket = io.connect('http://192.168.1.106:8888');
 
 const UserChat = props => {
   const { baseUrl, currentUserId } = useContext(AppContext);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [isInnerModalVisible, setInnerModalVisible] = useState(false);
+  const [changeHeader, setChangeHeader] = useState(false);
+  const [imagMessage, setImagMessage] = useState('');
+  const [msgId, setMsgId] = useState();
 
   const apiKey = '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';
   const [isSending, setIsSending] = useState(false);
 
-  const [outerModal, setOuterModal] = useState([
-    {
-      text: 'View contact',
-    },
-    {
-      text: 'Media,links,and docs',
-    },
-    {
-      text: 'search',
-    },
-    {
-      text: 'Mute notifications',
-    },
-    {
-      text: 'Disappearing messages',
-    },
-    {
-      text: 'Wallpaper',
-    },
-    {
-      text: 'More',
-    },
-  ]);
-  const [innerModal, setInnerrModal] = useState([
-    {
-      text: 'Report',
-    },
-    {
-      text: 'Block',
-    },
-    {
-      text: 'Clear chat',
-    },
-    {
-      text: 'Export chat',
-    },
-    {
-      text: 'Add shortcut',
-    },
-  ]);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
-  const toggleInnerModal = () => {
-    setInnerModalVisible(!isInnerModalVisible);
-  };
   useEffect(() => {
     console.log('data');
   }, [isSending]);
@@ -113,7 +69,7 @@ const UserChat = props => {
     formData.append('name', itm.name);
     formData.append('phoneNumber', itm.phoneNumber);
     formData.append('recieverId', itm.recieverId);
-    
+
     // Call the addContact API
     await fetch(`${baseUrl}/addContacts`, {
       method: 'POST',
@@ -196,8 +152,10 @@ const UserChat = props => {
       });
 
       const data = await response.json(); // Parse the response body as JSON
-      setMessageList(data);
+      // setMessageList(data)
+      setMessageList(list => [...list, data]);
       console.log('After Message deleted:', data);
+      setChangeHeader(!changeHeader);
       // Reset the new contact input
     } catch (error) {
       console.error('Error deleting message:', error);
@@ -221,7 +179,7 @@ const UserChat = props => {
     return () => {
       socket.off('receive_message');
     };
-  }, [recieverId]);
+  }, [messageList]);
 
   useEffect(() => {
     // Scroll to the end when messageList changes
@@ -245,7 +203,18 @@ const UserChat = props => {
         source={require('../../../assets/imges/userChatImages/img6.jpg')}
         style={{ height: hp('100%'), width: wp('100%') }}
         resizeMode="cover">
-        <UserChatHeader item={itm} navigation={props.navigation} />
+        {changeHeader != true ? (
+          <UserChatHeader item={itm} navigation={props.navigation} />
+        ) : (
+          <ChangedChatHeader
+            msgId={msgId}
+            navigation={props.navigation}
+            setChangeHeader={setChangeHeader}
+            DeleteMessage={() => {
+              DeleteMessage(msgId);
+            }}
+          />
+        )}
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ flex: 1 }}
@@ -255,33 +224,21 @@ const UserChat = props => {
               ref={flatListRef}
               data={filteredMessages}
               renderItem={({ item }) => (
-                <TouchableOpacity>
-                  <View
-                    style={[
-                      item.senderId === itm.userId
-                        ? UserChatStyle.userMessageContainer
-                        : UserChatStyle.otherMessageContainer,
-                    ]}>
-                    <Text
-                      style={[
-                        item.senderId === itm.userId
-                          ? UserChatStyle.userMessageText
-                          : UserChatStyle.otherMessageText,
-                      ]}>
-                      {item.content}
-                    </Text>
-
-                    <Text
-                      style={[
-                        item.senderId === itm.userId
-                          ? UserChatStyle.userTimestampText
-                          : UserChatStyle.otherTimestampText,
-                      ]}>
-                      {item.senderId == itm.userId ? '' : `${item.mood} mood`}{' '}
-                      {moment(item.createdAt).format('hh:mm a ')}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                <RenderChats
+                  item={item}
+                  itm={itm}
+                  setChangeHeader={setChangeHeader}
+                  setMsgId={setMsgId}
+                />
+                // <TouchableOpacity onLongPress={()=>{
+                //   setChangeHeader(true)
+                //   setMsgId(item._id)
+                // }}>
+                // <View style={[item.senderId === itm.userId ? UserChatStyle.userMessageContainer : UserChatStyle.otherMessageContainer]}>
+                //   <Text style={[item.senderId === itm.userId ? UserChatStyle.userMessageText : UserChatStyle.otherMessageText]}>{item.content}</Text>
+                //   <Text style={[item.senderId === itm.userId ? UserChatStyle.userTimestampText : UserChatStyle.userTimestampText]}>{moment(item.createdAt).format('hh:mm a ')}</Text>
+                // </View>
+                // </TouchableOpacity>
               )}
               contentContainerStyle={[UserChatStyle.messagesContainer]}
               keyExtractor={(item, index) => index.toString()}
@@ -292,66 +249,17 @@ const UserChat = props => {
                 flatListRef.current.scrollToEnd({ animated: true })
               }
             />
-            <View style={[UserChatStyle.inputContainer]}>
-              <TextInput
-                style={[UserChatStyle.input]}
-                placeholder="Type a message..."
-                value={currentMessage}
-                onChangeText={txt => {
-                  setCurrentMessage(txt);
-                }}
-              />
-              <TouchableOpacity
-                style={[UserChatStyle.sendButton]}
-                onPress={() => {
-                  if (currentMessage.trim() != null) {
-                    sendMessage();
-                  }
-                }}>
-                {/* <Text style={[UserChatStyle.sendButtonText]}>Send</Text> */}
-                {isSending ? (
-                  <ActivityIndicator size="small" color="#ffffff" /> // Show loading animation
-                ) : (
-                  <Text style={[UserChatStyle.sendButtonText]}>Send</Text>
-                )}
-              </TouchableOpacity>
-            </View>
           </View>
-          {/* <UserChatInput/> */}
-
-          {/* <View style={[UserChatStyle.containerView]}>
-        <View style={[UserChatStyle.headerView]}>
-          <View style={[UserChatStyle.leftview]}>
-            <TouchableOpacity
-              onPress={() => {
-                props.navigation.navigate('Home');
-              }}>
-              <FontAwesome5
-                name="arrow-left"
-                size={wp('5.5%')}
-                color="white"
-                style={{marginTop: hp('2.7%')}}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View
-                style={[UserChatStyle.leftInnerView]}>
-                <View style={[UserChatStyle.dpContainerView]}>
-                  <Image
-                    source={item.dpImage}
-                    style={[UserChatStyle.dpImageStyle]}
-                  />
-               </View>
-            {/* </ImageBackground> */}
-          {/* </View> */}
-
-          {/* <TouchableOpacity>
-          <View
-            style={[UserChatStyle.microphoneContainerView]}>
-            <FontAwesome name="microphone" size={wp('5.7%')} color={AppColors.white} />
-          </View>
-        </TouchableOpacity>
-      </View> */}
+          <UserChatInput
+            item={itm}
+            socket={socket}
+            setMessageList={setMessageList}
+            setImagMessage={setImagMessage}
+            imagMessage={imagMessage}
+            sendMessage={() => {
+              sendMessage();
+            }}
+          />
         </KeyboardAvoidingView>
       </ImageBackground>
     </View>

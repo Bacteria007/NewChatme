@@ -76,6 +76,7 @@ import CreateGroup from './src/screens/chats/groups/CreateGroup';
 import Apis from './src/utils/Apis';
 import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
 import Settings2 from './src/screens/settings/Settings2';
+import { UserProvider, useUserContext } from './src/context/UserContext';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -259,13 +260,20 @@ const App = props => {
           // backBehavior='history'
           initialRouteName="Home"
           drawerContent={props => {
+            const { userData } = useUserContext();
+            const parsedUser = JSON.parse(userData._j);
+            const { baseUrl } = useContext(AppContext);
+            console.log('baseurl', baseUrl);
+            console.log('usercontext.img', parsedUser.profileImage);
             return (
               <View style={{ flex: 1 }}>
                 <DrawerContentScrollView {...props}>
                   <Animated.View
                     style={[Containers.centerContainer, { height: hp('25%') }]}>
                     <Image
-                      source={require('./src/assets/imges/w11.jpg')}
+                      source={{
+                        uri: `${baseUrl} ${parsedUser?.profileImage} `,
+                      }}
                       style={{
                         height: wp('25%'),
                         width: wp('25%'),
@@ -274,10 +282,10 @@ const App = props => {
                     />
                     <Text
                       style={{ fontSize: hp('3%'), color: AppColors.black }}>
-                      User Name
+                      {parsedUser?.name}
                     </Text>
                   </Animated.View>
-                  <DrawerItemList {...props} />
+                <DrawerItemList {...props} />
                 </DrawerContentScrollView>
                 <TouchableOpacity
                   onPress={() => {
@@ -380,14 +388,17 @@ const App = props => {
   // console.log('user id App.js-----------------', loggedInUserId);
   return (
     <AppProvider>
+      <UserProvider>
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
           <ZegoCallInvitationDialog />
           <Stack.Navigator
             options={{ headerShown: false }}
-            initialRouteName={
-              loggedInUserId ? 'DrawerScreens' : 'DrawerScreens'
-            }>
+            // initialRouteName={
+            //   loggedInUserId ? 'DrawerScreens' : 'DrawerScreens'
+            // }
+            initialRouteName='WelcomeScreen'
+            >
            
             <Stack.Screen
               name="WelcomeScreen"
@@ -516,6 +527,7 @@ const App = props => {
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
+      </UserProvider>
     </AppProvider>
   );
 };
