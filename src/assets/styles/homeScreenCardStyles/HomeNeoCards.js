@@ -58,8 +58,8 @@ const HomeNeoCards = StyleSheet.create({
     borderRadius: hp('6%'),
   },
   dpIcon: {
-    height: hp('3.5%'),
-    width: hp('3.5%'),
+    height: hp('5%'),
+    width: hp('5%'),
     borderRadius: hp('4%'),
   },
   dpVew: {

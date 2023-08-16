@@ -118,7 +118,6 @@ const MyActivity = ({ navigation }) => {
     );
   };
   return (
-<GestureHandlerRootView style={{flex:1}}>
   <View style={{flex:1,backgroundColor:AppColors.white}}>
       <InnerScreensHeader navigation={navigation} screenName="My uploads" />
       <View style={Containers.centerContainer}>
@@ -187,9 +186,17 @@ const MyActivity = ({ navigation }) => {
                   const HtmlVideo = ActivityVideoHtml(baseUrl, item);
                   //console.log("video html", HtmlVideo)
                   return (
-                    <Swipeable overshootFriction={3}  renderRightActions={(progress, dragX) => renderRightActions(progress, dragX, item)}>
-                    <View>
-                      <View style={[Containers.centerContainer, { padding: 10 }]}>
+                    // <Swipeable overshootFriction={3}  renderRightActions={(progress, dragX) => renderRightActions(progress, dragX, item)}>
+                     <TouchableOpacity
+                     onPress={() => {
+                       setCurrentVideo(item);
+                       setCurrentIndex(index);
+                       setIsModalVisible(true);
+                       setReelid(item._id)
+                       //console.log("reel id", item._id)
+                     }}
+                     >
+                     <View style={[Containers.centerContainer, { padding: 10 }]}>
                         <Neomorph
                           darkShadowColor={AppColors.black}
                           style={{
@@ -216,34 +223,78 @@ const MyActivity = ({ navigation }) => {
                           />
                         </Neomorph>
                       </View>
-                    </View>
-                    </Swipeable>
+                      </TouchableOpacity>
+                    // </Swipeable>
+                    
                   )
                 }}
               />
             )}
           </View>
         )}
+      {/* Modal */}
+      <Modal
+  visible={isModalVisible}
+// onDismiss={() => setIsModalVisible(false)}
+>
+  <View
+    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>        
+    {currentIndex !== null && allUploads[currentIndex] ? (
+      <>
+        <View style={{ height: hp('7%'), width: wp('90%'), backgroundColor: 'white', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <Text style={{ textAlign: 'left', flex: 1, marginLeft: 5, color: 'black' }}>You Video: {allUploads[currentIndex].uri.uri}</Text>
+          <TouchableRipple
+            onPress={() => {
+              //console.log("cur============", allUploads[currentIndex])
+              deleteReel(allUploads[currentIndex]);
+              setIsModalVisible(false);
+            }}
+            rippleColor="rgba(0, 0, 0, 0.6)"        
+          >
+            <IconButton
+              icon="delete"
+              iconColor={"black"}
+              size={20}
+            />
+          </TouchableRipple>
+          <TouchableRipple
+            onPress={() => setIsModalVisible(false)}
+            rippleColor="rgba(0, 0, 0, .6)"        
+          >
+            <IconButton
+              icon="close"
+              iconColor={"black"}
+              size={20}
+            />
+          </TouchableRipple>
+        </View>
+        <WebView
+          source={{html:ActivityVideoHtml(baseUrl,allUploads[currentIndex])}}
+          style={{ height: hp('50%'), width: wp('90%') }}
+        />
+      </>  
+    ) : null}
+  </View>
+</Modal>
       
       </View>
      
       </View>
-      </GestureHandlerRootView>
    
   );
 };
 
 export default MyActivity;
 
-// <TouchableOpacity
-//   onPress={() => {
-//     setCurrentVideo(item);
-//     setCurrentIndex(index);
-//     setIsModalVisible(true);
-//     setReelid(item._id)
-//     //console.log("reel id", item._id)
-//   }}
-//   style={{flex:1}}
+{/* <TouchableOpacity
+  onPress={() => {
+    setCurrentVideo(item);
+    setCurrentIndex(index);
+    setIsModalVisible(true);
+    setReelid(item._id)
+    //console.log("reel id", item._id)
+  }}
+  style={{flex:1}} */}
 // 
 
 // ======================
