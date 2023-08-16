@@ -117,12 +117,12 @@ const App = props => {
       await AsyncStorage.removeItem('user');
       // storeLoggedinStatus(false)
       // console.log('User removed from storage');
-      // updateCurrentUserId(''); // Clear the currentUserId in the context
+      // updateCurrentUserId(''); // Clear the storedUser in the context
       navigation.replace('LogInScreen');
     } catch (error) {
       // console.log('Error while removing user from storage:', error);
       Alert.alert('You are unable to logout, try again later!');
-      // updateCurrentUserId(blank); // Clear the currentUserId in the context
+      // updateCurrentUserId(blank); // Clear the storedUser in the context
       // navigation.navigate('LogInScreen'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
     }
   };
@@ -147,7 +147,7 @@ const App = props => {
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
         <Tab.Navigator
-          initialRouteName="Chats"
+          initialRouteName="Groups"
           screenOptions={({ route, focused }) => ({
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
@@ -262,9 +262,9 @@ const App = props => {
           drawerContent={props => {
             // const { userData } = useUserContext();
             // const parsedUser = JSON.parse(userData._j);
-            const { baseUrl ,currentUserId} = useContext(AppContext);
+            const { baseUrl ,storedUser} = useContext(AppContext);
             console.log('baseurl', baseUrl);
-            console.log('usercontext appjs',currentUserId );
+            console.log('usercontext appjs',storedUser );
             return (
               <View style={{ flex: 1 }}>
                 <DrawerContentScrollView {...props}>
@@ -272,7 +272,7 @@ const App = props => {
                     style={[Containers.centerContainer, { height: hp('25%') }]}>
                     <Image
                       source={{
-                        uri: `${baseUrl} ${currentUserId?.profileImage} `,
+                        uri: `${baseUrl}${storedUser?.profileImage} `,
                       }}
                       style={{
                         height: wp('25%'),
@@ -282,7 +282,7 @@ const App = props => {
                     />
                     <Text
                       style={{ fontSize: hp('3%'), color: AppColors.black }}>
-                      {currentUserId?.name}
+                      {storedUser?.name}
                     </Text>
                   </Animated.View>
                 <DrawerItemList {...props} />
@@ -397,7 +397,7 @@ const App = props => {
             // initialRouteName={
             //   loggedInUserId ? 'DrawerScreens' : 'DrawerScreens'
             // }
-            initialRouteName='WelcomeScreen'
+            initialRouteName='DrawerScreens'
             >
            
             <Stack.Screen

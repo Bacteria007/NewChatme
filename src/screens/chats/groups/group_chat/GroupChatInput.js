@@ -15,6 +15,7 @@ import { Icons } from '../../../../assets/Icons';
 import AppColors from '../../../../assets/colors/Appcolors';
 
 const GroupChatInput = ({ sendMessageFunc, inputVal, setter }) => {
+    
     const [height, setHeight] = useState(hp('7%')); // Initialize height with a default value
     const maxInputHeight = hp('17'); // Maximum input height
     
@@ -42,7 +43,7 @@ const GroupChatInput = ({ sendMessageFunc, inputVal, setter }) => {
                         underlineColorAndroid={'transparent'}
                     />
                 </ScrollView>
-                <View style={UserChatInputStyle.camera_and_papercliper(wp('20%'))}>
+                <View style={UserChatInputStyle.camera_and_papercliper}>
                     <TouchableOpacity>
                         <Icons.FontAwesome name="paperclip" size={wp('6.5%')} />
                     </TouchableOpacity>

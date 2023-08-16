@@ -10,7 +10,7 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { Icons } from '../../assets/Icons';
 
 const GroupMsgItem = ({ msgData }) => {
-  const { curentUser,currentUserId } = useContext(AppContext);
+  const { curentUser,storedUser } = useContext(AppContext);
   // const currentId = JSON.parse(curentUser._j);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   // reply
@@ -56,7 +56,7 @@ const GroupMsgItem = ({ msgData }) => {
 // Checking  User
   const isCurrentUserFunc = async () => {
     const senderid = await msgData.sender_id;
-    return senderid === currentUserId.userId;
+    return senderid === storedUser.userId;
   };
   const checkIsCurrentUser = async () => {
     const result = await isCurrentUserFunc();
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   leftArrowOverlap: {
     position: 'absolute',
     backgroundColor: '#eeeeee',
-    // backgroundColor:"purple",
+    // backgroundColor:AppColors.primary,
     width: 20,
     height: 35,
     bottom: -6,

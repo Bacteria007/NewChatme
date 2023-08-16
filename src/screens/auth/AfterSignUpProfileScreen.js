@@ -29,7 +29,7 @@ import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AfterSignUpProfileScreen = ({ navigation }) => {
-  const { language, baseUrl,currentUserId,getUserID2,selectedImageUri,storeImageUri } = useContext(AppContext);
+  const { language, baseUrl,storedUser,getStoredUserDetails,selectedImageUri,storeImageUri } = useContext(AppContext);
 
   const [name, setName] = useState('');
   const [ques1, setQues1] = useState('');
@@ -43,14 +43,14 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
   const handleProfileUpdate = async () => {
     const userid = await AsyncStorage.getItem('user');
     const parseId = JSON.parse(userid);
-    // const parseIdcontextcrnt = JSON.parse(currentUserId);
-    console.log('id from context', currentUserId);
-    console.log('id from context', currentUserId.userId);
+    // const parseIdcontextcrnt = JSON.parse(storedUser);
+    console.log('id from context', storedUser);
+    console.log('id from context', storedUser.userId);
     console.log('id from Async', parseId);
-    console.log('id from getId', getUserID2());
+    console.log('id from getId', getStoredUserDetails());
     
     const formdata = new FormData();
-    formdata.append('_id', currentUserId.userId);
+    formdata.append('_id', storedUser.userId);
     formdata.append('name', name);
 
     // Convert security questions array to JSON and append as a string
@@ -90,10 +90,10 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
     }
   };
   useEffect(()=>{
-    getUserID2()
+    getStoredUserDetails()
   },[])
   useEffect(()=>{
-    let userid=currentUserId.userId
+    let userid=storedUser.userId
     fetch(`${baseUrl}/getProfileImage?logegedId=${userid}`, {
       method: 'GET',
     })
@@ -168,15 +168,15 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
                 }).then(async Response => {
                   const userid = await AsyncStorage.getItem('user');
                   const parseId = JSON.parse(userid);
-                  // const parseIdcntxtcurnt = JSON.parse(currentUserId);
+                  // const parseIdcntxtcurnt = JSON.parse(storedUser);
                   console.log("async parsed",parseId.userId)
-                  console.log("async parsed context vali",currentUserId)
-                  console.log("async parsed context vali id",currentUserId.userId)
+                  console.log("async parsed context vali",storedUser)
+                  console.log("async parsed context vali id",storedUser.userId)
                   console.log(Response.assets[0]);
                   // setSelectedImage(Response.assets[0]);
                   // setSelectedImageUri(Response.assets[0].uri);
                   const formdata = new FormData();
-                  formdata.append('_id', currentUserId.userId);
+                  formdata.append('_id', storedUser.userId);
                   formdata.append('name', 'profileImage');
                   formdata.append('profileImage', {
                     uri: Response.assets[0].uri,

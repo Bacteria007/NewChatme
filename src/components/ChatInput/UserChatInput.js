@@ -38,8 +38,8 @@ const UserChatInput = ({
   const {
     language,
     baseUrl,
-    currentUserId,
-    getUserID2,
+    storedUser,
+    getStoredUserDetails,
     selectedImageUri,
     storeImageUri,
   } = useContext(AppContext);

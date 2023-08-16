@@ -28,7 +28,7 @@ import HeaderNew from '../../components/Headers/AppHeaders/HeaderNew';
 const AddContact = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme, darkThemeActivator } = useContext(ThemeContext);
-  const { currentUserId, baseUrl } = useContext(AppContext);
+  const { storedUser, baseUrl } = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
@@ -40,7 +40,7 @@ const AddContact = ({ navigation }) => {
 
     console.log('desc', JSON.parse(userid));
     const parseId = JSON.parse(userid);
-    await fetch(`${baseUrl}/allUsers?userId=${currentUserId.userId}`, {
+    await fetch(`${baseUrl}/allUsers?userId=${storedUser.userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -52,11 +52,11 @@ const AddContact = ({ navigation }) => {
           // ye iss liye kiya hai q k backend sy just id , name or phone number mil raha tha jb k mein id ko as a receiver id or sender id ko b bejna chahti thi jis k liye ye approach use ki mein ny
           recieverId: item._id,
           name: item.name,
-          userId: currentUserId.userId,
+          userId: storedUser.userId,
           phoneNumber: item.phoneNo,
         }));
         const filteredChats = contactInformation.filter(
-          user => user.recieverId != currentUserId.userId, // NAME KI BASE PR SEARCH HO RAHI HAI
+          user => user.recieverId != storedUser.userId, // NAME KI BASE PR SEARCH HO RAHI HAI
         );
         setSearchedChat(filteredChats);
         setContactList(filteredChats);

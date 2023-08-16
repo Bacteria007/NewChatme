@@ -32,10 +32,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
 
-const socket = io.connect('http://192.168.76.238:8888');
+const socket = io.connect('http://192.168.43.145:8888');
 
 const UserChat = props => {
-  const { baseUrl, currentUserId } = useContext(AppContext);
+  const { baseUrl, storedUser } = useContext(AppContext);
   const [changeHeader, setChangeHeader] = useState(false);
   const [imagMessage, setImagMessage] = useState('');
   const [msgId, setMsgId] = useState();

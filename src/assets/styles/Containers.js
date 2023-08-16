@@ -26,7 +26,7 @@ const Containers = StyleSheet.create({
     fontSize: wp('6%'),
   },
   textstylewhite: {
-    color: 'purple',
+    color: AppColors.primary,
     fontSize: wp('3%'),
     textAlign: 'center',
   },

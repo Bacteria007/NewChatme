@@ -8,8 +8,8 @@ const RenderChats = ({ item, itm, setChangeHeader, setMsgId, imagMessage }) => {
   const {
     language,
     baseUrl,
-    currentUserId,
-    getUserID2,
+    storedUser,
+    getStoredUserDetails,
     selectedImageUri,
     storeImageUri,
   } = useContext(AppContext);

@@ -33,8 +33,8 @@ const UserChatInputStyle = StyleSheet.create({
     width: wp('58%'),
     height:height,
     alignItems: 'center',
-    paddingLeft: wp('3%'),
-    alignSelf:'center'
+    // paddingLeft: wp('3%'),
+    alignSelf:'center',
     // backgroundColor: 'red',
 
   }),

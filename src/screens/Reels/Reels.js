@@ -21,7 +21,7 @@ import GenerateVideoHtml from './ReelsHtmlVideo';
 const Reals = props => {
   //   **********************************           VARIABLES               ****************************
   const { height, width } = Dimensions.get('window');
-  const { baseUrl } = useContext(AppContext);
+  const { baseUrl,storedUser } = useContext(AppContext);
 
   //   **********************************          USE STATE               ****************************
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -199,12 +199,12 @@ const TabScreens = () => {
         await AsyncStorage.removeItem('user');
         // storeLoggedinStatus(false)
         console.log('User removed from storage');
-        // updateCurrentUserId(''); // Clear the currentUserId in the context
+        // updateCurrentUserId(''); // Clear the storedUser in the context
         navigation.replace('LogInScreen');
       } catch (error) {
         console.log('Error while removing user from storage:', error);
         Alert.alert('You are unable to logout, try again later!');
-        // updateCurrentUserId(blank); // Clear the currentUserId in the context
+        // updateCurrentUserId(blank); // Clear the storedUser in the context
         // navigation.navigate('LogInScreen'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
       }
     };

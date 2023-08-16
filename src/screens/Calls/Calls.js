@@ -88,22 +88,19 @@ const Calls = ({ navigation }) => {
     }
   };
 
-  const reversedData = allCallList.slice().reverse(); // flatlist call wali ko reverse krny k liye
+  const reversedData =  allCallList.length>0?allCallList.slice().reverse():allCallList; // flatlist call wali ko reverse krny k liye
 
   //       ***************************            FLATLIST RENDER FUNCTION         **************************************
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onLongPress={() => handleLongPress(item)}>
         <View style={HomeNeoCards.flatlistItemContainer}>
-          {!darkThemeActivator ? (
             <Neomorph
               lightShadowColor="#e2e2e2"
               darkShadowColor="#000"
               inner
               style={[
-                HomeNeoCards.neomorphStyle,
-                { backgroundColor: theme.discussionsCardColor },
-              ]}>
+                HomeNeoCards.neomorphStyle(theme.homeCardColor)]}>
               <View style={HomeNeoCards.dpImageView}>
                 <TouchableOpacity>
                   {/* <Image
@@ -117,9 +114,7 @@ const Calls = ({ navigation }) => {
                 <View style={HomeNeoCards.nameAndTimeContainer}>
                   <Text
                     style={[
-                      HomeNeoCards.profileName,
-                      { color: theme.profileName },
-                    ]}>
+                      HomeNeoCards.profileName(theme.profileNameColor)]}>
                     {item.userId === currentUserID ? (
                       <>
                         <Text>{item.recieverName}</Text>
@@ -157,7 +152,7 @@ const Calls = ({ navigation }) => {
                       </>
                     )}
                     <Text
-                      style={[HomeNeoCards.lastMsg, { color: theme.lastMsg }]}>
+                      style={[HomeNeoCards.lastMsg(theme.lastMsgColor)]}>
                       {item.callDate === currentDate ? 'Today' : item.callDate},{' '}
                       {moment(item.callTime).format('hh:mm a ')}
                     </Text>
@@ -180,92 +175,7 @@ const Calls = ({ navigation }) => {
                 </View>
               </View>
             </Neomorph>
-          ) : (
-            <Card style={HomeNeoCards.cardStyle}>
-              <View style={HomeNeoCards.cardView}>
-                <View style={HomeNeoCards.dpImageView}>
-                  <TouchableOpacity>
-                    {/* <Image
-                      source={item.callerDpImage}
-                      style={HomeNeoCards.dpImage}
-                    /> */}
-                  </TouchableOpacity>
-                </View>
-                {/* msg view */}
-                <View style={HomeNeoCards.name_CallIcon_Container}>
-                  <View style={HomeNeoCards.nameAndTimeContainer}>
-                    <Text
-                      style={[
-                        HomeNeoCards.profileName,
-                        { color: theme.profileName },
-                      ]}>
-                      {item.userId === currentUserID ? (
-                        <>
-                          <Text>{item.recieverName}</Text>
-                        </>
-                      ) : (
-                        <>
-                          <Text>{item.userName}</Text>
-                        </>
-                      )}
-                    </Text>
-                    <View style={HomeNeoCards.timeAndCallType}>
-                      {item.userId === currentUserID ? (
-                        <>
-                          {item.OutgoingCall == 'outgoing' ? (
-                            <Icons.MaterialCommunityIcons
-                              name="call-made"
-                              color={'red'}
-                              size={iconSize}
-                            />
-                          ) : (
-                            ''
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          {item.OutgoingCall == 'incoming' ? (
-                            <Icons.MaterialCommunityIcons
-                              name="call-received"
-                              color={'red'}
-                              size={iconSize}
-                            />
-                          ) : (
-                            ''
-                          )}
-                        </>
-                      )}
-                      <Text
-                        style={[
-                          HomeNeoCards.lastMsg,
-                          { color: theme.lastMsg },
-                        ]}>
-                        {item.callDate === currentDate
-                          ? 'Today'
-                          : item.callDate}
-                        ,{moment(item.callTime).format('hh:mm a ')}
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={HomeNeoCards.callIconView}>
-                    {item.callName === 'audio' ? (
-                      <Icons.Ionicons
-                        name="call-sharp"
-                        size={wp('6%')}
-                        color={AppColors.gray}
-                      />
-                    ) : (
-                      <Icons.FontAwesome5
-                        name="video"
-                        size={wp('5%')}
-                        color={AppColors.gray}
-                      />
-                    )}
-                  </View>
-                </View>
-              </View>
-            </Card>
-          )}
+        
         </View>
       </TouchableOpacity>
     );

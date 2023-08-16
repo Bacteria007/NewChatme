@@ -19,7 +19,7 @@ import AppSubHeader from '../../../components/Headers/AppHeaders/AppSubHeader';
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
-  const { baseUrl,currentUserId } = useContext(AppContext);
+  const { baseUrl,storedUser } = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
@@ -38,7 +38,7 @@ const Discussions = ({ navigation }) => {
     const  userParseData = JSON.parse(userData);
     const parseId = userParseData.userId;
 
-    console.log("discussion ma ",currentUserId.userId )
+    console.log("discussion ma ",storedUser.userId )
     try {
       const response = await fetch(`${baseUrl}/allChats?userId=${parseId}`, {
         method: 'GET',
@@ -97,6 +97,7 @@ const Discussions = ({ navigation }) => {
       <BotDiscussion navigation={navigation} />
       </View>
       <FlatList
+      style={{ marginTop: 10 }}
         ref={flatListRef}
         showsVerticalScrollIndicator={false}
         data={searchedChat == '' ? contactList : searchedChat}

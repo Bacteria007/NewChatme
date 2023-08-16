@@ -21,7 +21,7 @@ const GroupStyles = StyleSheet.create({
         width: wp('4.8%'),
         height: wp('4.8%'),
         borderRadius: wp('2.4%'),
-        backgroundColor: 'purple', // WhatsApp green color
+        backgroundColor: AppColors.primary, // WhatsApp green color
         justifyContent: 'center',
         alignItems: 'center',
         shadowColor: '#000',
@@ -36,10 +36,10 @@ const GroupStyles = StyleSheet.create({
       newGroupNameStyle: darkThemeActivator => ({
         fontFamily: FontStyle.regularFont,
         fontSize: 17,
-        color: darkThemeActivator ? "white" : AppColors.purple,
+        color: darkThemeActivator ? "white" : AppColors.primary,
         marginLeft: 10,
         letterSpacing: 1,
-        textShadowColor: darkThemeActivator ? AppColors.purple: 'rgba(255, 0, 0, 0.2)',
+        textShadowColor: darkThemeActivator ? AppColors.primary: 'rgba(255, 0, 0, 0.2)',
         textShadowOffset: { width: 2, height: 2 }, // Shadow offset
         textShadowRadius: 2, // Shadow radius
     

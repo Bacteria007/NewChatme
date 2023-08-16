@@ -5,9 +5,9 @@ const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
-  const baseUrl='http://192.168.76.238:8888'
+  const baseUrl='http://192.168.43.145:8888'
   const [userName, setUserName] = useState();
-  const [currentUserId, setCurrentUserId] = useState(AsyncStorage.getItem('user'));
+  const [storedUser, setStoredUser] = useState(AsyncStorage.getItem('user'));
   const [language, setLanguage] = useState('English');
   const [isUserLoggedin, setIsUserLoggedin] = useState(false)
   const [darkThemeActivator, setDarkThemeActivator] = useState(false);
@@ -38,27 +38,27 @@ export const AppProvider = ({ children }) => {
   const storeLoggedinStatus=val=>{
     setIsUserLoggedin(val)
   }
-  const getUserID2 = async () => {
+  const getStoredUserDetails = async () => {
     const userData = await AsyncStorage.getItem('user');
     console.log("asyncUser",userData)
         console.log('User ID get context:', typeof userData);
         console.log('User ID get context parse:', JSON.parse(userData));
         const pid= await JSON.parse(userData)
-        setCurrentUserId(pid)
+        setStoredUser(pid)
         console.log("pid",pid.userId)
         return pid;
      
   };
 
   useEffect(()=>{
-    getUserID2()
+    getStoredUserDetails()
   },[])
   // ********************************************     USE EFFECT FOR LANGUAGE RETRIVE FROM ASYNC STORAGE   ***************
 
   // useEffect(()=>{
   //   getUserID()
   //   console.log("conditional effect")
-  // },[currentUserId])
+  // },[storedUser])
   // useEffect(() => {
   //   // Retrieve the selected language from AsyncStorage
   //   AsyncStorage.getItem('selectedLanguage')
@@ -85,7 +85,7 @@ export const AppProvider = ({ children }) => {
         appName,
         baseUrl,
         userName,
-        currentUserId,
+        storedUser,
         isUserLoggedin,
         selectedImageUri,
         storeUserName,
@@ -99,7 +99,7 @@ export const AppProvider = ({ children }) => {
         // getUserID,
         // fetchUserId,
         storeImageUri,
-        getUserID2,
+        getStoredUserDetails,
       }}>
       {children}
     </AppContext.Provider>
