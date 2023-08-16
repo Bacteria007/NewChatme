@@ -38,9 +38,10 @@ const MyActivity = ({ navigation }) => {
 
   // New function for fetching uploaded videos
   const fetchUploadedVideos = async () => {
-    const userid = await AsyncStorage.getItem('user');
+    const userData = await AsyncStorage.getItem('user');
 
-    const parseId = JSON.parse(userid);
+    const  userParseData = JSON.parse(userData);
+    const parseId = userParseData.userId;
     fetch(`${baseUrl}/uploadedReels`, {
       method: 'POST',
     })

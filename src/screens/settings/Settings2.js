@@ -150,7 +150,7 @@ const Settings2 = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('activit');
+                            navigation.navigate('activity');
                         }}>
                         <View style={styles.itemStyle}>
                             <Avatar.Icon

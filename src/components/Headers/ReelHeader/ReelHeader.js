@@ -24,8 +24,10 @@ const ReelHeader = ({navigation}) => {
   const iconcolor = AppColors.white;
 
   const uploadVideo = async Response => {
-    const userid = await AsyncStorage.getItem('user');
-    const parseId = JSON.parse(userid);
+    const userData = await AsyncStorage.getItem('user');
+
+    const  userParseData = JSON.parse(userData);
+    const parseId = userParseData.userId;
     const formData = new FormData();
     formData.append('userId', parseId);
     formData.append('name', 'Video');
