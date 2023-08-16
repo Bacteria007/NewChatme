@@ -25,7 +25,7 @@ const ReelHeaderStyle = StyleSheet.create({
     fontSize: wp('6.3%'),
     fontFamily: FontStyle.regularFont,
     color: AppColors.white,
-    textShadowColor: AppColors.purple,
+    textShadowColor: AppColors.primary,
     textShadowOffset: {width: wp('0.7%'), height: wp('0.7%')},
     textShadowRadius: wp('0.5%'),
   },

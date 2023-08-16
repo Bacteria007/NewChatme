@@ -24,7 +24,7 @@ import PushNotification ,{Importance} from "react-native-push-notification";
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
-  const { baseUrl,currentUserId } = useContext(AppContext)
+  const { baseUrl,storedUser } = useContext(AppContext)
   const { theme, darkThemeActivator } = useContext(ThemeContext)
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
@@ -70,7 +70,7 @@ const AllGroups = ({ navigation }) => {
     // console.log("user id in all groups", JSON.parse(userId));
     // const parseId = JSON.parse(userId)
     try {
-      const result = await fetch(`${baseUrl}/viewGroups/?userId=${currentUserId.userId}`,
+      const result = await fetch(`${baseUrl}/viewGroups/?userId=${storedUser.userId}`,
 
         {
           method: 'GET',
@@ -127,8 +127,8 @@ const AllGroups = ({ navigation }) => {
         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
           <Neomorph
 
-            darkShadowColor={AppColors.purple}
-            lightShadowColor={AppColors.purple}
+            darkShadowColor={AppColors.primary}
+            lightShadowColor={AppColors.primary}
             swapShadows
             style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
           >

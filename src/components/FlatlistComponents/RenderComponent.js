@@ -31,8 +31,8 @@ const RenderComponent = ({ name, dp,callingScreen,discussions_item,groups_item,c
             <View
                 style={HomeNeoCards.flatlistItemContainer}>
                 <Neomorph
-                    darkShadowColor={AppColors.purple} // <- set this
-                    lightShadowColor={AppColors.purple}// <- this
+                    darkShadowColor={AppColors.primary} // <- set this
+                    lightShadowColor={AppColors.primary}// <- this
                     swapShadows
                     style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
                 >

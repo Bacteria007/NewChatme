@@ -25,7 +25,7 @@ import AppContext from '../../context/AppContext';
 import FontStyle from '../../assets/styles/FontStyle';
 
 const LogInScreen = ({ navigation }) => {
-  const {baseUrl,storeLoggedinStatus,currentUserId,getUserID2}=useContext(AppContext)
+  const {baseUrl,storeLoggedinStatus,storedUser,getStoredUserDetails}=useContext(AppContext)
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -75,8 +75,8 @@ const LogInScreen = ({ navigation }) => {
           let res=response.data.loggedInUser
           AsyncStorage.setItem('user', JSON.stringify({userId:res._id,phoneNumber:res.phoneNo,profileImage: res.profileImage,name:res.name}))
           // storeLoggedinStatus(true)
-          getUserID2()
-          console.log("async login",currentUserId)
+          getStoredUserDetails()
+          console.log("async login",storedUser)
           navigation.navigate('DrawerScreens');
         }
         else{
@@ -101,7 +101,7 @@ const LogInScreen = ({ navigation }) => {
     // if(currentUserStatus){
     //  navigation.navigate('DrawerScreens');
     //     }
-    // getUserID2()
+    // getStoredUserDetails()
   }, []);
 
   return (
@@ -212,7 +212,7 @@ const LogInScreen = ({ navigation }) => {
             <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
           </TouchableOpacity>
           <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',margin:wp('3%')}}>
-          <Text style={{fontFamily:FontStyle.mediumFont}}>Don't have an account?</Text>
+          <Text style={{fontFamily:FontStyle.mediumFont}}>Don't have an account?{' '}</Text>
           <TouchableOpacity onPress={()=>{
             navigation.navigate('SignUpScreen')
           }}><Text style={{color:AppColors.primary,fontFamily:FontStyle.mediumFont}}>Signup</Text></TouchableOpacity>

@@ -28,7 +28,7 @@ const GlobalFunction = () => {
           }}>
           <View style={{ alignItems: 'flex-end' }}>
             <Neomorph
-              darkShadowColor={AppColors.purple}
+              darkShadowColor={AppColors.primary}
               swapShadows
               style={[TermsStyle.arrowupStyle(theme.homeCardColor)]}>
               <Icons.AntDesign

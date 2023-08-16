@@ -1,5 +1,6 @@
 const AppColors = {
-  primary: "#BA68C8",
+  primary: "purple",
+  // primary: "#BA68C8",
   orange: "#EB5703",
   purple:"purple",
   white: 'white',

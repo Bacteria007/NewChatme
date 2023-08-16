@@ -28,7 +28,7 @@ import RNFS, { read } from 'react-native-fs';
 import FontStyle from '../../assets/styles/FontStyle';
 
 const SignUpScreen = ({ navigation }) => {
-  const { language,baseUrl,storeLoggedinStatus,getUserID2 } = useContext(AppContext);
+  const { language,baseUrl,storeLoggedinStatus,getStoredUserDetails } = useContext(AppContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -91,7 +91,7 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
             setAlreadyExist(response.data.newUser)
           }else{
             AsyncStorage.setItem('user', JSON.stringify({userId:response.data.newUser._id,phoneNumber:response.data.newUser.phoneNo}))
-            getUserID2()
+            getStoredUserDetails()
           storeLoggedinStatus(true)
           navigation.navigate('AfterSignUpProfileScreen');
           }
@@ -252,7 +252,7 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
             </Text>
           </TouchableOpacity>
           <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',margin:wp('3%')}}>
-          <Text style={{fontFamily:FontStyle.mediumFont}}>Have an account?</Text>
+          <Text style={{fontFamily:FontStyle.mediumFont}}>Have an account?{' '}</Text>
           <TouchableOpacity onPress={()=>{
             navigation.navigate('LogInScreen')
           }}><Text style={{color:AppColors.primary,fontFamily:FontStyle.mediumFont}}>Login</Text></TouchableOpacity>

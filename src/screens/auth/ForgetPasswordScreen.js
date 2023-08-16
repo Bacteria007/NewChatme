@@ -26,7 +26,7 @@ import { PhoneNumberUtil } from 'google-libphonenumber';
 
 
 const ForgetPasswordScreen = ({ navigation }) => {
-  const { language, baseUrl,currentUserId,getUserID2,selectedImageUri,storeImageUri } = useContext(AppContext);
+  const { language, baseUrl,storedUser,getStoredUserDetails,selectedImageUri,storeImageUri } = useContext(AppContext);
   const [ques1, setQues1] = useState('');
   const [ques2, setQues2] = useState('');
   const [phoneNo, setPhoneNo] = useState('')

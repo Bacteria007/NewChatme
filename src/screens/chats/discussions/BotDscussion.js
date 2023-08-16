@@ -15,8 +15,8 @@ const BotDiscussion = ({ navigation }) => {
                 navigation.navigate('ChatBot');
             }}>
         <Neomorph
-            darkShadowColor={AppColors.purple} // <- set this
-            // lightShadowColor={AppColors.purple}// <- this
+            darkShadowColor={AppColors.primary} // <- set this
+            // lightShadowColor={AppColors.primary}// <- this
             swapShadows
             style={[HomeNeoCards.neomorphStyle(theme.homeCardColor), { marginTop: 10 }]}
         >

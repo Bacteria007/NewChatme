@@ -2,17 +2,11 @@ import {
     View,
     Text,
     TouchableOpacity,
-    ScrollView,
-    Image,
     StyleSheet,
 } from 'react-native';
 
 import React, { useState, useContext } from 'react';
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
-import Modal from 'react-native-modal';
-
-import DrawerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
-
 import AppColors from '../../assets/colors/Appcolors';
 import {
     widthPercentageToDP as wp,
@@ -21,13 +15,10 @@ import {
 import AppContext from '../../context/AppContext';
 import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
 import GlobalFunction from '../../utils/GlobalFunc';
-import { Avatar, Card, Divider, IconButton } from 'react-native-paper';
+import { Avatar, Card, Divider } from 'react-native-paper';
 import { ThemeContext } from '../../context/ThemeContext';
-import { Neomorph } from 'react-native-neomorph-shadows-fixes';
-import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { Icons } from '../../assets/Icons';
 import FontStyle from '../../assets/styles/FontStyle';
-import SettingScreenStyle from '../../assets/styles/SettingScreenStyle';
 
 const Settings2 = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
@@ -268,7 +259,7 @@ const Settings2 = ({ navigation }) => {
                                 color={arrowColor}
                             />
                         </View>
-                        
+
                     </TouchableOpacity>
                 </Card>
                 {/* notifications */}

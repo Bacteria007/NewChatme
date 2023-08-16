@@ -39,13 +39,15 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import GroupChatInput from './GroupChatInput';
 import PushNotification from "react-native-push-notification";
 
-const socket = io.connect('http://192.168.43.122:8888');
+const socket = io.connect('http://192.168.43.145:8888');
 
 const GroupChat = props => {
     // VARIABLES
     const { item } = props.route.params;
-    const { baseUrl, curentUser ,currentUserId} = useContext(AppContext)
-    // let currentId = JSON.parse(curentUser._j);
+    const { baseUrl, storedUser} = useContext(AppContext)
+    let userId = storedUser.userId
+    console.log("userId====",userId)
+    console.log("storedUser===",storedUser)
     const groupMembers = item.members;
     const adminId = item.group_admin;
     const groupId = item._id;
@@ -69,28 +71,23 @@ const GroupChat = props => {
     const onContentSizeChange = event => {
         setHeight(event.nativeEvent.contentSize.height);
     };
-    const getSenderDetails = async () => {
-        const userDetails = groupMembers.find(member => member._id === currentUserId.userId);
-        return userDetails; // This will return the matching user details or undefined if not found
-    };
     const sendMessage = async () => {
 
-        const user_details = await getSenderDetails();
         const msgData = {
             text: newMsg,
-            sender_id: user_details._id,
-            sender_name: user_details.name,
-            sender_phone: user_details.phoneNo,
+            sender_id: storedUser.userId,
+            sender_name: storedUser.name,
+            sender_phone: storedUser.phoneNumber,
             group_id: groupId,
             readStatus: true,
             deliverStatus: true
         };
+        console.log("msg ^^^^^^^^^^^^^^^^",msgData)
         await socket.emit('send_group_message', msgData);
         setNewMsg('');
-
     }
     const handleNotification = (item) => {
-        if (item.sender_id != currentUserId.userId) {
+        if (item.sender_id !=userId) {
             PushNotification.localNotification({
                 channelId: "1233",
                 title: `${item.sender_name}`.toUpperCase(),
@@ -102,9 +99,10 @@ const GroupChat = props => {
     }
     const handleGetCurrentMsg = (msgData) => {
         
-        if (msgData.sender_id != currentUserId.userId) {
+        if (msgData.sender_id != userId) {
             handleNotification(msgData)
         } else {
+            console.log("msg notification gya tmhary receiver ko")
         }
         setMsgList([...msgList, msgData]);
     };
@@ -137,10 +135,8 @@ const GroupChat = props => {
         receivePreviousMessagesFromDb()
     }, [])
     const initialize_socket = async () => {
-        const user_details = await getSenderDetails();
-        // Initialize socket.io connection
         socket.emit('join_group', groupId);
-        const name = user_details.name;
+        const name = storedUser.name;
         socket.emit('user_connected', name);
         // Clean up when component unmounts
         return () => {
@@ -161,7 +157,8 @@ const GroupChat = props => {
                             <Appbar.Content title={item.group_name} style={{ paddingTop: 7 }} />
                             <Appbar.Action
                                 icon={() => <Icons.Ionicons name="people" size={24} />}
-                                color="purple"
+                                color={AppColors.primary}
+                                onPress={()=>showModal()}
                             />
                             {/* <Appbar.Action icon="dots-vertical" onPress={console.log('dots pressed')} /> */}
                         </Appbar.Header>
@@ -170,13 +167,14 @@ const GroupChat = props => {
                     <View style={{ height: hp('45') }}>
                         {msgList.length != 0 ?
                             <FlatList
+                            
                                 data={msgList.length != 0 ? msgList : []}
                                 // ref={flatListRef}
                                 renderItem={({ item }) => { return <GroupMsgItem msgData={item} /> }}
                                 keyExtractor={(item, index) => index.toString()} // Use a unique key for each item
                             />
                             :
-                            <Text style={{ color: 'purple' }}>Start Conversation</Text>
+                            <Text style={{ color: AppColors.primary }}>Start Conversation</Text>
                         }
                         {/* {swipeToReply && <View style={{backgroundColor:'blue',height:wp('20'),width:wp('100')}}>
                 <Text style={{color:'white'}}>Reply to your friend</Text>
@@ -189,6 +187,7 @@ const GroupChat = props => {
                             contentContainerStyle={styles.modalContentContainer}>
                             <View style={{ flexDirection: 'row' }}>
                                 <FlatList
+                                inverted={true}
                                     indicatorStyle="black"
                                     data={groupMembers}
                                     renderItem={({ item }) => (
@@ -197,7 +196,7 @@ const GroupChat = props => {
                                                 {item._id == adminId ? (
                                                     <Text
                                                         style={{
-                                                            color: 'purple',
+                                                            color: AppColors.primary,
                                                             fontFamily: FontStyle.boldFont,
                                                             fontSize: 16,
                                                         }}>

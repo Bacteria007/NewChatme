@@ -7,14 +7,14 @@ const CommonApis = () => {
     
     // const baseUrl='http://192.168.43.122:8888';
     const [userData,setUserata]=useState()
-    const { baseUrl ,currentUserId} = useContext(AppContext);
+    const { baseUrl ,storedUser} = useContext(AppContext);
 
     const UserDetails = async () => {
         // const userId = await AsyncStorage.getItem('user');
         // const parseId =await JSON.parse(userId)
 
         try {
-            const user_data = await fetch(`${baseUrl}/getUserData/?userId=${currentUserId.userId}`,
+            const user_data = await fetch(`${baseUrl}/getUserData/?userId=${storedUser.userId}`,
                 {
                     method: 'GET',
                     headers: {
@@ -23,7 +23,7 @@ const CommonApis = () => {
                 },
             );
             const data=await user_data.json()
-            console.log("user id======================", currentUserId.userId)
+            console.log("user id======================", storedUser.userId)
             console.log("user data============================", data)
             if (data) {
                 console.log('admin result==========================', data);
