@@ -33,12 +33,14 @@ const Discussions = ({ navigation }) => {
 //  },[u])
 
   const fetchContactList = async () => {
-    // const userid = await AsyncStorage.getItem('user')
-    // const parseId = JSON.parse(userid)
+    const userData = await AsyncStorage.getItem('user');
+
+    const  userParseData = JSON.parse(userData);
+    const parseId = userParseData.userId;
 
     console.log("discussion ma ",currentUserId.userId )
     try {
-      const response = await fetch(`${baseUrl}/allChats?userId=${currentUserId.userId}`, {
+      const response = await fetch(`${baseUrl}/allChats?userId=${parseId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

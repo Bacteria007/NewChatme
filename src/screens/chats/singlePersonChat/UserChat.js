@@ -32,7 +32,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
 
-const socket = io.connect('http://192.168.43.122:8888');
+const socket = io.connect('http://192.168.76.238:8888');
 
 const UserChat = props => {
   const { baseUrl, currentUserId } = useContext(AppContext);
@@ -64,9 +64,14 @@ const UserChat = props => {
 
   const addContact = async () => {
     //ye backend mein contact ko add krta
+    const user =await AsyncStorage.getItem('user');
+   const userData = JSON.parse(user);
+
     const formData = new FormData();
     formData.append('userId', itm.userId);
     formData.append('name', itm.name);
+    formData.append('SenderName', userData.name);
+    formData.append('SenderPhoneNo', userData.phoneNumber);
     formData.append('phoneNumber', itm.phoneNumber);
     formData.append('recieverId', itm.recieverId);
 
@@ -82,6 +87,7 @@ const UserChat = props => {
         console.error('Error adding contact:', error);
       });
   };
+
 
 //   const sendMessage = async () => {
 //     setIsSending(true);
