@@ -8,6 +8,7 @@ import {
   ScrollView,
   // TextInput,
   Alert,
+  Image,
 } from 'react-native';
 import AppContext from '../../../context/AppContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
@@ -159,12 +160,12 @@ const CreateGroup = () => {
             <View style={HomeNeoCards.dpVew}>
               <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
                 <TouchableOpacity>
-                  {/* <Image
-                            source={item.dpImage}
+                  <Image
+                            source={require('../../../assets/imges/default/userProfileDark.jpg')}
                             style={[HomeNeoCards.dpIcon]}
-                            /> */}
+                            />
 
-                  <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
+                  {/* <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} /> */}
                 </TouchableOpacity>
               </View>
             </View>
@@ -336,7 +337,7 @@ export default CreateGroup;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppColors.bgprimary,
+    backgroundColor: AppColors.white,
     justifyContent: 'space-around',
     alignItems: 'center',
     height: hp('100'),
