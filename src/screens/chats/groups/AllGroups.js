@@ -24,7 +24,7 @@ import PushNotification ,{Importance} from "react-native-push-notification";
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
-  const { baseUrl } = useContext(AppContext)
+  const { baseUrl,currentUserId } = useContext(AppContext)
   const { theme, darkThemeActivator } = useContext(ThemeContext)
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
@@ -66,11 +66,11 @@ const AllGroups = ({ navigation }) => {
   }
 
   const fetchAllGroups = async () => {
-    const userId = await AsyncStorage.getItem('user');
-    console.log("user id in all groups", JSON.parse(userId));
-    const parseId = JSON.parse(userId)
+    // const userId = await AsyncStorage.getItem('user');
+    // console.log("user id in all groups", JSON.parse(userId));
+    // const parseId = JSON.parse(userId)
     try {
-      const result = await fetch(`${baseUrl}/viewGroups/?userId=${parseId}`,
+      const result = await fetch(`${baseUrl}/viewGroups/?userId=${currentUserId.userId}`,
 
         {
           method: 'GET',

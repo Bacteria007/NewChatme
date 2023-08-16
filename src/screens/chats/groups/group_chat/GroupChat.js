@@ -39,13 +39,13 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import GroupChatInput from './GroupChatInput';
 import PushNotification from "react-native-push-notification";
 
-const socket = io.connect('http://192.168.1.106:8888');
+const socket = io.connect('http://192.168.43.122:8888');
 
 const GroupChat = props => {
     // VARIABLES
     const { item } = props.route.params;
-    const { baseUrl, curentUser } = useContext(AppContext)
-    let currentId = JSON.parse(curentUser._j);
+    const { baseUrl, curentUser ,currentUserId} = useContext(AppContext)
+    // let currentId = JSON.parse(curentUser._j);
     const groupMembers = item.members;
     const adminId = item.group_admin;
     const groupId = item._id;
@@ -70,7 +70,7 @@ const GroupChat = props => {
         setHeight(event.nativeEvent.contentSize.height);
     };
     const getSenderDetails = async () => {
-        const userDetails = groupMembers.find(member => member._id === currentId);
+        const userDetails = groupMembers.find(member => member._id === currentUserId.userId);
         return userDetails; // This will return the matching user details or undefined if not found
     };
     const sendMessage = async () => {
@@ -90,7 +90,7 @@ const GroupChat = props => {
 
     }
     const handleNotification = (item) => {
-        if (item.sender_id != currentId) {
+        if (item.sender_id != currentUserId.userId) {
             PushNotification.localNotification({
                 channelId: "1233",
                 title: `${item.sender_name}`.toUpperCase(),
@@ -102,7 +102,7 @@ const GroupChat = props => {
     }
     const handleGetCurrentMsg = (msgData) => {
         
-        if (msgData.sender_id != currentId) {
+        if (msgData.sender_id != currentUserId.userId) {
             handleNotification(msgData)
         } else {
         }

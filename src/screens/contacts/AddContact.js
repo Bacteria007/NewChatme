@@ -40,7 +40,7 @@ const AddContact = ({ navigation }) => {
 
     console.log('desc', JSON.parse(userid));
     const parseId = JSON.parse(userid);
-    await fetch(`${baseUrl}/allUsers?userId=${parseId}`, {
+    await fetch(`${baseUrl}/allUsers?userId=${currentUserId.userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -52,11 +52,11 @@ const AddContact = ({ navigation }) => {
           // ye iss liye kiya hai q k backend sy just id , name or phone number mil raha tha jb k mein id ko as a receiver id or sender id ko b bejna chahti thi jis k liye ye approach use ki mein ny
           recieverId: item._id,
           name: item.name,
-          userId: parseId,
+          userId: currentUserId.userId,
           phoneNumber: item.phoneNo,
         }));
         const filteredChats = contactInformation.filter(
-          user => user.recieverId != parseId, // NAME KI BASE PR SEARCH HO RAHI HAI
+          user => user.recieverId != currentUserId.userId, // NAME KI BASE PR SEARCH HO RAHI HAI
         );
         setSearchedChat(filteredChats);
         setContactList(filteredChats);

@@ -36,7 +36,7 @@ import FontStyle from '../../../assets/styles/FontStyle';
 import PushNotification from "react-native-push-notification";
 const CreateGroup = () => {
   // STATES
-  const { baseUrl } = useContext(AppContext);
+  const { baseUrl,currentUserId } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const [allUsers, setAllUsers] = useState([]);
   const [groupName, setgroupName] = useState('');
@@ -63,7 +63,7 @@ const CreateGroup = () => {
       });
       const data = await response.json();
       const filteredUsers = data.filter(
-        user => user._id != parseId, // id KI BASE PR SEARCH HO RAHI HAI
+        user => user._id != currentUserId.userId, // id KI BASE PR SEARCH HO RAHI HAI
       );
       // Add the 'isSelected' field to each item in the filteredUsers array
       const usersWithIsSelectedField = filteredUsers.map(user => ({
@@ -116,7 +116,7 @@ const CreateGroup = () => {
     console.log('selectedMembers', selectedMembers);
     const formData = new FormData();
     formData.append('group_name', name);
-    formData.append('group_admin', parseId);
+    formData.append('group_admin', currentUserId.userId);
     formData.append('members', JSON.stringify(selectedMembers));
     if (selectedMembers.length > 0) {
       await axios({

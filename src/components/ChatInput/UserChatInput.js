@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useContext, useRef, useState } from 'react';
 import { Icons } from '../../assets/Icons';
@@ -19,15 +20,20 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DocumentPicker from 'react-native-document-picker';
 import AppContext from '../../context/AppContext';
+import axios from 'axios';
 // import EmojiPicker from 'rn-emoji-keyboard';
 
 const UserChatInput = ({
   item,
   socket,
   setMessageList,
-  sendMessage,
   setImagMessage,
-  imagMessage,
+  addContact,
+  // sendMessage,
+  // imagMessage,
+  // currentMessage,
+  // setCurrentMessage,
+  // isSending,
 }) => {
   const {
     language,
@@ -37,13 +43,17 @@ const UserChatInput = ({
     selectedImageUri,
     storeImageUri,
   } = useContext(AppContext);
+  const apiKey = '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';
+
 
   const [currentMessage, setCurrentMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
   // const [messageList, setMessageList] = useState([]);
   // const [imagMessage, setImagMessage] = useState('');
   const [videoMessage, setVideoMessage] = useState('');
   const [textMessage, setTextMessage] = useState('');
-  const [height, setHeight] = useState(hp('7%')); // Initialize height with a default value
+  // const [isSending, setIsSending] = useState(false)
+  const [height, setHeight] = useState(hp('2%')); // Initialize height with a default value
   // const {item,socket} = props.route.params;
 
   const onContentSizeChange = event => {
@@ -74,22 +84,77 @@ const UserChatInput = ({
   //   }
   // };
 
+  const sendMessage = async () => {
+    setIsSending(true);
+    addContact();
+    await axios
+      .post(
+        'https://api.openai.com/v1/engines/text-davinci-003/completions',
+        {
+          prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
+          max_tokens: 1024,
+          temperature: 0.5,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+          },
+        },
+      )
+      .then(async response => {
+        const moodOfUser = response.data.choices[0].text.trim();
+
+        if (moodOfUser != '') {
+          const messageData = {
+            content: currentMessage.trim(),
+            name:item.name, 
+            senderId:item.userId,
+            recieverId:item.recieverId,
+            mood: moodOfUser,
+          };
+          console.log('frontend', messageData);
+
+          await socket.emit('send_message', messageData);
+          setMessageList(list => [...list, messageData]);
+          setCurrentMessage('');
+          setIsSending(false);
+        }
+        setIsSending(false);
+      })
+      .catch(async error => {
+        console.error('Error detecting mood:', error);
+        const messageData = {
+          content: currentMessage.trim(),
+          name:item.name, 
+          senderId:item.userId,
+          recieverId:item.recieverId,
+          mood: 'normal',
+        };
+        console.log('frontend', messageData);
+
+        await socket.emit('send_message', messageData);
+        setMessageList(list => [...list, messageData]);
+        setCurrentMessage('');
+        setIsSending(false);
+      });
+  };
+
+
   return (
     <View style={UserChatInputStyle.main_input_and_mic}>
       <View style={UserChatInputStyle.input_and_all_icons}>
         <ScrollView style={UserChatInputStyle.scroll_inputText}>
           <TextInput
-            style={UserChatInputStyle.input(height)}
+          style={UserChatInputStyle.input(height)}
             placeholder="Type here"
             value={currentMessage}
-            onChangeText={txt => {
-              setCurrentMessage(txt);
-            }}
-            keyboardType="twitter"
+            onChangeText={(txt)=>{setCurrentMessage(txt)}}
+            keyboardType='twitter'
             multiline={true}
             placeholderTextColor={AppColors.gray}
             onContentSizeChange={onContentSizeChange}
             underlineColorAndroid={'transparent'}
+
           />
         </ScrollView>
         <View style={UserChatInputStyle.camera_and_papercliper}>
