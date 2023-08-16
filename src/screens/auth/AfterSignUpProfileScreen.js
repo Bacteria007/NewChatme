@@ -235,13 +235,13 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
               )}
 
               {/* Icon ka view */}
-              <Animated.View style={[AfterSignUpStyleSheet.CameraIconView,{position:'absolute',right:wp('3%'),top:hp('13%')}]}>
+              <View style={[AfterSignUpStyleSheet.CameraIconView,{position:'absolute',right:wp('3%'),top:hp('13%')}]}>
                 <Icons.MaterialIcons
                   name="camera-alt"
                   size={23}
                   color="white"
                 />
-              </Animated.View>
+              </View>
             </TouchableOpacity>
             {/* </ImageBackground> */}
             {/* </TouchableOpacity> */}

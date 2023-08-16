@@ -28,7 +28,7 @@ import RNFS, { read } from 'react-native-fs';
 import FontStyle from '../../assets/styles/FontStyle';
 
 const SignUpScreen = ({ navigation }) => {
-  const { language,baseUrl,storeLoggedinStatus } = useContext(AppContext);
+  const { language,baseUrl,storeLoggedinStatus,getUserID2 } = useContext(AppContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -82,7 +82,7 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
     })
       .then(function (response) {
         if (response.data.save === true) {
-          console.log("respose aya",response.data)
+          console.log("respose signup vala",response.data)
           const uId=response.data.newUser._id
           console.log("type of",typeof uId)
           // console.log("asyncSignup",AsyncStorage.setItem('user', uId))
@@ -91,6 +91,7 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
             setAlreadyExist(response.data.newUser)
           }else{
             AsyncStorage.setItem('user', JSON.stringify({userId:response.data.newUser._id,phoneNumber:response.data.newUser.phoneNo}))
+            getUserID2()
           storeLoggedinStatus(true)
           navigation.navigate('AfterSignUpProfileScreen');
           }

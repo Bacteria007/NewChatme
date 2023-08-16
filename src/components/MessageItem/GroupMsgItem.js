@@ -10,8 +10,8 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { Icons } from '../../assets/Icons';
 
 const GroupMsgItem = ({ msgData }) => {
-  const { curentUser } = useContext(AppContext);
-  const currentId = JSON.parse(curentUser._j);
+  const { curentUser,currentUserId } = useContext(AppContext);
+  // const currentId = JSON.parse(curentUser._j);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   // reply
   const swipeableRef = useRef(null);
@@ -56,7 +56,7 @@ const GroupMsgItem = ({ msgData }) => {
 // Checking  User
   const isCurrentUserFunc = async () => {
     const senderid = await msgData.sender_id;
-    return senderid === currentId;
+    return senderid === currentUserId.userId;
   };
   const checkIsCurrentUser = async () => {
     const result = await isCurrentUserFunc();
@@ -112,7 +112,7 @@ const GroupMsgItem = ({ msgData }) => {
 export default GroupMsgItem;
 
 const styles = StyleSheet.create({
-  wholeMsgBox: user => ({
+  wholeMsgBox: (user) => ({
     flexDirection: 'column',
     width: 'auto',
     backgroundColor: user ? 'grey' : 'purple',

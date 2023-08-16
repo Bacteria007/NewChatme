@@ -19,26 +19,26 @@ import AppSubHeader from '../../../components/Headers/AppHeaders/AppSubHeader';
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
-  const { baseUrl } = useContext(AppContext);
+  const { baseUrl,currentUserId } = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const globalFunctions = GlobalFunction()
   const [contactList, setContactList] = useState([]);
- const u=globalFunctions.fetchUserId();
+//  const u=globalFunctions.fetchUserId();
 
- useEffect(()=>{
-  console.log("-------------",u)
-  u
- },[u])
+//  useEffect(()=>{
+//   console.log("-------------",u)
+//   u
+//  },[u])
 
   const fetchContactList = async () => {
-    const userid = await AsyncStorage.getItem('user')
+    // const userid = await AsyncStorage.getItem('user')
+    // const parseId = JSON.parse(userid)
 
-    console.log("discussion", JSON.parse(userid))
-    const parseId = JSON.parse(userid)
+    console.log("discussion ma ",currentUserId.userId )
     try {
-      const response = await fetch(`${baseUrl}/allChats?userId=${parseId}`, {
+      const response = await fetch(`${baseUrl}/allChats?userId=${currentUserId.userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -46,6 +46,7 @@ const Discussions = ({ navigation }) => {
       })
 
       const data = await response.json();
+      console.log('discussion from server',data)
       setContactList(data);
     } catch (error) {
       console.error('Error fetching contact list:', error);

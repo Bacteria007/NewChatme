@@ -24,7 +24,7 @@ import AppContext from '../../../context/AppContext';
 const ChatBot = props => {
 
   //***********************************      USE STATE    ************************* */
-  const { baseUrl, curentUser } = useContext(AppContext)
+  const { baseUrl, currentUserId } = useContext(AppContext)
   const [data, setData] = useState([]);
   const [msgHistory, setMessageHistory] = useState([]);
   const [textInput, setTextInput] = useState('');
@@ -80,10 +80,8 @@ const ChatBot = props => {
   };
 
   const storeInDb = async () => {
-    const userid = await JSON.parse(curentUser._j)
-    console.log("userid in bot", userid)
     const formData = new FormData();
-    formData.append("user_id", userid);
+    formData.append("user_id", currentUserId.userId);
     formData.append("user_msg", userMsg);
     formData.append("bot_msg", botMsg);
     // formData.append("timestamp", timestamp);

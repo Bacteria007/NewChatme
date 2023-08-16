@@ -75,6 +75,7 @@ const LogInScreen = ({ navigation }) => {
           let res=response.data.loggedInUser
           AsyncStorage.setItem('user', JSON.stringify({userId:res._id,phoneNumber:res.phoneNo,profileImage: res.profileImage,name:res.name}))
           // storeLoggedinStatus(true)
+          getUserID2()
           console.log("async login",currentUserId)
           navigation.navigate('DrawerScreens');
         }
@@ -100,7 +101,7 @@ const LogInScreen = ({ navigation }) => {
     // if(currentUserStatus){
     //  navigation.navigate('DrawerScreens');
     //     }
-    getUserID2()
+    // getUserID2()
   }, []);
 
   return (

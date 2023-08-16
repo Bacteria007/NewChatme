@@ -32,7 +32,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
 
-const socket = io.connect('http://192.168.1.106:8888');
+const socket = io.connect('http://192.168.43.122:8888');
 
 const UserChat = props => {
   const { baseUrl, currentUserId } = useContext(AppContext);
@@ -83,60 +83,60 @@ const UserChat = props => {
       });
   };
 
-  const sendMessage = async () => {
-    setIsSending(true);
-    addContact();
-    await axios
-      .post(
-        'https://api.openai.com/v1/engines/text-davinci-003/completions',
-        {
-          prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
-          max_tokens: 1024,
-          temperature: 0.5,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-          },
-        },
-      )
-      .then(async response => {
-        const moodOfUser = response.data.choices[0].text.trim();
+//   const sendMessage = async () => {
+//     setIsSending(true);
+//     addContact();
+//     await axios
+//       .post(
+//         'https://api.openai.com/v1/engines/text-davinci-003/completions',
+//         {
+//           prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
+//           max_tokens: 1024,
+//           temperature: 0.5,
+//         },
+//         {
+//           headers: {
+//             Authorization: `Bearer ${apiKey}`,
+//           },
+//         },
+//       )
+//       .then(async response => {
+//         const moodOfUser = response.data.choices[0].text.trim();
+// console.log('sendMsg recieverid',recieverId)
+//         if (moodOfUser != '') {
+//           const messageData = {
+//             content: currentMessage.trim(),
+//             name: itm.name,
+//             senderId: itm.userId,
+//             recieverId: recieverId,
+//             mood: moodOfUser,
+//           };
+//           console.log('frontend', messageData);
 
-        if (moodOfUser != '') {
-          const messageData = {
-            content: currentMessage.trim(),
-            name: itm.name,
-            senderId: itm.userId,
-            recieverId: recieverId,
-            mood: moodOfUser,
-          };
-          console.log('frontend', messageData);
+//           await socket.emit('send_message', messageData);
+//           setMessageList(list => [...list, messageData]);
+//           setCurrentMessage('');
+//           setIsSending(false);
+//         }
+//         setIsSending(false);
+//       })
+//       .catch(async error => {
+//         console.error('Error detecting mood:', error);
+//         const messageData = {
+//           content: currentMessage.trim(),
+//           name: itm.name,
+//           senderId: itm.userId,
+//           recieverId: recieverId,
+//           mood: 'normal',
+//         };
+//         console.log('frontend', messageData);
 
-          await socket.emit('send_message', messageData);
-          setMessageList(list => [...list, messageData]);
-          setCurrentMessage('');
-          setIsSending(false);
-        }
-        setIsSending(false);
-      })
-      .catch(async error => {
-        console.error('Error detecting mood:', error);
-        const messageData = {
-          content: currentMessage.trim(),
-          name: itm.name,
-          senderId: itm.userId,
-          recieverId: recieverId,
-          mood: 'normal',
-        };
-        console.log('frontend', messageData);
-
-        await socket.emit('send_message', messageData);
-        setMessageList(list => [...list, messageData]);
-        setCurrentMessage('');
-        setIsSending(false);
-      });
-  };
+//         await socket.emit('send_message', messageData);
+//         setMessageList(list => [...list, messageData]);
+//         setCurrentMessage('');
+//         setIsSending(false);
+//       });
+//   };
 
   const DeleteMessage = async msgId => {
     const formData = new FormData();
@@ -179,7 +179,7 @@ const UserChat = props => {
     return () => {
       socket.off('receive_message');
     };
-  }, [messageList]);
+  }, [recieverId]);
 
   useEffect(() => {
     // Scroll to the end when messageList changes
@@ -253,12 +253,16 @@ const UserChat = props => {
           <UserChatInput
             item={itm}
             socket={socket}
-            setMessageList={setMessageList}
+            setMessageList={(ml)=>{setMessageList(ml)}}
             setImagMessage={setImagMessage}
             imagMessage={imagMessage}
-            sendMessage={() => {
-              sendMessage();
-            }}
+            addContact={()=>{addContact()}}
+            // sendMessage={() => {
+            //   sendMessage();
+            // }}
+            // currentMessage={currentMessage}
+            // setCurrentMessage={(cm)=>{setCurrentMessage(cm)}}
+            // isSending={isSending}
           />
         </KeyboardAvoidingView>
       </ImageBackground>

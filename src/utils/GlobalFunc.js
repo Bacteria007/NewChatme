@@ -58,12 +58,12 @@ const GlobalFunction = () => {
     //   );
     // }
   };
-  const fetchUserId = async () => {
-    const user = await AsyncStorage.getItem('user');
-    const userId= await JSON.parse(user);
-    console.log("user id in all gloabl", JSON.parse(userId));
-    return userId;
-  }
+  // const fetchUserId = async () => {
+  //   const user = await AsyncStorage.getItem('user');
+  //   const userId= await JSON.parse(user);
+  //   console.log("user id in all gloabl", JSON.parse(userId));
+  //   return userId;
+  // }
   // useEffect(()=>{
   //   fetchUserId()
   // },[fetchUserId])
@@ -71,7 +71,7 @@ const GlobalFunction = () => {
     getRandomColor,
     scrollToTop,
     renderFooter,
-    fetchUserId,
+    // fetchUserId,
   };
 };
 

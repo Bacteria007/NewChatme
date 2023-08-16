@@ -147,7 +147,7 @@ const App = props => {
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
         <Tab.Navigator
-          initialRouteName="Reels"
+          initialRouteName="Chats"
           screenOptions={({ route, focused }) => ({
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
@@ -260,11 +260,11 @@ const App = props => {
           // backBehavior='history'
           initialRouteName="Home"
           drawerContent={props => {
-            const { userData } = useUserContext();
-            const parsedUser = JSON.parse(userData._j);
-            const { baseUrl } = useContext(AppContext);
+            // const { userData } = useUserContext();
+            // const parsedUser = JSON.parse(userData._j);
+            const { baseUrl ,currentUserId} = useContext(AppContext);
             console.log('baseurl', baseUrl);
-            console.log('usercontext.img', parsedUser.profileImage);
+            console.log('usercontext appjs',currentUserId );
             return (
               <View style={{ flex: 1 }}>
                 <DrawerContentScrollView {...props}>
@@ -272,7 +272,7 @@ const App = props => {
                     style={[Containers.centerContainer, { height: hp('25%') }]}>
                     <Image
                       source={{
-                        uri: `${baseUrl} ${parsedUser?.profileImage} `,
+                        uri: `${baseUrl} ${currentUserId?.profileImage} `,
                       }}
                       style={{
                         height: wp('25%'),
@@ -282,7 +282,7 @@ const App = props => {
                     />
                     <Text
                       style={{ fontSize: hp('3%'), color: AppColors.black }}>
-                      {parsedUser?.name}
+                      {currentUserId?.name}
                     </Text>
                   </Animated.View>
                 <DrawerItemList {...props} />
@@ -388,7 +388,7 @@ const App = props => {
   // console.log('user id App.js-----------------', loggedInUserId);
   return (
     <AppProvider>
-      <UserProvider>
+      {/* <UserProvider> */}
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
           <ZegoCallInvitationDialog />
@@ -527,7 +527,7 @@ const App = props => {
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
-      </UserProvider>
+      {/* </UserProvider> */}
     </AppProvider>
   );
 };

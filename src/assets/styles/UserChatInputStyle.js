@@ -38,15 +38,29 @@ const UserChatInputStyle = StyleSheet.create({
     // backgroundColor: 'red',
 
   }),
-  scroll_inputText:{flex:1,alignSelf:'center'},
-  camera_and_papercliper: (width)=>({
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: width,
-    alignItems: 'center',
-    paddingVertical: hp('1.5%'),
+  // input:{
+  //   width: wp('58%'),
+  //   height:hp('5%'),
+  //   alignItems: 'center',
+  //   paddingLeft: wp('3%'),
+  //   alignSelf:'center'
+  //   // backgroundColor: 'red',
+  // },
 
-  }),
+  scroll_inputText:{flex:1,alignSelf:'center'},
+  // camera_and_papercliper: (width)=>({
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-around',
+  //   width: width,
+  //   alignItems: 'center',
+  //   paddingVertical: hp('1.5%'),
+
+  // }),
+  camera_and_papercliper:{flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: wp('18%'),
+    alignItems: 'center',
+    paddingVertical: hp('1.5%'),},
   microphoneContainerView: {
     height: hp('6%'),
     width: hp('6%'),
