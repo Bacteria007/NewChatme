@@ -27,7 +27,8 @@ import Containers from '../../../assets/styles/Containers';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 
 const MyActivity = ({ navigation }) => {
-  const { baseUrl } = useContext(AppContext);
+  const { baseUrl,storedUser } = useContext(AppContext);
+  const userId = storedUser.userId;
   const [currentVideo, setCurrentVideo] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(null);
   const videoRef = useRef(null);
@@ -38,16 +39,12 @@ const MyActivity = ({ navigation }) => {
 
   // New function for fetching uploaded videos
   const fetchUploadedVideos = async () => {
-    const userData = await AsyncStorage.getItem('user');
-
-    const  userParseData = JSON.parse(userData);
-    const parseId = userParseData.userId;
     fetch(`${baseUrl}/uploadedReels`, {
       method: 'POST',
     })
       .then(response => response.json())
       .then(data => {
-        console.log("##### all reels response ####", data.UploadedVideos)
+        //console.log("##### all reels response ####", data.UploadedVideos)
 
         const videosWithSources = data.UploadedVideos.map(video => ({
           _id: video._id,
@@ -56,28 +53,26 @@ const MyActivity = ({ navigation }) => {
           user: video.userId
         }));
         const myuploads = videosWithSources.filter(
-          user => user.userId === parseId, // id KI BASE PR SEARCH HO RAHI HAI
+          user => user.userId === userId, // id KI BASE PR SEARCH HO RAHI HAI
         );
-        console.log('Myuploads --------^^^^^^^^^^^^^^^^^^^^  ', myuploads);
+        //console.log('Myuploads --------^^^^^^^^^^^^^^^^^^^^  ', myuploads);
         setAllUploads(videosWithSources);
-        console.log('allUploads --------^^^^^^^^^^^^^^^^^^^^  ', allUploads);
-        console.log(videosWithSources);
+        //console.log('allUploads --------^^^^^^^^^^^^^^^^^^^^  ', allUploads);
+        //console.log(videosWithSources);
       })
       .catch(error => {
-        console.log(error);
+        //console.log(error);
         Alert('Error while fetching data');
       });
   };
 
   const deleteReel = async (item) => {
-    const userid = await AsyncStorage.getItem('user');
-    const parseId = JSON.parse(userid);
-    console.log("userid in frontend", parseId)
-    console.log("reelId in frontend", item._id)
+    //console.log("userid in frontend", userId)
+    //console.log("reelId in frontend", item._id)
 
     const formData = new FormData();
     formData.append("reel_id", item._id)
-    formData.append("user_id", parseId)
+    formData.append("user_id", userId)
     const response = await axios(`${baseUrl}/deleteReel`, {
       method: "post",
       headers: {
@@ -87,7 +82,7 @@ const MyActivity = ({ navigation }) => {
     });
     if (response.data.deleted) {
       // Reel deleted successfully
-      console.log('Reel deleted');
+      //console.log('Reel deleted');
     } else {
       console.error('Failed to delete reel');
     }
@@ -100,9 +95,9 @@ const MyActivity = ({ navigation }) => {
     setTimeout(() => {
       setIsLoading(false); // Set loading state to false after 2 seconds
     }, 1000);
-  }, []);
+  }, [allUploads]);
   useEffect(() => {
-    console.log("reel id useefect", reelid)
+    //console.log("reel id useefect", reelid)
   }, [allUploads, reelid]);
 
 
@@ -190,7 +185,7 @@ const MyActivity = ({ navigation }) => {
                   const videoHeight = (videoWidth * 16) / 16; // Assuming a 16:9 aspect ratio
                   // ...
                   const HtmlVideo = ActivityVideoHtml(baseUrl, item);
-                  console.log("video html", HtmlVideo)
+                  //console.log("video html", HtmlVideo)
                   return (
                     <Swipeable overshootFriction={3}  renderRightActions={(progress, dragX) => renderRightActions(progress, dragX, item)}>
                     <View>
@@ -246,7 +241,7 @@ export default MyActivity;
 //     setCurrentIndex(index);
 //     setIsModalVisible(true);
 //     setReelid(item._id)
-//     console.log("reel id", item._id)
+//     //console.log("reel id", item._id)
 //   }}
 //   style={{flex:1}}
 // 
@@ -264,7 +259,7 @@ export default MyActivity;
 //           <Text style={{ textAlign: 'left', flex: 1, marginLeft: 5, color: 'black' }}>You Video: {allUploads[currentIndex].uri.uri}</Text>
 //           <TouchableRipple
 //             onPress={() => {
-//               console.log("cur============", allUploads[currentIndex])
+//               //console.log("cur============", allUploads[currentIndex])
 //               deleteReel(allUploads[currentIndex])
 //             }}
 //             rippleColor="rgba(0, 0, 0, 0.6)"        

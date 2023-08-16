@@ -76,7 +76,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       drawerColor: AppColors.Mauve,
       statusBarBg:AppColors.bgprimary,
       statusBarText: 'dark-content',
-      backgroundColor:AppColors.bgprimary,
+      backgroundColor:AppColors.white,
       tabColor: AppColors.tab,
       buttonsColor:AppColors.primary,
      buttonsTextColor:AppColors.white,
