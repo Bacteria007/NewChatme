@@ -15,33 +15,33 @@ import { BgTheme } from "./BgTheme";
 // }
 
 const AppHeaderStyle = StyleSheet.create({
-  mainHeader: {
+  mainHeader:(headerColor)=>({
     // flex:1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // height: hp('16%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: hp('15%'),
+    backgroundColor:headerColor
     // position:'absolute',
 
-  },
+  }),
   headerView: {
     flexDirection: 'row',
-    paddingHorizontal: wp('3.5%'),
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: wp('100%'),
-    // backgroundColor:'blue',
-
+    width: wp('100%')
   },
   drawerAndName_Container: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent:'center',alignItems:'center',
-    // backgroundColor:'red',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal:wp('5'),
+    // backgroundColor: 'red',
+
   },
   appNameStyle: {
     fontSize: wp('6%'),
-
     fontFamily: FontStyle.mediumFont,
-    marginLeft: wp('3%'),
     letterSpacing: 1
   },
   iconContainerStyle: {
@@ -50,16 +50,16 @@ const AppHeaderStyle = StyleSheet.create({
     // width: wp('20%'),
     alignItems: 'center',
     // backgroundColor:'red'
-    padding:6
+    padding: 6
   },
-  botBgStyle:{
-      height: hp('4.5%'),
-      width: hp('4.5%'),
-      backgroundColor: AppColors.coolgray,
-      borderRadius: hp('4.5'),
-      justifyContent:'center',alignItems:'center'
+  botBgStyle: {
+    height: hp('4.5%'),
+    width: hp('4.5%'),
+    backgroundColor: AppColors.coolgray,
+    borderRadius: hp('4.5'),
+    justifyContent: 'center', alignItems: 'center'
   },
-  botImgStyle:{ height: hp('4.5%'), width: hp('4.5%') },
+  botImgStyle: { height: hp('4.5%'), width: hp('4.5%') },
 });
 
 export default AppHeaderStyle;

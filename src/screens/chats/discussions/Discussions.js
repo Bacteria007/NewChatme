@@ -15,7 +15,7 @@ import RenderComponent from '../../../components/FlatlistComponents/RenderCompon
 import BotDiscussion from './BotDscussion';
 import HeaderNew from '../../../components/Headers/AppHeaders/HeaderNew';
 import AppSubHeader from '../../../components/Headers/AppHeaders/AppSubHeader';
-
+import PushNotification from "react-native-push-notification";
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
@@ -75,6 +75,16 @@ const Discussions = ({ navigation }) => {
     const upDatedChats = contactList.filter((element) => element.id !== item.id);
     setContactList(upDatedChats);
   }
+  const createPushNotificatioon = () => {
+    PushNotification.createChannel(
+      {
+        channelId: "123",
+        channelName: "discussion",
+      }
+    )
+    console.log('soud=========',)
+  }
+  createPushNotificatioon()
   const handleLongPress = (item) => {
     // toggleLongPressModal();
     Alert.alert(
@@ -92,7 +102,7 @@ const Discussions = ({ navigation }) => {
 
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
       <Primary_StatusBar />
-      <HeaderNew navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+      <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       <View style={{justifyContent:'center',alignItems:'center'}}>
       <BotDiscussion navigation={navigation} />
       </View>
@@ -101,7 +111,7 @@ const Discussions = ({ navigation }) => {
         ref={flatListRef}
         showsVerticalScrollIndicator={false}
         data={searchedChat == '' ? contactList : searchedChat}
-        renderItem={({ item }) => <RenderComponent name={item.name} dp={null} callingScreen={"Discussions"} discussions_item={item} navigation={navigation} />}
+        renderItem={({ item }) => <RenderComponent name={item.name} dp={storedUser.profileImage} callingScreen={"Discussions"} discussions_item={item} navigation={navigation} />}
         ListFooterComponent={globalFunctions.renderFooter(flatListRef, contactList)}
       />
     </View>

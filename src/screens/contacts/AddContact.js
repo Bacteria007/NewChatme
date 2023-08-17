@@ -111,7 +111,7 @@ const AddContact = ({ navigation }) => {
   return (
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
       <Primary_StatusBar />
-      <HeaderNew
+      <AppHeader
         navigation={navigation}
         headerTitle={'Contacts'}
         handleSearchOnChange={handleSearch}
