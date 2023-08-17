@@ -26,12 +26,16 @@ const UserChatHeader = ({ item, navigation }) => {
   const [callTime, setCallTime] = useState(0);
   const { baseUrl } = useContext(AppContext);
 
-  const ZegoRoomMake = () => {
+  const ZegoRoomMake = async() => {
+    const userData = await AsyncStorage.getItem('user');
+
+    const  userParseData = JSON.parse(userData);
+    const userName = userParseData.name;
     return ZegoUIKitPrebuiltCallService.init(
       1432799538, // You can get it from ZEGOCLOUD's console
       'd2d1b8a8f15ad602e020ba7e97236f8cd1030bdd3fa31ab1770c02aecc65bd14', // You can get it from ZEGOCLOUD's console
       item.userId,
-      'Ali',
+      userName,
       // item.name,
       [ZIM, ZPNs],
       {
@@ -95,8 +99,10 @@ const UserChatHeader = ({ item, navigation }) => {
   };
   //        #############################################################################
   const addCallDetailInBackend = async call => {
-    const userid = await AsyncStorage.getItem('user');
-    const parseId = JSON.parse(userid);
+    const userData = await AsyncStorage.getItem('user');
+
+    const  userParseData = JSON.parse(userData);
+    const parseId = userParseData.userId;
 
    
 

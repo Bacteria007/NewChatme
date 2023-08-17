@@ -30,6 +30,7 @@ const ChatBot = props => {
   const [textInput, setTextInput] = useState('');
   const [userMsg, setUserMsg] = useState('');
   const [botMsg, setBotMsg] = useState('');
+  let msgOfBot;
 
 
   //***********************************     VARIABLES   ************************* */
@@ -40,6 +41,9 @@ const ChatBot = props => {
 
   //***********************************      FUNCTIONS    ************************* */
 
+  // useEffect(()=>{
+  //   console.log("Bot Msg")
+  // },[botMsg])
   const handleSend = async () => {
     const prompt = textInput;
     const response = await axios.post(
@@ -58,6 +62,7 @@ const ChatBot = props => {
     );
     const text = response.data.choices[0].text;
     setBotMsg(text)
+    msgOfBot=text;
     const timestamp = new Date().toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
@@ -76,16 +81,18 @@ const ChatBot = props => {
         { type: 'bot', text: text, timestamp: timestamp },
       ]);
     }, 1000);
+    storeInDb()
 
   };
 
   const storeInDb = async () => {
     const formData = new FormData();
-    formData.append("user_id", storedUser.userId);
-    formData.append("user_msg", userMsg);
-    formData.append("bot_msg", botMsg);
-    // formData.append("timestamp", timestamp);
-    const response = await fetch(`${baseUrl}/store_msg`, {
+    formData.append("userId", storedUser.userId);
+    formData.append("userMsg", textInput);
+    formData.append("botMsg", msgOfBot);
+    console.log("bot_msg", msgOfBot);
+        // formData.append("timestamp", timestamp);
+    const response = await fetch(`${baseUrl}/storeBotMsg`, {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -99,9 +106,9 @@ const ChatBot = props => {
     // setMessageHistory(data)
     console.log('after msg send:', data);
   }
-  useEffect(() => {
-    storeInDb()
-  }, [])
+  // useEffect(() => {
+  //   storeInDb()
+  // }, [])
 
   //***********************************      FLATLIST FUNCTION    ************************* */
   const renderMessage = ({ item }) => {
