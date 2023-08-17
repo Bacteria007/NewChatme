@@ -36,7 +36,7 @@ const Calls = ({ navigation }) => {
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [allCallList, setAllCallList] = useState([]);
   const [currentUserID, setCurrentUserID] = useState('');
-
+let parseId;
   //       ***************************                 VARIABLES         **************************************
   const iconSize = hp('2.5%');
   const currentDate = new Date().toLocaleDateString([], {
@@ -49,25 +49,32 @@ const Calls = ({ navigation }) => {
     fetchCallList();
   }, []);
 
+
+
   //       ***************************              FUNCTIONS         **************************************
   const fetchCallList = async () => {
-    const userid = await AsyncStorage.getItem('user');
-    const userName = await AsyncStorage.getItem('user_name');
-    setCurrentUserID(userid);
+   
+   
+    const userData = await AsyncStorage.getItem('user');
 
-    console.log('desc', JSON.parse(userid));
-    const parseId = JSON.parse(userid);
+    const  userParseData = JSON.parse(userData);
+   parseId = userParseData.userId;
+    console.log("User ID iS                    " , parseId)
+  
 
     try {
-      const response = await fetch(`${baseUrl}/allCalls?userId=${parseId}`, {
+     await fetch(`${baseUrl}/allCalls?userId=${parseId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-      });
-
-      const data = await response.json();
-      setAllCallList(data); // Set the callList received from the response
+      }).then(async(response)=>{
+        const data = await response.json();
+        setAllCallList(data); // Set the callList received from the response
+        console.log("Data of user is              ",data)
+      }).catch((error)=>{
+        console.error('Error fetching call list:', error);
+      })
     } catch (error) {
       console.error('Error fetching call list:', error);
     }
@@ -115,7 +122,7 @@ const Calls = ({ navigation }) => {
                   <Text
                     style={[
                       HomeNeoCards.profileName(theme.profileNameColor)]}>
-                    {item.userId === currentUserID ? (
+                    {item.userId === parseId ? (
                       <>
                         <Text>{item.recieverName}</Text>
                       </>
@@ -126,7 +133,7 @@ const Calls = ({ navigation }) => {
                     )}
                   </Text>
                   <View style={HomeNeoCards.timeAndCallType}>
-                    {item.userId === currentUserID ? (
+                    {item.userId === parseId  ? (
                       <>
                         {item.OutgoingCall == 'outgoing' ? (
                           <Icons.MaterialCommunityIcons
@@ -163,13 +170,13 @@ const Calls = ({ navigation }) => {
                     <Icons.Ionicons
                       name="call-sharp"
                       size={wp('6%')}
-                      color={AppColors.black}
+                      color={AppColors.Mauve}
                     />
                   ) : (
                     <Icons.FontAwesome5
                       name="video"
                       size={wp('5%')}
-                      color={AppColors.black}
+                      color={AppColors.Mauve}
                     />
                   )}
                 </View>
