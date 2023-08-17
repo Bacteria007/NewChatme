@@ -35,9 +35,11 @@ import {
 } from 'react-native-paper';
 import FontStyle from '../../../assets/styles/FontStyle';
 import PushNotification from "react-native-push-notification";
-const CreateGroup = () => {
+import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
+import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
+const CreateGroup = ({navigation}) => {
   // STATES
-  const { baseUrl,storedUser } = useContext(AppContext);
+  const { baseUrl, storedUser } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const [allUsers, setAllUsers] = useState([]);
   const [groupName, setgroupName] = useState('');
@@ -161,9 +163,9 @@ const CreateGroup = () => {
               <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
                 <TouchableOpacity>
                   <Image
-                            source={require('../../../assets/imges/default/userProfileDark.jpg')}
-                            style={[HomeNeoCards.dpIcon]}
-                            />
+                    source={require('../../../assets/imges/default/userProfileDark.jpg')}
+                    style={[HomeNeoCards.dpIcon]}
+                  />
 
                   {/* <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} /> */}
                 </TouchableOpacity>
@@ -224,11 +226,12 @@ const CreateGroup = () => {
   // selectedmember array mn jab member ad kry to foran nai hoty dosri dfa click krny pr hoty is liye ye lgaya ta k jab array update ho useeffect chal jaye
   return (
     <Provider>
+      <InnerScreensHeader screenName={"Create Group"} navigation={navigation}/>
       <View style={styles.container}>
-        <Surface>
-          <Text style={HomeNeoCards.profileName(theme.profileNameColor)}>Select Members</Text>
-          <View style={styles.memberlistContainer}>
-            {selectedMembers.length > 0 ? (
+        {selectedMembers.length > 0 ? (
+          <Surface>
+            <Text style={HomeNeoCards.profileName(theme.profileNameColor)}>Select Members</Text>
+            <View style={styles.memberlistContainer}>
               <ScrollView horizontal>
                 {selectedMembers.map(member => {
                   return (
@@ -239,9 +242,9 @@ const CreateGroup = () => {
                   );
                 })}
               </ScrollView>
-            ) : null}
-          </View>
-        </Surface>
+            </View>
+          </Surface>
+        ) : null}
         <FlatList
           showsVerticalScrollIndicator={false}
           data={allUsers.length > 0 ? allUsers : null}
@@ -258,7 +261,7 @@ const CreateGroup = () => {
           onPress={() => toggleModal()}>
           <Text>Create Now</Text>
         </Button>
-        
+
         {/* <FAB
           buttonColor={theme.buttonsColor}
           iconTextColor={theme.buttonsTextColor}

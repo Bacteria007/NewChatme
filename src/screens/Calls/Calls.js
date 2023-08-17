@@ -26,6 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppContext from '../../context/AppContext';
 import moment from 'moment';
 import HeaderNew from '../../components/Headers/AppHeaders/HeaderNew';
+import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 
 const Calls = ({ navigation }) => {
   const { baseUrl } = useContext(AppContext);
@@ -103,9 +104,8 @@ let parseId;
       <TouchableOpacity onLongPress={() => handleLongPress(item)}>
         <View style={HomeNeoCards.flatlistItemContainer}>
             <Neomorph
-              lightShadowColor="#e2e2e2"
-              darkShadowColor="#000"
-              inner
+              lightShadowColor={AppColors.primary}
+              swapShadows
               style={[
                 HomeNeoCards.neomorphStyle(theme.homeCardColor)]}>
               <View style={HomeNeoCards.dpImageView}>
@@ -196,7 +196,7 @@ let parseId;
         handleSearchOnChange={handleSearch}
         searchQuery={searchText}
       /> */}
-      <HeaderNew navigation={navigation} headerTitle={'Calls'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+      <AppHeader navigation={navigation} headerTitle={'Calls'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       <FlatList
         style={{ marginTop: 10 }}
         showsVerticalScrollIndicator={false}

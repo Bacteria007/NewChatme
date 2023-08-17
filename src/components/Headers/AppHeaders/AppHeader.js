@@ -29,19 +29,17 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
   const DarkThemeChanger = () => {
     // Update the theme
     const newTheme = {
-      linearBlue: AppColors.darkThemeColors.bgColor,
-      linearPink: AppColors.darkThemeColors.bgColor,
+      
       notFocusedTabIconsColor: AppColors.lightwhite,
       focusedTabIconsColor: AppColors.primary,
       headerIconsColor: AppColors.white,
-      headerSearchText: AppColors.lightwhite,
-      headerSearchBar: AppColors.darkThemeColors.darkHomeCards,
+      headerSearchText: AppColors.darkThemeColors.headerSearchText,
+      headerSearchBar: AppColors.darkThemeColors.headerSearchBar,
       homeCardColor: AppColors.darkThemeColors.darkHomeCards,
       profileNameColor: AppColors.white,
       lastMsgColor: AppColors.lightwhite,
       groupDpIconColor: AppColors.darkThemeColors.groupDpIcon,
       dpCircleColor: AppColors.darkThemeColors.dpCircleColor,
-      headerSearchBarIcons: AppColors.coolgray,
       chatsHeaderBg: AppColors.transparent,
       statusBarBg: AppColors.darkThemeColors.bgColor,
       statusBarText: 'light-content',
@@ -52,6 +50,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
      buttonsTextColor:AppColors.white,
      addBtnColor:AppColors.black,
      addBtnTextColor:AppColors.white,
+     headerColor:AppColors.darkThemeColors.bgColor
     };
     updateTheme(newTheme);
     changeThemeState()
@@ -59,19 +58,17 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
   const LightThemeChanger = () => {
     // Update the theme
     const newTheme = {
-      linearBlue: AppColors.linearGradient.blue,
-      linearPink: AppColors.linearGradient.pink,
+     
       notFocusedTabIconsColor: AppColors.inActiveIconsColor,
       focusedTabIconsColor: AppColors.primary,
       headerIconsColor: AppColors.black,
-      headerSearchBar: AppColors.lightBlack,
-      headerSearchText: AppColors.black,
+      headerSearchBar: AppColors.lightThemeColors.headerSearchBar,
+      headerSearchText: AppColors.lightThemeColors.headerSearchText,
       homeCardColor: AppColors.white,
       profileNameColor: AppColors.black,
       lastMsgColor: AppColors.lightBlack2,
       groupDpIconColor: AppColors.lightThemeColors.groupDpIcon,
       dpCircleColor: AppColors.lightThemeColors.dpCircleColor,
-      headerSearchBarIcons: AppColors.coolgray,
       chatsHeaderBg: AppColors.transparent,
       drawerColor: AppColors.Mauve,
       statusBarBg:AppColors.bgprimary,
@@ -82,8 +79,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
      buttonsTextColor:AppColors.white,
      addBtnColor:AppColors.black,
      addBtnTextColor:AppColors.white,
-
-
+     headerColor:AppColors.white
     };
     updateTheme(newTheme);
     changeThemeState()
@@ -94,9 +90,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
 
     <View>
       {/* <Wave style={{ position: 'absolute' }}  /> */}
-      <View style={[AppHeaderStyle.mainHeader, {
-        // backgroundColor: AppColors.transparent
-      }]}>
+      <View style={AppHeaderStyle.mainHeader(theme.headerColor)}>
         <Primary_StatusBar />
         <View style={[AppHeaderStyle.headerView]}>
           <View style={AppHeaderStyle.drawerAndName_Container}>
@@ -108,8 +102,8 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
             </TouchableOpacity>
 
             <Text style={[AppHeaderStyle.appNameStyle, { color: theme.headerIconsColor }]}>{headerTitle}</Text>
-          </View>
-          <View style={[AppHeaderStyle.iconContainerStyle]}>
+         
+          <View>
             {darkThemeActivator ? (
               <TouchableOpacity
                 onPress={() => {
@@ -134,6 +128,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
               </TouchableOpacity>
             )}
           </View>
+          </View>
         </View>
 
         <SearchBar
@@ -146,7 +141,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
           placeholderTextColor={theme.headerSearchText} //light
           round
           showCancel
-          containerStyle={[AppSubHeaderStyle.container]}
+          containerStyle={[AppSubHeaderStyle.container(theme.backgroundColor)]}
           inputContainerStyle={[AppSubHeaderStyle.inputContainer, { backgroundColor: theme.headerSearchBar }]}
           inputStyle={{ color: theme.headerSearchText }}
           searchIcon={{ color: theme.headerSearchText, size: 23 }}
