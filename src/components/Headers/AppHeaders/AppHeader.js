@@ -43,7 +43,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       chatsHeaderBg: AppColors.transparent,
       statusBarBg: AppColors.darkThemeColors.bgColor,
       statusBarText: 'light-content',
-      drawerColor: AppColors.primary,
+      drawerColor: AppColors.Mauve,
       backgroundColor:AppColors.darkThemeColors.bgColor,
       tabColor: AppColors.darkThemeColors.bgColor,
       buttonsColor:AppColors.primary,

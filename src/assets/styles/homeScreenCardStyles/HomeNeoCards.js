@@ -42,7 +42,7 @@ const HomeNeoCards = StyleSheet.create({
     paddingHorizontal:14
   }),
   addUserinGroup: (bgColor)=>({
-    shadowRadius: 0.5,
+    shadowRadius:3,
     borderRadius: wp('1.5'),
     flexDirection: 'row',
     alignItems: 'center',
@@ -84,7 +84,7 @@ const HomeNeoCards = StyleSheet.create({
     borderRadius: hp('6%'),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
   },
 
   profileName: textColor => ({
