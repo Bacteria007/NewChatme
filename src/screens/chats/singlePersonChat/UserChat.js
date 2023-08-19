@@ -32,12 +32,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
 
-const socket = io.connect('http://192.168.76.238:8888');
+const socket = io.connect('http://192.168.10.15:8888');
 
 const UserChat = props => {
   const { baseUrl, storedUser } = useContext(AppContext);
   const [changeHeader, setChangeHeader] = useState(false);
   const [imagMessage, setImagMessage] = useState('');
+  const [document, setDocument] = useState('')
   const [msgId, setMsgId] = useState();
 
   const apiKey = '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';
@@ -185,7 +186,7 @@ const UserChat = props => {
     return () => {
       socket.off('receive_message');
     };
-  }, [recieverId]);
+  }, [recieverId,imagMessage]);
 
   useEffect(() => {
     // Scroll to the end when messageList changes
@@ -235,6 +236,7 @@ const UserChat = props => {
                   itm={itm}
                   setChangeHeader={setChangeHeader}
                   setMsgId={setMsgId}
+                  document={document}
                 />
                 // <TouchableOpacity onLongPress={()=>{
                 //   setChangeHeader(true)
@@ -262,6 +264,7 @@ const UserChat = props => {
             setMessageList={(ml)=>{setMessageList(ml)}}
             setImagMessage={setImagMessage}
             imagMessage={imagMessage}
+            setDocument={(doc)=>{setDocument(doc)}}
             addContact={()=>{addContact()}}
             // sendMessage={() => {
             //   sendMessage();

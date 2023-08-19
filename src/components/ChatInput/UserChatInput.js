@@ -21,6 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DocumentPicker from 'react-native-document-picker';
 import AppContext from '../../context/AppContext';
 import axios from 'axios';
+import Pdf from 'react-native-pdf';
 // import EmojiPicker from 'rn-emoji-keyboard';
 
 const UserChatInput = ({
@@ -29,6 +30,7 @@ const UserChatInput = ({
   setMessageList,
   setImagMessage,
   addContact,
+  setDocument,
   // sendMessage,
   // imagMessage,
   // currentMessage,
@@ -139,6 +141,104 @@ const UserChatInput = ({
       });
   };
 
+  const sendImageMessage=()=>{
+    launchImageLibrary({
+      maxWidth: hp('18%'),
+      maxHeight: hp('18%'),
+    }).then(async Response => {
+      console.log(Response.assets[0]);
+      // setImagMessage(Response.assets[0])
+
+      const formdata = new FormData();
+      if (currentMessage !== '') {
+        formdata.append('content', currentMessage.trim());
+      } else {
+        formdata.append('content', 'ChatMe_Image');
+      }
+      formdata.append('name', item.name);
+      formdata.append('senderId', item.userId);
+      formdata.append('recieverId', item.recieverId);
+
+      formdata.append('ChatMe_Image', {
+        uri: Response.assets[0].uri,
+        type: Response.assets[0].type,
+        name: Response.assets[0].fileName,
+      });
+      fetch(`${baseUrl}/sendImageMsg`, {
+        method: 'POST',
+        body: formdata,
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error image! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('send img res', data);
+          setImagMessage(data.newImage);
+        })
+        .catch(error => console.log('res error image', error));
+    });
+
+  }
+  const selectDoc = async () => {
+    try {
+       const doc = await DocumentPicker.pick({
+         // type: [DocumentPicker.types.pdf],
+        //  allowMultiSelection: true
+       });
+       // const doc = await DocumentPicker.pickSingle()
+       // const doc = await DocumentPicker.pickMultiple({
+       //   type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
+       // })
+      console.log("doc",doc)
+       const formData = new FormData();
+       if (currentMessage !== '') {
+         formData.append('content', currentMessage.trim());
+       } else {
+         formData.append('content', 'document');
+       }
+       formData.append('name', item.name);
+       formData.append('senderId', item.userId);
+       formData.append('recieverId', item.recieverId);
+ 
+       doc.forEach(item => {
+        formData.append('document', {
+          uri: item.uri,
+          type: item.type,
+          name: item.name,
+        });
+      });
+      // formData.append('document', JSON.stringify({
+      //   name: item.name,
+      //   type: item.type,
+      //   uri: item.uri,
+      // }));
+   
+       const response = await fetch(`${baseUrl}/sendDocMsg2`, {
+         method: 'POST',
+         body: formData,
+        //  headers: {
+        //   'Content-Type': 'application/json',
+        // },
+       });
+   
+       if (response.ok) {
+         console.log('Document uploaded successfully');
+         setDocument(response.result)
+       } else {
+         console.log('Document upload failed');
+       }
+     } catch (err) {
+       if (DocumentPicker.isCancel(err)) {
+         console.log('User cancelled the upload', err);
+       } else {
+         console.log(err);
+       }
+     }
+   }
+ 
 
   return (
     <View style={UserChatInputStyle.main_input_and_mic}>
@@ -159,51 +259,17 @@ const UserChatInput = ({
         </ScrollView>
         <View style={UserChatInputStyle.camera_and_papercliper}>
           <TouchableOpacity onPress={()=>{
-            
+            selectDoc()
           }}>
             <Icons.FontAwesome name="paperclip" size={wp('6.5%')} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              requestCameraAndAudioPermission();
-              launchImageLibrary({
-                maxWidth: hp('18%'),
-                maxHeight: hp('18%'),
-              }).then(async Response => {
-                console.log(Response.assets[0]);
-                // setImagMessage(Response.assets[0])
-
-                const formdata = new FormData();
-                if (currentMessage !== '') {
-                  formdata.append('content', currentMessage.trim());
-                } else {
-                  formdata.append('content', 'image');
-                }
-                formdata.append('name', item.name);
-                formdata.append('senderId', item.userId);
-                formdata.append('recieverId', item.recieverId);
-
-                formdata.append('ChatMe_Image', {
-                  uri: Response.assets[0].uri,
-                  type: Response.assets[0].type,
-                  name: Response.assets[0].fileName,
-                });
-                fetch(`${baseUrl}/sendImageMsg`, {
-                  method: 'POST',
-                  body: formdata,
-                })
-                  .then(response => {
-                    if (!response.ok) {
-                      throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                  })
-                  .then(data => {
-                    console.log('res aya', data);
-                    setImagMessage(data.newImage);
-                  })
-                  .catch(error => console.log('res error', error));
-              });
+              const permission=requestCameraAndAudioPermission();
+              if(permission){
+                sendImageMessage()
+              }else
+              requestCameraAndAudioPermission()
             }}>
             <Icons.FontAwesome name="camera" size={wp('5.5%')} />
           </TouchableOpacity>

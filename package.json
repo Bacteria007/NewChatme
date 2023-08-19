@@ -33,22 +33,17 @@
     "react": "18.2.0",
     "react-delegate-component": "^1.0.0",
     "react-native": "0.71.10",
-
     "react-native-agora": "^4.2.1",
     "react-native-audio-record": "^0.2.2",
-
-
     "react-native-axios": "^0.17.1",
     "react-native-base64": "^0.2.1",
+    "react-native-blob-util": "^0.19.1",
     "react-native-callkeep": "^4.3.9",
     "react-native-country-codes-picker": "^2.3.3",
     "react-native-country-picker-modal": "^2.0.0",
     "react-native-device-info": "^10.8.0",
-
     "react-native-document-picker": "^9.0.1",
-
     "react-native-fab": "^1.0.18",
-
     "react-native-floating-label-input": "^1.4.2",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.12.0",
@@ -60,6 +55,7 @@
     "react-native-neomorph-shadows-fixes": "^1.1.4",
     "react-native-pager-view": "^6.2.0",
     "react-native-paper": "^5.8.0",
+    "react-native-pdf": "^6.7.1",
     "react-native-permissions": "^3.8.4",
     "react-native-push-notification": "^8.1.1",
     "react-native-raw-bottom-sheet": "^2.2.0",
