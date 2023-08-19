@@ -115,6 +115,7 @@ const App = props => {
     try {
       // console.log('isUserLoggedin ', isUserLoggedin);
       await AsyncStorage.removeItem('user');
+      console.log('logout')
       // storeLoggedinStatus(false)
       // console.log('User removed from storage');
       // updateCurrentUserId(''); // Clear the storedUser in the context
@@ -264,7 +265,7 @@ const App = props => {
             // const parsedUser = JSON.parse(userData._j);
             const { baseUrl ,storedUser} = useContext(AppContext);
             console.log('baseurl', baseUrl);
-            console.log('usercontext appjs',storedUser );
+            console.log('appcontext appjs',storedUser );
             return (
               <View style={{ flex: 1 }}>
                 <DrawerContentScrollView {...props}>
@@ -397,7 +398,7 @@ const App = props => {
             // initialRouteName={
             //   loggedInUserId ? 'DrawerScreens' : 'DrawerScreens'
             // }
-            initialRouteName='DrawerScreens'
+            initialRouteName='WelcomeScreen'
             >
            
             <Stack.Screen

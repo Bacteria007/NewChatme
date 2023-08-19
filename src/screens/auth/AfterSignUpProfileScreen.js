@@ -42,12 +42,12 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
 
   const handleProfileUpdate = async () => {
     const userid = await AsyncStorage.getItem('user');
-    const parseId = JSON.parse(userid);
-    // const parseIdcontextcrnt = JSON.parse(storedUser);
-    console.log('id from context', storedUser);
-    console.log('id from context', storedUser.userId);
-    console.log('id from Async', parseId);
-    console.log('id from getId', getStoredUserDetails());
+    // const parseId = JSON.parse(userid);
+    // // const parseIdcontextcrnt = JSON.parse(storedUser);
+    // console.log('id from context', storedUser);
+    // console.log('id from context', storedUser.userId);
+    // console.log('id from Async', parseId);
+    // console.log('id from getId', getStoredUserDetails());
     
     const formdata = new FormData();
     formdata.append('_id', storedUser.userId);
@@ -89,10 +89,11 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
       console.error('Error updating profile:', error);
     }
   };
+  // useEffect(()=>{
+  //   getStoredUserDetails()
+  // },[])
   useEffect(()=>{
-    getStoredUserDetails()
-  },[])
-  useEffect(()=>{
+    console.log("after signup console",storedUser)
     let userid=storedUser.userId
     fetch(`${baseUrl}/getProfileImage?logegedId=${userid}`, {
       method: 'GET',

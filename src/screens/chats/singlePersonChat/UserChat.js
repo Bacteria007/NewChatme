@@ -33,12 +33,15 @@ import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedCha
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
 import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
 
+
 const socket = io.connect('http://192.168.43.145:8888');
+
 
 const UserChat = props => {
   const { baseUrl, storedUser } = useContext(AppContext);
   const [changeHeader, setChangeHeader] = useState(false);
   const [imagMessage, setImagMessage] = useState('');
+  const [document, setDocument] = useState('')
   const [msgId, setMsgId] = useState();
 
   const apiKey = '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';
@@ -186,7 +189,7 @@ const UserChat = props => {
     return () => {
       socket.off('receive_message');
     };
-  }, [recieverId]);
+  }, [recieverId,imagMessage]);
 
   useEffect(() => {
     // Scroll to the end when messageList changes
@@ -232,6 +235,7 @@ const UserChat = props => {
                   itm={itm}
                   setChangeHeader={setChangeHeader}
                   setMsgId={setMsgId}
+                  document={document}
                 />
                 // <TouchableOpacity onLongPress={()=>{
                 //   setChangeHeader(true)
@@ -259,6 +263,7 @@ const UserChat = props => {
             setMessageList={(ml)=>{setMessageList(ml)}}
             setImagMessage={setImagMessage}
             imagMessage={imagMessage}
+            setDocument={(doc)=>{setDocument(doc)}}
             addContact={()=>{addContact()}}
             // sendMessage={() => {
             //   sendMessage();

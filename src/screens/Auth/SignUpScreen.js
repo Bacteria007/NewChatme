@@ -120,6 +120,7 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
     // Set default country as Pakistan
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
     setCountryCode('92');
+    // getStoredUserDetails()
   }, []);
 
   return (

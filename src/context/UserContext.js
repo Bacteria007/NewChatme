@@ -6,10 +6,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [userData, setUserData] = useState(AsyncStorage.getItem('user'));
-console.log("useContext console",JSON.stringify(userData))
+//   const [userData, setUserData] = useState(AsyncStorage.getItem('user'));
+// console.log("useContext console",JSON.stringify(userData))
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
+    <UserContext.Provider value={{ 
+      // userData, setUserData
+       }}>
       {children}
     </UserContext.Provider>
   );
