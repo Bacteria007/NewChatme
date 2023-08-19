@@ -57,7 +57,7 @@ const HeaderNew = ({
   const LightThemeChanger = () => {
     // Update the theme
     const newTheme = {
-      linearBlue: AppColors.linearGradient.blue,
+      linearBlue: AppColors.primary,
       linearPink: AppColors.linearGradient.pink,
       notFocusedTabIconsColor: AppColors.inActiveIconsColor,
       focusedTabIconsColor: AppColors.primary,

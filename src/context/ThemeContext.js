@@ -3,8 +3,6 @@ import AppColors from '../assets/colors/Appcolors';
 
 // Define the initial theme
 const initialTheme = {
-    linearBlue: AppColors.linearGradient.blue,
-    linearPink: AppColors.linearGradient.pink,
     tabColor: AppColors.tab,
     notFocusedTabIconsColor: AppColors.inActiveIconsColor,
     focusedTabIconsColor: AppColors.primary,
@@ -17,7 +15,7 @@ const initialTheme = {
     groupDpIconColor: AppColors.lightThemeColors.groupDpIcon,
     dpCircleColor: AppColors.lightThemeColors.dpCircleColor,
     headerSearchBarIcons: AppColors.coolgray,
-    chatsHeaderBg:AppColors.linearGradient.blue,
+    chatsHeaderBg:AppColors.primary,
     statusBarBg:AppColors.bgprimary,
     statusBarText: 'dark-content',
     drawerColor:AppColors.Mauve,
@@ -26,6 +24,7 @@ const initialTheme = {
     buttonsTextColor:AppColors.white,
     addBtnColor:AppColors.black,
     addBtnTextColor:AppColors.white,
+    headerColor:AppColors.white
 };
 
 // Create the theme context

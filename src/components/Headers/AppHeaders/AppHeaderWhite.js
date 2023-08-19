@@ -58,7 +58,7 @@ const AppHeaderWhite = ({ navigation, headerTitle, searchQuery, handleSearchOnCh
   const LightThemeChanger = () => {
     // Update the theme
     const newTheme = {
-      linearBlue: AppColors.linearGradient.blue,
+      linearBlue: AppColors.primary,
       linearPink: AppColors.linearGradient.pink,
       notFocusedTabIconsColor: AppColors.inActiveIconsColor,
       focusedTabIconsColor: AppColors.black,
@@ -73,7 +73,7 @@ const AppHeaderWhite = ({ navigation, headerTitle, searchQuery, handleSearchOnCh
       groupDpCircle: AppColors.darkThemeColors.groupDpCircle,
       headerSearchBarIcons: AppColors.coolgray,
       chatsHeaderBg: AppColors.transparent,
-      statusBarBg: AppColors.linearGradient.blue,
+      statusBarBg: AppColors.primary,
       statusBarTextLight: 'light-content',
       statusBarTextDark: 'dark-content',
       statusBarText: 'dark-content',
