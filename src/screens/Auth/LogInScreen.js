@@ -23,6 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import AppContext from '../../context/AppContext';
 import FontStyle from '../../assets/styles/FontStyle';
+import { initializeZego } from '../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
 
 const LogInScreen = ({ navigation }) => {
   const {baseUrl,storeLoggedinStatus,storedUser,getStoredUserDetails}=useContext(AppContext)
@@ -35,6 +36,10 @@ const LogInScreen = ({ navigation }) => {
   const [passwordSnackWidth, setPasswordSnackWidth] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
+
+
+  
+  
 
   const showSnackbar = message => {
     setSnackbarMessage(message);
@@ -77,6 +82,7 @@ const LogInScreen = ({ navigation }) => {
           // storeLoggedinStatus(true)
           getStoredUserDetails()
           console.log("async login",storedUser)
+          initializeZego(res._id, res.name);
           navigation.navigate('DrawerScreens');
         }
         else{
