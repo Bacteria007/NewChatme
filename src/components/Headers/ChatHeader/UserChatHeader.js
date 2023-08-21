@@ -17,8 +17,6 @@ import ZegoUIKitPrebuiltCallService, {
   ZegoSendCallInvitationButton,
   ONE_ON_ONE_VIDEO_CALL_CONFIG,
 } from '@zegocloud/zego-uikit-prebuilt-call-rn';
-import * as ZIM from 'zego-zim-react-native';
-import * as ZPNs from 'zego-zpns-react-native';
 import AppContext from '../../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -26,63 +24,6 @@ const UserChatHeader = ({ item, navigation }) => {
   const [callTime, setCallTime] = useState(0);
   const { baseUrl } = useContext(AppContext);
 
-  const ZegoRoomMake = async() => {
-    const userData = await AsyncStorage.getItem('user');
-
-    const  userParseData = JSON.parse(userData);
-    const userName = userParseData.name;
-    return ZegoUIKitPrebuiltCallService.init(
-      1432799538, // You can get it from ZEGOCLOUD's console
-      'd2d1b8a8f15ad602e020ba7e97236f8cd1030bdd3fa31ab1770c02aecc65bd14', // You can get it from ZEGOCLOUD's console
-      item.userId,
-      userName,
-      // item.name,
-      [ZIM, ZPNs],
-      {
-        // ... (Other configurations)
-        // onOutgoingCallDeclined:()=>{     // Agar user call ko cut krta hai
-
-        // },
-        // onOutgoingCallCancelButtonPressed:()=>{    // yni sender khud call ko cut krta hai
-
-        // },
-        // onOutgoingCallAccepted: ( ) => {   // Agar call accept krta receiver or dono mein baat hoti
-
-        //   setSenderOrReceiver(true) ;
-
-        // },
-
-        // onIncomingCallReceived: () => {    // jis  ki trf sy call aa rahi uska naam
-
-        // },
-
-        // ... (Other event callbacks)
-
-        ringtoneConfig: {
-          incomingCallFileName: 'ring1.mp3',
-          outgoingCallFileName: 'ring1.mp3',
-        },
-        requireConfig: data => {
-          return {
-            timingConfig: {
-              enableTiming: true,
-              onDurationUpdate: duration => {
-                setCallTime(duration);
-              },
-            },
-          };
-        },
-
-        notifyWhenAppRunningInBackgroundOrQuit: true,
-        isIOSSandboxEnvironment: true,
-        androidNotificationConfig: {
-          channelID: 'ZegoUIKit',
-          channelName: 'ZegoUIKit',
-        },
-      },
-    );
-  };
-  ZegoRoomMake();
 
   const formatDuration = seconds => {
     const hours = Math.floor(seconds / 3600);

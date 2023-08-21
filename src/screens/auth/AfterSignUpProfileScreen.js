@@ -27,6 +27,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { requestCameraAndAudioPermission } from '../../components/Permission/Permission';
 import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeZego } from '../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
 
 const AfterSignUpProfileScreen = ({ navigation }) => {
   const { language, baseUrl,storedUser,getStoredUserDetails,selectedImageUri,storeImageUri } = useContext(AppContext);
@@ -37,7 +38,6 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
   // const [selectedImageUri, setSelectedImageUri] = useState('');
   const [alreadyExist, setAlreadyExist] = useState('')
   const [errorMessage, setErrorMessage] = useState(false)
-
 
 
   const handleProfileUpdate = async () => {
@@ -82,6 +82,11 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
         console.log("update async",updatedData)
         AsyncStorage.setItem("user", JSON.stringify(updatedData));
       }
+     
+      const  existinguserParseData = JSON.parse(userData);
+      const idOfUser = existinguserParseData.userId;
+      const nameofUser = data.updated.name;
+      initializeZego(idOfUser,nameofUser)
       navigation.navigate('DrawerScreens');
     });
   }
