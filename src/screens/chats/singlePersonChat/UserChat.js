@@ -43,6 +43,7 @@ const UserChat = props => {
   const [imagMessage, setImagMessage] = useState('');
   const [document, setDocument] = useState('')
   const [msgId, setMsgId] = useState();
+  const scrollRef=useRef()
 
   const apiKey = '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';
   const [isSending, setIsSending] = useState(false);
@@ -191,10 +192,21 @@ const UserChat = props => {
     };
   }, [recieverId,imagMessage]);
 
-  useEffect(() => {
-    // Scroll to the end when messageList changes
-    flatListRef.current.scrollToEnd({ animated: true });
-  }, [messageList]);
+  // useEffect(() => {
+  //   // Scroll to the end when messageList changes
+  //   flatListRef.current.scrollToEnd({ animated: true });
+  // }, [messageList]);
+const scrollingStop=()=>{
+  const lastChildElement = scrollRef.current?.lastElementChild;
+    lastChildElement?.scrollIntoView({ behavior: 'smooth' });
+}
+  useEffect(()=>{
+    scrollingStop()
+console.log('scrollref effect')
+    // if (scrollRef.current) {
+    //   scrollRef.current.scrollToEnd({ behavior: 'smooth' });
+    // }
+    })
 
   const filteredMessages = messageList.filter(
     message =>
@@ -224,11 +236,14 @@ const UserChat = props => {
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ flex: 1 }}
-          contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={[UserChatStyle.container2]}>
+          contentContainerStyle={{ flexGrow: 1 }}
+          >
+          <View style={[UserChatStyle.container2]} ref={scrollRef}>
             <FlatList
-              ref={flatListRef}
+              ref={{flatListRef,scrollRef}}
               data={filteredMessages}
+  // onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
+
               renderItem={({ item }) => (
                 <RenderChats
                   item={item}
@@ -249,12 +264,15 @@ const UserChat = props => {
               )}
               contentContainerStyle={[UserChatStyle.messagesContainer]}
               keyExtractor={(item, index) => index.toString()}
-              onContentSizeChange={() =>
-                flatListRef.current.scrollToEnd({ animated: true })
-              }
-              onLayout={() =>
-                flatListRef.current.scrollToEnd({ animated: true })
-              }
+              onContentSizeChange={scrollingStop} 
+              // onContentSizeChange={() =>{
+              //   flatListRef.current.scrollToEnd({ animated: true }),
+                           
+              //   scrollRef.current?.scrollToEnd({ animated: true })}
+              // }
+              // onLayout={() =>
+              //   flatListRef.current.scrollToEnd({ animated: true })
+              // }
             />
           </View>
           <UserChatInput
@@ -268,8 +286,8 @@ const UserChat = props => {
             // sendMessage={() => {
             //   sendMessage();
             // }}
-            // currentMessage={currentMessage}
-            // setCurrentMessage={(cm)=>{setCurrentMessage(cm)}}
+            currentMessage={currentMessage}
+            setCurrentMessage={(cm)=>{setCurrentMessage(cm)}}
             // isSending={isSending}
           />
         </KeyboardAvoidingView>
