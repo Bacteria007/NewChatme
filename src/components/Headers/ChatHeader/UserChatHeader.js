@@ -42,10 +42,10 @@ const UserChatHeader = ({ item, navigation }) => {
   const addCallDetailInBackend = async call => {
     const userData = await AsyncStorage.getItem('user');
 
-    const  userParseData = JSON.parse(userData);
+    const userParseData = JSON.parse(userData);
     const parseId = userParseData.userId;
 
-   
+
 
     // CAll Date
     const datestamp = new Date().toLocaleDateString([], {
@@ -58,7 +58,7 @@ const UserChatHeader = ({ item, navigation }) => {
     formData.append('userId', parseId);
     formData.append('callName', call);
     formData.append('callDate', datestamp);
-    formData.append('recieverId', item.recieverId);
+    formData.append('recieverId', item._id);
     formData.append('IncomingCall', 'incoming');
     formData.append('OutgoingCall', 'outgoing');
     // formData.append('callDuration', formatDuration(callTime));
@@ -108,11 +108,10 @@ const UserChatHeader = ({ item, navigation }) => {
               <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
                 <Text style={[UserChatHeaderStyle.profileNameTextStyle]}>
                   {item.name}
-                  {/* {formatDuration(callTime)} */}
                 </Text>
-                <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
+                {/* <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
                   Online
-                </Text>
+                </Text> */}
               </View>
             </View>
           </TouchableOpacity>
@@ -124,7 +123,7 @@ const UserChatHeader = ({ item, navigation }) => {
             }}
             invitees={[
               {
-                userID: item.recieverId,
+                userID: item._id,
                 userName: item.name,
               },
             ]}
@@ -138,7 +137,7 @@ const UserChatHeader = ({ item, navigation }) => {
             }}
             invitees={[
               {
-                userID: item.recieverId,
+                userID: item._id,
                 userName: item.name,
               },
             ]}
@@ -157,79 +156,6 @@ const UserChatHeader = ({ item, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <Modal
-      isVisible={isModalVisible}
-      onBackdropPress={() => {
-        setModalVisible(false);
-      }}
-      backdropColor="white"
-      backdropOpacity={0}
-      animationIn="zoomIn"
-      animationOut={'zoomOutDown'}>
-      <View
-        style={{
-          height: hp('40%'),
-          width: wp('54%'),
-          padding: wp('5%'),
-          backgroundColor: 'white',
-          position: 'absolute',
-          top: hp('-1.7%'),
-          right: wp('-3%'),
-        }}>
-        <FlatList
-          data={outerModal}
-          renderItem={({item}) => {
-            return (
-              <TouchableOpacity>
-                <Text
-                  style={{
-                    fontSize: wp('4%'),
-                    lineHeight: hp('4.5%'),
-                    color: 'black',
-                    fontFamily: FontStyle.lightFont,
-                  }}>
-                  {item.text}
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
-        />
-        <Modal
-          isVisible={isInnerModalVisible}
-          onBackdropPress={() => {
-            setInnerModalVisible(false);
-          }}
-          backdropColor="white"
-          backdropOpacity={0}
-          animationIn="zoomIn"
-          animationOut={'zoomOutDown'}>
-          <View
-            style={{
-              height: hp('22%'),
-              width: wp('47%'),
-              backgroundColor: 'white',
-              position: 'absolute',
-              top: hp('0%'),
-              right: wp('-3%'),
-            }}>
-            <FlatList
-              data={innerModal}
-              renderItem={({item}) => {
-                return (
-                  <TouchableOpacity>
-                    <Text>{item.text}</Text>
-                  </TouchableOpacity>
-                );
-              }}
-            />
-          </View>
-        </Modal>
-
-        <TouchableOpacity onPress={toggleModal}>
-          <FontAwesome name="close" size={wp('4%')} />
-        </TouchableOpacity>
-      </View>
-    </Modal> */}
     </View>
   );
 };

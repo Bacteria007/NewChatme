@@ -39,15 +39,16 @@ const HomeNeoCards = StyleSheet.create({
     height: hp('10%'),
     width: wp('93%'),
     backgroundColor: cardColor,
-    paddingHorizontal:14
+    paddingHorizontal:14,flex:1
+
   }),
   addUserinGroup: (bgColor)=>({
-    shadowRadius:3,
+    shadowRadius:1,
     borderRadius: wp('1.5'),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: bgColor,
+    backgroundColor: `${bgColor}`,
     height: hp('4%'),
     width: wp('14s%'),
     // padding:wp('2%')

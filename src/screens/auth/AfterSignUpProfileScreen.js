@@ -28,9 +28,12 @@ import { requestCameraAndAudioPermission } from '../../components/Permission/Per
 import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeZego } from '../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
+import UseScreenFocus from '../ScreenFocus.js/UseScreenFocus';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const AfterSignUpProfileScreen = ({ navigation }) => {
   const { language, baseUrl,storedUser,getStoredUserDetails,selectedImageUri,storeImageUri } = useContext(AppContext);
+  const {theme} = useContext(ThemeContext);
 
   const [name, setName] = useState('');
   const [ques1, setQues1] = useState('');
@@ -39,6 +42,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
   const [alreadyExist, setAlreadyExist] = useState('')
   const [errorMessage, setErrorMessage] = useState(false)
 
+  // UseScreenFocus(getStoredUserDetails)
 
   const handleProfileUpdate = async () => {
     const userid = await AsyncStorage.getItem('user');
@@ -119,7 +123,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
 
 
   return (
-    <SafeAreaView style={AfterSignUpStyleSheet.container}>
+    <SafeAreaView style={AfterSignUpStyleSheet.container(theme.backgroundColor)}>
       <Primary_StatusBar
         darkModeBgColor={'black'}
         lightModeBgColor={Appcolors.primary}

@@ -86,13 +86,8 @@ const CreateGroup = ({navigation}) => {
       prevUsers.map(user => {
         if (user._id === item._id) {
           if (!item.isSelected) {
-            // yaha msla ye hy k jab wo us item ko click kry ga to usy selected member wali array mn rak sy ga mgr isseected ko true nai kry ga wo flase e jati hy
-            // usko agr mn khud true kron to sari working khrab ho jati ku k us k true false ki base pe add ho rha 
-            // If selecting, add to selectedMembers
             setSelectedMembers(prevSelected => [...prevSelected, item]);
           } else {
-            // selected member wali array mn agr wo item pehly sy hy or user ny phr sy click kiya mtlab cross pr click kiya to wo usko remove krdy ga selecetd member wali array sy
-            // If deselecting, remove from selectedMembers
             setSelectedMembers(prevSelected =>
               prevSelected.filter(selectedUser => selectedUser._id !== item._id),
             );
@@ -312,24 +307,6 @@ const CreateGroup = ({navigation}) => {
             </Button>
           </Modal>
         </Portal>
-        {/* <RBSheet
-        ref={refRBSheet}
-        closeOnDragDown={true}
-        closeOnPressMask={false}
-        customStyles={{
-          wrapper: {
-            backgroundColor: "transparent"
-          },
-          draggableIcon: {
-            backgroundColor: "#000"
-          }
-        }}
-      >
-        <TextInput label={"Group Subject"} mode='outlined' value={groupName} onChangeText={(e) => { setgroupName(e) }} placeholder='Group Name' />
-        <Button mode='contained' style={{ width: wp('70'), alignSelf: 'center', margin: 10}} onPress={() => createNewGroup(groupName)}>
-          <Text style={{ color: 'white' }}>Create Group</Text>
-        </Button>
-      </RBSheet> */}
       </View>
     </Provider>
   );

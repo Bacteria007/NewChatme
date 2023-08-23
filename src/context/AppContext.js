@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useId } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as RNLocalize from 'react-native-localize';
+import { io } from 'socket.io-client';
 const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
-  const baseUrl='http://192.168.43.145:8888'
+  const baseUrl='http://192.168.43.145:8888';
+  const socket = io.connect('http://192.168.43.145:8888');
   const [userName, setUserName] = useState();
   const [storedUser, setStoredUser] = useState(AsyncStorage.getItem('user'));
   const [language, setLanguage] = useState('English');
@@ -100,6 +102,7 @@ export const AppProvider = ({ children }) => {
         // fetchUserId,
         storeImageUri,
         getStoredUserDetails,
+        socket,
       }}>
       {children}
     </AppContext.Provider>

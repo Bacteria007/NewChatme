@@ -20,11 +20,10 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { Text } from 'react-native';
 import FontStyle from '../../../assets/styles/FontStyle';
 import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroups';
-import PushNotification ,{Importance} from "react-native-push-notification";
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
-  const { baseUrl,storedUser } = useContext(AppContext)
+  const { baseUrl, storedUser } = useContext(AppContext)
   const { theme, darkThemeActivator } = useContext(ThemeContext)
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
@@ -52,34 +51,9 @@ const AllGroups = ({ navigation }) => {
       setSearchedGroups(filteredGroups);
     }
   };
-  const deleteGroup = (item) => {
-    const upDatedGroupsArray = allGroups.filter((element) => element.id !== item.id);
-    setAllGroups(upDatedGroupsArray);
-  }
-  const handleLongPress = (item) => {
-    // toggleLongPressModal();
-    Alert.alert(
-      'Delete Chat', 'All Media and chat history wil be deleted',
-      [{ text: 'Delete', onPress: () => { deleteGroup(item) } }],
-      { cancelable: true },
-    )
-  }
-
   const fetchAllGroups = async () => {
-    // const userId = await AsyncStorage.getItem('user');
-    // console.log("user id in all groups", JSON.parse(userId));
-    // const parseId = JSON.parse(userId)
     try {
-      const result = await fetch(`${baseUrl}/viewGroups/?userId=${storedUser.userId}`,
-
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-
-      );
+      const result = await fetch(`${baseUrl}/viewGroups/?userId=${storedUser.userId}`, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
       if (result.ok) {
         const groups = await result.json()
         setAllGroups(groups)
@@ -93,25 +67,6 @@ const AllGroups = ({ navigation }) => {
     }
   }
 
-  const createPushNotificatioon = () => {
-    PushNotification.createChannel(
-      {
-        channelId: "1233",
-        channelName: "channel",
-        // soundName: "in_ring123.mp3",
-        // sound: "android.resource://com.chatme/raw/in_ring123", // Use the correct Android asset URI
-        // importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
-        // vibrate: true, // (optional),
-        // color:'skyblue',
-        // id:""  to replace the old notifi with new
-      }
-    )
-    console.log('soud=========',)
-  }
-  // EFFECTS
-  useEffect(() => {
-    createPushNotificatioon()
-  }, [])
   useEffect(() => {
     fetchAllGroups()
   }, [])
@@ -141,12 +96,7 @@ const AllGroups = ({ navigation }) => {
             </View>
             <Text style={GroupStyles.newGroupNameStyle(darkThemeActivator)}>New Group</Text>
           </Neomorph>
-
         </View>
-        {/* FFF8F8 */}
-        {/* <View style={{justifyContent:'center',alignItems:'center',flexDirection:'row'}}>
-            <Image source={require('../../../assets/imges/groups/createGroup.jpg')} style={{height:heightPercentageToDP('6%'),width:heightPercentageToDP('6'),borderRadius:heightPercentageToDP('6'),borderColor:'grey',borderWidth:2}}/>
-            </View> */}
       </TouchableOpacity>
       <FlatList
         style={{ marginTop: 10 }}
@@ -156,8 +106,6 @@ const AllGroups = ({ navigation }) => {
         ref={flatListRef}
         ListFooterComponent={gloabalFunctions.renderFooter(flatListRef, allGroups)}
       />
-
-
     </View>
 
   );

@@ -6,10 +6,10 @@ import {
 import AppColors from '../../../colors/Appcolors';
 
 const AfterSignUpStyleSheet = StyleSheet.create({
-  container: {
+  container: (bgcolor)=>({
     flex: 1,
-    backgroundColor: AppColors.white,
-  },
+    backgroundColor: bgcolor,
+  }),
   TopView: {
     height: hp('8'),
     width: wp('100'),

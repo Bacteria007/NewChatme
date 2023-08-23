@@ -19,50 +19,29 @@ import AppColors from '../../assets/colors/Appcolors';
 import UserChatStyle from '../../assets/styles/UserChatStyle';
 import { requestCameraAndAudioPermission } from '../Permission/Permission';
 import { launchImageLibrary } from 'react-native-image-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import DocumentPicker from 'react-native-document-picker';
 import AppContext from '../../context/AppContext';
 import axios from 'axios';
-import Pdf from 'react-native-pdf';
-import { Image } from 'react-native-svg';
-// import EmojiPicker from 'rn-emoji-keyboard';
+
 
 const UserChatInput = ({
-  item,
+  receiver,
   socket,
   setMessageList,
-  setImagMessage,
-  addContact,
   setDocument,
-  // sendMessage,
-  // imagMessage,
   currentMessage,
   setCurrentMessage,
-  // isSending,
 }) => {
-  const {
-    language,
-    baseUrl,
-    storedUser,
-    getStoredUserDetails,
-    selectedImageUri,
-    storeImageUri,
-  } = useContext(AppContext);
+  const { baseUrl, storedUser  } = useContext(AppContext);
+    // console.log("item%%%%%%%%%%%", item)
   const apiKey = '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';
 
   const screenDimensions = Dimensions.get('window');
-  // const [currentMessage, setCurrentMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
-  // const [messageList, setMessageList] = useState([]);
-  // const [imagMessage, setImagMessage] = useState('');
-  const [videoMessage, setVideoMessage] = useState('');
-  const [textMessage, setTextMessage] = useState('');
-  // const [isSending, setIsSending] = useState(false)
   const [selectedImage, setSelectedImage] = useState([])
   const [height, setHeight] = useState(hp('2%')); // Initialize height with a default value
   const [marginBottom, setMarginBottom] = useState(hp('0.1%'))
   const [isScrollEnabled, setIsScrollEnabled] = useState(false);
-  // const {item,socket} = props.route.params;
 
   const [inputHeight, setInputHeight] = useState(0);
 
@@ -70,35 +49,9 @@ const UserChatInput = ({
     setInputHeight(Math.min(contentHeight, 6 * 18)); // Assuming each line has an average height of 18
     setIsScrollEnabled(contentHeight / 18 > 6); // Assuming each line has an average height of 18
   };  // onContentSizeChange={(e) => handleContentSizeChange(e.nativeEvent.contentSize.width, e.nativeEvent.contentSize.height)}
-          
-
-  // const sendMessage = async () => {
-  //   // const imgMsg= {
-  //   //   uri: imagMessage.uri,
-  //   //   type: imagMessage.type,
-  //   //   name: imagMessage.fileName,
-  //   // }
-  //   // console.log("imgg",imgMsg)
-  //   if (currentMessage.trim() !== '') {
-  //     const messageData = {
-  //           content: currentMessage.trim(),
-  //           name:item.name,
-  //           senderId:item.userId,
-  //           recieverId:item.recieverId,
-  //           // image:imgMsg
-
-  //     };
-  //     console.log("frontend",messageData)
-
-  //     await socket.emit("send_message", messageData);
-  //           setMessageList((list) => [...list, messageData]);
-  //     setCurrentMessage("");
-  //   }
-  // };
 
   const sendMessage = async () => {
     setIsSending(true);
-    addContact();
     await axios
       .post(
         'https://api.openai.com/v1/engines/text-davinci-003/completions',
@@ -119,9 +72,9 @@ const UserChatInput = ({
         if (moodOfUser != '') {
           const messageData = {
             content: currentMessage.trim(),
-            name:item.name, 
-            senderId:item.userId,
-            recieverId:item.recieverId,
+            name: receiver.name,
+            senderId: storedUser.userId,
+            receiverId: receiver._id,
             mood: moodOfUser,
           };
           console.log('frontend', messageData);
@@ -137,9 +90,9 @@ const UserChatInput = ({
         console.error('Error detecting mood:', error);
         const messageData = {
           content: currentMessage.trim(),
-          name:item.name, 
-          senderId:item.userId,
-          recieverId:item.recieverId,
+          name: receiver.name,
+          senderId: storedUser.userId,
+          receiverId: receiver._id,
           mood: 'normal',
         };
         console.log('frontend', messageData);
@@ -166,7 +119,7 @@ const UserChatInput = ({
         Response.assets.map((item)=>{
           setSelectedImage(oldSelected=>[...oldSelected,item.uri,item.type,item.fileName])
         })
-console.log("selimg",selectedImage)
+console.log("selected img",selectedImage)
       }
       
       // const formdata = new FormData();
@@ -220,8 +173,8 @@ console.log("selimg",selectedImage)
          formData.append('content', 'document');
        }
        formData.append('name', item.name);
-       formData.append('senderId', item.userId);
-       formData.append('recieverId', item.recieverId);
+       formData.append('senderId', storedUser.userId);
+       formData.append('recieverId', receiver._id);
  
        doc.forEach(item => {
         formData.append('document', {

@@ -16,31 +16,31 @@ import BotDiscussion from './BotDscussion';
 import HeaderNew from '../../../components/Headers/AppHeaders/HeaderNew';
 import AppSubHeader from '../../../components/Headers/AppHeaders/AppSubHeader';
 import PushNotification from "react-native-push-notification";
+import UseScreenFocus from '../../ScreenFocus.js/UseScreenFocus';
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
-  const { baseUrl,storedUser } = useContext(AppContext);
+  const { baseUrl, storedUser,getStoredUserDetails } = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const globalFunctions = GlobalFunction()
   const [contactList, setContactList] = useState([]);
-//  const u=globalFunctions.fetchUserId();
+   
+  UseScreenFocus(getStoredUserDetails)
 
-//  useEffect(()=>{
-//   console.log("-------------",u)
-//   u
-//  },[u])
+  //  const u=globalFunctions.fetchUserId();
+
+  //  useEffect(()=>{
+  //   console.log("-------------",u)
+  //   u
+  //  },[u])
 
   const fetchContactList = async () => {
-    const userData = await AsyncStorage.getItem('user');
-
-    const  userParseData = JSON.parse(userData);
-    const parseId = userParseData.userId;
-
-    console.log("discussion ma ",storedUser.userId )
+   
+    // console.log("discussion ma ", storedUser.userId)
     try {
-      const response = await fetch(`${baseUrl}/allChats?userId=${parseId}`, {
+      const response = await fetch(`${baseUrl}/userContactList?userId=${storedUser.userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const Discussions = ({ navigation }) => {
       })
 
       const data = await response.json();
-      console.log('discussion from server',data)
+      // console.log('discussion from server', data)
       setContactList(data);
     } catch (error) {
       console.error('Error fetching contact list:', error);
@@ -75,43 +75,26 @@ const Discussions = ({ navigation }) => {
     const upDatedChats = contactList.filter((element) => element.id !== item.id);
     setContactList(upDatedChats);
   }
-  const createPushNotificatioon = () => {
-    PushNotification.createChannel(
-      {
-        channelId: "123",
-        channelName: "discussion",
-      }
-    )
-    console.log('soud=========',)
-  }
-  createPushNotificatioon()
-  const handleLongPress = (item) => {
-    // toggleLongPressModal();
-    Alert.alert(
-      'Delete Chat', 'All Media and chat history wil be deleted',
-      [{ text: 'Delete', onPress: () => { deleteChat(item) } }],
-      { cancelable: true },
-    )
-  }
+  
 
   useEffect(() => {
     fetchContactList();
-  }, []);
+  }, [contactList]);
 
   return (
 
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
       <Primary_StatusBar />
       <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
-      <View style={{justifyContent:'center',alignItems:'center'}}>
-      <BotDiscussion navigation={navigation} />
+      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <BotDiscussion navigation={navigation} />
       </View>
       <FlatList
-      style={{ marginTop: 10 }}
+        style={{ marginTop: 10 }}
         ref={flatListRef}
         showsVerticalScrollIndicator={false}
         data={searchedChat == '' ? contactList : searchedChat}
-        renderItem={({ item }) => <RenderComponent name={item.name} dp={storedUser.profileImage} callingScreen={"Discussions"} discussions_item={item} navigation={navigation} />}
+        renderItem={({ item }) => <RenderComponent name={item.name} dp={item.profileImage} callingScreen={"Discussions"} discussions_item={item} navigation={navigation} />}
         ListFooterComponent={globalFunctions.renderFooter(flatListRef, contactList)}
       />
     </View>

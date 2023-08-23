@@ -2,13 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import moment from 'moment';
 import {
-  View,
-  ActivityIndicator,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  Text,
-  FlatList,
+  View, FlatList,
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
@@ -17,22 +11,13 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-// import AppColors from '../../asset/colors/AppColors';
-// import Modal from 'react-native-modal';
-import Status_bar from '../../../components/statusbars/Primary_StatusBar';
 import UserChatStyle from '../../../assets/styles/UserChatStyle';
-import AppColors from '../../../assets/colors/Appcolors';
-
 import UserChatHeader from '../../../components/Headers/ChatHeader/UserChatHeader';
 import UserChatInput from '../../../components/ChatInput/UserChatInput';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AppContext from '../../../context/AppContext';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
 import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
-
 
 const socket = io.connect('http://192.168.43.145:8888');
 
@@ -43,111 +28,11 @@ const UserChat = props => {
   const [imagMessage, setImagMessage] = useState('');
   const [document, setDocument] = useState('')
   const [msgId, setMsgId] = useState();
-  const scrollRef=useRef()
-
-  const apiKey = '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';
-  const [isSending, setIsSending] = useState(false);
-
-  useEffect(() => {
-    console.log('data');
-  }, [isSending]);
-  // const {item} = props.route.params;
+  const scrollRef = useRef()
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
   const flatListRef = useRef(null);
-  const { itm } = props.route.params;
-  const recieverId = itm.recieverId;
-
-  AsyncStorage.setItem('receiverId', recieverId)
-    .then(() => {
-      // console.log('Receiver ID stored successfully');
-    })
-    .catch(error => {
-      // console.error('Error storing receiver ID:', error);
-    });
-  // console.log("item",itm)
-
-  const addContact = async () => {
-    //ye backend mein contact ko add krta
-    const user =await AsyncStorage.getItem('user');
-   const userData = JSON.parse(user);
-
-    const formData = new FormData();
-    formData.append('userId', itm.userId);
-    formData.append('name', itm.name);
-    formData.append('SenderName', userData.name);
-    formData.append('SenderPhoneNo', userData.phoneNumber);
-    formData.append('phoneNumber', itm.phoneNumber);
-    formData.append('recieverId', itm.recieverId);
-
-    // Call the addContact API
-    await fetch(`${baseUrl}/addContacts`, {
-      method: 'POST',
-      body: formData,
-    })
-      .then(() => {
-        console.log('Data added successfully');
-      })
-      .catch(error => {
-        console.error('Error adding contact:', error);
-      });
-  };
-
-
-//   const sendMessage = async () => {
-//     setIsSending(true);
-//     addContact();
-//     await axios
-//       .post(
-//         'https://api.openai.com/v1/engines/text-davinci-003/completions',
-//         {
-//           prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
-//           max_tokens: 1024,
-//           temperature: 0.5,
-//         },
-//         {
-//           headers: {
-//             Authorization: `Bearer ${apiKey}`,
-//           },
-//         },
-//       )
-//       .then(async response => {
-//         const moodOfUser = response.data.choices[0].text.trim();
-// console.log('sendMsg recieverid',recieverId)
-//         if (moodOfUser != '') {
-//           const messageData = {
-//             content: currentMessage.trim(),
-//             name: itm.name,
-//             senderId: itm.userId,
-//             recieverId: recieverId,
-//             mood: moodOfUser,
-//           };
-//           console.log('frontend', messageData);
-
-//           await socket.emit('send_message', messageData);
-//           setMessageList(list => [...list, messageData]);
-//           setCurrentMessage('');
-//           setIsSending(false);
-//         }
-//         setIsSending(false);
-//       })
-//       .catch(async error => {
-//         console.error('Error detecting mood:', error);
-//         const messageData = {
-//           content: currentMessage.trim(),
-//           name: itm.name,
-//           senderId: itm.userId,
-//           recieverId: recieverId,
-//           mood: 'normal',
-//         };
-//         console.log('frontend', messageData);
-
-//         await socket.emit('send_message', messageData);
-//         setMessageList(list => [...list, messageData]);
-//         setCurrentMessage('');
-//         setIsSending(false);
-//       });
-//   };
+  const { receiver } = props.route.params;
 
   const DeleteMessage = async msgId => {
     const formData = new FormData();
@@ -155,11 +40,7 @@ const UserChat = props => {
 
     try {
       const response = await fetch(`${baseUrl}/deleteMessage`, {
-        method: 'POST',
-        // headers: {
-        //   'Content-Type': 'application/json',
-        // },
-        body: formData,
+        method: 'POST', body: formData,
       });
 
       const data = await response.json(); // Parse the response body as JSON
@@ -173,56 +54,62 @@ const UserChat = props => {
     }
   };
 
+  const handleGetCurrentMsg = (msgData) => {
+    setMessageList([...messageList, msgData]);
+  };
   useEffect(() => {
-    socket.on('receive_message', data => {
-      setMessageList(list => [...list, data]);
-    });
-
-    // Fetch data from the server
-    fetch(`${baseUrl}/messages`)
-      .then(response => response.json())
-      .then(data => setMessageList(data))
-      .catch(error => console.error(error));
-
-    // Join the room based on the user's ID
-    socket.emit('join_room', recieverId);
-
+    // Listen for the "getCurrentMsg" event
+    socket.on('receive_message', handleGetCurrentMsg);
+    // Clean up the event listener when component unmounts
     return () => {
-      socket.off('receive_message');
+      socket.off('receive_message', handleGetCurrentMsg);
     };
-  }, [recieverId,imagMessage]);
+  }, [handleGetCurrentMsg]);
 
+  const messagesFromDb = async () => {
+
+    const res = await fetch(`${baseUrl}/messages?userId=${storedUser.userId}&receiverId=${receiver._id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const data = await res.json()
+    setMessageList(data);
+  }
+  useEffect(() => {
+    messagesFromDb()
+  }, [])
+  useEffect(() => {
+    socket.emit('join_room', receiver._id);
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
   // useEffect(() => {
   //   // Scroll to the end when messageList changes
   //   flatListRef.current.scrollToEnd({ animated: true });
   // }, [messageList]);
-const scrollingStop=()=>{
-  const lastChildElement = scrollRef.current?.lastElementChild;
+  const scrollingStop = () => {
+    const lastChildElement = scrollRef.current?.lastElementChild;
     lastChildElement?.scrollIntoView({ behavior: 'smooth' });
-}
-  useEffect(()=>{
+  }
+  useEffect(() => {
     scrollingStop()
-console.log('scrollref effect')
+    console.log('scrollref effect')
     // if (scrollRef.current) {
     //   scrollRef.current.scrollToEnd({ behavior: 'smooth' });
     // }
-    })
-
-  const filteredMessages = messageList.filter(
-    message =>
-      (message.senderId === itm.userId && message.recieverId === recieverId) ||
-      (message.senderId === recieverId && message.recieverId === itm.userId),
-  );
-
+  })
   return (
     <View styles={[UserChatStyle.contianer]}>
-      <Primary_StatusBar/>
+      <Primary_StatusBar />
       <ImageBackground
         source={require('../../../assets/imges/userChatImages/img6.jpg')}
         style={{ height: hp('100%'), width: wp('100%') }}
         resizeMode="cover">
         {changeHeader != true ? (
-          <UserChatHeader item={itm} navigation={props.navigation} />
+          <UserChatHeader item={receiver} navigation={props.navigation} />
         ) : (
           <ChangedChatHeader
             msgId={msgId}
@@ -237,58 +124,44 @@ console.log('scrollref effect')
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ flex: 1 }}
           contentContainerStyle={{ flexGrow: 1 }}
-          >
+        >
           <View style={[UserChatStyle.container2]} ref={scrollRef}>
             <FlatList
-              ref={{flatListRef,scrollRef}}
-              data={filteredMessages}
-  // onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
+              ref={{ flatListRef,scrollRef }}
+              data={messageList}
+              // onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
 
               renderItem={({ item }) => (
                 <RenderChats
-                  item={item}
-                  itm={itm}
+                  msgItem={item}
+                  receiver={receiver}
                   setChangeHeader={setChangeHeader}
                   setMsgId={setMsgId}
                   document={document}
                 />
-                // <TouchableOpacity onLongPress={()=>{
-                //   setChangeHeader(true)
-                //   setMsgId(item._id)
-                // }}>
-                // <View style={[item.senderId === itm.userId ? UserChatStyle.userMessageContainer : UserChatStyle.otherMessageContainer]}>
-                //   <Text style={[item.senderId === itm.userId ? UserChatStyle.userMessageText : UserChatStyle.otherMessageText]}>{item.content}</Text>
-                //   <Text style={[item.senderId === itm.userId ? UserChatStyle.userTimestampText : UserChatStyle.userTimestampText]}>{moment(item.createdAt).format('hh:mm a ')}</Text>
-                // </View>
-                // </TouchableOpacity>
               )}
               contentContainerStyle={[UserChatStyle.messagesContainer]}
               keyExtractor={(item, index) => index.toString()}
-              onContentSizeChange={scrollingStop} 
-              // onContentSizeChange={() =>{
-              //   flatListRef.current.scrollToEnd({ animated: true }),
-                           
-              //   scrollRef.current?.scrollToEnd({ animated: true })}
-              // }
-              // onLayout={() =>
-              //   flatListRef.current.scrollToEnd({ animated: true })
-              // }
+              onContentSizeChange={scrollingStop}
+            // onContentSizeChange={() =>{
+            //   flatListRef.current.scrollToEnd({ animated: true }),
+
+            //   scrollRef.current?.scrollToEnd({ animated: true })}
+            // }
+            // onLayout={() =>
+            //   flatListRef.current.scrollToEnd({ animated: true })
+            // }
             />
           </View>
           <UserChatInput
-            item={itm}
+            receiver={receiver}
             socket={socket}
-            setMessageList={(ml)=>{setMessageList(ml)}}
+            setMessageList={(ml) => { setMessageList(ml) }}
             setImagMessage={setImagMessage}
             imagMessage={imagMessage}
-            setDocument={(doc)=>{setDocument(doc)}}
-            addContact={()=>{addContact()}}
-            // sendMessage={() => {
-            //   sendMessage();
-            // }}
+            setDocument={(doc) => { setDocument(doc) }}
             currentMessage={currentMessage}
-            setCurrentMessage={(cm)=>{setCurrentMessage(cm)}}
-            // isSending={isSending}
+            setCurrentMessage={(cm) => { setCurrentMessage(cm) }}
           />
         </KeyboardAvoidingView>
       </ImageBackground>

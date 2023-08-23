@@ -24,9 +24,11 @@ import axios from 'axios';
 import AppContext from '../../context/AppContext';
 import FontStyle from '../../assets/styles/FontStyle';
 import { initializeZego } from '../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const LogInScreen = ({ navigation }) => {
   const {baseUrl,storeLoggedinStatus,storedUser,getStoredUserDetails}=useContext(AppContext)
+  const {theme}=useContext(ThemeContext)
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -37,10 +39,7 @@ const LogInScreen = ({ navigation }) => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-
-  
-  
-
+// UseScreenFocus(getStoredUserDetails)
   const showSnackbar = message => {
     setSnackbarMessage(message);
     setVisible(true);
@@ -100,18 +99,12 @@ const LogInScreen = ({ navigation }) => {
   }
 
   useEffect(() => {
-    // Set default country as Pakistan
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
     setCountryCode('92');
-    // let currentUserStatus = AsyncStorage.getItem('user');
-    // if(currentUserStatus){
-    //  navigation.navigate('DrawerScreens');
-    //     }
-    // getStoredUserDetails()
-  }, []);
+    }, []);
 
   return (
-    <View style={[LogInStyleSheet.container]}>
+    <View style={LogInStyleSheet.container(theme.backgroundColor)}>
       <Status_bar
         darkModeBgColor={'black'}
         lightModeBgColor={AppColors.primary}

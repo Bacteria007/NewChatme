@@ -40,33 +40,25 @@ const GlobalFunction = () => {
           </View>
         </TouchableOpacity>
       );
-    } else null;
-    // ye s liye rkha tha k list k nechy thori c blank sace ban jaye
-    //  {
-    //   return (
-    //     <View style={[TermsStyle.arrowupStyle, { opacity: 0, }]}>
-    //       <TouchableOpacity
-    //         onPress={() => {
-    //           scrollToTop();
-    //         }}
-    //         style={[TermsStyle.arrowupStyle, { backgroundColor: theme.discussionsCardColor, elevation: 0, display: 'none' }]}
-    //       >
-    //         <Icons.AntDesign name="arrowup" size={20} color={theme.profileName} />
-    //       </TouchableOpacity>
+    } else 
+    {
+       // ye s liye rkha tha k list k nechy thori c blank sace ban jaye
+      return (
+        <View style={[TermsStyle.arrowupStyle, { opacity: 0, }]}>
+          <TouchableOpacity
+            onPress={() => {
+              scrollToTop();
+            }}
+            style={[TermsStyle.arrowupStyle, { backgroundColor: theme.discussionsCardColor, elevation: 0, display: 'none' }]}
+          >
+            <Icons.AntDesign name="arrowup" size={20} color={theme.profileName} />
+          </TouchableOpacity>
 
-    //     </View>
-    //   );
-    // }
+        </View>
+      );
+    }
   };
-  // const fetchUserId = async () => {
-  //   const user = await AsyncStorage.getItem('user');
-  //   const userId= await JSON.parse(user);
-  //   console.log("user id in all gloabl", JSON.parse(userId));
-  //   return userId;
-  // }
-  // useEffect(()=>{
-  //   fetchUserId()
-  // },[fetchUserId])
+
   return {
     getRandomColor,
     scrollToTop,
