@@ -39,12 +39,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import GroupChatInput from './GroupChatInput';
 import PushNotification from "react-native-push-notification";
 
-const socket = io.connect('http://192.168.43.145:8888');
+// const socket = io.connect('http://192.168.43.145:8888');
 
 const GroupChat = props => {
     // VARIABLES
     const { item } = props.route.params;
-    const { baseUrl, storedUser} = useContext(AppContext)
+    const { baseUrl, storedUser,socket} = useContext(AppContext)
     let userId = storedUser.userId
     console.log("userId====",userId)
     console.log("storedUser===",storedUser)

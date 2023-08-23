@@ -26,9 +26,11 @@ import TranslationFile from '../../assets/translation/TranslationFile';
 import AppContext from '../../context/AppContext';
 import RNFS, { read } from 'react-native-fs';
 import FontStyle from '../../assets/styles/FontStyle';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const SignUpScreen = ({ navigation }) => {
   const { language,baseUrl,storeLoggedinStatus,getStoredUserDetails } = useContext(AppContext);
+  const { theme } = useContext(ThemeContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -40,17 +42,14 @@ const SignUpScreen = ({ navigation }) => {
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
   const [alreadyExist, setAlreadyExist] = useState('')
   const [errorMessage, setErrorMessage] = useState(false)
-
-
-
-  // Regular expression to check for special characters
-const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+ 
+  const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
 
   const showSnackbar = message => {
     setSnackbarMessage(message);
     setVisible(true);
   };
-
+// UseScreenFocus(getStoredUserDetails)
   const isValidPhoneNumber = () => {
     try {
       const parsedPhoneNumber = phoneNumberUtil.parseAndKeepRawInput(
@@ -96,14 +95,6 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
           navigation.navigate('AfterSignUpProfileScreen');
           }
       
-          // .then(() => {
-          //   console.log('User ID stored successfully:', response.data.newUser);
-          //   navigation.navigate('DrawerScreens');
-          // })
-          // .catch((error) => {
-          //   console.log('Error while storing user ID:', error);
-          //   navigation.navigate('DrawerScreens'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
-          // });
       } else {
         alert('Account cannot be created! Please try again later.');
       }
@@ -117,22 +108,17 @@ const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
 // }
 
   useEffect(() => {
-    // Set default country as Pakistan
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
     setCountryCode('92');
-    // getStoredUserDetails()
   }, []);
 
   return (
-    <View style={[SignUpStyleSheet.container]}>
+    <View style={SignUpStyleSheet.container(theme.backgroundColor)}>
       <Status_bar
         darkModeBgColor={'black'}
         lightModeBgColor={AppColors.primary}
       />
-    
-
       <KeyboardAvoidingView
-      
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
       >

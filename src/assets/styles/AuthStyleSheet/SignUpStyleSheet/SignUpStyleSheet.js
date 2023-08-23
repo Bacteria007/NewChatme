@@ -6,11 +6,12 @@ import {
 import AppColors from '../../../colors/Appcolors';
 
 const SignUpStyleSheet = StyleSheet.create({
-  container: {
+  container:(bgcolor)=>({
     flex: 1,
     alignItems: 'center',
     paddingTop: hp('1'),
-  },
+    backgroundColor:bgcolor,
+  }),
   scrollContainer: {
     paddingBottom: hp('5%'), // Adjust the value based on your content's bottom padding
   },

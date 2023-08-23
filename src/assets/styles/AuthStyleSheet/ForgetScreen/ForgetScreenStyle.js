@@ -6,13 +6,12 @@ import {
 import AppColors from '../../../colors/Appcolors';
 
 const AfterSignUpStyleSheet = StyleSheet.create({
-  container: {
+  container: (bgcolor)=>({
     flex: 1,
-    backgroundColor: AppColors.white,
-    // alignItems: 'center',
+    backgroundColor:bgcolor,
     paddingTop: hp('1'),
     paddingHorizontal: wp('8'),
-  },
+  }),
   TouchableButtonStyle: {
     width: wp('30'),
     borderRadius: wp('20'),

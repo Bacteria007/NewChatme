@@ -30,7 +30,7 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
         <Appbar.Content title={screenName} style={{ paddingTop: 7 }} />
       </Appbar.Header> */}
       {/* </Surface> */}
-      <View style={[DrawerHeaderStyle.headerView, { backgroundColor: theme.backgroundColor }]}>
+      <View style={[DrawerHeaderStyle.headerView, { backgroundColor: theme.backgroundColor, elevation: 2 }]}>
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();

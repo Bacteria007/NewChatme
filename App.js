@@ -29,18 +29,10 @@ import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
 
 import { Icons } from './src/assets/Icons'; // Navigation
-import {
-  NavigationContainer,
- 
-} from '@react-navigation/native';
+import { NavigationContainer} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  createDrawerNavigator,
-  useDrawerProgress,
-} from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator,useDrawerProgress} from '@react-navigation/drawer';
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 import ChangeNumber from './src/screens/settings/security/ChangeNumber';
@@ -77,6 +69,8 @@ import Apis from './src/utils/Apis';
 import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
 import Settings2 from './src/screens/settings/Settings2';
 import { UserProvider, useUserContext } from './src/context/UserContext';
+import AllUsers from './src/screens/requests/AllUsers';
+import AllRequest from './src/screens/requests/AllRequests';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -148,7 +142,7 @@ const App = props => {
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
         <Tab.Navigator
-          initialRouteName="Groups"
+          initialRouteName="Chats"
           screenOptions={({ route, focused }) => ({
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
@@ -230,7 +224,7 @@ const App = props => {
           <Tab.Screen name="Groups" component={Groups} />
           <Tab.Screen name="Calls" component={Calls} />
           <Tab.Screen name="Reels" component={Reels} />
-          <Tab.Screen name="Contacts" component={AddContact} />
+          <Tab.Screen name="Contacts" component={AllUsers} />
         </Tab.Navigator>
       </Animated.View>
     );
@@ -398,7 +392,7 @@ const App = props => {
             // initialRouteName={
             //   loggedInUserId ? 'DrawerScreens' : 'DrawerScreens'
             // }
-            initialRouteName='WelcomeScreen'
+            initialRouteName='DrawerScreens'
             >
            
             <Stack.Screen
@@ -496,6 +490,11 @@ const App = props => {
             <Stack.Screen
               name="theme"
               component={Theme}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Requests"
+              component={AllRequest}
               options={{ headerShown: false }}
             />
             {/* <Stack.Screen

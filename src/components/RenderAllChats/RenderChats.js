@@ -10,7 +10,7 @@ import {
 } from 'react-native-responsive-screen';
 
 
-const RenderChats = ({ item, itm, setChangeHeader, setMsgId,document, imagMessage }) => {
+const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId,document, imagMessage }) => {
   const {
     language,
     baseUrl,
@@ -23,30 +23,30 @@ const RenderChats = ({ item, itm, setChangeHeader, setMsgId,document, imagMessag
     <TouchableOpacity
       onLongPress={() => {
         setChangeHeader(true);
-        setMsgId(item._id);
+        setMsgId(msgItem._id);
       }}>
       <View
         style={[
-          item.senderId === itm.userId
+          msgItem.senderId === storedUser.userId
             ? UserChatStyle.userMessageContainer
             : UserChatStyle.otherMessageContainer,
         ]}>
-          {item.content!=='ChatMe_Image'?
+          {msgItem.content!=='ChatMe_Image'?
         <Text
           style={[
-            item.senderId === itm.userId
+            msgItem.senderId ===storedUser.userId
               ? UserChatStyle.userMessageText
               : UserChatStyle.otherMessageText,
           ]}>
-          {item.content}
+          {msgItem.content}
         </Text>:<Text></Text>}
-        {item.image&&<Image source={{uri:`${baseUrl}${item.image}`}} style={{height:hp('27%'),width:wp('50%')}}/>}
-        {item.document&&<View style={{flex: 1,
+        {msgItem.image&&<Image source={{uri:`${baseUrl}${msgItem.image}`}} style={{height:hp('27%'),width:wp('50%')}}/>}
+        {msgItem.document&&<View style={{flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
         marginTop: 25,}}>
                 <Pdf
-                    source={{uri:item.document}}
+                    source={{uri:msgItem.document}}
                     onLoadComplete={(numberOfPages,filePath) => {
                         console.log(`Number of pages: ${numberOfPages}`);
                     }}
@@ -65,12 +65,12 @@ const RenderChats = ({ item, itm, setChangeHeader, setMsgId,document, imagMessag
             </View>}
         <Text
           style={[
-            item.senderId === itm.userId
+            msgItem.senderId === storedUser.userId
               ? UserChatStyle.userTimestampText
               : UserChatStyle.otherTimestampText,
           ]}>
-          {item.senderId == itm.userId ? '' : `${item.mood} mood`}{' '}
-          {moment(item.createdAt).format('hh:mm a ')}
+          {msgItem.senderId == storedUser.userId ? '' : `${msgItem.mood} mood`}{' '}
+          {moment(msgItem.createdAt).format('hh:mm a ')}
         </Text>
       </View>
     </TouchableOpacity>

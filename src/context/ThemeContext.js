@@ -19,7 +19,7 @@ const initialTheme = {
     statusBarBg:AppColors.bgprimary,
     statusBarText: 'dark-content',
     drawerColor:AppColors.Mauve,
-    backgroundColor:AppColors.bgprimary,
+    backgroundColor:AppColors.white,
     buttonsColor:AppColors.primary,
     buttonsTextColor:AppColors.white,
     addBtnColor:AppColors.black,

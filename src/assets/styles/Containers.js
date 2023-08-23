@@ -10,14 +10,10 @@ import AppColors from '../colors/Appcolors';
 const Containers = StyleSheet.create({
   touchablestyle: {
     backgroundColor: 'transparent',
-    // backgroundColor: 'rgba(255,255,255,0.7)',
-    // textAlign: 'center',
     justifyContent: 'center',
-    // alignItems: 'center',
     height: hp('9%'),
     width: wp('100%'),
     marginTop: 10,
-    // borderRadius: 10,
     borderColor: 'white',
     borderBottomWidth: 1,
   },
@@ -35,6 +31,12 @@ const Containers = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  whiteCenterContainer:(bgcolor)=>({
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor:bgcolor
+  }),
   centercontent: {
     justifyContent: 'center',
     alignContent: 'center',

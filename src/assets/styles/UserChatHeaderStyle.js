@@ -46,9 +46,9 @@ const UserChatHeaderStyle = StyleSheet.create({
     width: hp('5%'),
     borderRadius: 100,
   },
-  profileNameContainerStyle: {marginLeft: wp('2%')},
+  profileNameContainerStyle: {marginLeft: wp('2%'),justifyContent:'center',alignItems:'center'},
   profileNameTextStyle: {
-    fontSize: wp('2.5%'),
+    fontSize: wp('6%'),
     color: AppColors.black,
   },
   profileStatusStyle: {
