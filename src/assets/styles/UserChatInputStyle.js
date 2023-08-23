@@ -78,7 +78,7 @@ const UserChatInputStyle = StyleSheet.create({
   microphoneContainerView: {
     height: hp('6%'),
     width: hp('6%'),
-    backgroundColor: AppColors.coolgray,
+    backgroundColor: AppColors.primary,
     borderRadius: hp('6%'),
     justifyContent: 'center',
     alignItems: 'center',
