@@ -42,7 +42,7 @@ const HomeNeoCards = StyleSheet.create({
     paddingHorizontal:14
   }),
   addUserinGroup: (bgColor)=>({
-    shadowRadius: 0.5,
+    shadowRadius:3,
     borderRadius: wp('1.5'),
     flexDirection: 'row',
     alignItems: 'center',
@@ -53,8 +53,8 @@ const HomeNeoCards = StyleSheet.create({
     // padding:wp('2%')
   }),
   dpImage: {
-    height: hp('6%'),
-    width: hp('6%'),
+    height: hp('5%'),
+    width: hp('5%'),
     borderRadius: hp('6%'),
   },
   dpIcon: {
@@ -70,9 +70,9 @@ const HomeNeoCards = StyleSheet.create({
   },
   iconView: bgColor => ({
     // marginLeft: 10,
-    height: hp('5.5%'),
-    width: hp('5.5%'),
-    borderRadius: hp('5.5%'),
+    height: hp('5%'),
+    width: hp('5%'),
+    borderRadius: hp('2.5%'),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: bgColor,
@@ -84,7 +84,7 @@ const HomeNeoCards = StyleSheet.create({
     borderRadius: hp('6%'),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
   },
 
   profileName: textColor => ({
@@ -106,7 +106,30 @@ const HomeNeoCards = StyleSheet.create({
     // backgroundColor: 'green',
     paddingHorizontal:14
   },
+  // RENDER COMPONENT PROFILE PIC MODAL STYLE START
+  modalContainer: {
+    // backgroundColor: 'red',
+    height: hp('40'),
+    width: wp('87'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+},
+modalView: {
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    height: hp('35'),
+    width: wp('75'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
 
+},
+dpInModal: {
+  height: hp('30%'),
+  width: hp('30%'),
+  resizeMode:'cover'
+},
+// RENDER COMPONENT PROFILE PIC MODAL STYLE  END
   // CALLS SCREEN
 
   name_CallIcon_Container: {

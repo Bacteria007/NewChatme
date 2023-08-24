@@ -31,8 +31,11 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
+import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
 
-const socket = io.connect('http://192.168.43.122:8888');
+
+const socket = io.connect('http://192.168.43.145:8888');
+
 
 const UserChat = props => {
   const { baseUrl, storedUser } = useContext(AppContext);
@@ -213,11 +216,7 @@ console.log('scrollref effect')
 
   return (
     <View styles={[UserChatStyle.contianer]}>
-      <Status_bar
-        darkModeBgColor={AppColors.black}
-        lightModeBgColor={AppColors.linearGradient.blue}
-        content={'light-content'}
-      />
+      <Primary_StatusBar/>
       <ImageBackground
         source={require('../../../assets/imges/userChatImages/img6.jpg')}
         style={{ height: hp('100%'), width: wp('100%') }}

@@ -118,7 +118,7 @@ const AllGroups = ({ navigation }) => {
   return (
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
       <Primary_StatusBar />
-      <HeaderNew navigation={navigation} headerTitle={'Groups'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+      <AppHeader navigation={navigation} headerTitle={'Groups'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("CreateGroup");
@@ -126,7 +126,6 @@ const AllGroups = ({ navigation }) => {
       >
         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
           <Neomorph
-
             darkShadowColor={AppColors.primary}
             lightShadowColor={AppColors.primary}
             swapShadows

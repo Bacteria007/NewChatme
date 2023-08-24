@@ -26,6 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppContext from '../../context/AppContext';
 import moment from 'moment';
 import HeaderNew from '../../components/Headers/AppHeaders/HeaderNew';
+import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 
 const Calls = ({ navigation }) => {
   const { baseUrl } = useContext(AppContext);
@@ -36,7 +37,7 @@ const Calls = ({ navigation }) => {
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [allCallList, setAllCallList] = useState([]);
   const [currentUserID, setCurrentUserID] = useState('');
-let parseId;
+  let parseId;
   //       ***************************                 VARIABLES         **************************************
   const iconSize = hp('2.5%');
   const currentDate = new Date().toLocaleDateString([], {
@@ -53,26 +54,26 @@ let parseId;
 
   //       ***************************              FUNCTIONS         **************************************
   const fetchCallList = async () => {
-   
-   
+
+
     const userData = await AsyncStorage.getItem('user');
 
-    const  userParseData = JSON.parse(userData);
-   parseId = userParseData.userId;
-    console.log("User ID iS                    " , parseId)
-  
+    const userParseData = JSON.parse(userData);
+    parseId = userParseData.userId;
+    console.log("User ID iS                    ", parseId)
+
 
     try {
-     await fetch(`${baseUrl}/allCalls?userId=${parseId}`, {
+      await fetch(`${baseUrl}/allCalls?userId=${parseId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-      }).then(async(response)=>{
+      }).then(async (response) => {
         const data = await response.json();
         setAllCallList(data); // Set the callList received from the response
-        console.log("Data of user is              ",data)
-      }).catch((error)=>{
+        console.log("Data of user is              ", data)
+      }).catch((error) => {
         console.error('Error fetching call list:', error);
       })
     } catch (error) {
@@ -95,94 +96,94 @@ let parseId;
     }
   };
 
-  const reversedData =  allCallList.length>0?allCallList.slice().reverse():allCallList; // flatlist call wali ko reverse krny k liye
+  const reversedData = allCallList.length > 0 ? allCallList.slice().reverse() : allCallList; // flatlist call wali ko reverse krny k liye
 
   //       ***************************            FLATLIST RENDER FUNCTION         **************************************
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onLongPress={() => handleLongPress(item)}>
         <View style={HomeNeoCards.flatlistItemContainer}>
-            <Neomorph
-              lightShadowColor="#e2e2e2"
-              darkShadowColor="#000"
-              inner
-              style={[
-                HomeNeoCards.neomorphStyle(theme.homeCardColor)]}>
-              <View style={HomeNeoCards.dpImageView}>
-                <TouchableOpacity>
-                  {/* <Image
-                    source={item.callerDpImage}
-                    style={HomeNeoCards.dpImage}
-                  /> */}
-                </TouchableOpacity>
-              </View>
-              {/* msg view */}
-              <View style={HomeNeoCards.name_CallIcon_Container}>
-                <View style={HomeNeoCards.nameAndTimeContainer}>
-                  <Text
-                    style={[
-                      HomeNeoCards.profileName(theme.profileNameColor)]}>
-                    {item.userId === parseId ? (
-                      <>
-                        <Text>{item.recieverName}</Text>
-                      </>
-                    ) : (
-                      <>
-                        <Text>{item.userName}</Text>
-                      </>
-                    )}
-                  </Text>
-                  <View style={HomeNeoCards.timeAndCallType}>
-                    {item.userId === parseId  ? (
-                      <>
-                        {item.OutgoingCall == 'outgoing' ? (
-                          <Icons.MaterialCommunityIcons
-                            name="call-made"
-                            color='red'
-                            size={iconSize}
-                          />
-                        ) : (
-                          ''
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {item.OutgoingCall == 'incoming' ? (
-                          <Icons.MaterialCommunityIcons
-                            name="call-received"
-                            color={'red'}
-                            size={iconSize}
-                          />
-                        ) : (
-                          ''
-                        )}
-                      </>
-                    )}
-                    <Text
-                      style={[HomeNeoCards.lastMsg(theme.lastMsgColor)]}>
-                      {item.callDate === currentDate ? 'Today' : item.callDate},{' '}
-                      {moment(item.callTime).format('hh:mm a ')}
-                    </Text>
-                  </View>
+          <Neomorph
+            darkShadowColor={AppColors.primary}
+            swapShadows
+            style={[
+              HomeNeoCards.neomorphStyle(theme.homeCardColor)]}>
+            <View style={HomeNeoCards.dpImageView}>
+              <TouchableOpacity>
+                <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
+
+                  <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
+
                 </View>
-                <View style={HomeNeoCards.callIconView}>
-                  {item.callName === 'audio' ? (
-                    <Icons.Ionicons
-                      name="call-sharp"
-                      size={wp('6%')}
-                      color={AppColors.Mauve}
-                    />
+              </TouchableOpacity>
+            </View>
+            {/* msg view */}
+            <View style={HomeNeoCards.name_CallIcon_Container}>
+              <View style={HomeNeoCards.nameAndTimeContainer}>
+                <Text
+                  style={[
+                    HomeNeoCards.profileName(theme.profileNameColor)]}>
+                  {item.userId === parseId ? (
+                    <>
+                      <Text>{item.recieverName}</Text>
+                    </>
                   ) : (
-                    <Icons.FontAwesome5
-                      name="video"
-                      size={wp('5%')}
-                      color={AppColors.Mauve}
-                    />
+                    <>
+                      <Text>{item.userName}</Text>
+                    </>
                   )}
+                </Text>
+                <View style={HomeNeoCards.timeAndCallType}>
+                  {item.userId === parseId ? (
+                    <>
+                      {item.OutgoingCall == 'outgoing' ? (
+                        <Icons.MaterialCommunityIcons
+                          name="call-made"
+                          color='red'
+                          size={iconSize}
+                        />
+                      ) : (
+                        ''
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {item.OutgoingCall == 'incoming' ? (
+                        <Icons.MaterialCommunityIcons
+                          name="call-received"
+                          color={'red'}
+                          size={iconSize}
+                        />
+                      ) : (
+                        ''
+                      )}
+                    </>
+                  )}
+                  <Text
+                    style={[HomeNeoCards.lastMsg(theme.lastMsgColor)]}>
+                    {item.callDate === currentDate ? 'Today' : item.callDate},{' '}
+                    {moment(item.callTime).format('hh:mm a ')}
+                  </Text>
                 </View>
               </View>
-            </Neomorph>
-        
+              <View style={HomeNeoCards.callIconView}>
+                {item.callName === 'audio' ? (
+                  <Icons.Ionicons
+                    name="call-sharp"
+                    size={wp('6%')}
+                    color={AppColors.Mauve}
+                  />
+                ) : (
+                  <Icons.FontAwesome5
+                    name="video"
+                    size={wp('5%')}
+                    color={AppColors.Mauve}
+                  />
+                )}
+              </View>
+            </View>
+          </Neomorph>
+
         </View>
       </TouchableOpacity>
     );
@@ -196,7 +197,7 @@ let parseId;
         handleSearchOnChange={handleSearch}
         searchQuery={searchText}
       /> */}
-      <HeaderNew navigation={navigation} headerTitle={'Calls'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+      <AppHeader navigation={navigation} headerTitle={'Calls'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       <FlatList
         style={{ marginTop: 10 }}
         showsVerticalScrollIndicator={false}

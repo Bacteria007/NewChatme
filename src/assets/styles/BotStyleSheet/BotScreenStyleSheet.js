@@ -31,7 +31,7 @@ const BotScrenStyleSheet = StyleSheet.create({
   input: {
     backgroundColor: AppColors.bgprimary,
     width: wp('82%'),
-    borderColor: AppColors.linearGradient.blue,
+    borderColor: AppColors.primary,
     borderRadius: wp('10%'),
     borderWidth: wp('0.25'),
     elevation: 1,

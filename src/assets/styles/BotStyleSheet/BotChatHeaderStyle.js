@@ -12,7 +12,7 @@ const BotChatHeaderStyle = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: wp('3%'),
     // justifyContent:'center',
-    backgroundColor:AppColors.linearGradient.blue
+    backgroundColor:AppColors.white
   },
   leftview: {
     flexDirection: 'row',
@@ -42,12 +42,6 @@ BotNameTextStyle: {
     fontSize: wp('5.5%'),
     color: AppColors.black,
     width:wp('30'),
-    //  textShadowColor: 'blue',
-    //     textShadowOffset: { width: 1, height: 1 },
-    //     textShadowRadius: 0.1,
-    
-    // backgroundColor:'red',
-    
   },
   profileStatusStyle: {
     color: AppColors.white,

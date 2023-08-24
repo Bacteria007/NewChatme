@@ -33,7 +33,7 @@ const UserChatInputStyle = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     borderRadius: wp('8%'),
-    borderColor: AppColors.linearGradient.blue,
+    borderColor: AppColors.primary,
     borderWidth: 1,
     backgroundColor: AppColors.white,
     marginBottom: hp('1%'),
