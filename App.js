@@ -29,10 +29,10 @@ import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
 
 import { Icons } from './src/assets/Icons'; // Navigation
-import { NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator,useDrawerProgress} from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator, useDrawerProgress } from '@react-navigation/drawer';
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 import ChangeNumber from './src/screens/settings/security/ChangeNumber';
@@ -65,7 +65,7 @@ import {
   ZegoUIKitPrebuiltCallInCallScreen,
 } from '@zegocloud/zego-uikit-prebuilt-call-rn';
 import CreateGroup from './src/screens/chats/groups/CreateGroup';
-import Apis from './src/utils/Apis';
+import Apis from './src/components/HelperFunctions/GlobalApiz/Apis';
 import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
 import Settings2 from './src/screens/settings/Settings2';
 import { UserProvider, useUserContext } from './src/context/UserContext';
@@ -87,13 +87,12 @@ const App = props => {
   const tabColor = theme.tabColor;
   const tabFontBold = FontStyle.boldFont;
   const tabFontSemiBold = FontStyle.semiBoldFont;
-  //Tab Variables End
   //Drawer Variables Start
   const myFontFamily = FontStyle.regularFont;
   const drawerBackgroungColor = theme.drawerColor;
-  const activeTintColor = AppColors.white;
+  const activeTintColor = AppColors.black;
   const inActiveTintColor = AppColors.black;
-  const activeBgColor = 'rgba(0,0,0,0.2)';
+  const activeBgColor = 'rgba(0,0,0,0.1)';
   const inActiveBgColor = AppColors.transparent;
   //Drawer Variables End
 
@@ -134,15 +133,24 @@ const App = props => {
         {
           translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp'),
         },
+
       ],
       overflow: 'hidden',
       // borderRadius:progress.value===1?12:0
+      elevation: 5, // Add elevation for shadow effect
+      shadowColor: 'black', // Set shadow color
+      shadowOffset: {
+        width: 10,  // Change these values as needed
+        height: 10, // Change these values as needed
+      },
+      shadowOpacity: 1, // Change this value as needed
+      shadowRadius: 3, // Change this value as needed
     }));
 
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
         <Tab.Navigator
-          initialRouteName="Chats"
+          initialRouteName="Groups"
           screenOptions={({ route, focused }) => ({
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
@@ -257,9 +265,9 @@ const App = props => {
           drawerContent={props => {
             // const { userData } = useUserContext();
             // const parsedUser = JSON.parse(userData._j);
-            const { baseUrl ,storedUser} = useContext(AppContext);
+            const { baseUrl, storedUser } = useContext(AppContext);
             console.log('baseurl', baseUrl);
-            console.log('appcontext appjs',storedUser );
+            console.log('appcontext appjs', storedUser);
             return (
               <View style={{ flex: 1 }}>
                 <DrawerContentScrollView {...props}>
@@ -280,7 +288,7 @@ const App = props => {
                       {storedUser?.name}
                     </Text>
                   </Animated.View>
-                <DrawerItemList {...props} />
+                  <DrawerItemList {...props} />
                 </DrawerContentScrollView>
                 <TouchableOpacity
                   onPress={() => {
@@ -317,11 +325,12 @@ const App = props => {
             options={{
               drawerIcon: ({ focused }) => (
                 <Icons.MaterialCommunityIcons
-                  color={focused?activeTintColor:inActiveTintColor}
-                  name={focused ? 'home' : 'ios-home-outline'}
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  name={'home'}
+                  // name={focused ? 'home' : 'ios-home-outline'}
                   size={iconSize}
                 />
-              
+
               ),
             }}
           />
@@ -332,7 +341,7 @@ const App = props => {
               drawerIcon: ({ focused }) => (
                 <Icons.MaterialIcons
                   name={'person'}
-                  color={focused?activeTintColor:inActiveTintColor}
+                  color={focused ? activeTintColor : inActiveTintColor}
                   size={iconSize}
                 />
               ),
@@ -345,7 +354,7 @@ const App = props => {
               drawerIcon: ({ focused }) => (
                 <Icons.Ionicons
                   name={'ios-information-circle-sharp'}
-                  color={focused?activeTintColor:inActiveTintColor}
+                  color={focused ? activeTintColor : inActiveTintColor}
                   size={iconSize}
                 />
               ),
@@ -358,7 +367,7 @@ const App = props => {
               drawerIcon: ({ focused }) => (
                 <Icons.Ionicons
                   name={'ios-settings-sharp'}
-                  color={focused?activeTintColor:inActiveTintColor}
+                  color={focused ? activeTintColor : inActiveTintColor}
                   size={iconSize}
                 />
               ),
@@ -371,10 +380,11 @@ const App = props => {
               drawerIcon: ({ focused }) => (
                 <Icons.FontAwesome5
                   name="file-signature"
-                  color={focused?activeTintColor:inActiveTintColor}
+                  color={focused ? activeTintColor : inActiveTintColor}
                   size={iconSize}
                 />
-    )}}
+              )
+            }}
           />
         </Drawer.Navigator>
       </View>
@@ -387,20 +397,17 @@ const App = props => {
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
           <ZegoCallInvitationDialog />
-          <Stack.Navigator
-            options={{ headerShown: false }}
-            // initialRouteName={
-            //   loggedInUserId ? 'DrawerScreens' : 'DrawerScreens'
-            // }
-            initialRouteName='DrawerScreens'
-            >
-           
+          <Stack.Navigator options={{ headerShown: false }} initialRouteName='DrawerScreens'  >
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
               options={{ headerShown: false }}
             />
-
+            <Stack.Screen
+              name="DrawerScreens"
+              component={DrawerScreens}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="SignUpScreen"
               component={SignUpScreen}
@@ -441,11 +448,7 @@ const App = props => {
               component={Apis}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name="DrawerScreens"
-              component={DrawerScreens}
-              options={{ headerShown: false }}
-            />
+
             <Stack.Screen
               name="ChatBot"
               component={ChatBot}

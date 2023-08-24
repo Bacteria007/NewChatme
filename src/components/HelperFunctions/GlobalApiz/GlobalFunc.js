@@ -1,11 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { Icons } from '../assets/Icons';
-import TermsStyle from '../assets/styles/tremsAndConditions/TermsStyle';
-import { ThemeContext } from '../context/ThemeContext';
+import { Icons } from '../../../assets/Icons';
+import TermsStyle from '../../../assets/styles/tremsAndConditions/TermsStyle';
+import { ThemeContext } from '../../../context/ThemeContext';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
-import AppColors from '../assets/colors/Appcolors';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppColors from '../../../assets/colors/Appcolors';
 
 const GlobalFunction = () => {
   const { theme } = useContext(ThemeContext);

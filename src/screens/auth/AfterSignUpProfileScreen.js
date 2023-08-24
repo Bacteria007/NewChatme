@@ -28,7 +28,7 @@ import { requestCameraAndAudioPermission } from '../../components/Permission/Per
 import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeZego } from '../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
-import UseScreenFocus from '../ScreenFocus.js/UseScreenFocus';
+import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import { ThemeContext } from '../../context/ThemeContext';
 
 const AfterSignUpProfileScreen = ({ navigation }) => {
@@ -173,8 +173,8 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
               onPress={() => {
                 requestCameraAndAudioPermission();
                 launchImageLibrary({
-                  maxWidth: hp('18%'),
-                  maxHeight: hp('18%'),
+                  maxWidth:800,
+                  maxHeight:800,
                 }).then(async Response => {
                   const userid = await AsyncStorage.getItem('user');
                   const parseId = JSON.parse(userid);

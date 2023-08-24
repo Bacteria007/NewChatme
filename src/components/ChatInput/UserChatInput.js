@@ -32,8 +32,8 @@ const UserChatInput = ({
   currentMessage,
   setCurrentMessage,
 }) => {
-  const { baseUrl, storedUser } = useContext(AppContext);
-  // console.log("item%%%%%%%%%%%", item)
+  const { baseUrl, storedUser  } = useContext(AppContext);
+    // console.log("item%%%%%%%%%%%", item)
   const apiKey = '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';
 
   const screenDimensions = Dimensions.get('window');
@@ -45,7 +45,7 @@ const UserChatInput = ({
 
   const [inputHeight, setInputHeight] = useState(0);
 
-  const handleContentSizeChange = (contentHeight) => {
+  const handleContentSizeChange = ( contentHeight) => {
     setInputHeight(Math.min(contentHeight, 6 * 18)); // Assuming each line has an average height of 18
     setIsScrollEnabled(contentHeight / 18 > 6); // Assuming each line has an average height of 18
   };  // onContentSizeChange={(e) => handleContentSizeChange(e.nativeEvent.contentSize.width, e.nativeEvent.contentSize.height)}
@@ -104,24 +104,24 @@ const UserChatInput = ({
       });
   };
 
-  const sendImageMessage = () => {
+  const sendImageMessage=()=>{
     launchImageLibrary({
       maxWidth: 800,
       maxHeight: 800,
-      selectionLimit: 4
+      selectionLimit:4
     }).then(async Response => {
-      if (Response.didCancel) {
+      if(Response.didCancel){
         console.log("user cancelled image")
-      } else if (Response.error) {
-        console.log("ImgPicker error", Response.error)
-      } else {
+      }else if(Response.error){
+        console.log("ImgPicker error",Response.error)
+      }else {
         console.log(Response.assets);
-        Response.assets.map((item) => {
-          setSelectedImage(oldSelected => [...oldSelected, item.uri, item.type, item.fileName])
+        Response.assets.map((item)=>{
+          setSelectedImage(oldSelected=>[...oldSelected,item.uri,item.type,item.fileName])
         })
-        console.log("selected img", selectedImage)
+console.log("selected img",selectedImage)
       }
-
+      
       // const formdata = new FormData();
       // if (currentMessage !== '') {
       //   formdata.append('content', currentMessage.trim());
@@ -157,26 +157,26 @@ const UserChatInput = ({
   }
   const selectDoc = async () => {
     try {
-      const doc = await DocumentPicker.pick({
-        // type: [DocumentPicker.types.pdf],
+       const doc = await DocumentPicker.pick({
+         // type: [DocumentPicker.types.pdf],
         //  allowMultiSelection: true
-      });
-      // const doc = await DocumentPicker.pickSingle()
-      // const doc = await DocumentPicker.pickMultiple({
-      //   type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
-      // })
-      console.log("doc", doc)
-      const formData = new FormData();
-      if (currentMessage !== '') {
-        formData.append('content', currentMessage.trim());
-      } else {
-        formData.append('content', 'document');
-      }
-      formData.append('name', item.name);
-      formData.append('senderId', storedUser.userId);
-      formData.append('recieverId', receiver._id);
-
-      doc.forEach(item => {
+       });
+       // const doc = await DocumentPicker.pickSingle()
+       // const doc = await DocumentPicker.pickMultiple({
+       //   type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
+       // })
+      console.log("doc",doc)
+       const formData = new FormData();
+       if (currentMessage !== '') {
+         formData.append('content', currentMessage.trim());
+       } else {
+         formData.append('content', 'document');
+       }
+       formData.append('name', item.name);
+       formData.append('senderId', storedUser.userId);
+       formData.append('recieverId', receiver._id);
+ 
+       doc.forEach(item => {
         formData.append('document', {
           uri: item.uri,
           type: item.type,
@@ -188,76 +188,76 @@ const UserChatInput = ({
       //   type: item.type,
       //   uri: item.uri,
       // }));
-
-      const response = await fetch(`${baseUrl}/sendDocMsg2`, {
-        method: 'POST',
-        body: formData,
+   
+       const response = await fetch(`${baseUrl}/sendDocMsg2`, {
+         method: 'POST',
+         body: formData,
         //  headers: {
         //   'Content-Type': 'application/json',
         // },
-      });
-
-      if (response.ok) {
-        console.log('Document uploaded successfully');
-        setDocument(response.result)
-      } else {
-        console.log('Document upload failed');
-      }
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        console.log('User cancelled the upload', err);
-      } else {
-        console.log(err);
-      }
-    }
-  }
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
+       });
+   
+       if (response.ok) {
+         console.log('Document uploaded successfully');
+         setDocument(response.result)
+       } else {
+         console.log('Document upload failed');
+       }
+     } catch (err) {
+       if (DocumentPicker.isCancel(err)) {
+         console.log('User cancelled the upload', err);
+       } else {
+         console.log(err);
+       }
+     }
+   }
+   const [keyboardOpen, setKeyboardOpen] = useState(false);
   //  const handleContentSizeChange = ( contentHeight) => {
   //   // Adjust the number (6) according to your requirement
   //   setIsScrollEnabled(contentHeight / 18 > 6); // Assuming each line has an average height of 18
   // };
 
-  const handleFocus = () => {
-    if (!keyboardOpen) {
-      setKeyboardOpen(true);
-    }
-  };
-
-  const handleBlur = () => {
-    if (keyboardOpen) {
-      setKeyboardOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    const keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () => {
-      setKeyboardOpen(true);
-    });
-
-    const keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => {
-      setKeyboardOpen(false);
-    });
-
-    return () => {
-      keyboardWillShowListener.remove();
-      keyboardWillHideListener.remove();
-    };
-  }, []);
-
+   const handleFocus = () => {
+     if (!keyboardOpen) {
+       setKeyboardOpen(true);
+     }
+   };
+ 
+   const handleBlur = () => {
+     if (keyboardOpen) {
+       setKeyboardOpen(false);
+     }
+   };
+ 
+   useEffect(() => {
+     const keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () => {
+       setKeyboardOpen(true);
+     });
+ 
+     const keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => {
+       setKeyboardOpen(false);
+     });
+ 
+     return () => {
+       keyboardWillShowListener.remove();
+       keyboardWillHideListener.remove();
+     };
+   }, []);
+ 
 
   return (
-    <View style={[UserChatInputStyle.main_input_and_mic, { paddingBottom: keyboardOpen ? screenDimensions.width * 0.06 : screenDimensions.width * 0 }]}>
+    <View style={[UserChatInputStyle.main_input_and_mic,{paddingBottom: keyboardOpen ? screenDimensions.width * 0.06 : screenDimensions.width * 0}]}>
       <View style={UserChatInputStyle.input_and_all_icons}>
         <ScrollView style={UserChatInputStyle.scroll_inputText}>
           <TextInput
-            // style={UserChatInputStyle.input(height)}
-            style={[
-              { width: wp('58%'), alignSelf: 'center', alignItems: 'center' },
-              { height: inputHeight, maxHeight: 6 * 18 },
-            ]}
+          // style={UserChatInputStyle.input(height)}
+          style={[
+            { width: wp('58%'), alignSelf: 'center', alignItems: 'center' },
+            { height: inputHeight, maxHeight: 6 * 18 },
+          ]}
             placeholder="Type here"
             value={currentMessage}
-            onChangeText={(txt) => { setCurrentMessage(txt) }}
+            onChangeText={(txt)=>{setCurrentMessage(txt)}}
             keyboardType='twitter'
             multiline={true}
             placeholderTextColor={AppColors.gray}
@@ -276,22 +276,22 @@ const UserChatInput = ({
           />
         </ScrollView>
         <View style={UserChatInputStyle.camera_and_papercliper}>
-          <TouchableOpacity onPress={() => {
+          <TouchableOpacity onPress={()=>{
             selectDoc()
           }}>
             <Icons.FontAwesome name="paperclip" size={wp('6.5%')} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              const permission = requestCameraAndAudioPermission();
-              if (permission) {
+              const permission=requestCameraAndAudioPermission();
+              if(permission){
                 sendImageMessage()
-              } else
-                requestCameraAndAudioPermission()
+              }else
+              requestCameraAndAudioPermission()
             }}>
             <Icons.FontAwesome name="camera" size={wp('5.5%')} />
           </TouchableOpacity>
-
+          
         </View>
       </View>
       {currentMessage == '' ? (
@@ -306,25 +306,25 @@ const UserChatInput = ({
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
-          onPress={() => {
-            if (currentMessage.trim() != null) {
-              sendMessage();
-            }
-          }}>
+        onPress={() => {
+          if (currentMessage.trim() != null) {
+            sendMessage();
+          }
+        }}>
           <View
-            style={[UserChatInputStyle.microphoneContainerView]}
-          >
-            {isSending ? (
-              <ActivityIndicator size="small" color="#ffffff" /> // Show loading animation
-            ) : (
-              // <Text style={[UserChatStyle.sendButtonText]}>Send</Text>
-              <Icons.Ionicons name='send-sharp' size={wp('5.7%')} color={AppColors.white} />
-            )}
+        style={[UserChatInputStyle.microphoneContainerView]}
+        >
+          {isSending ? (
+            <ActivityIndicator size="small" color="#ffffff" /> // Show loading animation
+          ) : (
+            // <Text style={[UserChatStyle.sendButtonText]}>Send</Text>
+            <Icons.Ionicons name='send-sharp' size={wp('5.7%')} color={AppColors.white}/>
+          )}
           </View>
         </TouchableOpacity>
       )}
     </View>
-
+    
   );
 };
 

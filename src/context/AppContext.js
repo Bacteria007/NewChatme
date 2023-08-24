@@ -9,7 +9,7 @@ export const AppProvider = ({ children }) => {
   const baseUrl='http://192.168.43.145:8888';
   const socket = io.connect('http://192.168.43.145:8888');
   const [userName, setUserName] = useState();
-  const [storedUser, setStoredUser] = useState(AsyncStorage.getItem('user'));
+  const [storedUser, setStoredUser] = useState('');
   const [language, setLanguage] = useState('English');
   const [isUserLoggedin, setIsUserLoggedin] = useState(false)
   const [darkThemeActivator, setDarkThemeActivator] = useState(false);

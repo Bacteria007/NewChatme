@@ -11,7 +11,6 @@ import { ThemeContext } from '../../../context/ThemeContext';
 import AppContext from '../../../context/AppContext';
 import FAB from 'react-native-fab';
 import RenderComponent from '../../../components/FlatlistComponents/RenderComponent';
-import GlobalFunction from '../../../utils/GlobalFunc';
 import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
 import HeaderNew from '../../../components/Headers/AppHeaders/HeaderNew';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
@@ -20,6 +19,8 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { Text } from 'react-native';
 import FontStyle from '../../../assets/styles/FontStyle';
 import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroups';
+import UseScreenFocus from '../../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
+import GlobalFunction from '../../../components/HelperFunctions/GlobalApiz/GlobalFunc';
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
@@ -66,6 +67,8 @@ const AllGroups = ({ navigation }) => {
       console.log("error fetching groups")
     }
   }
+
+  UseScreenFocus(fetchAllGroups)
 
   useEffect(() => {
     fetchAllGroups()

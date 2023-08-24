@@ -29,7 +29,7 @@ video {
 </style>
 </head>
 <body>
-  <video controls>
+  <video controls autoplay>
     <source src="${baseUrl}${item.uri.uri}" type="video/mp4">
     Your browser does not support the video tag.
   </video>

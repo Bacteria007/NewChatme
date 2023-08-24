@@ -48,18 +48,15 @@ const UserChatInputStyle = StyleSheet.create({
     // paddingLeft: wp('3%'),
     alignSelf:'center',
     // backgroundColor: 'red',
-    
-    
-
-  }),
-  input:{
-    width: wp('58%'),
-    height:hp('5%'),
-    alignItems: 'center',
-    paddingLeft: wp('3%'),
-    alignSelf:'center'
-    // backgroundColor: 'red',
-  },
+    }),
+  // input:{
+  //   width: wp('58%'),
+  //   height:hp('5%'),
+  //   alignItems: 'center',
+  //   paddingLeft: wp('3%'),
+  //   alignSelf:'center'
+  //   // backgroundColor: 'red',
+  // },
 
   scroll_inputText:{flex:1,alignSelf:'center'},
   // camera_and_papercliper: (width)=>({

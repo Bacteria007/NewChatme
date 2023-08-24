@@ -1,43 +1,22 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  FlatList,
-  ScrollView,
-  // TextInput,
-  Alert,
-  Image,
-} from 'react-native';
+import {StyleSheet,  Text,  TouchableOpacity,  View,  FlatList,  ScrollView,  TextInput,  Alert,  Image,} from 'react-native';
 import AppContext from '../../../context/AppContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { Icons } from '../../../assets/Icons';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp,  widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import axios from 'axios';
-import CommonApis from '../../../utils/Apis';
-// import { FAB } from 'react-native-paper';
-import FAB from 'react-native-fab';
+import CommonApis from '../../../components/HelperFunctions/GlobalApiz/Apis';
 import AppColors from '../../../assets/colors/Appcolors';
-import {
-  Button,
-  TextInput,
-  Modal,
-  Portal,
-  Provider,
-  Surface,
-} from 'react-native-paper';
+import {Surface} from 'react-native-paper';
 import FontStyle from '../../../assets/styles/FontStyle';
-import PushNotification from "react-native-push-notification";
-import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
-import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
-const CreateGroup = ({navigation}) => {
+import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
+import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ReactNativeModal from 'react-native-modal';
+const CreateGroup = ({ navigation }) => {
   // STATES
   const { baseUrl, storedUser } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
@@ -45,7 +24,16 @@ const CreateGroup = ({navigation}) => {
   const [groupName, setgroupName] = useState('');
   const [selectedMembers, setSelectedMembers] = useState([]);
   const commonApis = CommonApis();
-  const refRBSheet = useRef();
+  const [selectedMembersCount, setSelectedMembersCount] = useState(0);
+
+  const incrementMemberCount = () => {
+    setSelectedMembersCount(prevCount => prevCount + 1);
+  };
+
+  const decrementMemberCount = () => {
+    setSelectedMembersCount(prevCount => prevCount - 1);
+  };
+
   //
   const [visible, setVisible] = React.useState(false);
   const showModal = () => setVisible(true);
@@ -87,10 +75,13 @@ const CreateGroup = ({navigation}) => {
         if (user._id === item._id) {
           if (!item.isSelected) {
             setSelectedMembers(prevSelected => [...prevSelected, item]);
+            incrementMemberCount()
           } else {
             setSelectedMembers(prevSelected =>
               prevSelected.filter(selectedUser => selectedUser._id !== item._id),
+
             );
+            decrementMemberCount()
           }
           return { ...user, isSelected: !user.isSelected };
         }
@@ -189,15 +180,12 @@ const CreateGroup = ({navigation}) => {
                 alignItems: 'center',
               }}>
               {item.isSelected ? (
-                // <Neomorph  swapShadows style={[HomeNeoCards.addUserinGroup,{width:wp('17')}]}>
-                //   <Text style={{ color: "black" }}>Remove</Text>
-                // </Neomorph>
-                <View style={styles.doneButton(theme.addBtnColor)}>
+                <View style={styles.doneButton(AppColors.primary)}>
                   <Icons.AntDesign name="close" size={21} color={theme.addBtnTextColor} />
                 </View>
               ) : (
                 // <Avatar.Icon size={30} icon={"cross"} color='white' style={{backgroundColor:'red'}}/>
-                <Neomorph swapShadows style={HomeNeoCards.addUserinGroup(theme.addBtnColor)}>
+                <Neomorph swapShadows style={HomeNeoCards.addUserinGroup(AppColors.primary)}>
                   <Text style={{ color: theme.addBtnTextColor }}>Add</Text>
                   {/* <Icons.Ionicons name='person-add-sharp' size={20} color={theme.addBtnTextColor} /> */}
                 </Neomorph>
@@ -220,12 +208,38 @@ const CreateGroup = ({navigation}) => {
   }, [selectedMembers]);
   // selectedmember array mn jab member ad kry to foran nai hoty dosri dfa click krny pr hoty is liye ye lgaya ta k jab array update ho useeffect chal jaye
   return (
-    <Provider>
-      <InnerScreensHeader screenName={"Create Group"} navigation={navigation}/>
+    <SafeAreaView style={{ flex: 1 }}>
+      {/* <InnerScreensHeader screenName={"Create Group"} navigation={navigation}/> */}
+      <Primary_StatusBar />
+      <View style={styles.headerContainer}>
+        <View style={styles.header(theme.backgroundColor)}>
+          <View style={{ flexDirection: 'row', flex: 1 }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <Icons.Ionicons
+                name="arrow-back"
+                size={wp('7%')}
+                color={theme.headerIconsColor}
+                style={{ marginLeft: wp('2%') }}
+              />
+            </TouchableOpacity>
+            <Text style={[DrawerHeaderStyle.screenNameStyle, { color: theme.headerIconsColor }]}>Create Group</Text>
+          </View>
+          <TouchableOpacity onPress={() => { toggleModal() }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={{ color: AppColors.primary, fontFamily: FontStyle.regularFont }}>Create</Text>
+              {selectedMembers.length > 0 ?
+                <Text style={{ color: AppColors.primary, fontFamily: FontStyle.regularFont }}>({selectedMembersCount})</Text>
+                : null}
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
       <View style={styles.container}>
         {selectedMembers.length > 0 ? (
-          <Surface>
-            <Text style={HomeNeoCards.profileName(theme.profileNameColor)}>Select Members</Text>
+      
             <View style={styles.memberlistContainer}>
               <ScrollView horizontal>
                 {selectedMembers.map(member => {
@@ -237,15 +251,143 @@ const CreateGroup = ({navigation}) => {
                   );
                 })}
               </ScrollView>
+              {/* <Text style={[HomeNeoCards.profileName(theme.profileNameColor),{textAlign:'center'}]}>Selected Members</Text> */}
             </View>
-          </Surface>
+
+
         ) : null}
         <FlatList
           showsVerticalScrollIndicator={false}
           data={allUsers.length > 0 ? allUsers : null}
           renderItem={renderItem}
         />
-        <Button
+        <ReactNativeModal
+          visible={visible}
+          onBackButtonPress={hideModal}
+          onDismiss={hideModal}
+          animationIn="slideInUp"
+          animationOut="slideOutDown"
+          style={{
+            backgroundColor: "rgba(0,0,0,0.4)",
+            margin: 0,
+            justifyContent: 'flex-end',
+            height: hp('30')
+          }}>
+          <Surface>
+            <View style={styles.modalView}>
+              <TextInput
+                autoFocus={true}
+                cursorColor={AppColors.primary}
+                style={{
+                  borderBottomWidth: wp('0.1%'),
+                  borderBottomColor: AppColors.primary,
+                  width: wp('100%'),
+                  paddingHorizontal: 10
+                }}
+                selectTextOnFocus={true}
+                value={groupName}
+                onChangeText={e => {
+                  setgroupName(e);
+                }}
+                placeholder="Group Name"
+                keyboardType='default'
+              />
+              <TouchableOpacity
+
+                style={{
+                  width: wp('40'),
+                  alignSelf: 'center',
+                  backgroundColor: theme.buttonsColor,
+                  justifyContent: 'center', alignItems: 'center',padding:5,borderRadius:wp('20')
+                }}
+                onPress={() => createNewGroup(groupName).then(() => { hideModal(), setgroupName(''), navigation.navigate('Groups') })}>
+                <Text
+                  style={{ color: theme.buttonsTextColor, fontFamily: FontStyle.regularFont }}>
+                  Create Now
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Surface>
+        </ReactNativeModal>
+      </View>
+    </SafeAreaView >
+  );
+};
+
+export default CreateGroup;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: AppColors.white,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: hp('100'),
+    width: wp('100'),
+  },
+  memberlistContainer: {
+    flexDirection: 'row',
+    height: hp('15'),
+    width: wp('100'),
+    // borderBottomColor: AppColors.primary,
+    // borderBottomWidth: 0.3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: AppColors.Mauve,
+
+  },
+  doneButton: (btnColor) => ({
+    height: hp('4.5'),
+    width: hp('4.5'),
+    borderRadius: hp('4.5'),
+    backgroundColor: btnColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    elevation: 4,
+  }),
+  selectedMember: {
+    height: hp('12'),
+    width: hp('12'),
+    borderRadius: hp('12'),
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 6,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+  },
+  header: (bgcolor) => ({
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp('3%'),
+    backgroundColor: bgcolor,
+  }),
+  headerContainer: {
+    height: hp('7'),
+    width: wp('100')
+
+  },
+  modalView: {
+    // backgroundColor: "#D8BFD8",
+    height: hp('25'),
+    width: wp('100'),
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    alignSelf: 'center',
+  },
+
+
+});
+
+
+{/* <Button
           mode="contained"
           style={{
             width: wp('40'),
@@ -255,19 +397,7 @@ const CreateGroup = ({navigation}) => {
           }}
           onPress={() => toggleModal()}>
           <Text>Create Now</Text>
-        </Button>
-
-        {/* <FAB
-          buttonColor={theme.buttonsColor}
-          iconTextColor={theme.buttonsTextColor}
-          onClickAction={() => {
-            showModal();
-            // refRBSheet.current.open()
-          }}
-          visible={visible ? false : true}
-          iconTextComponent={<Icons.AntDesign name="arrowright" />}
-        /> */}
-
+        </Button>         
         <Portal>
           <Modal
             visible={visible}
@@ -306,55 +436,4 @@ const CreateGroup = ({navigation}) => {
               </Text>
             </Button>
           </Modal>
-        </Portal>
-      </View>
-    </Provider>
-  );
-};
-
-export default CreateGroup;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: AppColors.white,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: hp('100'),
-    width: wp('100'),
-  },
-  memberlistContainer: {
-    flexDirection: 'row',
-    height: hp('15'),
-    width: wp('100'),
-    // borderBottomColor: AppColors.primary,
-    // borderBottomWidth: 0.3,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  doneButton: (btnColor) => ({
-    height: hp('4.5'),
-    width: hp('4.5'),
-    borderRadius: hp('4.5'),
-    backgroundColor: btnColor,
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    elevation: 4,
-  }),
-  selectedMember: {
-    height: hp('12'),
-    width: hp('12'),
-    borderRadius: hp('12'),
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 6,
-  },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-});
+        </Portal> */}

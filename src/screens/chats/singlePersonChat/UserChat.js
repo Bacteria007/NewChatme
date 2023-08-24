@@ -106,8 +106,9 @@ const UserChat = props => {
       <Primary_StatusBar />
       <ImageBackground
         source={require('../../../assets/imges/userChatImages/img6.jpg')}
-        style={{ height: hp('100%'), width: wp('100%') }}
-        resizeMode="cover">
+        style={{ height: hp('100%'), width: wp('100%'),backgroundColor:"green" }}
+        resizeMode="cover"
+        >
         {changeHeader != true ? (
           <UserChatHeader item={receiver} navigation={props.navigation} />
         ) : (

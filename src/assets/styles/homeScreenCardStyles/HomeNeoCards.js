@@ -29,7 +29,10 @@ const HomeNeoCards = StyleSheet.create({
     marginTop: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    width:wp('100'),
     // top: 115,
+    // backgroundColor:'red'
+
   },
   neomorphStyle: cardColor => ({
     shadowRadius: 1.5,
@@ -109,17 +112,16 @@ const HomeNeoCards = StyleSheet.create({
   },
   // RENDER COMPONENT PROFILE PIC MODAL STYLE START
   modalContainer: {
-    // backgroundColor: 'red',
-    height: hp('40'),
-    width: wp('87'),
+    // backgroundColor: 'rgba(0,0,0,0.3)',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
 },
 modalView: {
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    height: hp('35'),
-    width: wp('75'),
+    // backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor:AppColors.transparent,
+    // height: hp('35'),
+    // width: wp('75'),
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',

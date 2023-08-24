@@ -10,25 +10,26 @@ import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCar
 import AppContext from '../../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
-import GlobalFunction from '../../../utils/GlobalFunc';
 import RenderComponent from '../../../components/FlatlistComponents/RenderComponent';
 import BotDiscussion from './BotDscussion';
 import HeaderNew from '../../../components/Headers/AppHeaders/HeaderNew';
 import AppSubHeader from '../../../components/Headers/AppHeaders/AppSubHeader';
 import PushNotification from "react-native-push-notification";
-import UseScreenFocus from '../../ScreenFocus.js/UseScreenFocus';
+import UseScreenFocus from '../../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
+import GlobalFunction from '../../../components/HelperFunctions/GlobalApiz/GlobalFunc';
+import { initializeZego } from '../../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
+
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
-  const { baseUrl, storedUser,getStoredUserDetails } = useContext(AppContext);
+  const { baseUrl, storedUser, getStoredUserDetails } = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const globalFunctions = GlobalFunction()
   const [contactList, setContactList] = useState([]);
-   
   UseScreenFocus(getStoredUserDetails)
-
+  UseScreenFocus(initializeZego)
   //  const u=globalFunctions.fetchUserId();
 
   //  useEffect(()=>{
@@ -37,7 +38,7 @@ const Discussions = ({ navigation }) => {
   //  },[u])
 
   const fetchContactList = async () => {
-   
+
     // console.log("discussion ma ", storedUser.userId)
     try {
       const response = await fetch(`${baseUrl}/userContactList?userId=${storedUser.userId}`, {
@@ -75,7 +76,7 @@ const Discussions = ({ navigation }) => {
     const upDatedChats = contactList.filter((element) => element.id !== item.id);
     setContactList(upDatedChats);
   }
-  
+
 
   useEffect(() => {
     fetchContactList();

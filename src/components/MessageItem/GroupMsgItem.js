@@ -164,11 +164,3 @@ const styles = StyleSheet.create({
     left: -20,
   },
 });
-
-
-  // const getRandomColor = () => {
-  //   const colors = ['yellow', 'black', 'orange', 'white', 'skyblue']; // List of possible colors
-  //   const randomIndex = Math.floor(Math.random() * colors.length); // Generate a random index
-  //   return colors[randomIndex]; // Return the random color
-  // };
-  // const randomColor = getRandomColor();

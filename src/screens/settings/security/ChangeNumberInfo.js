@@ -1,12 +1,15 @@
 import {View, Text,Image} from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
 import ChnageNumberInfoStyle from '../../../assets/styles/ChnageNumberInfoStyle';
 import LongButton from '../../../components/Buttons/LongButton';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const ChangeNumberInfo = ({navigation}) => {
+  const {theme}=useContext(ThemeContext);
+
   return (
-    <View >
+    <View style={{flex:1,backgroundColor:theme.backgroundColor}}>
       <InnerScreensHeader navigation={navigation} screenName="Change number" />
       <View style={[ChnageNumberInfoStyle.imageContainerView]}>
       <Image  source={require('../../../assets/imges/sim-card-icon-11.jpg')}

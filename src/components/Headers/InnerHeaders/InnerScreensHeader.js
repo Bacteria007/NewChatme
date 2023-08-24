@@ -22,14 +22,7 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
 
   return (
     <View style={[DrawerHeaderStyle.containerView]}>
-
       <Primary_StatusBar />
-      {/* <Surface> */}
-      {/* <Appbar.Header style={{backgroundColor:theme.backgroundColor}}>
-        <Appbar.BackAction onPress={() => { navigation.goBack() }} />
-        <Appbar.Content title={screenName} style={{ paddingTop: 7 }} />
-      </Appbar.Header> */}
-      {/* </Surface> */}
       <View style={[DrawerHeaderStyle.headerView, { backgroundColor: theme.backgroundColor, elevation: 2 }]}>
         <TouchableOpacity
           onPress={() => {

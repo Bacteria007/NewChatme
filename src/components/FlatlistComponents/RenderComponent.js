@@ -132,6 +132,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                     </View>
                 </Neomorph>
             </View>
+            {/* <View style={{backgroundColor:'rgba(0,0,0,0.3)',height:hp('100'),width:wp('100'),flex:1}}> */}
             <ReactNativeModal
                 visible={profileModal}
                 coverScreen={true}
@@ -158,6 +159,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                     )}
                 </View>
             </ReactNativeModal>
+            {/* </View> */}
         </TouchableOpacity>
     );
 };
