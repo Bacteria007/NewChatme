@@ -4,9 +4,11 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  Keyboard,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Icons } from '../../assets/Icons';
 import UserChatInputStyle from '../../assets/styles/UserChatInputStyle';
 import {
@@ -22,6 +24,7 @@ import DocumentPicker from 'react-native-document-picker';
 import AppContext from '../../context/AppContext';
 import axios from 'axios';
 import Pdf from 'react-native-pdf';
+import { Image } from 'react-native-svg';
 // import EmojiPicker from 'rn-emoji-keyboard';
 
 const UserChatInput = ({
@@ -33,8 +36,8 @@ const UserChatInput = ({
   setDocument,
   // sendMessage,
   // imagMessage,
-  // currentMessage,
-  // setCurrentMessage,
+  currentMessage,
+  setCurrentMessage,
   // isSending,
 }) => {
   const {
@@ -47,20 +50,27 @@ const UserChatInput = ({
   } = useContext(AppContext);
   const apiKey = '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';
 
-
-  const [currentMessage, setCurrentMessage] = useState('');
+  const screenDimensions = Dimensions.get('window');
+  // const [currentMessage, setCurrentMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   // const [messageList, setMessageList] = useState([]);
   // const [imagMessage, setImagMessage] = useState('');
   const [videoMessage, setVideoMessage] = useState('');
   const [textMessage, setTextMessage] = useState('');
   // const [isSending, setIsSending] = useState(false)
+  const [selectedImage, setSelectedImage] = useState([])
   const [height, setHeight] = useState(hp('2%')); // Initialize height with a default value
+  const [marginBottom, setMarginBottom] = useState(hp('0.1%'))
+  const [isScrollEnabled, setIsScrollEnabled] = useState(false);
   // const {item,socket} = props.route.params;
 
-  const onContentSizeChange = event => {
-    setHeight(event.nativeEvent.contentSize.height);
-  };
+  const [inputHeight, setInputHeight] = useState(0);
+
+  const handleContentSizeChange = ( contentHeight) => {
+    setInputHeight(Math.min(contentHeight, 6 * 18)); // Assuming each line has an average height of 18
+    setIsScrollEnabled(contentHeight / 18 > 6); // Assuming each line has an average height of 18
+  };  // onContentSizeChange={(e) => handleContentSizeChange(e.nativeEvent.contentSize.width, e.nativeEvent.contentSize.height)}
+          
 
   // const sendMessage = async () => {
   //   // const imgMsg= {
@@ -143,42 +153,52 @@ const UserChatInput = ({
 
   const sendImageMessage=()=>{
     launchImageLibrary({
-      maxWidth: hp('18%'),
-      maxHeight: hp('18%'),
+      maxWidth: 800,
+      maxHeight: 800,
+      selectionLimit:4
     }).then(async Response => {
-      console.log(Response.assets[0]);
-      // setImagMessage(Response.assets[0])
-
-      const formdata = new FormData();
-      if (currentMessage !== '') {
-        formdata.append('content', currentMessage.trim());
-      } else {
-        formdata.append('content', 'ChatMe_Image');
+      if(Response.didCancel){
+        console.log("user cancelled image")
+      }else if(Response.error){
+        console.log("ImgPicker error",Response.error)
+      }else {
+        console.log(Response.assets);
+        Response.assets.map((item)=>{
+          setSelectedImage(oldSelected=>[...oldSelected,item.uri,item.type,item.fileName])
+        })
+console.log("selimg",selectedImage)
       }
-      formdata.append('name', item.name);
-      formdata.append('senderId', item.userId);
-      formdata.append('recieverId', item.recieverId);
+      
+      // const formdata = new FormData();
+      // if (currentMessage !== '') {
+      //   formdata.append('content', currentMessage.trim());
+      // } else {
+      //   formdata.append('content', 'ChatMe_Image');
+      // }
+      // formdata.append('name', item.name);
+      // formdata.append('senderId', item.userId);
+      // formdata.append('recieverId', item.recieverId);
 
-      formdata.append('ChatMe_Image', {
-        uri: Response.assets[0].uri,
-        type: Response.assets[0].type,
-        name: Response.assets[0].fileName,
-      });
-      fetch(`${baseUrl}/sendImageMsg`, {
-        method: 'POST',
-        body: formdata,
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error image! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('send img res', data);
-          setImagMessage(data.newImage);
-        })
-        .catch(error => console.log('res error image', error));
+      // formdata.append('ChatMe_Image', {
+      //   uri: Response.assets[0].uri,
+      //   type: Response.assets[0].type,
+      //   name: Response.assets[0].fileName,
+      // });
+      // fetch(`${baseUrl}/sendImageMsg`, {
+      //   method: 'POST',
+      //   body: formdata,
+      // })
+      //   .then(response => {
+      //     if (!response.ok) {
+      //       throw new Error(`HTTP error image! Status: ${response.status}`);
+      //     }
+      //     return response.json();
+      //   })
+      //   .then(data => {
+      //     console.log('send img res', data);
+      //     setImagMessage(data.newImage);
+      //   })
+      //   .catch(error => console.log('res error image', error));
     });
 
   }
@@ -238,23 +258,68 @@ const UserChatInput = ({
        }
      }
    }
+   const [keyboardOpen, setKeyboardOpen] = useState(false);
+  //  const handleContentSizeChange = ( contentHeight) => {
+  //   // Adjust the number (6) according to your requirement
+  //   setIsScrollEnabled(contentHeight / 18 > 6); // Assuming each line has an average height of 18
+  // };
+
+   const handleFocus = () => {
+     if (!keyboardOpen) {
+       setKeyboardOpen(true);
+     }
+   };
+ 
+   const handleBlur = () => {
+     if (keyboardOpen) {
+       setKeyboardOpen(false);
+     }
+   };
+ 
+   useEffect(() => {
+     const keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () => {
+       setKeyboardOpen(true);
+     });
+ 
+     const keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => {
+       setKeyboardOpen(false);
+     });
+ 
+     return () => {
+       keyboardWillShowListener.remove();
+       keyboardWillHideListener.remove();
+     };
+   }, []);
  
 
   return (
-    <View style={UserChatInputStyle.main_input_and_mic}>
+    <View style={[UserChatInputStyle.main_input_and_mic,{paddingBottom: keyboardOpen ? screenDimensions.width * 0.06 : screenDimensions.width * 0}]}>
       <View style={UserChatInputStyle.input_and_all_icons}>
         <ScrollView style={UserChatInputStyle.scroll_inputText}>
           <TextInput
-          style={UserChatInputStyle.input(height)}
+          // style={UserChatInputStyle.input(height)}
+          style={[
+            { width: wp('58%'), alignSelf: 'center', alignItems: 'center' },
+            { height: inputHeight, maxHeight: 6 * 18 },
+          ]}
             placeholder="Type here"
             value={currentMessage}
             onChangeText={(txt)=>{setCurrentMessage(txt)}}
             keyboardType='twitter'
             multiline={true}
             placeholderTextColor={AppColors.gray}
-            onContentSizeChange={onContentSizeChange}
+            // onContentSizeChange={onContentSizeChange}
+            onContentSizeChange={(e) =>
+              handleContentSizeChange(
+                e.nativeEvent.contentSize.height
+              )
+            }
             underlineColorAndroid={'transparent'}
-
+            scrollEnabled={isScrollEnabled}
+            // onFocus={()=>{setMarginBottom(screenDimensions.width * 0.05)}}
+            // onBlur={()=>setMarginBottom(screenDimensions.width * 0.02)}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
           />
         </ScrollView>
         <View style={UserChatInputStyle.camera_and_papercliper}>
@@ -273,6 +338,7 @@ const UserChatInput = ({
             }}>
             <Icons.FontAwesome name="camera" size={wp('5.5%')} />
           </TouchableOpacity>
+          
         </View>
       </View>
       {currentMessage == '' ? (
@@ -301,6 +367,7 @@ const UserChatInput = ({
         </TouchableOpacity>
       )}
     </View>
+    
   );
 };
 

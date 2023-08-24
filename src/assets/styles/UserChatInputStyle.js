@@ -8,13 +8,24 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const UserChatInputStyle = StyleSheet.create({
-  main_input_and_mic: {
+  main_input_and_mic:(mb)=>( {
     flexDirection: 'row',
     width: wp('100%'),
     justifyContent: 'space-evenly',
     alignItems: 'flex-end',
-    alignSelf:'flex-end'
+    alignSelf:'flex-end',
     // backgroundColor: AppColors.black,
+    paddingBottom: mb,
+  }),
+  main_input_and_mic: {
+    flexDirection: 'row',
+    width: wp('100%'),
+    justifyContent: 'space-evenly',
+    // alignItems: 'flex-end',
+    // alignSelf:'flex-end',
+    // backgroundColor: AppColors.black,
+    // height:hp('')
+    
   },
   input_and_all_icons: {
     flexDirection: 'row',
@@ -26,7 +37,8 @@ const UserChatInputStyle = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: AppColors.white,
     marginBottom: hp('1%'),
-    paddingHorizontal:hp('1%')
+    paddingHorizontal:hp('1%'),
+    
   },
   
   input:(height)=>({
@@ -36,16 +48,18 @@ const UserChatInputStyle = StyleSheet.create({
     // paddingLeft: wp('3%'),
     alignSelf:'center',
     // backgroundColor: 'red',
+    
+    
 
   }),
-  // input:{
-  //   width: wp('58%'),
-  //   height:hp('5%'),
-  //   alignItems: 'center',
-  //   paddingLeft: wp('3%'),
-  //   alignSelf:'center'
-  //   // backgroundColor: 'red',
-  // },
+  input:{
+    width: wp('58%'),
+    height:hp('5%'),
+    alignItems: 'center',
+    paddingLeft: wp('3%'),
+    alignSelf:'center'
+    // backgroundColor: 'red',
+  },
 
   scroll_inputText:{flex:1,alignSelf:'center'},
   // camera_and_papercliper: (width)=>({

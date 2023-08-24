@@ -15,7 +15,7 @@ const UserChatStyle = StyleSheet.create({
   },
   container2: {
     flex: 1,
-    padding: 10,
+    padding: 3,
   },
   messagesContainer: {
     flexGrow: 1,
