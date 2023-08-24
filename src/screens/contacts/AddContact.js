@@ -20,10 +20,10 @@ import { Icons } from '../../assets/Icons';
 import Animated from 'react-native-reanimated';
 import AppContext from '../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import GlobalFunction from '../../utils/GlobalFunc';
 import Primary_StatusBar from '../../components/statusbars/Primary_StatusBar';
 import RenderComponent from '../../components/FlatlistComponents/RenderComponent';
 import HeaderNew from '../../components/Headers/AppHeaders/HeaderNew';
+import GlobalFunction from '../../components/HelperFunctions/GlobalApiz/GlobalFunc';
 
 const AddContact = ({ navigation }) => {
   //            **************                    USE STATES      *****************

@@ -1,5 +1,5 @@
 import { View, Text,TextInput } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader'
 import ChangeNumberStyle from '../../../assets/styles/ChangeNumberStyle'
 import LongButton from '../../../components/Buttons/LongButton'
@@ -7,11 +7,13 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { ThemeContext } from '../../../context/ThemeContext'
 
 
 const ChangePassword = ({navigation}) => {
+  const {theme}=useContext(ThemeContext);
   return (
-    <View>
+    <View style={{flex:1,backgroundColor:theme.backgroundColor}}>
       <InnerScreensHeader navigation={navigation} screenName="Change password" />
       <View style={[ChangeNumberStyle.mainViewStyle]}>
         <Text

@@ -25,6 +25,7 @@ import AppContext from '../../context/AppContext';
 import FontStyle from '../../assets/styles/FontStyle';
 import { initializeZego } from '../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
 import { ThemeContext } from '../../context/ThemeContext';
+import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 
 const LogInScreen = ({ navigation }) => {
   const {baseUrl,storeLoggedinStatus,storedUser,getStoredUserDetails}=useContext(AppContext)
@@ -39,7 +40,9 @@ const LogInScreen = ({ navigation }) => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-// UseScreenFocus(getStoredUserDetails)
+UseScreenFocus(getStoredUserDetails)
+UseScreenFocus(initializeZego)
+
   const showSnackbar = message => {
     setSnackbarMessage(message);
     setVisible(true);

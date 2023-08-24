@@ -4,7 +4,7 @@ import {
   View,
   Text,
   TouchableOpacity,
- 
+
 } from 'react-native';
 import Icon, { Icons } from '../../../assets/Icons';
 import {
@@ -21,6 +21,7 @@ import { ThemeContext } from '../../../context/ThemeContext';
 import BotChatHeaderStyle from '../../../assets/styles/BotStyleSheet/BotChatHeaderStyle';
 import Primary_StatusBar from '../../statusbars/Primary_StatusBar';
 import { SearchBar } from '@rneui/base';
+import FontStyle from '../../../assets/styles/FontStyle';
 const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange }) => {
 
   const { updateTheme, theme, darkThemeActivator, changeThemeState } = useContext(ThemeContext);
@@ -29,7 +30,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
   const DarkThemeChanger = () => {
     // Update the theme
     const newTheme = {
-      
+
       notFocusedTabIconsColor: AppColors.lightwhite,
       focusedTabIconsColor: AppColors.primary,
       headerIconsColor: AppColors.white,
@@ -44,13 +45,13 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       statusBarBg: AppColors.darkThemeColors.bgColor,
       statusBarText: 'light-content',
       drawerColor: AppColors.Mauve,
-      backgroundColor:AppColors.darkThemeColors.bgColor,
+      backgroundColor: AppColors.darkThemeColors.bgColor,
       tabColor: AppColors.darkThemeColors.bgColor,
-      buttonsColor:AppColors.primary,
-     buttonsTextColor:AppColors.white,
-     addBtnColor:AppColors.black,
-     addBtnTextColor:AppColors.white,
-     headerColor:AppColors.darkThemeColors.bgColor
+      buttonsColor: AppColors.primary,
+      buttonsTextColor: AppColors.white,
+      addBtnColor: AppColors.black,
+      addBtnTextColor: AppColors.white,
+      headerColor: AppColors.darkThemeColors.bgColor
     };
     updateTheme(newTheme);
     changeThemeState()
@@ -58,7 +59,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
   const LightThemeChanger = () => {
     // Update the theme
     const newTheme = {
-     
+
       notFocusedTabIconsColor: AppColors.inActiveIconsColor,
       focusedTabIconsColor: AppColors.primary,
       headerIconsColor: AppColors.black,
@@ -71,15 +72,15 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       dpCircleColor: AppColors.lightThemeColors.dpCircleColor,
       chatsHeaderBg: AppColors.transparent,
       drawerColor: AppColors.Mauve,
-      statusBarBg:AppColors.bgprimary,
+      statusBarBg: AppColors.bgprimary,
       statusBarText: 'dark-content',
-      backgroundColor:AppColors.white,
+      backgroundColor: AppColors.white,
       tabColor: AppColors.tab,
-      buttonsColor:AppColors.primary,
-     buttonsTextColor:AppColors.white,
-     addBtnColor:AppColors.black,
-     addBtnTextColor:AppColors.white,
-     headerColor:AppColors.white
+      buttonsColor: AppColors.primary,
+      buttonsTextColor: AppColors.white,
+      addBtnColor: AppColors.black,
+      addBtnTextColor: AppColors.white,
+      headerColor: AppColors.white
     };
     updateTheme(newTheme);
     changeThemeState()
@@ -102,32 +103,49 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
             </TouchableOpacity>
 
             <Text style={[AppHeaderStyle.appNameStyle, { color: theme.headerIconsColor }]}>{headerTitle}</Text>
-         
-          <View>
-            {darkThemeActivator ? (
-              <TouchableOpacity
-                onPress={() => {
-                  LightThemeChanger();
-                }}>
-                <Icons.Entypo
-                  name="light-up"
-                  color={theme.headerIconsColor}
-                  size={wp('6%')}
-                />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={() => {
-                  DarkThemeChanger();
-                }}>
-                <Icons.Ionicons
-                  name="moon-sharp"
-                  color={theme.headerIconsColor}
-                  size={wp('6%')}
-                />
-              </TouchableOpacity>
-            )}
-          </View>
+
+            <View>
+              {headerTitle == "People" ?
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Requests");
+                  }}>
+                  <Text style={{ color: AppColors.primary, fontFamily: FontStyle.regularFont,fontSize:11 }}>Requests</Text>
+                  {/* <Icons.MaterialCommunityIcons
+                    name="bell"
+                    size={wp('7%')}
+                    color={theme.headerIconsColor}
+                    style={{ marginLeft: wp('2%') }}
+                /> */}
+
+                </TouchableOpacity>
+                :
+                darkThemeActivator ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      LightThemeChanger();
+                    }}>
+                    <Icons.Entypo
+                      name="light-up"
+                      color={theme.headerIconsColor}
+                      size={wp('6%')}
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => {
+                      DarkThemeChanger();
+                    }}>
+                    <Icons.Ionicons
+                      name="moon-sharp"
+                      color={theme.headerIconsColor}
+                      size={wp('6%')}
+                    />
+                  </TouchableOpacity>
+                )
+              }
+
+            </View>
           </View>
         </View>
 
@@ -141,7 +159,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
           placeholderTextColor={theme.headerSearchText} //light
           round
           showCancel
-          containerStyle={[AppSubHeaderStyle.container(theme.backgroundColor)]}
+          containerStyle={[AppSubHeaderStyle.container(theme.headerColor)]}
           inputContainerStyle={[AppSubHeaderStyle.inputContainer, { backgroundColor: theme.headerSearchBar }]}
           inputStyle={{ color: theme.headerSearchText }}
           searchIcon={{ color: theme.headerSearchText, size: 23 }}

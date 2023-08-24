@@ -28,6 +28,7 @@ const UserChatStyle = StyleSheet.create({
     padding: 8,
     marginBottom: 8,
     maxWidth: '70%',
+    marginRight:wp('1')
   },
   userMessageText: {
     color: 'black',
@@ -43,6 +44,7 @@ const UserChatStyle = StyleSheet.create({
     padding: 8,
     marginBottom: 8,
     maxWidth: '70%',
+    marginLeft:wp('1')
   },
   otherMessageText: {
     color: 'black',

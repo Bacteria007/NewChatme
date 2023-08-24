@@ -20,7 +20,7 @@ import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 import AppColors from '../../assets/colors/Appcolors';
 import { Icons } from '../../assets/Icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import UseScreenFocus from '../ScreenFocus.js/UseScreenFocus';
+import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import { io } from 'socket.io-client';
 import { all } from 'axios';
 
@@ -285,24 +285,7 @@ const AllUsers = ({ navigation }) => {
     return (
         <View style={Containers.whiteCenterContainer(theme.backgroundColor)}>
             <View>
-                <InnerScreensHeader screenName={"People"} navigation={navigation} />
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate("Requests");
-                    }}>
-                    {badgeCount > 0 && (
-                        <View style={styles.badge}>
-                            <Text style={styles.badgeText}>{badgeCount}</Text>
-                        </View>
-                    )}
-                    <Icons.MaterialCommunityIcons
-                        name="bell"
-                        size={wp('7%')}
-                        color={theme.headerIconsColor}
-                        style={{ marginLeft: wp('2%') }}
-                    />
-
-                </TouchableOpacity>
+                <AppHeader headerTitle={"People"}   navigation={navigation} />
                 <FlatList data={people} renderItem={({ item }) => renderPeople(item)} />
             </View>
         </View>

@@ -23,7 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CountryPicker from 'react-native-country-picker-modal';
 import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/LogInStyleSheet';
 import { PhoneNumberUtil } from 'google-libphonenumber';
-import UseScreenFocus from '../ScreenFocus.js/UseScreenFocus';
+import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import { ThemeContext } from '../../context/ThemeContext';
 
 

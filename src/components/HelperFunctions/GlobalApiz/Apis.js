@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import AppContext from "../context/AppContext";
+import AppContext from "../../../context/AppContext";
 
 
 const CommonApis = () => {

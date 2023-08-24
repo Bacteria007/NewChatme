@@ -14,20 +14,20 @@ import {
 } from 'react-native-responsive-screen';
 import AppContext from '../../context/AppContext';
 import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
-import GlobalFunction from '../../utils/GlobalFunc';
 import { Avatar, Card, Divider } from 'react-native-paper';
 import { ThemeContext } from '../../context/ThemeContext';
 import { Icons } from '../../assets/Icons';
 import FontStyle from '../../assets/styles/FontStyle';
+import ReactNativeModal from 'react-native-modal';
+import Containers from '../../assets/styles/Containers';
 
 const Settings2 = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const toggleModal = () => {
-        setIsModalVisible(!isModalVisible);
-    };
+    const [visible, setVisible] = React.useState(false);
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+    const toggleModal = () => setVisible(!visible);
     const { language } = useContext(AppContext);
-    const gloabalFunctions = GlobalFunction();
     const arrow_icon = 'chevron-right';
     const iconSize = wp('9%');
     const iconSizeSmall = wp('5%');
@@ -241,7 +241,7 @@ const Settings2 = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('changePassword');
+                            navigation.navigate('Requests');
                         }}>
                         <View style={styles.itemStyle}>
                             <Avatar.Icon
@@ -263,6 +263,30 @@ const Settings2 = ({ navigation }) => {
                     </TouchableOpacity>
                 </Card>
                 {/* notifications */}
+            </View>
+            <View style={Containers.centercontent}>
+            <ReactNativeModal
+             visible={visible}
+             onBackButtonPress={hideModal}
+             onDismiss={hideModal}
+             animationIn="slideInUp"
+             animationOut="slideOutDown"
+             style={{
+               backgroundColor: "rgba(0,0,0,0.4)",
+               margin: 0,
+               justifyContent: 'center',
+               height: hp('30'),alignSelf:'center'
+             }}
+            >
+                <View style={styles.modalView}>
+                <TouchableOpacity>
+                    <Text style={{ color: AppColors.primary, fontFamily: FontStyle.regularFont,fontSize:17 }}>Dark Theme</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Text style={{ color: AppColors.primary, fontFamily: FontStyle.regularFont,fontSize:17 }}>Light Theme</Text>
+                </TouchableOpacity>
+                </View>
+            </ReactNativeModal>
             </View>
         </DrawerScreenswrapper>
     );
@@ -297,18 +321,26 @@ const styles = StyleSheet.create({
         padding: 15,
     },
     itemName: color => ({
-        fontFamily: FontStyle.regularFont,
+        // fontFamily: FontStyle.regularFont,
         fontSize: 15,
         color: color,
         marginLeft: 10,
     }),
     sectionHeadText: {
         fontSize: wp('4%'),
-        fontFamily: FontStyle.regularFont,
+        // fontFamily: FontStyle.regularFont,
         color: AppColors.black,
     },
     dividerContainer: {
         paddingHorizontal: 15, // Add horizontal padding here
     },
+    modalView: {
+        backgroundColor: "#fff",
+        height: hp('25'),
+        width: wp('100'),
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        alignSelf: 'center',
+      },
 });
 

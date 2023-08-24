@@ -17,9 +17,7 @@ import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import UserChatInputStyle from '../../../../assets/styles/UserChatInputStyle';
 import { Icons } from '../../../../assets/Icons';
-import UserChatHeader from '../../../../components/Headers/ChatHeader/UserChatHeader';
 import {
     Appbar,
     Divider,
@@ -27,14 +25,10 @@ import {
     Portal,
     Provider,
     Surface,
-    TouchableRipple,
 } from 'react-native-paper';
 import FontStyle from '../../../../assets/styles/FontStyle';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import io from 'socket.io-client';
 import AppContext from '../../../../context/AppContext';
 import GroupMsgItem from '../../../../components/MessageItem/GroupMsgItem';
-import moment from 'moment';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import GroupChatInput from './GroupChatInput';
 import PushNotification from "react-native-push-notification";

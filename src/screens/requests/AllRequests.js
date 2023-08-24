@@ -165,9 +165,9 @@ const AllRequest = ({ navigation }) => {
                     swapShadows
                     style={[HomeNeoCards.neomorphStyle(theme.homeCardColor), { justifyContent: 'space-between' }]}
                 >
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row',flex:1 }}>
                         {!item.requesterId.profileImage ? (
-                            <View style={HomeNeoCards.dpVew}>
+                            <View style={[HomeNeoCards.dpVew]}>
                                 <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
 
                                     <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
@@ -185,14 +185,20 @@ const AllRequest = ({ navigation }) => {
                             </Text>
                         </View>
                     </View>
+                    <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('35')}}>
                     <TouchableOpacity
-                        onPress={() => acceptRequest(item)}>
-                        <Text style={{ color: "black" }}>Accept</Text>
+                        onPress={() => acceptRequest(item)}
+                        style={{backgroundColor:"green",paddingHorizontal:7,paddingVertical:5,borderRadius:7}}
+                        >
+                        <Text style={{ color: "white" }}>Accept</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => rejectRequest(item)}>
-                        <Text style={{ color: "black" }}>Reject</Text>
+                        onPress={() => rejectRequest(item)}
+                        style={{backgroundColor:"red",paddingHorizontal:7,paddingVertical:5,borderRadius:7}}
+                        >
+                        <Text style={{ color: "white",textAlign:'center' }}>Reject </Text>
                     </TouchableOpacity>
+                    </View>
                 </Neomorph>
             </View>
         );
@@ -207,7 +213,7 @@ const AllRequest = ({ navigation }) => {
         <View style={Containers.whiteCenterContainer(theme.backgroundColor)}>
             <View>
                 <InnerScreensHeader screenName={"All Request"} navigation={navigation} />
-                <Text style={{ marginTop: 20, fontSize: 20, color: AppColors.primary, textAlign: 'center' }}>All Requests</Text>
+                {/* <Text style={{ marginTop: 20, fontSize: 20, color: AppColors.primary, textAlign: 'center' }}>All Requests</Text> */}
                 <FlatList data={waitingRequests} renderItem={({ item }) => renderPeople(item)} style={{ marginTop: 20 }} />
             </View>
         </View>
