@@ -28,8 +28,8 @@ import { ThemeContext } from '../../context/ThemeContext';
 import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 
 const LogInScreen = ({ navigation }) => {
-  const {baseUrl,storeLoggedinStatus,storedUser,getStoredUserDetails}=useContext(AppContext)
-  const {theme}=useContext(ThemeContext)
+  const { baseUrl, storeLoggedinStatus, storedUser, getStoredUserDetails } = useContext(AppContext)
+  const { theme } = useContext(ThemeContext)
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -40,8 +40,8 @@ const LogInScreen = ({ navigation }) => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-UseScreenFocus(getStoredUserDetails)
-UseScreenFocus(initializeZego)
+  UseScreenFocus(getStoredUserDetails)
+  UseScreenFocus(initializeZego)
 
   const showSnackbar = message => {
     setSnackbarMessage(message);
@@ -65,35 +65,34 @@ UseScreenFocus(initializeZego)
     setCountryCode(country.callingCode);
   };
 
-  const userLogin = ({navigation})=>{
+  const userLogin = ({ navigation }) => {
     const formdata = new FormData();
     formdata.append('phoneNo', phoneNumber);
     formdata.append('password', password);
     axios({
       method: 'post',
-      url:  `${baseUrl}/login`,
+      url: `${baseUrl}/login`,
       data: formdata,
       headers: { 'Content-Type': 'multipart/form-data' },
     })
       .then(function (response) {
-        if(response.data.match == true)
-        {
-          console.log("login",response.data)
-          let res=response.data.loggedInUser
-          AsyncStorage.setItem('user', JSON.stringify({userId:res._id,phoneNumber:res.phoneNo,profileImage: res.profileImage,name:res.name}))
+        if (response.data.match == true) {
+          console.log("login", response.data)
+          let res = response.data.loggedInUser
+          AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name }))
           // storeLoggedinStatus(true)
           getStoredUserDetails()
-          console.log("async login",storedUser)
+          console.log("async login", storedUser)
           initializeZego(res._id, res.name);
           navigation.navigate('DrawerScreens');
         }
-        else{
-            if (response.data.message === 'Invalid phone number or password') {
-              alert("Invalid phone number or password");
-            } else {
-              alert("There was an issue in logging in,try again",
+        else {
+          if (response.data.message === 'Invalid phone number or password') {
+            alert("Invalid phone number or password");
+          } else {
+            alert("There was an issue in logging in,try again",
               "No user found with this phone number or password");
-            }
+          }
         }
       })
       .catch(function (response) {
@@ -104,7 +103,7 @@ UseScreenFocus(initializeZego)
   useEffect(() => {
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
     setCountryCode('92');
-    }, []);
+  }, []);
 
   return (
     <View style={LogInStyleSheet.container(theme.backgroundColor)}>
@@ -120,8 +119,9 @@ UseScreenFocus(initializeZego)
         <ScrollView
           contentContainerStyle={LogInStyleSheet.scrollContainer}
           showsVerticalScrollIndicator={false}>
+          <View style={LogInStyleSheet.contentContainer}>
           <Image
-            source={require('../../assets/imges/AuthScreenPictures/LOgInPic/LogInPic.png')}
+            source={require('../../assets/imges/AuthScreenPictures/LOgInPic/login4.png')}
             style={[LogInStyleSheet.image]}
           />
           <Text style={[LogInStyleSheet.title]}>LogIn to Continue!</Text>
@@ -134,7 +134,7 @@ UseScreenFocus(initializeZego)
               withCallingCode
               countryCode={selectedCountry?.cca2}
               onSelect={handleCountrySelect}
-              // translation="eng"
+            // translation="eng"
             />
           </View>
 
@@ -168,11 +168,14 @@ UseScreenFocus(initializeZego)
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={()=>{
+         <View style={{width:wp('85')}}>
+          <TouchableOpacity onPress={() => {
             navigation.navigate('ForgetPassword')
-          }}>
-          <Text style={[LogInStyleSheet.forgotpasswordText]}>Forgot Password?</Text>
+          }} 
+          >
+            <Text style={[LogInStyleSheet.forgotpasswordText]}>Forgot Password?</Text>
           </TouchableOpacity>
+          </View>
           <TouchableOpacity
             onPress={() => {
               if ((phoneNumber == '') & (password == '')) {
@@ -203,7 +206,7 @@ UseScreenFocus(initializeZego)
                 }
               } else {
                 console.log("clicked")
-                userLogin({navigation})
+                userLogin({ navigation })
                 // navigation.navigate('DrawerScreens');
               }
 
@@ -213,35 +216,36 @@ UseScreenFocus(initializeZego)
             style={[LogInStyleSheet.TouchableButtonStyle]}>
             <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
           </TouchableOpacity>
-          <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',margin:wp('3%')}}>
-          <Text style={{fontFamily:FontStyle.mediumFont}}>Don't have an account?{' '}</Text>
-          <TouchableOpacity onPress={()=>{
-            navigation.navigate('SignUpScreen')
-          }}><Text style={{color:AppColors.primary,fontFamily:FontStyle.mediumFont}}>Signup</Text></TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: wp('3%') }}>
+            <Text style={{ fontFamily: FontStyle.mediumFont }}>Don't have an account?{' '}</Text>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate('SignUpScreen')
+            }}><Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Signup</Text></TouchableOpacity>
+          </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
       <Snackbar
-            visible={visible}
-            onDismiss={() => setVisible(false)}
-            duration={2000}
-            style={
-              passwordSnackWidth === true
-                ? {
-                    backgroundColor: '#D3D3D3',
-                    width: wp('80'),
-                    marginBottom: hp('6'),
-                    alignSelf: 'center',
-                  }
-                : {
-                    backgroundColor: '#D3D3D3',
-                    width: wp('55'),
-                    marginBottom: hp('6'),
-                    alignSelf: 'center',
-                  }
-            }>
-            <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
-          </Snackbar>
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        duration={2000}
+        style={
+          passwordSnackWidth === true
+            ? {
+              backgroundColor: '#D3D3D3',
+              width: wp('80'),
+              marginBottom: hp('6'),
+              alignSelf: 'center',
+            }
+            : {
+              backgroundColor: '#D3D3D3',
+              width: wp('55'),
+              marginBottom: hp('6'),
+              alignSelf: 'center',
+            }
+        }>
+        <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
+      </Snackbar>
     </View>
   );
 };

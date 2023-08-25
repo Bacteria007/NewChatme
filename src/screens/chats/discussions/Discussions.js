@@ -18,6 +18,8 @@ import PushNotification from "react-native-push-notification";
 import UseScreenFocus from '../../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import GlobalFunction from '../../../components/HelperFunctions/GlobalApiz/GlobalFunc';
 import { initializeZego } from '../../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
+import AppColors from '../../../assets/colors/Appcolors';
+import { StatusBar } from 'react-native';
 
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
@@ -28,8 +30,14 @@ const Discussions = ({ navigation }) => {
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const globalFunctions = GlobalFunction()
   const [contactList, setContactList] = useState([]);
+  
+  const [statusbarColor, setStatusbarColor] = useState(AppColors.white);
+  const stColor=()=>{
+    setStatusbarColor(AppColors.white)
+  }
   UseScreenFocus(getStoredUserDetails)
   UseScreenFocus(initializeZego)
+  UseScreenFocus(stColor)
   //  const u=globalFunctions.fetchUserId();
 
   //  useEffect(()=>{
@@ -85,7 +93,7 @@ const Discussions = ({ navigation }) => {
   return (
 
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
-      <Primary_StatusBar />
+      <Primary_StatusBar/>
       <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <BotDiscussion navigation={navigation} />

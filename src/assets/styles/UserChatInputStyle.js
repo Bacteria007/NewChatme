@@ -24,7 +24,7 @@ const UserChatInputStyle = StyleSheet.create({
     // alignItems: 'flex-end',
     // alignSelf:'flex-end',
     // backgroundColor: AppColors.black,
-    // height:hp('')
+    // height:hp(''),
     
   },
   input_and_all_icons: {
@@ -38,7 +38,6 @@ const UserChatInputStyle = StyleSheet.create({
     backgroundColor: AppColors.white,
     marginBottom: hp('1%'),
     paddingHorizontal:hp('1%'),
-    
   },
   
   input:(height)=>({

@@ -4,11 +4,13 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import AppColors from '../../../colors/Appcolors';
+import FontStyle from '../../FontStyle';
 
 const AfterSignUpStyleSheet = StyleSheet.create({
-  container: (bgcolor)=>({
+  container: (bgcolor) => ({
     flex: 1,
     backgroundColor: bgcolor,
+    height: hp('100'), width: wp('100')
   }),
   TopView: {
     height: hp('8'),
@@ -32,8 +34,8 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     alignItems: 'flex-end',
   },
   TouchableButtonStyle: {
-    width: wp('30'),
-    borderRadius: wp('20'),
+    width: wp('85'),
+    borderRadius: wp('2'),
     height: hp('5.5'),
     // width:wp('85'),
     borderColor: AppColors.primary,
@@ -44,6 +46,7 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: hp('3'),
+    verticalAlign: 'bottom'
   },
   TouchableTextStyle: {
     fontSize: wp('5'),
@@ -60,16 +63,17 @@ const AfterSignUpStyleSheet = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: hp('5%'), // Adjust the value based on your content's bottom padding
+
   },
 
   Text1: {
     fontSize: wp('6'),
     fontFamily: 'Poppins-Medium ',
-    color: AppColors.dodgerblue,
+    color: AppColors.primary,
   },
   CameraIconView: {
-    height: hp('6%'),
-    width: hp('6%'),
+    height: hp('4%'),
+    width: hp('4%'),
     borderRadius: 100,
     backgroundColor: AppColors.black,
     justifyContent: 'center',
@@ -85,7 +89,7 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     height: hp('25%'),
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor:'red',
+    // backgroundColor: 'red',
   },
   displyNameText: {
     color: AppColors.black,
@@ -110,22 +114,15 @@ const AfterSignUpStyleSheet = StyleSheet.create({
   },
   Text2: {
     fontSize: wp('5'),
-    fontFamily: 'Poppins-Bold ',
-    color: AppColors.dodgerblue,
-    marginTop: hp('5'),
+    fontFamily: FontStyle.regularFont,
+    color: AppColors.primary,
+    marginTop: hp('4'),
     marginBottom: hp('1'),
   },
   quesView: {
     height: hp('5'),
     width: wp('90'),
-    // marginTop:hp('1'),
-    // borderColor: AppColors.primary,
-    // backgroundColor:'red',
-    // borderRadius: hp('1'),
-    // borderRadius: hp('1'),
-    // borderWidth:hp('0.2'),
     justifyContent: 'center',
-    // alignItems:'center',
     paddingHorizontal: wp('3.75'),
   },
   TextInputContainer: {

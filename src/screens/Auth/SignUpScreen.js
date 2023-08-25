@@ -27,6 +27,7 @@ import AppContext from '../../context/AppContext';
 import RNFS, { read } from 'react-native-fs';
 import FontStyle from '../../assets/styles/FontStyle';
 import { ThemeContext } from '../../context/ThemeContext';
+import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 
 const SignUpScreen = ({ navigation }) => {
   const { language,baseUrl,storeLoggedinStatus,getStoredUserDetails } = useContext(AppContext);
@@ -106,7 +107,7 @@ const SignUpScreen = ({ navigation }) => {
   }
 //   )
 // }
-
+// AsyncStorage.removeItem("user")
   useEffect(() => {
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
     setCountryCode('92');
