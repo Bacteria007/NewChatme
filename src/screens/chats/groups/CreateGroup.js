@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {StyleSheet,  Text,  TouchableOpacity,  View,  FlatList,  ScrollView,  TextInput,  Alert,  Image,} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, FlatList, ScrollView, TextInput, Alert, Image, } from 'react-native';
 import AppContext from '../../../context/AppContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { Icons } from '../../../assets/Icons';
-import {heightPercentageToDP as hp,  widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import axios from 'axios';
 import CommonApis from '../../../components/HelperFunctions/GlobalApiz/Apis';
 import AppColors from '../../../assets/colors/Appcolors';
-import {Surface} from 'react-native-paper';
+import { Surface } from 'react-native-paper';
 import FontStyle from '../../../assets/styles/FontStyle';
 import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
@@ -144,23 +144,17 @@ const CreateGroup = ({ navigation }) => {
           swapShadows
           style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
         >
-          {item.dp == null ?
+          {!item.profileImage ? (
             <View style={HomeNeoCards.dpVew}>
               <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
-                <TouchableOpacity>
-                  <Image
-                    source={require('../../../assets/imges/default/userProfileDark.jpg')}
-                    style={[HomeNeoCards.dpIcon]}
-                  />
 
-                  {/* <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} /> */}
-                </TouchableOpacity>
+                <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
+
               </View>
             </View>
-            :
-            // jo backend sy aye ga wo is null ki jga pr rkhna hy
-            null
-          }
+          ) : (
+            <Image source={{ uri: `${baseUrl}${item.profileImage}` }} style={HomeNeoCards.dpImage} />
+          )}
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
             <View style={HomeNeoCards.nameAndMsgContainer}>
@@ -239,7 +233,7 @@ const CreateGroup = ({ navigation }) => {
       </View>
       <View style={styles.container}>
         {selectedMembers.length > 0 ? (
-      
+          <Surface>
             <View style={styles.memberlistContainer}>
               <ScrollView horizontal>
                 {selectedMembers.map(member => {
@@ -253,13 +247,14 @@ const CreateGroup = ({ navigation }) => {
               </ScrollView>
               {/* <Text style={[HomeNeoCards.profileName(theme.profileNameColor),{textAlign:'center'}]}>Selected Members</Text> */}
             </View>
-
+          </Surface>
 
         ) : null}
         <FlatList
           showsVerticalScrollIndicator={false}
           data={allUsers.length > 0 ? allUsers : null}
           renderItem={renderItem}
+          style={{marginTop:15}}
         />
         <ReactNativeModal
           visible={visible}
@@ -298,7 +293,7 @@ const CreateGroup = ({ navigation }) => {
                   width: wp('40'),
                   alignSelf: 'center',
                   backgroundColor: theme.buttonsColor,
-                  justifyContent: 'center', alignItems: 'center',padding:5,borderRadius:wp('20')
+                  justifyContent: 'center', alignItems: 'center', padding: 5, borderRadius: wp('20')
                 }}
                 onPress={() => createNewGroup(groupName).then(() => { hideModal(), setgroupName(''), navigation.navigate('Groups') })}>
                 <Text

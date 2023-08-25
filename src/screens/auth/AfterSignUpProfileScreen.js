@@ -11,6 +11,7 @@ import {
   ScrollView,
   Keyboard,
   PermissionsAndroid,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import AfterSignUpStyleSheet from '../../assets/styles/AuthStyleSheet/AfterSignUpStyleSheet/AfterSignUpStyleSheet';
 import Primary_StatusBar from '../../components/statusbars/Primary_StatusBar';
@@ -30,10 +31,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeZego } from '../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
 import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import { ThemeContext } from '../../context/ThemeContext';
+import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
+import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 
 const AfterSignUpProfileScreen = ({ navigation }) => {
-  const { language, baseUrl,storedUser,getStoredUserDetails,selectedImageUri,storeImageUri } = useContext(AppContext);
-  const {theme} = useContext(ThemeContext);
+  const { language, baseUrl, storedUser, getStoredUserDetails, selectedImageUri, storeImageUri } = useContext(AppContext);
+  const { theme } = useContext(ThemeContext);
 
   const [name, setName] = useState('');
   const [ques1, setQues1] = useState('');
@@ -52,7 +55,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
     // console.log('id from context', storedUser.userId);
     // console.log('id from Async', parseId);
     // console.log('id from getId', getStoredUserDetails());
-    
+
     const formdata = new FormData();
     formdata.append('_id', storedUser.userId);
     formdata.append('name', name);
@@ -74,26 +77,26 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
       });
       const data = await response.json();
       console.log('res after updating', data);
-      if(data.message==="This user name is not available."){
-      setErrorMessage(true)
-      setAlreadyExist(data.message)
-    }
-    else{
-    AsyncStorage.getItem("user").then((userData) => {
-      if (userData) {
-        const existingData = JSON.parse(userData);
-        const updatedData = { ...existingData, name: data.updated.name };
-        console.log("update async",updatedData)
-        AsyncStorage.setItem("user", JSON.stringify(updatedData));
+      if (data.message === "This user name is not available.") {
+        setErrorMessage(true)
+        setAlreadyExist(data.message)
       }
-     
-      const  existinguserParseData = JSON.parse(userData);
-      const idOfUser = existinguserParseData.userId;
-      const nameofUser = data.updated.name;
-      initializeZego(idOfUser,nameofUser)
-      navigation.navigate('DrawerScreens');
-    });
-  }
+      else {
+        AsyncStorage.getItem("user").then((userData) => {
+          if (userData) {
+            const existingData = JSON.parse(userData);
+            const updatedData = { ...existingData, name: data.updated.name };
+            console.log("update async", updatedData)
+            AsyncStorage.setItem("user", JSON.stringify(updatedData));
+          }
+
+          const existinguserParseData = JSON.parse(userData);
+          const idOfUser = existinguserParseData.userId;
+          const nameofUser = data.updated.name;
+          initializeZego(idOfUser, nameofUser)
+          navigation.navigate('DrawerScreens');
+        });
+      }
     } catch (error) {
       console.error('Error updating profile:', error);
     }
@@ -101,36 +104,33 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
   // useEffect(()=>{
   //   getStoredUserDetails()
   // },[])
-  useEffect(()=>{
-    console.log("after signup console",storedUser)
-    let userid=storedUser.userId
+  useEffect(() => {
+    console.log("after signup console", storedUser)
+    let userid = storedUser.userId
     fetch(`${baseUrl}/getProfileImage?logegedId=${userid}`, {
       method: 'GET',
     })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-        console.log('res aya',data)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('res aya', data)
         storeImageUri(data.profileImage);
       })
-      .catch(error => console.log("res error",error));
+      .catch(error => console.log("res error", error));
 
-  },[])
+  }, [])
 
 
   return (
     <SafeAreaView style={AfterSignUpStyleSheet.container(theme.backgroundColor)}>
-      <Primary_StatusBar
-        darkModeBgColor={'black'}
-        lightModeBgColor={Appcolors.primary}
-      />
+      <Primary_StatusBar />
 
       {/* ***************** HEADER OF SCREEN ************** */}
-      <View style={AfterSignUpStyleSheet.TopView}>
+      {/* <View style={AfterSignUpStyleSheet.TopView}>
         <View style={AfterSignUpStyleSheet.TopInnerView1}>
           <Image
             source={require('../../assets/imges/logo/logo.png')}
@@ -141,7 +141,8 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
             {TranslationFile[language].ChatMe}
           </Text>
         </View>
-      </View>
+      </View> */}
+      <InnerScreensHeader screenName={"Profile"} navigation={navigation} />
       <KeyboardAvoidingView
         style={AfterSignUpStyleSheet.BelowHeadercontainer}
         behavior={Platform.OS === 'ios' ? 'padding' : null}
@@ -154,190 +155,166 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
             {TranslationFile[language].Complete_your_profile}
           </Text> */}
           <View style={AfterSignUpStyleSheet.ImageContainer}>
-            {/* <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={() => {
-                console.log('Image Show');
-              }}
-              style={AfterSignUpStyleSheet.ImageBackTouchable}> */}
-            {/* <ImageBackground */}
-            {/* source={require('../../assets/imges/img2.png')}
-                style={{
-                  height: hp('20%'),
-                  width: hp('20%'),
-                }}
-                imageStyle={{ borderRadius: 100 }}> */}
-            {/* img k oper same size ka view ta k camera icon k view ko rotate kr k bottom right corner pr ly jaye*/}
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={() => {
-                requestCameraAndAudioPermission();
-                launchImageLibrary({
-                  maxWidth:800,
-                  maxHeight:800,
-                }).then(async Response => {
-                  const userid = await AsyncStorage.getItem('user');
-                  const parseId = JSON.parse(userid);
-                  // const parseIdcntxtcurnt = JSON.parse(storedUser);
-                  console.log("async parsed",parseId.userId)
-                  console.log("async parsed context vali",storedUser)
-                  console.log("async parsed context vali id",storedUser.userId)
-                  console.log(Response.assets[0]);
-                  // setSelectedImage(Response.assets[0]);
-                  // setSelectedImageUri(Response.assets[0].uri);
-                  const formdata = new FormData();
-                  formdata.append('_id', storedUser.userId);
-                  formdata.append('name', 'profileImage');
-                  formdata.append('profileImage', {
-                    uri: Response.assets[0].uri,
-                    type: Response.assets[0].type,
-                    name: Response.assets[0].fileName,
-                  });
-                  fetch(`${baseUrl}/uploadProfile`, {
-                    method: 'POST',
-                    body: formdata,
-                  })
-                  .then((response) => {
-                    if (!response.ok) {
-                      throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                  })
-                  .then(data => {
-                      console.log('res aya')
-                      storeImageUri(data.newImage.profileImage);
-                      AsyncStorage.getItem("user").then((userData) => {
-                        if (userData) {
-                          const existingData = JSON.parse(userData);
-                          const updatedData = { ...existingData, profileImage: data.newImage.profileImage };
-                          console.log("async updatedion chli",updatedData)
-                          AsyncStorage.setItem("user", JSON.stringify(updatedData));
-                        }
-                      });
-                    })
-                    .catch(error => console.log("res error",error));
-                })
-                // .catch(error=>{console.log("image picking error",error)})
-              }}>
-              {selectedImageUri == '' ? (
-                <Image
-                  source={require('../../assets/imges/defaultProfile/defaultDP.jpg')}
-                  style={{
-                    height: hp('23%'),
-                    width: hp('23%'),
-                    borderRadius: 80,
-                    // alignSelf: 'center',
-                    // marginBottom: 7,
-                  }}
-                />
-              ) : (
-                <Image
-                  source={{ uri: `${baseUrl}${selectedImageUri}` }}
-                  style={{
-                    height: hp('18%'),
-                    width: hp('18%'),
-                    borderRadius: 80,
-                    // alignSelf: 'center',
-                    // marginBottom: 7,
-                    backgroundColor: AppColors.periWinkle,
-                  }}
-                />
-              )}
-
+            <View>
+              <View style={{ position: 'relative' }}>
+                {selectedImageUri == '' ? (
+                  <Neomorph
+                    inner
+                    style={{
+                      shadowRadius: 3,
+                      borderRadius: 90,
+                      backgroundColor: "#d8dfe7", // Change this color to match your design
+                      width: 130,
+                      height: 130,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Neomorph
+                      style={{
+                        shadowRadius: 3,
+                        borderRadius: 100,
+                        backgroundColor: "#d8dfe7",
+                        // backgroundColor: "#d8dfe7",
+                        width: 100,
+                        height: 100,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Icons.MaterialIcons
+                        name="person"
+                        size={60}
+                        color={AppColors.black} // Change this color to match your design
+                      />
+                    </Neomorph>
+                  </Neomorph>
+                ) : (
+                  <Image
+                    source={{ uri: `${baseUrl}${selectedImageUri}` }}
+                    style={{
+                      height: hp('18%'),
+                      width: hp('18%'),
+                      borderRadius: wp('100'),
+                      // alignSelf: 'center',
+                      // marginBottom: 7,
+                      backgroundColor: AppColors.periWinkle,
+                    }}
+                  />
+                )}
+              </View>
               {/* Icon ka view */}
-              <View style={[AfterSignUpStyleSheet.CameraIconView,{position:'absolute',right:wp('3%'),top:hp('13%')}]}>
-                <Icons.MaterialIcons
-                  name="camera-alt"
-                  size={23}
-                  color="white"
-                />
+              <View style={[AfterSignUpStyleSheet.CameraIconView, { position: 'absolute', right: 0, bottom: 0 }]}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => {
+                  requestCameraAndAudioPermission();
+                  launchImageLibrary({
+                    maxWidth: 800,
+                    maxHeight: 800,
+                  }).then(async Response => {
+                    const userid = await AsyncStorage.getItem('user');
+                    const parseId = JSON.parse(userid);
+                    // const parseIdcntxtcurnt = JSON.parse(storedUser);
+                    console.log("async parsed", parseId.userId)
+                    console.log("async parsed context vali", storedUser)
+                    console.log("async parsed context vali id", storedUser.userId)
+                    console.log(Response.assets[0]);
+                    // setSelectedImage(Response.assets[0]);
+                    // setSelectedImageUri(Response.assets[0].uri);
+                    const formdata = new FormData();
+                    formdata.append('_id', storedUser.userId);
+                    formdata.append('name', 'profileImage');
+                    formdata.append('profileImage', {
+                      uri: Response.assets[0].uri,
+                      type: Response.assets[0].type,
+                      name: Response.assets[0].fileName,
+                    });
+                    fetch(`${baseUrl}/uploadProfile`, {
+                      method: 'POST',
+                      body: formdata,
+                    })
+                      .then((response) => {
+                        if (!response.ok) {
+                          throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                      })
+                      .then(data => {
+                        console.log('res aya')
+                        storeImageUri(data.newImage.profileImage);
+                        AsyncStorage.getItem("user").then((userData) => {
+                          if (userData) {
+                            const existingData = JSON.parse(userData);
+                            const updatedData = { ...existingData, profileImage: data.newImage.profileImage };
+                            console.log("async updatedion chli", updatedData)
+                            AsyncStorage.setItem("user", JSON.stringify(updatedData));
+                          }
+                        });
+                      })
+                      .catch(error => console.log("res error", error));
+                  })
+                  // .catch(error=>{console.log("image picking error",error)})
+                }}>
+                  <Icons.MaterialIcons
+                    name="edit"
+                    size={15}
+                    color="white"
+                  />
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-            {/* </ImageBackground> */}
-            {/* </TouchableOpacity> */}
-          </View>
-
-          <Text style={AfterSignUpStyleSheet.displyNameText}>
-            {TranslationFile[language].Enter_your_display_name}
-          </Text>
-          
-
-          {/* ************************************************************************************************ */}
-
-          {name == '' ? (
-            <View style={AfterSignUpStyleSheet.floatingInputView}>
-              <FloatingLabelInput
-                value={name}
-                hintTextColor={Appcolors.gray}
-                hint={TranslationFile[language].Enter_Your_Name}
-                containerStyles={AfterSignUpStyleSheet.floatingInputContainer}
-                customLabelStyles={AfterSignUpStyleSheet.floatingCustomerLabel}
-                inputStyles={AfterSignUpStyleSheet.floatingInputStyle}
-                onChangeText={value => {
-                  setName(value);
-                }}
-                autoCapitalize='none'
-              />
-              </View>
-          ) : (
-            <View style={AfterSignUpStyleSheet.floatingInputView}>
-              <FloatingLabelInput
-                staticLabel
-                label={TranslationFile[language].Name}
-                labelStyles={AfterSignUpStyleSheet.floatingLabel}
-                value={name}
-                hintTextColor={Appcolors.gray}
-                hint={TranslationFile[language].Enter_Your_Name}
-                containerStyles={AfterSignUpStyleSheet.floatingInputContainer}
-                customLabelStyles={AfterSignUpStyleSheet.floatingCustomerLabel}
-                inputStyles={AfterSignUpStyleSheet.floatingInputStyle}
-                onChangeText={value => {
-                  setName(value);
-                }}autoCapitalize='none'
-              />
             </View>
-          )}
-           {errorMessage&&
-            <Text style={{color:AppColors.red}}>{alreadyExist}</Text>}
-
-
-          {/* *************************************************************************************************** */}
-          <Text style={AfterSignUpStyleSheet.Text2}>
-            {TranslationFile[language].Security_questions}
-          </Text>
-          <View style={AfterSignUpStyleSheet.quesView}>
-            <Text style={AfterSignUpStyleSheet.displyNameText}>
-              {TranslationFile[language].What_is_your_favourite_fruit}
-            </Text>
           </View>
-          <TextInput
-            placeholder={TranslationFile[language].Answer}
-            value={ques1}
-            style={AfterSignUpStyleSheet.TextInputContainer}
-            onChangeText={value => {
-              setQues1(value);
-            }}
-            autoCapitalize='none'
-          />
+          {/* <Text style={AfterSignUpStyleSheet.displyNameText}>
+            {TranslationFile[language].Enter_your_display_name}
+          </Text> */}
+          <View style={{ justifyContent: 'center' }}>
+            <TextInput
+              placeholder={TranslationFile[language].Name}
+              value={name}
+              style={AfterSignUpStyleSheet.TextInputContainer}
+              onChangeText={value => {
+                setName(value);
+              }}
+              autoCapitalize='none'
+            />
+            {errorMessage &&
+              <Text style={{ color: AppColors.red }}>{alreadyExist}</Text>}
 
-          <View style={AfterSignUpStyleSheet.quesView}>
-            <Text style={AfterSignUpStyleSheet.displyNameText}>
-              {TranslationFile[language].What_is_your_favourite_game}
+
+            {/* *************************************************************************************************** */}
+            <Text style={[AfterSignUpStyleSheet.Text2, { marginLeft: 15 }]}>
+              {TranslationFile[language].Security_questions} 
             </Text>
+            <View style={AfterSignUpStyleSheet.quesView}>
+              <Text style={AfterSignUpStyleSheet.displyNameText}>
+                {TranslationFile[language].What_is_your_favourite_fruit}
+              </Text>
+            </View>
+            <TextInput
+              placeholder={TranslationFile[language].Answer}
+              value={ques1}
+              style={AfterSignUpStyleSheet.TextInputContainer}
+              onChangeText={value => {
+                setQues1(value);
+              }}
+              autoCapitalize='none'
+            />
+
+            <View style={AfterSignUpStyleSheet.quesView}>
+              <Text style={AfterSignUpStyleSheet.displyNameText}>
+                {TranslationFile[language].What_is_your_favourite_game}
+              </Text>
+            </View>
+            <TextInput
+              placeholder={TranslationFile[language].Answer}
+              value={ques2}
+              style={AfterSignUpStyleSheet.TextInputContainer}
+              onChangeText={value => {
+                setQues2(value);
+              }}
+              autoCapitalize='none'
+            />
           </View>
-          <TextInput
-            placeholder={TranslationFile[language].Answer}
-            value={ques2}
-            style={AfterSignUpStyleSheet.TextInputContainer}
-            onChangeText={value => {
-              setQues2(value);
-            }}
-            autoCapitalize='none'
-          />
-
-          {/* ################################################################### */}
-
-          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ alignItems: 'center', justifyContent: 'center', height: hp('18') }}>
             <TouchableOpacity
               onPress={() => {
                 Keyboard.dismiss;
@@ -353,8 +330,6 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           </View>
-
-          {/* ################################################################### */}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

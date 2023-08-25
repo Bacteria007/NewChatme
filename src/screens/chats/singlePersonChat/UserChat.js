@@ -18,6 +18,7 @@ import AppContext from '../../../context/AppContext';
 import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
 import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
+import axios from 'axios';
 
 const socket = io.connect('http://192.168.43.145:8888');
 
@@ -33,7 +34,9 @@ const UserChat = props => {
   const [messageList, setMessageList] = useState([]);
   const flatListRef = useRef(null);
   const { receiver } = props.route.params;
+  const apiKey = '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';
 
+ 
   const DeleteMessage = async msgId => {
     const formData = new FormData();
     formData.append('_id', msgId);

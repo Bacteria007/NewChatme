@@ -25,11 +25,12 @@ import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import { ThemeContext } from '../../context/ThemeContext';
+import AppColors from '../../assets/colors/Appcolors';
 
 
 const ForgetPasswordScreen = ({ navigation }) => {
   const { language, baseUrl, storedUser, getStoredUserDetails, selectedImageUri, storeImageUri } = useContext(AppContext);
-  const {theme} = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const [ques1, setQues1] = useState('');
   const [ques2, setQues2] = useState('');
   const [phoneNo, setPhoneNo] = useState('')
@@ -154,72 +155,71 @@ const ForgetPasswordScreen = ({ navigation }) => {
       <ScrollView
         showsVerticalScrollIndicator={false}>
         <Image
-          source={require('../../assets/imges/AuthScreenPictures/ForgetPassPic/ForgetPic2.png')}
+          source={require('../../assets/imges/AuthScreenPictures/ForgetPassPic/forgot4.png')}
           style={[ForgetScreenStyle.image]}
         />
         {/* *************************************************************************************************** */}
         {toggleState == 1 ? (
           <>
-            <View style={[LogInStyleSheet.countryContainer]}>
-              <CountryPicker
-                withFilter
-                withFlag
-                withCountryNameButton
-                withCallingCode
-                countryCode={selectedCountry?.cca2}
-                onSelect={handleCountrySelect}
-              // translation="eng"
-              />
+            <View style={ForgetScreenStyle.phoneNoAndCountryContainer}>
+              <View style={[LogInStyleSheet.countryContainer]}>
+                <CountryPicker
+                  withFilter
+                  withFlag
+                  withCountryNameButton
+                  withCallingCode
+                  countryCode={selectedCountry?.cca2}
+                  onSelect={handleCountrySelect}
+                // translation="eng"
+                />
+              </View>
             </View>
+            <View style={ForgetScreenStyle.phoneNoAndCountryContainer}>
 
-            <View style={[LogInStyleSheet.phoneNumberContainer]}>
-              <Text style={[LogInStyleSheet.countryCode]}>+{countryCode}</Text>
+              <View style={[LogInStyleSheet.phoneNumberContainer]}>
+                <Text style={[LogInStyleSheet.countryCode]}>+{countryCode}</Text>
+                <TextInput
+                  style={[LogInStyleSheet.phoneNumberInput]}
+                  placeholder="Phone Number"
+                  onChangeText={text => setPhoneNo(text)}
+                  keyboardType="numeric"
+                  maxLength={15}
+                  value={phoneNo}
+                />
+              </View>
+            </View>
+            <View style={ForgetScreenStyle.securityQuestionsContainer}>
+              <Text style={ForgetScreenStyle.Text2}>Security questions</Text>
+              <View style={ForgetScreenStyle.quesView}>
+                <Text style={ForgetScreenStyle.displyNameText}>
+                  Q1 : What is your favourite fruit?
+                </Text>
+              </View>
               <TextInput
-                style={[{
-                  flex: 1,
-                  alignItems: 'center',
-                  paddingTop: hp('1'),
-                  // backgroundColor:'red'
-                  borderBottomColor: '#e2e2e2',
-                  borderBottomWidth: 1
-                }]}
-                placeholder="Phone Number"
-                onChangeText={text => setPhoneNo(text)}
-                keyboardType="numeric"
-                maxLength={15}
-                value={phoneNo}
+                placeholder="Answer"
+                value={ques1}
+                style={ForgetScreenStyle.TextInputContainer}
+                onChangeText={value => {
+                  setQues1(value);
+                }}
+                autoCapitalize='none'
+              />
+
+              <View style={ForgetScreenStyle.quesView}>
+                <Text style={ForgetScreenStyle.displyNameText}>
+                  Q2 : What is your favourite game?
+                </Text>
+              </View>
+              <TextInput
+                placeholder="Answer"
+                value={ques2}
+                style={ForgetScreenStyle.TextInputContainer}
+                onChangeText={value => {
+                  setQues2(value);
+                }}
+                autoCapitalize='none'
               />
             </View>
-            <Text style={ForgetScreenStyle.Text2}>Security questions</Text>
-            <View style={ForgetScreenStyle.quesView}>
-              <Text style={ForgetScreenStyle.displyNameText}>
-                Q1 : What is your favourite fruit?
-              </Text>
-            </View>
-            <TextInput
-              placeholder="Answer"
-              value={ques1}
-              style={ForgetScreenStyle.TextInputContainer}
-              onChangeText={value => {
-                setQues1(value);
-              }}
-              autoCapitalize='none'
-            />
-
-            <View style={ForgetScreenStyle.quesView}>
-              <Text style={ForgetScreenStyle.displyNameText}>
-                Q2 : What is your favourite game?
-              </Text>
-            </View>
-            <TextInput
-              placeholder="Answer"
-              value={ques2}
-              style={ForgetScreenStyle.TextInputContainer}
-              onChangeText={value => {
-                setQues2(value);
-              }}
-              autoCapitalize='none'
-            />
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <TouchableOpacity
                 onPress={() => {

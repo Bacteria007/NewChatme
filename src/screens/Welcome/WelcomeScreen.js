@@ -1,16 +1,31 @@
-import React ,{useContext}from 'react';
-import {View, Text, TouchableOpacity, SafeAreaView, Image} from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Text, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import WelcomeScreenStyles from '../../assets/styles/WelcomeScreenStyle/WelcomeScreenStyleSheet';
 import Appcolors from '../../assets/colors/Appcolors';
 import Status_bar from '../../components/statusbars/Primary_StatusBar';
 import TranslationFile from '../../assets/translation/TranslationFile.js';
 import AppContext from '../../context/AppContext';
+import AppColors from '../../assets/colors/Appcolors';
+import { Neomorph } from 'react-native-neomorph-shadows-fixes';
+import { Icons } from '../../assets/Icons';
+import { launchImageLibrary } from 'react-native-image-picker';
 
-const WelcomeScreen = ({navigation}) => {
-  const {language}  = useContext(AppContext);
- 
+const WelcomeScreen = ({ navigation }) => {
+  const { language } = useContext(AppContext);
+  const [selectedImageUri, setSelectedImageUri] = useState(null);
+
+  const openImagePicker = () => {
+    launchImageLibrary({
+      maxWidth: 800,
+      maxHeight: 800,
+    }, response => {
+      if (response.assets && response.assets[0]) {
+        setSelectedImageUri(response.assets[0].uri);
+      }
+    });
+  };
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: Appcolors.white}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Appcolors.white }}>
       <Status_bar
         darkModeBgColor={'black'}
         lightModeBgColor={Appcolors.primary}
@@ -20,6 +35,7 @@ const WelcomeScreen = ({navigation}) => {
       <View style={[WelcomeScreenStyles.TopView]}></View>
 
       {/* *****************           WELCOME SCREEN IMAGE       *************** */}
+
       <View>
         <Image
           source={require('../../assets/imges/WelcomeScreenPic/welcomeScreen.png')}
@@ -30,14 +46,14 @@ const WelcomeScreen = ({navigation}) => {
       {/* *****************           VIEW WITH TEXT AND TOUCHABLE BUTTONS   ************** */}
       <View>
         <Text style={[WelcomeScreenStyles.HeadingText2]}>
-        {TranslationFile[language].Welcome_to_ChatMe} 
+          {TranslationFile[language].Welcome_to_ChatMe}
         </Text>
         <Text style={[WelcomeScreenStyles.Text]}>
-        {TranslationFile[language].Be_part_of_millions_of_people_on_ChatMe}
+          {TranslationFile[language].Be_part_of_millions_of_people_on_ChatMe}
         </Text>
         <Text style={[WelcomeScreenStyles.Text2]}>
-        {TranslationFile[language].who_connect_securely_with_their_contacts}
-  
+          {TranslationFile[language].who_connect_securely_with_their_contacts}
+
         </Text>
         <TouchableOpacity style={[WelcomeScreenStyles.TouchableButton1]}>
           <Text
@@ -45,7 +61,7 @@ const WelcomeScreen = ({navigation}) => {
             onPress={() => {
               navigation.navigate('SignUpScreen');
             }}>
-           {TranslationFile[language].Register_as_new_user} 
+            {TranslationFile[language].Register_as_new_user}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

@@ -50,6 +50,7 @@ const UserChatHeaderStyle = StyleSheet.create({
   profileNameTextStyle: {
     fontSize: wp('6%'),
     color: AppColors.black,
+    marginBottom:9
   },
   profileStatusStyle: {
     color: AppColors.black,

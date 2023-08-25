@@ -31,7 +31,7 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
             ? UserChatStyle.userMessageContainer
             : UserChatStyle.otherMessageContainer,
         ]}>
-        {msgItem.content !== 'ChatMe_Image' ?
+        {msgItem.content != 'ChatMe_Image' ?
           <Text
             style={[
               msgItem.senderId === storedUser.userId

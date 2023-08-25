@@ -15,7 +15,8 @@ const LogInStyleSheet = StyleSheet.create({
 
   scrollContainer: {
     paddingBottom: hp('5%'), // Adjust the value based on your content's bottom padding
-  },
+  },contentContainer:{height:hp('85'),width:wp('100'),justifyContent:'center',alignItems:'center'},
+
   title: {
     fontSize: hp('3'),
     fontFamily: 'Poppins-Medium',
@@ -31,7 +32,7 @@ const LogInStyleSheet = StyleSheet.create({
   },
   image: {
     width: wp('70%'),
-    height: hp('25%'),
+    height: hp('30%'),
     alignSelf: 'center',
   },
   countryContainer: {
@@ -87,7 +88,8 @@ const LogInStyleSheet = StyleSheet.create({
     alignSelf:'flex-end',
     marginTop:hp('1'),
     color:AppColors.black,
-    fontFamily:'Poppins-Regular'
+    fontFamily:'Poppins-Regular',
+    textAlign:'right',
   },
   phoneNumberInput: {
     fontSize: wp('5'),
@@ -120,6 +122,7 @@ const LogInStyleSheet = StyleSheet.create({
     fontSize: wp('5'),
     color: AppColors.white,
     fontFamily: 'Poppins-Regular',
+   
   },
 });
 export default LogInStyleSheet;

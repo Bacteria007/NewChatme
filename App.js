@@ -1,11 +1,12 @@
 import 'react-native-gesture-handler';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Image,
   View,
   Text,
   TouchableOpacity,
   Alert,
+  StatusBar,
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -29,10 +30,10 @@ import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
 
 import { Icons } from './src/assets/Icons'; // Navigation
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator, useDrawerProgress } from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator, useDrawerProgress, useDrawerStatus, useIsDrawerOpen } from '@react-navigation/drawer';
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 import ChangeNumber from './src/screens/settings/security/ChangeNumber';
@@ -71,14 +72,18 @@ import Settings2 from './src/screens/settings/Settings2';
 import { UserProvider, useUserContext } from './src/context/UserContext';
 import AllUsers from './src/screens/requests/AllUsers';
 import AllRequest from './src/screens/requests/AllRequests';
+import { Neomorph } from 'react-native-neomorph-shadows-fixes';
+import Primary_StatusBar from './src/components/statusbars/Primary_StatusBar';
+import UseScreenFocus from './src/components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const App = props => {
+const App = ({ navigation }) => {
   const { darkThemeActivator, theme, isUserLoggedin } =
     useContext(ThemeContext);
+
   let iconSize = 18;
   //Tab Variables Start
   const reelsIconSize = 19;
@@ -92,7 +97,7 @@ const App = props => {
   const drawerBackgroungColor = theme.drawerColor;
   const activeTintColor = AppColors.black;
   const inActiveTintColor = AppColors.black;
-  const activeBgColor = 'rgba(0,0,0,0.1)';
+  const activeBgColor = 'rgba(0,0,0,0.0)';
   const inActiveBgColor = AppColors.transparent;
   //Drawer Variables End
 
@@ -122,13 +127,23 @@ const App = props => {
   };
 
   const TabScreens = () => {
-    // Animated
-    let progress = useDrawerProgress();
+    const {theme}=useContext(ThemeContext)
+    const drawerStatus = useDrawerStatus();
+    useEffect(() => {
+      if (drawerStatus == 'open') {
+        StatusBar.setBarStyle('dark-content');
+        StatusBar.setBackgroundColor(AppColors.Mauve);
+      } else {
+        StatusBar.setBarStyle('dark-content');
+        StatusBar.setBackgroundColor(AppColors.white);
+      }
+    }, [drawerStatus]);
+    const progress = useDrawerProgress()
     // console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
       transform: [
         { perspective: 1000 },
-        { scale: interpolate(progress.value, [0, 1], [1, 0.7], 'clamp') },
+        { scale: interpolate(progress.value, [0, 1], [1, 0.8], 'clamp') },
         // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
         {
           translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp'),
@@ -136,21 +151,14 @@ const App = props => {
 
       ],
       overflow: 'hidden',
-      // borderRadius:progress.value===1?12:0
-      elevation: 5, // Add elevation for shadow effect
-      shadowColor: 'black', // Set shadow color
-      shadowOffset: {
-        width: 10,  // Change these values as needed
-        height: 10, // Change these values as needed
-      },
-      shadowOpacity: 1, // Change this value as needed
-      shadowRadius: 3, // Change this value as needed
+      borderRadius: progress.value === 1 ? 12 : 0
+
     }));
 
     return (
       <Animated.View style={[animatedStyle, { flex: 1 }]}>
         <Tab.Navigator
-          initialRouteName="Groups"
+          initialRouteName="Chats"
           screenOptions={({ route, focused }) => ({
             headerShown: false,
             tabBarIndicatorStyle: { backgroundColor: 'transparent' },
@@ -239,6 +247,7 @@ const App = props => {
   };
 
   const DrawerScreens = () => {
+
     return (
       <View style={{ flex: 1 }}>
         <Drawer.Navigator
@@ -249,144 +258,152 @@ const App = props => {
             drawerActiveTintColor: activeTintColor,
             drawerInactiveTintColor: inActiveTintColor,
             drawerStyle: {
-              width: wp('50%'),
+              width: wp('55%'),
               backgroundColor: drawerBackgroungColor,
             },
-            drawerLabelStyle: { marginLeft: wp('-6%') },
+            drawerLabelStyle: { fontFamily: FontStyle.regularFont, fontSize: hp('1.7'), marginLeft: wp('13') },
             drawerActiveBackgroundColor: activeBgColor,
             sceneContainerStyle: {
               backgroundColor: drawerBackgroungColor,
             },
-            // drawerHideStatusBarOnOpen: true,
-            // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen
           }}
-          // backBehavior='history'
           initialRouteName="Home"
           drawerContent={props => {
+
             // const { userData } = useUserContext();
             // const parsedUser = JSON.parse(userData._j);
             const { baseUrl, storedUser } = useContext(AppContext);
             console.log('baseurl', baseUrl);
             console.log('appcontext appjs', storedUser);
             return (
-              <View style={{ flex: 1 }}>
-                <DrawerContentScrollView {...props}>
-                  <Animated.View
-                    style={[Containers.centerContainer, { height: hp('25%') }]}>
-                    <Image
-                      source={{
-                        uri: `${baseUrl}${storedUser?.profileImage} `,
-                      }}
-                      style={{
-                        height: wp('25%'),
-                        width: wp('25%'),
-                        borderRadius: wp('100%'),
-                      }}
-                    />
+              <View style={{ flex: 1, justifyContent: 'center' }}>
+                <View style={{ height: hp('70'), width: wp('50'), justifyContent: 'center', marginTop: hp('3') }}>
+                  <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
+                    <View style={{
+                      height: wp('26.5%'),
+                      width: wp('26.5%'),
+                      borderRadius: wp('100%'),
+                      backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', alignSelf: 'center'
+                    }}>
+                      <Image
+                        source={{
+                          uri: `${baseUrl}${storedUser?.profileImage} `,
+                        }}
+                        style={{
+                          height: wp('25%'),
+                          width: wp('25%'),
+                          borderRadius: wp('100%'),
+                          alignSelf: 'center'
+                        }}
+                      />
+                    </View>
                     <Text
-                      style={{ fontSize: hp('3%'), color: AppColors.black }}>
+                      style={{ fontSize: hp('2.5%'), color: AppColors.black, fontFamily: FontStyle.regularFont, marginVertical: 6, textAlign: 'center' }}>
                       {storedUser?.name}
                     </Text>
-                  </Animated.View>
-                  <DrawerItemList {...props} />
-                </DrawerContentScrollView>
-                <TouchableOpacity
-                  onPress={() => {
-                    logoutUser(props);
-                  }}>
-                  <View
-                    style={{
-                      paddingLeft: wp('5%'),
-                      paddingBottom: hp('4%'),
-                      flexDirection: 'row',
+                    <DrawerItemList {...props} />
+                  </DrawerContentScrollView>
+                  <TouchableOpacity
+                    onPress={() => {
+                      logoutUser(props);
                     }}>
-                    <Icons.AntDesign
-                      name="logout"
-                      color={AppColors.black}
-                      size={iconSize}
-                    />
-                    <Text
+                    <View
                       style={{
-                        fontSize: wp('4%'),
-                        fontFamily: FontStyle.regularFont,
-                        color: AppColors.black,
-                        marginLeft: wp('3.5%'),
+                        // paddingLeft: wp('5%'),
+                        // paddingBottom: hp('4%'),
+                        flexDirection: 'row',
+                        alignSelf: 'center',
+                        marginTop: hp('3')
                       }}>
-                      Logout
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                      <Icons.AntDesign
+                        name="logout"
+                        color={AppColors.black}
+                        size={iconSize}
+                      />
+                      <Text
+                        style={{
+                          fontSize: wp('4%'),
+                          fontFamily: FontStyle.regularFont,
+                          color: AppColors.black,
+                          marginLeft: wp('3.5%'),
+                        }}>
+                        Logout
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
             );
           }}>
+
           <Drawer.Screen
             name="Home"
             component={TabScreens}
-            options={{
-              drawerIcon: ({ focused }) => (
-                <Icons.MaterialCommunityIcons
-                  color={focused ? activeTintColor : inActiveTintColor}
-                  name={'home'}
-                  // name={focused ? 'home' : 'ios-home-outline'}
-                  size={iconSize}
-                />
+          // options={{
+          //   drawerIcon: ({ focused }) => (
+          //     <Icons.MaterialCommunityIcons
+          //       color={focused ? activeTintColor : inActiveTintColor}
+          //       name={'home'}
+          //       // name={focused ? 'home' : 'ios-home-outline'}
+          //       size={iconSize}
+          //     />
 
-              ),
-            }}
+          //   ),
+          // }}
           />
           <Drawer.Screen
             name="UserProfile"
             component={UserProfile}
-            options={{
-              drawerIcon: ({ focused }) => (
-                <Icons.MaterialIcons
-                  name={'person'}
-                  color={focused ? activeTintColor : inActiveTintColor}
-                  size={iconSize}
-                />
-              ),
-            }}
+          // options={{
+          //   drawerIcon: ({ focused }) => (
+          //     <Icons.MaterialIcons
+          //       name={'person'}
+          //       color={focused ? activeTintColor : inActiveTintColor}
+          //       size={iconSize}
+          //     />
+          //   ),
+          // }}
           />
           <Drawer.Screen
             name="AboutUs"
             component={AboutUs}
-            options={{
-              drawerIcon: ({ focused }) => (
-                <Icons.Ionicons
-                  name={'ios-information-circle-sharp'}
-                  color={focused ? activeTintColor : inActiveTintColor}
-                  size={iconSize}
-                />
-              ),
-            }}
+          // options={{
+          //   drawerIcon: ({ focused }) => (
+          //     <Icons.Ionicons
+          //       name={'ios-information-circle-sharp'}
+          //       color={focused ? activeTintColor : inActiveTintColor}
+          //       size={iconSize}
+          //     />
+          //   ),
+          // }}
           />
           <Drawer.Screen
             name="Settings"
             component={Settings2}
-            options={{
-              drawerIcon: ({ focused }) => (
-                <Icons.Ionicons
-                  name={'ios-settings-sharp'}
-                  color={focused ? activeTintColor : inActiveTintColor}
-                  size={iconSize}
-                />
-              ),
-            }}
+          // options={{
+          //   drawerIcon: ({ focused }) => (
+          //     <Icons.Ionicons
+          //       name={'ios-settings-sharp'}
+          //       color={focused ? activeTintColor : inActiveTintColor}
+          //       size={iconSize}
+          //     />
+          //   ),
+          // }}
           />
           <Drawer.Screen
             name="Terms And Conditions"
             component={TermsAndConditions}
-            options={{
-              drawerIcon: ({ focused }) => (
-                <Icons.FontAwesome5
-                  name="file-signature"
-                  color={focused ? activeTintColor : inActiveTintColor}
-                  size={iconSize}
-                />
-              )
-            }}
+          // options={{
+          //   drawerIcon: ({ focused }) => (
+          //     <Icons.FontAwesome5
+          //       name="file-signature"
+          //       color={focused ? activeTintColor : inActiveTintColor}
+          //       size={iconSize}
+          //     />
+          //   )
+          // }}
           />
-        </Drawer.Navigator>
+       </Drawer.Navigator>
       </View>
     );
   };

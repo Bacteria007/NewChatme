@@ -8,6 +8,7 @@ import moment from 'moment';
 import AppContext from '../../context/AppContext';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Icons } from '../../assets/Icons';
+import AppColors from '../../assets/colors/Appcolors';
 
 const GroupMsgItem = ({ msgData }) => {
   const { curentUser,storedUser } = useContext(AppContext);
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
   wholeMsgBox: (user) => ({
     flexDirection: 'column',
     width: 'auto',
-    backgroundColor: user ? 'grey' : 'purple',
+    backgroundColor: user ? AppColors.gray : 'purple',
     marginTop: 8,
     marginHorizontal: 10,
     alignSelf: user ? 'flex-end' : 'flex-start',

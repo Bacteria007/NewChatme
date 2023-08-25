@@ -5,17 +5,20 @@ import {
 } from 'react-native-responsive-screen';
 import AppColors from '../../../colors/Appcolors';
 
-const AfterSignUpStyleSheet = StyleSheet.create({
+const ForgetScreenStyle = StyleSheet.create({
   container: (bgcolor)=>({
     flex: 1,
     backgroundColor:bgcolor,
     paddingTop: hp('1'),
-    paddingHorizontal: wp('8'),
+    justifyContent:'center',
+    alignItems:'center',
   }),
+  phoneNoAndCountryContainer:{ flex: 1, width: wp('100'), justifyContent: 'center', alignItems: 'center' },
+  securityQuestionsContainer:{ flex: 1, width: wp('100'), justifyContent:'center', alignItems: 'flex-start',paddingLeft:wp('9') },
   TouchableButtonStyle: {
-    width: wp('30'),
-    borderRadius: wp('20'),
-    height: hp('5.5'),
+    width: wp('83'),
+    borderRadius: wp('1.5'),
+    height: hp('5.7'),
     // width:wp('85'),
     borderColor: AppColors.primary,
     borderWidth: wp('0.25'),
@@ -24,7 +27,7 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     backgroundColor: AppColors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: hp('8'),
+    marginTop: hp('5'),
   },
   TouchableTextStyle: {
     fontSize: wp('5'),
@@ -45,16 +48,17 @@ const AfterSignUpStyleSheet = StyleSheet.create({
   Text2: {
     fontSize: wp('6'),
     fontFamily: 'Poppins-Bold ',
-    color: AppColors.dodgerblue,
+    color: AppColors.primary,
     marginTop: hp('5'),
     marginBottom: hp('2'),
-    textShadowColor: 'red',
-    textShadowOffset: { width: 0.5, height: 0.5 },
-    textShadowRadius: 0.1,
+    // marginLeft:wp('4'),
+    // textShadowColor: 'blue',
+    // textShadowOffset: { width: 0.5, height: 0.5 },
+    // textShadowRadius: 0.1,
   },
   image: {
     width: wp('70%'),
-    height: hp('25%'),
+    height: hp('32%'),
     alignSelf: 'center',
   },
   quesView: {
@@ -65,9 +69,9 @@ const AfterSignUpStyleSheet = StyleSheet.create({
   TextInputContainer: {
     borderBottomWidth: hp('0.1'),
     borderColor: AppColors.primary,
-    width: wp('70'),
+    width: wp('75'),
     alignSelf: 'center',
-    height: hp('5.8'),
+    height: hp('5'),
   },
   text: {
     textAlign: 'center',
@@ -97,4 +101,4 @@ const AfterSignUpStyleSheet = StyleSheet.create({
   },
 });
 
-export default AfterSignUpStyleSheet;
+export default ForgetScreenStyle;
