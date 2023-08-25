@@ -22,6 +22,7 @@ import AppColors from '../../assets/colors/Appcolors';
 import { Icons } from '../../assets/Icons';
 import { Button } from 'react-native-paper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import FontStyle from '../../assets/styles/FontStyle';
 
 const AllRequest = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
@@ -188,15 +189,15 @@ const AllRequest = ({ navigation }) => {
                     <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('35')}}>
                     <TouchableOpacity
                         onPress={() => acceptRequest(item)}
-                        style={{backgroundColor:"green",paddingHorizontal:7,paddingVertical:5,borderRadius:7}}
+                        style={{backgroundColor:AppColors.white,paddingHorizontal:7,paddingVertical:5,borderRadius:7,borderWidth:1,borderColor:AppColors.primary}}
                         >
-                        <Text style={{ color: "white" }}>Accept</Text>
+                        <Text style={{ color:AppColors.primary,fontFamily:FontStyle.regularFont,fontSize:wp('3') }}>Accept</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => rejectRequest(item)}
-                        style={{backgroundColor:"red",paddingHorizontal:7,paddingVertical:5,borderRadius:7}}
+                        style={{backgroundColor:AppColors.white,paddingHorizontal:7,paddingVertical:5,borderRadius:7,borderWidth:1,borderColor:AppColors.primary}}
                         >
-                        <Text style={{ color: "white",textAlign:'center' }}>Reject </Text>
+                        <Text style={{ color:AppColors.primary,fontFamily:FontStyle.regularFont,fontSize:wp('3'),textAlign:'center' }}>Reject </Text>
                     </TouchableOpacity>
                     </View>
                 </Neomorph>

@@ -17,6 +17,7 @@ import FontStyle from '../../assets/styles/FontStyle';
 import Containers from '../../assets/styles/Containers';
 import WebView from 'react-native-webview';
 import GenerateVideoHtml from './ReelsHtmlVideo';
+import { widthPercentageToDP as wp} from 'react-native-responsive-screen';
 
 const Reals = props => {
   //   **********************************           VARIABLES               ****************************
@@ -156,16 +157,16 @@ const Reals = props => {
 
         />
         :
-        <View style={Containers.centerContainer}>
+        <View style={[Containers.centerContainer,{width:wp('60'),alignSelf:'center'}]}>
 
           <Text
             style={{
-              fontSize: 25,
+              fontSize: 22,
               color: 'white',
               textAlign: 'center',
-              fontFamily: FontStyle.boldFont,
+              fontFamily: FontStyle.mediumFont,letterSpacing:2
             }}>
-            Upload a new one by clicking that plus icon ↗️
+            Upload a new one by clicking plus icon 
           </Text>
         </View>
       }
