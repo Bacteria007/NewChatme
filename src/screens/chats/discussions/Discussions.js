@@ -38,13 +38,7 @@ const Discussions = ({ navigation }) => {
   UseScreenFocus(getStoredUserDetails)
   UseScreenFocus(initializeZego)
   UseScreenFocus(stColor)
-  //  const u=globalFunctions.fetchUserId();
-
-  //  useEffect(()=>{
-  //   console.log("-------------",u)
-  //   u
-  //  },[u])
-
+  
   const fetchContactList = async () => {
 
     // console.log("discussion ma ", storedUser.userId)
@@ -65,7 +59,6 @@ const Discussions = ({ navigation }) => {
 
   }
 
-  //  **********************   FINCTION  ***********************************
   const handleSearch = text => {
     setSearchText(text);
     if (text === '') {

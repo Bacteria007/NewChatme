@@ -129,6 +129,8 @@ const UserChatHeader = ({ item, navigation }) => {
             ]}
             isVideoCall={true}
             resourceID={'incoming123'} // Please fill in the resource ID name that has been configured in the ZEGOCLOUD's console here.
+            // icon={20}
+            
           />
 
           <ZegoSendCallInvitationButton

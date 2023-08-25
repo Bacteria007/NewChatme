@@ -9,7 +9,7 @@ import AppColors from '../colors/Appcolors';
 
 const UserChatHeaderStyle = StyleSheet.create({
   containerView: {
-    backgroundColor: AppColors.white,
+    backgroundColor: AppColors.primary,
     height: hp('8%'),
   },
   headerView: {

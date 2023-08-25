@@ -102,13 +102,32 @@ const HomeNeoCards = StyleSheet.create({
     fontSize: 11,
     color: textColor,
   }),
+  lastMsgTime: textColor => ({
+    fontFamily: FontStyle.mediumFont,
+    fontSize: wp('2.5'),
+    color: textColor,
+  }),
   nameAndMsgContainer: {
     flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    width: "auto",
+    // alignItems: 'flex-start',
+    // justifyContent: 'center',
+    // width: "auto",
     // backgroundColor: 'green',
-    paddingHorizontal:14
+    // paddingHorizontal:14,
+    // flex:0.9
+  },
+  nameAndTimeContainer: {
+    flexDirection: 'row',
+    
+  },
+  timeContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    width: "auto",
+    // backgroundColor: 'red',
+    flex:1,
+    padding:5
   },
   // RENDER COMPONENT PROFILE PIC MODAL STYLE START
   modalContainer: {
@@ -142,7 +161,7 @@ dpInModal: {
     paddingRight: 10,
     width: wp('75%'),
   },
-  nameAndTimeContainer: { flexDirection: 'column' },
+  nameAndTimeContainer: { flexDirection: 'row',justifyContent:'center',alignItems:'center' },
 
   timeAndCallType: {
     flexDirection: 'row',

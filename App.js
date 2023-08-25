@@ -97,7 +97,7 @@ const App = ({ navigation }) => {
   const drawerBackgroungColor = theme.drawerColor;
   const activeTintColor = AppColors.black;
   const inActiveTintColor = AppColors.black;
-  const activeBgColor = 'rgba(0,0,0,0.0)';
+  const activeBgColor = 'rgba(255,255,255,0.8)';
   const inActiveBgColor = AppColors.transparent;
   //Drawer Variables End
 
@@ -143,7 +143,7 @@ const App = ({ navigation }) => {
     const animatedStyle = useAnimatedStyle(() => ({
       transform: [
         { perspective: 1000 },
-        { scale: interpolate(progress.value, [0, 1], [1, 0.8], 'clamp') },
+        { scale: interpolate(progress.value, [0, 1], [1, 0.75], 'clamp') },
         // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
         {
           translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp'),
@@ -258,10 +258,11 @@ const App = ({ navigation }) => {
             drawerActiveTintColor: activeTintColor,
             drawerInactiveTintColor: inActiveTintColor,
             drawerStyle: {
-              width: wp('55%'),
+              width: wp('50%'),
               backgroundColor: drawerBackgroungColor,
             },
-            drawerLabelStyle: { fontFamily: FontStyle.regularFont, fontSize: hp('1.7'), marginLeft: wp('13') },
+            drawerLabelStyle: { fontFamily: FontStyle.mediumFont, fontSize: hp('1.6'),marginLeft:-16 },
+            // drawerLabelStyle: { fontFamily: FontStyle.regularFont, fontSize: hp('1.7'), marginLeft: wp('13') },
             drawerActiveBackgroundColor: activeBgColor,
             sceneContainerStyle: {
               backgroundColor: drawerBackgroungColor,
@@ -276,14 +277,15 @@ const App = ({ navigation }) => {
             console.log('baseurl', baseUrl);
             console.log('appcontext appjs', storedUser);
             return (
-              <View style={{ flex: 1, justifyContent: 'center' }}>
-                <View style={{ height: hp('70'), width: wp('50'), justifyContent: 'center', marginTop: hp('3') }}>
+              <View style={{ flex: 1}}>
+                {/* <View style={{ height: hp('70'), width: wp('50'), justifyContent: 'center', marginTop: hp('3') }}> */}
                   <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
+                  <Animated.View style={[Containers.centerContainer, { height: hp('25%') }]}>
                     <View style={{
                       height: wp('26.5%'),
                       width: wp('26.5%'),
                       borderRadius: wp('100%'),
-                      backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', alignSelf: 'center'
+                      backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', alignSelf: 'center',marginTop:hp('5')
                     }}>
                       <Image
                         source={{
@@ -301,37 +303,37 @@ const App = ({ navigation }) => {
                       style={{ fontSize: hp('2.5%'), color: AppColors.black, fontFamily: FontStyle.regularFont, marginVertical: 6, textAlign: 'center' }}>
                       {storedUser?.name}
                     </Text>
+                    </Animated.View>
                     <DrawerItemList {...props} />
                   </DrawerContentScrollView>
                   <TouchableOpacity
-                    onPress={() => {
-                      logoutUser(props);
+                  onPress={() => {
+                    logoutUser(props);
+                  }}>
+                  <View
+                    style={{
+                      paddingLeft: wp('5%'),
+                      paddingBottom: hp('4%'),
+                      flexDirection: 'row',
                     }}>
-                    <View
+                    <Icons.AntDesign
+                      name="logout"
+                      color={AppColors.black}
+                      size={iconSize}
+                    />
+                    <Text
                       style={{
-                        // paddingLeft: wp('5%'),
-                        // paddingBottom: hp('4%'),
-                        flexDirection: 'row',
-                        alignSelf: 'center',
-                        marginTop: hp('3')
+                        fontSize: wp('4%'),
+                        fontFamily: FontStyle.regularFont,
+                        color: AppColors.black,
+                        marginLeft: wp('3.5%'),
                       }}>
-                      <Icons.AntDesign
-                        name="logout"
-                        color={AppColors.black}
-                        size={iconSize}
-                      />
-                      <Text
-                        style={{
-                          fontSize: wp('4%'),
-                          fontFamily: FontStyle.regularFont,
-                          color: AppColors.black,
-                          marginLeft: wp('3.5%'),
-                        }}>
-                        Logout
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
+                      Logout
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              
+                {/* </View> */}
               </View>
             );
           }}>
@@ -339,69 +341,69 @@ const App = ({ navigation }) => {
           <Drawer.Screen
             name="Home"
             component={TabScreens}
-          // options={{
-          //   drawerIcon: ({ focused }) => (
-          //     <Icons.MaterialCommunityIcons
-          //       color={focused ? activeTintColor : inActiveTintColor}
-          //       name={'home'}
-          //       // name={focused ? 'home' : 'ios-home-outline'}
-          //       size={iconSize}
-          //     />
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.MaterialCommunityIcons
+                color={focused ? activeTintColor : inActiveTintColor}
+                name={'home'}
+                // name={focused ? 'home' : 'ios-home-outline'}
+                size={iconSize}
+              />
 
-          //   ),
-          // }}
+            ),
+          }}
           />
           <Drawer.Screen
             name="UserProfile"
             component={UserProfile}
-          // options={{
-          //   drawerIcon: ({ focused }) => (
-          //     <Icons.MaterialIcons
-          //       name={'person'}
-          //       color={focused ? activeTintColor : inActiveTintColor}
-          //       size={iconSize}
-          //     />
-          //   ),
-          // }}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.MaterialIcons
+                name={'person'}
+                color={focused ? activeTintColor : inActiveTintColor}
+                size={iconSize}
+              />
+            ),
+          }}
           />
           <Drawer.Screen
             name="AboutUs"
             component={AboutUs}
-          // options={{
-          //   drawerIcon: ({ focused }) => (
-          //     <Icons.Ionicons
-          //       name={'ios-information-circle-sharp'}
-          //       color={focused ? activeTintColor : inActiveTintColor}
-          //       size={iconSize}
-          //     />
-          //   ),
-          // }}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.Ionicons
+                name={'ios-information-circle-sharp'}
+                color={focused ? activeTintColor : inActiveTintColor}
+                size={iconSize}
+              />
+            ),
+          }}
           />
           <Drawer.Screen
             name="Settings"
             component={Settings2}
-          // options={{
-          //   drawerIcon: ({ focused }) => (
-          //     <Icons.Ionicons
-          //       name={'ios-settings-sharp'}
-          //       color={focused ? activeTintColor : inActiveTintColor}
-          //       size={iconSize}
-          //     />
-          //   ),
-          // }}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.Ionicons
+                name={'ios-settings-sharp'}
+                color={focused ? activeTintColor : inActiveTintColor}
+                size={iconSize}
+              />
+            ),
+          }}
           />
           <Drawer.Screen
             name="Terms And Conditions"
             component={TermsAndConditions}
-          // options={{
-          //   drawerIcon: ({ focused }) => (
-          //     <Icons.FontAwesome5
-          //       name="file-signature"
-          //       color={focused ? activeTintColor : inActiveTintColor}
-          //       size={iconSize}
-          //     />
-          //   )
-          // }}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.FontAwesome5
+                name="file-signature"
+                color={focused ? activeTintColor : inActiveTintColor}
+                size={iconSize}
+              />
+            )
+          }}
           />
        </Drawer.Navigator>
       </View>

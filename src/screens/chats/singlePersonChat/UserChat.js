@@ -6,6 +6,7 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -19,6 +20,7 @@ import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedCha
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
 import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
 import axios from 'axios';
+import AppColors from '../../../assets/colors/Appcolors';
 
 const socket = io.connect('http://192.168.43.145:8888');
 
@@ -107,10 +109,10 @@ const UserChat = props => {
   return (
     <View styles={[UserChatStyle.contianer]}>
       <Primary_StatusBar />
-      <ImageBackground
-        source={require('../../../assets/imges/userChatImages/img6.jpg')}
-        style={{ height: hp('100%'), width: wp('100%'),backgroundColor:"green" }}
-        resizeMode="cover"
+      <View
+        // source={require('../../../assets/imges/userChatImages/img6.jpg')}
+        style={{ height: hp('100%'), width: wp('100%'),backgroundColor:"white" }}
+        // resizeMode="cover"
         >
         {changeHeader != true ? (
           <UserChatHeader item={receiver} navigation={props.navigation} />
@@ -124,6 +126,7 @@ const UserChat = props => {
             }}
           />
         )}
+        <StatusBar barStyle={'dark-content'} backgroundColor={AppColors.primary}/>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ flex: 1 }}
@@ -168,7 +171,7 @@ const UserChat = props => {
             setCurrentMessage={(cm) => { setCurrentMessage(cm) }}
           />
         </KeyboardAvoidingView>
-      </ImageBackground>
+      </View>
     </View>
   );
 };

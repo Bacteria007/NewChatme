@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import HomeNeoCards from "../../assets/styles/homeScreenCardStyles/HomeNeoCards";
 import { ThemeContext } from "../../context/ThemeContext";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
@@ -8,18 +8,39 @@ import { Icons } from "../../assets/Icons";
 import AppColors from "../../assets/colors/Appcolors";
 import ReactNativeModal from "react-native-modal";
 import AppContext from "../../context/AppContext";
+// import 'moment/locale/en'; // Import the locale you need
+import moment from "moment";
+import { isToday, isYesterday } from 'react-native-localize';
+import UseScreenFocus from "../HelperFunctions/AutoRefreshScreen/UseScreenFocus";
 
 const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_item, contacts_item, navigation }) => {
     const { theme } = useContext(ThemeContext);
     const { baseUrl, storedUser } = useContext(AppContext);
     const [profileModal, setProfileModal] = useState(false);
+    const [userLastMsg, setUserLastMsg] = useState('');
+    const [groupLastMsg, setGroupLastMsg] = useState('');
+    const maxLength = 33;
+    const nameMaxLength = 20;
+    // Time format
+    const formatMessageDate = (createdAt) => {
+        const messageDate = moment(createdAt);
+        const today = moment().startOf('day');
+        const yesterday = moment().subtract(1, 'day').startOf('day');
+
+        if (messageDate.isSame(today, 'd')) {
+            return messageDate.format('h:mm A'); // Format time as hour:minutes AM/PM
+        } else if (messageDate.isSame(yesterday, 'd')) {
+            return 'Yesterday';
+        } else {
+            return messageDate.format('DD/MM/YYYY');
+        }
+    }
     const showProfileModal = () => {
         setProfileModal(true);
     };
     const hideProfileModal = () => {
         setProfileModal(false);
     };
-
     const blockContact = async (item) => {
         console.log("discussion ma ", storedUser.userId)
         console.log("discussion ma ", item._id)
@@ -68,7 +89,6 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
         }
 
     }
-
     const handleLongPress = (item) => {
         Alert.alert(
             'Delete Chat', 'All Media and chat history wil be deleted',
@@ -76,19 +96,53 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
             { cancelable: true },
         )
     }
+    const getUserLastMessage = async () => {
+        // console.log("req.query", discussions_item)
 
+        const res = await fetch(`${baseUrl}/userLatestMessage?userId=${storedUser.userId}&receiverId=${discussions_item._id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        const data = await res.json()
+        // console.log("----------", data)
+
+        setUserLastMsg(data);
+    }
+    const getGroupLastMessage = async () => {
+        // console.log("i(((((())))))))))m", groups_item._id)
+        const res = await fetch(`${baseUrl}/groupLatestMessage?groupId=${groups_item._id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        const data = await res.json()
+        setGroupLastMsg(data);
+        // console.log("i(((((())))))))))m", groups_item)
+
+    }
+
+    UseScreenFocus(getGroupLastMessage)
+    UseScreenFocus(getUserLastMessage)
+    useEffect(() => {
+        getUserLastMessage();
+        getGroupLastMessage()
+
+    }, []);
     return (
         <TouchableOpacity
             onPress={() => {
                 if (callingScreen === "Discussions") {
                     console.log("Comming form Discussions", discussions_item)
-                    navigation.navigate('UserChat', { receiver : discussions_item });
+                    navigation.navigate('UserChat', { receiver: discussions_item });
                 }
                 else if (callingScreen === "Groups") {
                     console.log("Comming form Groups")
                     navigation.navigate('GroupChat', { item: groups_item });
                 }
-                
+
             }}
             onLongPress={() => { handleLongPress(discussions_item) }}
         >
@@ -121,15 +175,33 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
 
                     {/* profile name view */}
                     <View style={HomeNeoCards.nameAndMsgContainer}>
-                        <Text
-                            style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                            {name}
-                        </Text>
+                        <View style={HomeNeoCards.nameAndTimeContainer}>
+                            <Text
+                                style={HomeNeoCards.profileName(theme.profileNameColor)}>
+                                {name ? (name.length > nameMaxLength ? name.substring(0, nameMaxLength) + '...' : name) : null}
+
+                            </Text>
+                            <Text
+                                style={HomeNeoCards.lastMsgTime(theme.lastMsgColor)}>
+                                {callingScreen !== 'Groups' ? (userLastMsg ? (formatMessageDate(userLastMsg.createdAt)) : null)
+                                    : (groupLastMsg ? (formatMessageDate(groupLastMsg.createdAt)) : null)}
+                            </Text>
+                        </View>
                         <Text
                             style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
-                            {"yaha last msg"}
+                            {callingScreen !== 'Groups' ? (userLastMsg ? ((userLastMsg.content.length) > maxLength ? userLastMsg.content.substring(0, maxLength) + '...' : userLastMsg.content) : null) : (groupLastMsg ? ((groupLastMsg.text.length) > maxLength ? groupLastMsg.text.substring(0, maxLength) : groupLastMsg.text) : null)}
                         </Text>
                     </View>
+                    {/* <View style={HomeNeoCards.timeContainer}>
+                        <Text
+                            style={HomeNeoCards.lastMsgTime(theme.focusedTabIconsColor)}>
+                            {callingScreen !== 'Groups' ? (userLastMsg ? (formatMessageDate(userLastMsg.createdAt)) : null)
+                                : (groupLastMsg ? (formatMessageDate(groupLastMsg.createdAt)) : null)}
+                        </Text>
+                        <Text style={HomeNeoCards.lastMsgTime(theme.focusedTabIconsColor)}>
+                            {" "}
+                        </Text>
+                    </View> */}
                 </Neomorph>
             </View>
             {/* <View style={{backgroundColor:'rgba(0,0,0,0.3)',height:hp('100'),width:wp('100'),flex:1}}> */}
