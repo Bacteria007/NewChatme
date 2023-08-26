@@ -1,6 +1,6 @@
-import React, {useState, useContext} from 'react';
-import {Text, View, TouchableOpacity, TextInput} from 'react-native';
-import Icon, {Icons} from '../../assets/Icons';
+import React, { useState, useContext, useEffect } from 'react';
+import { Text, View, TouchableOpacity, TextInput } from 'react-native';
+import Icon, { Icons } from '../../assets/Icons';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -8,94 +8,78 @@ import {
 import AppColors from '../../assets/colors/Appcolors';
 import Modal from 'react-native-modal';
 import AppContext from '../../context/AppContext';
-import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
 
-const SelectInfo = ({
-  iconName1,
-  iconType1,
-  title,
-  subtitle,
-  iconName2,
-  props,
-}) => {
-  //'''''''''''''''
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/ProfileScreenStyleSheet';
 
-  // const deviceWidth = Dimensions.get("window").width;
-  // const deviceHeight = Platform.OS === "ios"
-  //   ? Dimensions.get("window").height
-  //   : require("react-native-extra-dimensions-android").get(
-  //       "REAL_WINDOW_HEIGHT"
-  //     );
-
-  // sizes
-  const titlefontsize = wp('3.5%');
-  const selectedinfofontsize = wp('4%');
+const SelectInfo = ({ iconName2, props }) => {
   const modalfontsize = wp('4.6%');
-  const subtitlefontsize = wp('3%');
   const iconSize = wp('5.5%');
-  //colors
   const selectedTextColor = 'black';
   const titleTextColor = 'grey';
-  //
+
   const {
-    aboutOfUserProfile,
-    storeUserAbout,
     userName,
-    userPhoneNumber,
+    storedUser,
     storeUserName,
-    storeUserPhone,
+    baseUrl,
   } = useContext(AppContext);
-  const [userinput, setUserinput] = useState('');
+
+  const [userinput, setUserinput] = useState(userName);
   const [isModalOpened, setIsModalOpened] = useState(false);
+
+  const StoreUpdatedNameInDb = () => {
+    const formData = new FormData();
+    formData.append('_id', storedUser.userId);
+    formData.append('name', userinput);
+    fetch(`${baseUrl}/updateProfileName`, {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Backend sy result aya', data);
+        storeUserName(data.result.name);
+        AsyncStorage.getItem('user').then(userData => {
+          if (userData) {
+            const existingData = JSON.parse(userData);
+            const updatedData = {
+              ...existingData,
+              name: data.result.name,
+            };
+            console.log('async updatedion chli', updatedData);
+            AsyncStorage.setItem('user', JSON.stringify(updatedData));
+          }
+        });
+      })
+      .catch(error => console.log('res error', error));
+  };
+
+  useEffect(() => {
+    let userNaame = storedUser.name;
+    storeUserName(userNaame);
+  }, []);
+  useEffect(() => {
+    setUserinput(userName);
+  }, [userName]);
   return (
-    // for other data and line
     <View>
-      {/* for icons and other data */}
-      <View style={{marginTop: wp('2.5%')}}>
+      <View style={{ marginTop: hp('0.8%') }}>
         <TouchableOpacity
-          //   activeOpacity={1}
           onPress={() => {
-            if (title == 'About') {
-              props.navigation.navigate('About');
-            } else if (title == 'Phone') {
-              props.navigation.navigate('Phone');
-            } else if (title == 'Name') {
-              setIsModalOpened(true);
-            }
+            setIsModalOpened(true);
           }}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-            <Icon
-              type={iconType1}
-              name={iconName1}
-              size={iconSize}
-              color={titleTextColor}
-              style={{marginLeft: wp('0.3%')}}
-            />
-            <View style={{flexDirection: 'column', width: wp('65%')}}>
-              <Text style={{fontSize: titlefontsize, color: titleTextColor}}>
-                {title}
-              </Text>
-
-              <>
-                <Text
-                  style={{
-                    fontSize: selectedinfofontsize,
-                    color: selectedTextColor,
-                  }}>
-                  {userName}
-                </Text>
-                <Text
-                  style={{fontSize: subtitlefontsize, color: titleTextColor}}>
-                  {subtitle}
-                </Text>
-              </>
-            </View>
-
+          <View style={{ marginLeft: wp('2.5') }}>
             <Icon
               type={Icons.MaterialCommunityIcons}
               name={iconName2}
               size={iconSize}
-              color={titleTextColor}
+              color={AppColors.black}
               // style={{margin: 15}}
             />
           </View>
@@ -109,78 +93,40 @@ const SelectInfo = ({
           onBackdropPress={() => {
             setIsModalOpened(false);
           }}
-          animationIn="slideInUp"
-          animationOut="slideOutDown"
           style={{
             backgroundColor: 'transparent',
             margin: 0,
             justifyContent: 'flex-end',
           }}>
-          <View
-            style={{
-              backgroundColor: 'white',
-              height: hp('25%'),
-              justifyContent: 'space-around',
-            }}>
+          <View style={[ProfileScreenStyleSheet.ModalDesign]}>
             <Text
               style={{
                 fontSize: modalfontsize,
                 color: selectedTextColor,
                 margin: wp('3%'),
               }}>
-              Enter Your Name
+              Edit Your Name
             </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                // padding: 10,
-                // backgroundColor: 'orange',
-                // width: wp('100%'),
-                margin: wp('3%'),
-              }}>
+            <View style={[ProfileScreenStyleSheet.ViewStyle]}>
               <TextInput
-                autoFocus={true}
                 value={userinput}
                 cursorColor={AppColors.primary}
                 onChangeText={text => {
                   setUserinput(text);
                 }}
                 selectTextOnFocus={true}
-                style={{
-                  borderBottomWidth: wp('0.1%'),
-                  borderBottomColor: AppColors.primary,
-                  width: wp('86%'),
-                  // padding: 5,
-                }}
+                style={[ProfileScreenStyleSheet.TextInputStyle]}
                 placeholderTextColor={titleTextColor}
               />
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                // backgroundColor:"blue",
-                height: hp('6%'),
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                  // backgroundColor:"green",
-                  width: wp('40%'),
-                  // marginRight: wp('2%'),       //---------------YE
-                }}>
+            <View style={[ProfileScreenStyleSheet.innerView1]}>
+              <View style={[ProfileScreenStyleSheet.InnerView2]}>
                 <TouchableOpacity
                   onPress={() => {
                     setIsModalOpened(false);
-                    storeUserName(userName);
+                    setUserinput(userName);
                   }}
-                  style={{
-                    // backgroundColor: 'red',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+                  style={[ProfileScreenStyleSheet.TouchableContent]}>
                   <Text
                     style={{
                       fontSize: modalfontsize,
@@ -192,13 +138,9 @@ const SelectInfo = ({
                 <TouchableOpacity
                   onPress={() => {
                     setIsModalOpened(false);
-                    storeUserName(userinput);
+                    StoreUpdatedNameInDb();
                   }}
-                  style={{
-                    // backgroundColor: 'yellow',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+                  style={[ProfileScreenStyleSheet.TouchableContent]}>
                   <Text
                     style={{
                       fontSize: modalfontsize,

@@ -36,7 +36,7 @@ import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
 const AfterSignUpProfileScreen = ({ navigation }) => {
-  const { language, baseUrl, storedUser, getStoredUserDetails, selectedImageUri, storeImageUri } = useContext(AppContext);
+  const { language, baseUrl, storedUser,storeUserName, getStoredUserDetails, selectedImageUri, storeImageUri } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
 
   const [name, setName] = useState('');
@@ -274,6 +274,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
               style={AfterSignUpStyleSheet.TextInputContainer}
               onChangeText={value => {
                 setName(value);
+                storeUserName(value)
               }}
               autoCapitalize='none'
             />
