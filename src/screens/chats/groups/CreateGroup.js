@@ -157,7 +157,7 @@ const CreateGroup = ({ navigation }) => {
           )}
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-            <View style={HomeNeoCards.nameAndMsgContainer}>
+            <View style={HomeNeoCards.callNameAndTimeContainer}>
               <Text
                 style={HomeNeoCards.profileName(theme.profileNameColor)}>
                 {item.name}
@@ -239,8 +239,8 @@ const CreateGroup = ({ navigation }) => {
                 {selectedMembers.map(member => {
                   return (
                     <View key={member._id} style={styles.selectedMember}>
-                      <Text>{member.name}</Text>
-                      <Text>{member.phoneNo}</Text>
+                      <Text style={{fontFamily:FontStyle.mediumFont,fontSize:wp('3'),color:AppColors.primary}}>{member.name.length>7?member.name.substring(0,7)+'..':member.name}</Text>
+                      <Text style={{fontFamily:FontStyle.mediumFont,fontSize:wp('2.5'),color:AppColors.coolgray}}>{member.phoneNo}</Text>
                     </View>
                   );
                 })}
@@ -342,9 +342,9 @@ const styles = StyleSheet.create({
     elevation: 4,
   }),
   selectedMember: {
-    height: hp('12'),
-    width: hp('12'),
-    borderRadius: hp('12'),
+    height: hp('10'),
+    width: hp('10'),
+    borderRadius: hp('5'),
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
