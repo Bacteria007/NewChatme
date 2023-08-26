@@ -8,9 +8,10 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const ChangeNumberStyle = StyleSheet.create({
-  mainViewStyle: {
+  mainViewStyle: (bgcolor)=>({
     paddingHorizontal: wp('6%'),
-  },
+backgroundColor:bgcolor
+  }),
   headTextStyle: {
     fontSize: wp('4.7%'),
     color: AppColors.black,

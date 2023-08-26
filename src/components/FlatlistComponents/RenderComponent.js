@@ -8,10 +8,9 @@ import { Icons } from "../../assets/Icons";
 import AppColors from "../../assets/colors/Appcolors";
 import ReactNativeModal from "react-native-modal";
 import AppContext from "../../context/AppContext";
-// import 'moment/locale/en'; // Import the locale you need
 import moment from "moment";
-import { isToday, isYesterday } from 'react-native-localize';
 import UseScreenFocus from "../HelperFunctions/AutoRefreshScreen/UseScreenFocus";
+import FontStyle from "../../assets/styles/FontStyle";
 
 const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_item, contacts_item, navigation }) => {
     const { theme } = useContext(ThemeContext);
@@ -19,7 +18,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
     const [profileModal, setProfileModal] = useState(false);
     const [userLastMsg, setUserLastMsg] = useState('');
     const [groupLastMsg, setGroupLastMsg] = useState('');
-    const maxLength = 33;
+    const maxLength = 25;
     const nameMaxLength = 20;
     // Time format
     const formatMessageDate = (createdAt) => {
@@ -120,7 +119,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
         })
         const data = await res.json()
         setGroupLastMsg(data);
-        // console.log("i(((((())))))))))m", groups_item)
+        // console.log("i(((((())))))))))m", data)
 
     }
 
@@ -189,22 +188,17 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                         </View>
                         <Text
                             style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
-                            {callingScreen !== 'Groups' ? (userLastMsg ? ((userLastMsg.content.length) > maxLength ? userLastMsg.content.substring(0, maxLength) + '...' : userLastMsg.content) : null) : (groupLastMsg ? ((groupLastMsg.text.length) > maxLength ? groupLastMsg.text.substring(0, maxLength) : groupLastMsg.text) : null)}
+                            {callingScreen !== 'Groups' ? (userLastMsg ? ((userLastMsg.content.length) > maxLength ? userLastMsg.content.substring(0, maxLength) + '...' : userLastMsg.content) : null) : (groupLastMsg ? ((groupLastMsg.text.length) > maxLength ?
+                                <Text>
+                                    <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name}{": "}</Text>
+                                    {groupLastMsg.text.substring(0, maxLength) + '...'}</Text> :
+                                <Text>
+                                    <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name}{": "}</Text>
+                                    {groupLastMsg.text}</Text>) : null)}
                         </Text>
                     </View>
-                    {/* <View style={HomeNeoCards.timeContainer}>
-                        <Text
-                            style={HomeNeoCards.lastMsgTime(theme.focusedTabIconsColor)}>
-                            {callingScreen !== 'Groups' ? (userLastMsg ? (formatMessageDate(userLastMsg.createdAt)) : null)
-                                : (groupLastMsg ? (formatMessageDate(groupLastMsg.createdAt)) : null)}
-                        </Text>
-                        <Text style={HomeNeoCards.lastMsgTime(theme.focusedTabIconsColor)}>
-                            {" "}
-                        </Text>
-                    </View> */}
                 </Neomorph>
             </View>
-            {/* <View style={{backgroundColor:'rgba(0,0,0,0.3)',height:hp('100'),width:wp('100'),flex:1}}> */}
             <ReactNativeModal
                 visible={profileModal}
                 coverScreen={true}
@@ -217,6 +211,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
             >
                 <View style={HomeNeoCards.modalView}>
                     {dp == null ? (
+
                         <View style={HomeNeoCards.dpVew}>
                             <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
                                 {callingScreen === 'Discussions' || callingScreen === 'Contacts' ? (
@@ -227,13 +222,26 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                             </View>
                         </View>
                     ) : (
-                        <Image source={{ uri: `${baseUrl}${dp}` }} style={HomeNeoCards.dpInModal} />
+                        <View>
+                            <View style={HomeNeoCards.dpHeader(theme.backgroundColor)}>
+                                <Text
+                                    style={HomeNeoCards.profileName(theme.profileNameColor)}>
+                                    {name ? (name.length > nameMaxLength ? name.substring(0, nameMaxLength) + '...' : name) : null}
+
+                                </Text>
+                            </View>
+                            <Image source={{ uri: `${baseUrl}${dp}` }} style={HomeNeoCards.dpInModal} />
+                        </View>
                     )}
                 </View>
             </ReactNativeModal>
-            {/* </View> */}
+
         </TouchableOpacity>
     );
 };
 
 export default RenderComponent;
+
+const styles = StyleSheet.create({
+    
+})

@@ -12,7 +12,7 @@ import {
 } from 'react-native-responsive-screen';
 import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 import { Icons } from '../../../assets/Icons';
-import Primary_StatusBar from '../../statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../statusbars/Primary_StatusBar';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { Appbar, Surface } from 'react-native-paper';
 

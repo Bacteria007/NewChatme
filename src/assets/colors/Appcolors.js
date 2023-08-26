@@ -4,6 +4,7 @@ const AppColors = {
   orange: "#EB5703",
   purple:"purple",
   white: 'white',
+  smokeWhite: '#F5F5F5',
   black: 'black',
   gray: 'gray',
   bgprimary:'#fff',
@@ -17,6 +18,7 @@ const AppColors = {
   tab: 'rgba(243,237,245,1)',
   darkTheme: '#0D0D0D',
   darkThemeContent: 'rgba(255, 255, 255,0.7)',
+  darkgray: '#5A5A5A',
   gray: 'gray',
   tomato: '#dd5f56',
   

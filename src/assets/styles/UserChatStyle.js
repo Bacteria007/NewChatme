@@ -11,11 +11,14 @@ const UserChatStyle = StyleSheet.create({
   contianer: {
     flex: 1,
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor:AppColors.white
+    
   },
   container2: {
     flex: 1,
-    padding: 3,
+    padding: 4,
+    backgroundColor:AppColors.white
   },
   messagesContainer: {
     flexGrow: 1,
@@ -23,12 +26,14 @@ const UserChatStyle = StyleSheet.create({
   },
   userMessageContainer: {
     alignSelf: 'flex-end',
-    backgroundColor: '#DCF8C6',
+    backgroundColor: AppColors.tab,
+    // backgroundColor: '#DCF8C6',
     borderRadius: 8,
     padding: 8,
     marginBottom: 8,
     maxWidth: '70%',
-    marginRight:wp('1')
+    marginRight:wp('1'),
+    elevation:4
   },
   userMessageText: {
     color: 'black',
@@ -39,12 +44,15 @@ const UserChatStyle = StyleSheet.create({
   },
   otherMessageContainer: {
     alignSelf: 'flex-start',
-    backgroundColor: '#E5E5EA',
+    backgroundColor:AppColors.Lilac,
+    // backgroundColor: '#E5E5EA',
     borderRadius: 8,
     padding: 8,
     marginBottom: 8,
     maxWidth: '70%',
-    marginLeft:wp('1')
+    marginLeft:wp('1'),
+    elevation:4
+
   },
   otherMessageText: {
     color: 'black',

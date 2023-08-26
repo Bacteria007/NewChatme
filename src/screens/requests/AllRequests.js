@@ -9,7 +9,7 @@ import {
     Alert, ActivityIndicator
 } from 'react-native';
 import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
-import Primary_StatusBar from '../../components/statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
 import RenderComponent from '../../components/FlatlistComponents/RenderComponent';
 import { ThemeContext } from '../../context/ThemeContext';
 import Containers from '../../assets/styles/Containers';
@@ -61,7 +61,7 @@ const AllRequest = ({ navigation }) => {
         }
 
 
-    };
+    }
     const fetchPendingRequest = async () => {
         try {
             const result = await fetch(`${baseUrl}/pendingRequests?userId=${storedUser.userId}`, {
@@ -99,7 +99,6 @@ const AllRequest = ({ navigation }) => {
                 console.log('error fetching req.........', err)
             })
     }
-
     const acceptRequest = async (contact) => {
         console.log("contact in accept", contact)
         try {
@@ -124,8 +123,7 @@ const AllRequest = ({ navigation }) => {
         } catch (error) {
             console.log('Network request failed', error);
         }
-    };
-
+    }
     const rejectRequest = async (contact) => {
 
         // console.log("contact in reject", contact)
@@ -151,8 +149,7 @@ const AllRequest = ({ navigation }) => {
         } catch (error) {
             console.log('Error rejecting request', error);
         }
-    };
-
+    }
     const renderPeople = (item) => {
 
         return (
@@ -187,17 +184,22 @@ const AllRequest = ({ navigation }) => {
                         </View>
                     </View>
                     <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('35')}}>
+                   
                     <TouchableOpacity
                         onPress={() => acceptRequest(item)}
-                        style={{backgroundColor:AppColors.white,paddingHorizontal:7,paddingVertical:5,borderRadius:7,borderWidth:1,borderColor:AppColors.primary}}
+                        style={{
+                            // backgroundColor:AppColors.Mauve,
+                            paddingHorizontal:7,paddingVertical:5,borderRadius:7}}
                         >
-                        <Text style={{ color:AppColors.primary,fontFamily:FontStyle.regularFont,fontSize:wp('3') }}>Accept</Text>
+                        <Text style={{ color:"green",fontFamily:FontStyle.mediumFont,fontSize:wp('3') }}>Accept</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => rejectRequest(item)}
-                        style={{backgroundColor:AppColors.white,paddingHorizontal:7,paddingVertical:5,borderRadius:7,borderWidth:1,borderColor:AppColors.primary}}
+                        style={{
+                            // backgroundColor:"#eadff0",
+                            paddingHorizontal:7,paddingVertical:5,borderRadius:7}}
                         >
-                        <Text style={{ color:AppColors.primary,fontFamily:FontStyle.regularFont,fontSize:wp('3'),textAlign:'center' }}>Reject </Text>
+                        <Text style={{ color:'red',fontFamily:FontStyle.mediumFont,fontSize:wp('3'),textAlign:'center' }}>Reject </Text>
                     </TouchableOpacity>
                     </View>
                 </Neomorph>

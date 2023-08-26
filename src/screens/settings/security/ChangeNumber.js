@@ -1,24 +1,17 @@
-import {View, Text} from 'react-native';
-import React, {useState} from 'react';
+import { View, Text } from 'react-native';
+import React, { useContext } from 'react';
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
-import {TextInput} from 'react-native-gesture-handler';
-import AppColors from '../../../assets/colors/Appcolors';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-import FontStyle from '../../../assets/styles/FontStyle';
-import Icon, {Icons} from '../../../assets/Icons';
 import LongButton from '../../../components/Buttons/LongButton';
 import ChangeNumberStyle from '../../../assets/styles/ChangeNumberStyle';
 import TextInputForChangeNumber from '../../../components/TextInputs/TextInputForChangeNumber';
+import { ThemeContext } from '../../../context/ThemeContext';
 
-const ChangeNumber = ({navigation}) => {
-
+const ChangeNumber = ({ navigation }) => {
+  const { theme } = useContext(ThemeContext)
   return (
-    <View>
+    <View style={{ backgroundColor: 'white', flex: 1 }}>
       <InnerScreensHeader navigation={navigation} screenName="Change number" />
-      <View style={[ChangeNumberStyle.mainViewStyle]}>
+      <View style={[ChangeNumberStyle.mainViewStyle(theme.backgroundColor)]}>
         <Text
           style={[ChangeNumberStyle.headTextStyle]}>
           Enter your old phone number with country code:
@@ -31,9 +24,8 @@ const ChangeNumber = ({navigation}) => {
         <TextInputForChangeNumber />
         <LongButton navigation={navigation} />
       </View>
-
     </View>
+
   );
 };
-
 export default ChangeNumber;

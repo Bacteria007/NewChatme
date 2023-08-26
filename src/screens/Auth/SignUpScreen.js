@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import SignUpStyleSheet from '../../assets/styles/AuthStyleSheet/SignUpStyleSheet/SignUpStyleSheet';
-import Status_bar from '../../components/statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
 import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -115,10 +115,7 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <View style={SignUpStyleSheet.container(theme.backgroundColor)}>
-      <Status_bar
-        darkModeBgColor={'black'}
-        lightModeBgColor={AppColors.primary}
-      />
+      <Primary_StatusBar/>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement

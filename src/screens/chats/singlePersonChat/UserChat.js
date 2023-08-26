@@ -18,9 +18,10 @@ import UserChatInput from '../../../components/ChatInput/UserChatInput';
 import AppContext from '../../../context/AppContext';
 import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
-import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
+import { Primary_StatusBar, UserChatStatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import axios from 'axios';
 import AppColors from '../../../assets/colors/Appcolors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const socket = io.connect('http://192.168.43.145:8888');
 
@@ -38,7 +39,7 @@ const UserChat = props => {
   const { receiver } = props.route.params;
   const apiKey = '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';
 
- 
+
   const DeleteMessage = async msgId => {
     const formData = new FormData();
     formData.append('_id', msgId);
@@ -107,72 +108,72 @@ const UserChat = props => {
     // }
   })
   return (
-    <View styles={[UserChatStyle.contianer]}>
-      <Primary_StatusBar />
-      <View
-        // source={require('../../../assets/imges/userChatImages/img6.jpg')}
-        style={{ height: hp('100%'), width: wp('100%'),backgroundColor:"white" }}
-        // resizeMode="cover"
+      <View styles={[UserChatStyle.contianer]}>
+        <View
+          // source={require('../../../assets/imges/userChatImages/chatbg3.jpg')}
+          style={{ height: hp('100%'), width: wp('100%') }}
+          // resizeMode="cover"
         >
-        {changeHeader != true ? (
-          <UserChatHeader item={receiver} navigation={props.navigation} />
-        ) : (
-          <ChangedChatHeader
-            msgId={msgId}
-            navigation={props.navigation}
-            setChangeHeader={setChangeHeader}
-            DeleteMessage={() => {
-              DeleteMessage(msgId);
-            }}
-          />
-        )}
-        <StatusBar barStyle={'dark-content'} backgroundColor={AppColors.primary}/>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={{ flex: 1 }}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
-          <View style={[UserChatStyle.container2]} ref={scrollRef}>
-            <FlatList
-              ref={{ flatListRef,scrollRef }}
-              data={messageList}
-              // onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
+          {changeHeader != true ? (
+            <UserChatHeader item={receiver} navigation={props.navigation} />
 
-              renderItem={({ item }) => (
-                <RenderChats
-                  msgItem={item}
-                  receiver={receiver}
-                  setChangeHeader={setChangeHeader}
-                  setMsgId={setMsgId}
-                  document={document}
-                />
-              )}
-              contentContainerStyle={[UserChatStyle.messagesContainer]}
-              keyExtractor={(item, index) => index.toString()}
-              onContentSizeChange={scrollingStop}
-            // onContentSizeChange={() =>{
-            //   flatListRef.current.scrollToEnd({ animated: true }),
-
-            //   scrollRef.current?.scrollToEnd({ animated: true })}
-            // }
-            // onLayout={() =>
-            //   flatListRef.current.scrollToEnd({ animated: true })
-            // }
+          ) : (
+            <ChangedChatHeader
+              msgId={msgId}
+              navigation={props.navigation}
+              setChangeHeader={setChangeHeader}
+              DeleteMessage={() => {
+                DeleteMessage(msgId);
+              }}
             />
-          </View>
-          <UserChatInput
-            receiver={receiver}
-            socket={socket}
-            setMessageList={(ml) => { setMessageList(ml) }}
-            setImagMessage={setImagMessage}
-            imagMessage={imagMessage}
-            setDocument={(doc) => { setDocument(doc) }}
-            currentMessage={currentMessage}
-            setCurrentMessage={(cm) => { setCurrentMessage(cm) }}
-          />
-        </KeyboardAvoidingView>
+          )}
+          <StatusBar barStyle={'dark-content'} backgroundColor={AppColors.white} />
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            <View style={[UserChatStyle.container2]} ref={scrollRef}>
+              <FlatList
+                ref={{ flatListRef, scrollRef }}
+                data={messageList}
+                // onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
+
+                renderItem={({ item }) => (
+                  <RenderChats
+                    msgItem={item}
+                    receiver={receiver}
+                    setChangeHeader={setChangeHeader}
+                    setMsgId={setMsgId}
+                    document={document}
+                  />
+                )}
+                contentContainerStyle={[UserChatStyle.messagesContainer]}
+                keyExtractor={(item, index) => index.toString()}
+                onContentSizeChange={scrollingStop}
+              // onContentSizeChange={() =>{
+              //   flatListRef.current.scrollToEnd({ animated: true }),
+
+              //   scrollRef.current?.scrollToEnd({ animated: true })}
+              // }
+              // onLayout={() =>
+              //   flatListRef.current.scrollToEnd({ animated: true })
+              // }
+              />
+            </View>
+            <UserChatInput
+              receiver={receiver}
+              socket={socket}
+              setMessageList={(ml) => { setMessageList(ml) }}
+              setImagMessage={setImagMessage}
+              imagMessage={imagMessage}
+              setDocument={(doc) => { setDocument(doc) }}
+              currentMessage={currentMessage}
+              setCurrentMessage={(cm) => { setCurrentMessage(cm) }}
+            />
+          </KeyboardAvoidingView>
+        </View>
       </View>
-    </View>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -9,8 +9,11 @@ import AppColors from '../colors/Appcolors';
 
 const UserChatHeaderStyle = StyleSheet.create({
   containerView: {
-    backgroundColor: AppColors.primary,
+    backgroundColor: AppColors.white,
     height: hp('8%'),
+    // borderBottomWidth:1,
+    // borderBottomColor:'grey'
+    // elevation: 4,
   },
   headerView: {
     flexDirection: 'row',
@@ -19,16 +22,18 @@ const UserChatHeaderStyle = StyleSheet.create({
   },
   leftview: {
     flexDirection: 'row',
-    width: wp('34%'),
+    width: wp('42%'),
     height: hp('8%'),
     justifyContent: 'space-between',
   },
-  rightView:{
+  rightView: {
     flexDirection: 'row',
-    width: wp('33%'),
-    justifyContent: 'space-between',
+    // width:"auto",
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    // backgroundColor:'red'
   },
-  leftInnerView:{
+  leftInnerView: {
     flexDirection: 'row',
     paddingTop: hp('1%'),
     height: hp('8%'),
@@ -40,23 +45,28 @@ const UserChatHeaderStyle = StyleSheet.create({
     backgroundColor: AppColors.black,
     borderRadius: 100,
     marginTop: hp('0.6%'),
+    marginLeft: 10,
   },
   dpImageStyle: {
     height: hp('5%'),
     width: hp('5%'),
     borderRadius: 100,
   },
-  profileNameContainerStyle: {marginLeft: wp('2%'),justifyContent:'center',alignItems:'center'},
+  profileNameContainerStyle: {
+    marginLeft: wp('2%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   profileNameTextStyle: {
     fontSize: wp('6%'),
     color: AppColors.black,
-    marginBottom:9
+    marginBottom: 9,
   },
   profileStatusStyle: {
     color: AppColors.black,
     fontSize: wp('3'),
+    //  backgroundColor:'red'
   },
-
 });
 
 export default UserChatHeaderStyle;
