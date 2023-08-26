@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/LogInStyleSheet';
-import Status_bar from '../../components/statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
 import AppColors from '../../assets/colors/Appcolors';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { Snackbar } from 'react-native-paper';
@@ -107,10 +107,7 @@ const LogInScreen = ({ navigation }) => {
 
   return (
     <View style={LogInStyleSheet.container(theme.backgroundColor)}>
-      <Status_bar
-        darkModeBgColor={'black'}
-        lightModeBgColor={AppColors.primary}
-      />
+      <Primary_StatusBar/>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}

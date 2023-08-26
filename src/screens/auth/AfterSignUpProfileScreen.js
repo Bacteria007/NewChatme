@@ -14,7 +14,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import AfterSignUpStyleSheet from '../../assets/styles/AuthStyleSheet/AfterSignUpStyleSheet/AfterSignUpStyleSheet';
-import Primary_StatusBar from '../../components/statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
 import Appcolors from '../../assets/colors/Appcolors';
 import {
   widthPercentageToDP as wp,

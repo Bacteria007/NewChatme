@@ -80,5 +80,4 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
     </TouchableOpacity>
   );
 };
-
 export default RenderChats

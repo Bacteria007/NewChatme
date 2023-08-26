@@ -3,23 +3,20 @@ import {
   FlatList,
   View,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 import { ThemeContext } from '../../../context/ThemeContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import AppContext from '../../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
 import RenderComponent from '../../../components/FlatlistComponents/RenderComponent';
 import BotDiscussion from './BotDscussion';
-import HeaderNew from '../../../components/Headers/AppHeaders/HeaderNew';
-import AppSubHeader from '../../../components/Headers/AppHeaders/AppSubHeader';
-import PushNotification from "react-native-push-notification";
 import UseScreenFocus from '../../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import GlobalFunction from '../../../components/HelperFunctions/GlobalApiz/GlobalFunc';
 import { initializeZego } from '../../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
 import AppColors from '../../../assets/colors/Appcolors';
-import { StatusBar } from 'react-native';
+import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
@@ -30,15 +27,15 @@ const Discussions = ({ navigation }) => {
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const globalFunctions = GlobalFunction()
   const [contactList, setContactList] = useState([]);
-  
+
   const [statusbarColor, setStatusbarColor] = useState(AppColors.white);
-  const stColor=()=>{
+  const stColor = () => {
     setStatusbarColor(AppColors.white)
   }
   UseScreenFocus(getStoredUserDetails)
   UseScreenFocus(initializeZego)
   UseScreenFocus(stColor)
-  
+
   const fetchContactList = async () => {
 
     // console.log("discussion ma ", storedUser.userId)
@@ -84,23 +81,25 @@ const Discussions = ({ navigation }) => {
   }, [contactList]);
 
   return (
-
-    <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
-      <Primary_StatusBar/>
-      <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <BotDiscussion navigation={navigation} />
+    <SafeAreaView style={{flex:1}}>
+      <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
+        <Primary_StatusBar />
+        <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <BotDiscussion navigation={navigation} />
+        </View>
+        <FlatList
+          style={{ marginTop: 10 }}
+          ref={flatListRef}
+          showsVerticalScrollIndicator={false}
+          data={searchedChat == '' ? contactList : searchedChat}
+          renderItem={({ item }) => <RenderComponent name={item.name} dp={item.profileImage} callingScreen={"Discussions"} discussions_item={item} navigation={navigation} />}
+          ListFooterComponent={globalFunctions.renderFooter(flatListRef, contactList)}
+        />
       </View>
-      <FlatList
-        style={{ marginTop: 10 }}
-        ref={flatListRef}
-        showsVerticalScrollIndicator={false}
-        data={searchedChat == '' ? contactList : searchedChat}
-        renderItem={({ item }) => <RenderComponent name={item.name} dp={item.profileImage} callingScreen={"Discussions"} discussions_item={item} navigation={navigation} />}
-        ListFooterComponent={globalFunctions.renderFooter(flatListRef, contactList)}
-      />
-    </View>
+    </SafeAreaView>
   );
+
 };
 
 export default Discussions;

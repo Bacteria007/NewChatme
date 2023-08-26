@@ -1,22 +1,8 @@
 import 'react-native-gesture-handler';
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  Image,
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-  StatusBar,
-} from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import Animated, {
-  interpolate,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
-// SCREENS
+import {Image,View,Text,TouchableOpacity,Alert,StatusBar,} from 'react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import Animated, {  interpolate,  useAnimatedStyle,} from 'react-native-reanimated';
 import Reels from './src/screens/reels/Reels';
 import Calls from './src/screens/calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
@@ -28,7 +14,6 @@ import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
 import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
-
 import { Icons } from './src/assets/Icons'; // Navigation
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -54,27 +39,18 @@ import Theme from './src/screens/settings/accountPreferences/Theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ForgetPasswordScreen from './src/screens/auth/ForgetPasswordScreen';
 import { LogBox } from 'react-native';
-import AddContact from './src/screens/contacts/AddContact';
 import FontStyle from './src/assets/styles/FontStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
-import {
-  ZegoCallInvitationDialog,
-  ZegoUIKitPrebuiltCallWaitingScreen,
-  ZegoUIKitPrebuiltCallInCallScreen,
-} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import {  ZegoCallInvitationDialog,  ZegoUIKitPrebuiltCallWaitingScreen,  ZegoUIKitPrebuiltCallInCallScreen,} from '@zegocloud/zego-uikit-prebuilt-call-rn';
 import CreateGroup from './src/screens/chats/groups/CreateGroup';
 import Apis from './src/components/HelperFunctions/GlobalApiz/Apis';
 import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
 import Settings2 from './src/screens/settings/Settings2';
-import { UserProvider, useUserContext } from './src/context/UserContext';
 import AllUsers from './src/screens/requests/AllUsers';
 import AllRequest from './src/screens/requests/AllRequests';
-import { Neomorph } from 'react-native-neomorph-shadows-fixes';
-import Primary_StatusBar from './src/components/statusbars/Primary_StatusBar';
-import UseScreenFocus from './src/components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -133,7 +109,7 @@ const App = ({ navigation }) => {
       if (drawerStatus == 'open') {
         StatusBar.setBarStyle('dark-content');
         StatusBar.setBackgroundColor(AppColors.Mauve);
-      } else {
+      } else if(drawerStatus=='closed'){
         StatusBar.setBarStyle('dark-content');
         StatusBar.setBackgroundColor(AppColors.white);
       }
@@ -151,7 +127,7 @@ const App = ({ navigation }) => {
 
       ],
       overflow: 'hidden',
-      borderRadius: progress.value === 1 ? 12 : 0
+      borderRadius: progress.value === 1 ? 18 : 0
 
     }));
 
@@ -247,7 +223,7 @@ const App = ({ navigation }) => {
   };
 
   const DrawerScreens = () => {
-
+    
     return (
       <View style={{ flex: 1 }}>
         <Drawer.Navigator

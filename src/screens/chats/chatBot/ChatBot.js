@@ -16,7 +16,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../../components/statusbars/Primary_StatusBar';
 import BotChatHeader from '../../../components/Headers/ChatHeader/BotChatHeader';
 import BotScreenStyleSheet from '../../../assets/styles/BotStyleSheet/BotScreenStyleSheet';
 import AppContext from '../../../context/AppContext';

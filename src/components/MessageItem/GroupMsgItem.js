@@ -83,17 +83,17 @@ const GroupMsgItem = ({ msgData }) => {
     >
       <View style={{ width: wp('100') }}>
         <View style={styles.wholeMsgBox(isCurrentUser)}>
-          <Text style={{ color: "black" }}>
+          <Text style={{ color: AppColors.primary }}>
             {!isCurrentUser ? msgData.sender_name : 'You'}
           </Text>
-          <Text style={[{ color: 'white', fontSize: 15, textAlign: 'right' }]}>
+          <Text style={[{ color: AppColors.coolgray, fontSize: 15, textAlign: 'right' }]}>
             {msgData.text}
           </Text>
           <Text style={{ fontSize: 10, textAlign: 'right' }}>
             {moment(msgData.createdAt).format('hh:mm a ')}
           </Text>
 
-          {isCurrentUser ? (
+          {/* {isCurrentUser ? (
             <>
               <View style={styles.rightArrow}></View>
               <View style={styles.rightArrowOverlap}></View>
@@ -103,7 +103,7 @@ const GroupMsgItem = ({ msgData }) => {
               <View style={styles.leftArrow}></View>
               <View style={styles.leftArrowOverlap}></View>
             </>
-          )}
+          )} */}
         </View>
       </View>
     </Swipeable>
@@ -115,17 +115,19 @@ export default GroupMsgItem;
 const styles = StyleSheet.create({
   wholeMsgBox: (user) => ({
     flexDirection: 'column',
-    width: 'auto',
-    backgroundColor: user ? AppColors.gray : 'purple',
-    marginTop: 8,
-    marginHorizontal: 10,
+    backgroundColor: user ? AppColors.tab  : AppColors.Lilac,
+    margin: 5,
+    marginHorizontal: 13,
     alignSelf: user ? 'flex-end' : 'flex-start',
     padding: 7,
     borderRadius: 6,
+    maxWidth:wp('80'),
+    // maxHeight:hp('90'),
+    elevation:4,
   }),
-  rightArrow: {
+  rightArrow: { 
     position: 'absolute',
-    backgroundColor: 'grey',
+    backgroundColor: AppColors.tab,
     width: 20,
     height: 25,
     bottom: 0,
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
 
   rightArrowOverlap: {
     position: 'absolute',
-    backgroundColor: '#eeeeee',
+    backgroundColor: AppColors.white,
     width: 20,
     height: 35,
     bottom: -6,
@@ -146,7 +148,7 @@ const styles = StyleSheet.create({
   /*Arrow head for recevied messages*/
   leftArrow: {
     position: 'absolute',
-    backgroundColor: 'purple',
+    backgroundColor: AppColors.Lilac,
     width: 20,
     height: 25,
     bottom: 0,
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
 
   leftArrowOverlap: {
     position: 'absolute',
-    backgroundColor: '#eeeeee',
+    backgroundColor: AppColors.white,
     // backgroundColor:AppColors.primary,
     width: 20,
     height: 35,

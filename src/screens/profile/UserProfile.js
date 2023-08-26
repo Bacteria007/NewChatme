@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import Status_bar from '../../components/statusbars/Primary_StatusBar'
+import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar'
 import AppColors from '../../assets/colors/Appcolors'
 import Icon, { Icons } from '../../assets/Icons.js';
 import SelectInfo from './SelectInfo';
@@ -34,7 +34,7 @@ const UserProfile = (props) => {
   return (
     <Animated.View style={[animatedStyle, { flex: 1 }]}>
       <View style={{ backgroundColor: "white", flex: 1, height: hp('100%'), width: wp('100%') }}>
-        <Status_bar darkModeBgColor={"black"} lightModeBgColor={AppColors.white} />
+        <Primary_StatusBar />
         <InnerScreensHeader screenName={"Profile"} navigation={props.navigation} />
         {/* main view for profile img */}
         <View

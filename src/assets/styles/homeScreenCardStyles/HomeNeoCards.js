@@ -12,7 +12,6 @@ const HomeNeoCards = StyleSheet.create({
     flex: 1,
     height: hp('100%'),
     backgroundColor: bgColor,
-    
   }),
   contentcontainer: {
     justifyContent: 'center',
@@ -29,10 +28,9 @@ const HomeNeoCards = StyleSheet.create({
     marginTop: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width:wp('100'),
+    width: wp('100'),
     // top: 115,
     // backgroundColor:'red'
-
   },
   neomorphStyle: cardColor => ({
     shadowRadius: 1.5,
@@ -42,11 +40,11 @@ const HomeNeoCards = StyleSheet.create({
     height: hp('10%'),
     width: wp('93%'),
     backgroundColor: cardColor,
-    paddingHorizontal:14,flex:1
-
+    paddingHorizontal: 14,
+    flex: 1,
   }),
-  addUserinGroup: (bgColor)=>({
-    shadowRadius:1,
+  addUserinGroup: bgColor => ({
+    shadowRadius: 1,
     borderRadius: wp('1.5'),
     flexDirection: 'row',
     alignItems: 'center',
@@ -90,12 +88,18 @@ const HomeNeoCards = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor: 'red',
   },
-
+  dpHeader: bgcolor => ({
+    height: hp('5'),
+    backgroundColor: bgcolor,
+    width: wp('61.4%'),
+    paddingHorizontal: 5,
+    justifyContent: 'center',
+  }),
   profileName: textColor => ({
     fontFamily: FontStyle.regularFont,
     fontSize: 16,
     color: textColor,
-    letterSpacing:0.3,
+    letterSpacing: 0.3,
   }),
   lastMsg: textColor => ({
     fontFamily: FontStyle.regularFont,
@@ -109,51 +113,59 @@ const HomeNeoCards = StyleSheet.create({
   }),
   nameAndMsgContainer: {
     flexDirection: 'column',
-    // alignItems: 'flex-start',
-    // justifyContent: 'center',
-    // width: "auto",
+    paddingHorizontal: 14,
+    width: wp('78'),
     // backgroundColor: 'green',
-    // paddingHorizontal:14,
-    // flex:0.9
   },
   nameAndTimeContainer: {
     flexDirection: 'row',
-    
+    justifyContent: 'space-between', // Align items horizontally
+    alignItems: 'center', // Center items vertically
+    // marginBottom: 4, // Adjust as needed
   },
   timeContainer: {
     flexDirection: 'column',
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
-    width: "auto",
-    // backgroundColor: 'red',
-    flex:1,
-    padding:5
+    width: 'auto',
+    flex: 1,
+    padding: 5,
+  },
+  senderName: {
+    fontSize: wp('2.7'),
+    color: AppColors.primary,
+    fontFamily: FontStyle.semiBoldFont,
   },
   // RENDER COMPONENT PROFILE PIC MODAL STYLE START
   modalContainer: {
-    // backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: 'rgba(0,0,0,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-},
-modalView: {
+    margin: 0,
+    width: wp('100'),
+  },
+  modalView: {
     // backgroundColor: 'rgba(0,0,0,0.3)',
-    backgroundColor:AppColors.transparent,
+    backgroundColor: AppColors.transparent,
     // height: hp('35'),
     // width: wp('75'),
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-
-},
-dpInModal: {
-  height: hp('30%'),
-  width: hp('30%'),
-  resizeMode:'cover'
-},
-// RENDER COMPONENT PROFILE PIC MODAL STYLE  END
+  },
+  dpInModal: {
+    height: hp('30%'),
+    width: hp('30%'),
+    resizeMode: 'cover',
+  },
+  // RENDER COMPONENT PROFILE PIC MODAL STYLE  END
   // CALLS SCREEN
-
+  callNameAndTimeContainer: {
+    flexDirection: 'column',
+    alignItems:'flex-start',
+    marginLeft:wp('3.5')
+  },
   name_CallIcon_Container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -161,8 +173,6 @@ dpInModal: {
     paddingRight: 10,
     width: wp('75%'),
   },
-  nameAndTimeContainer: { flexDirection: 'row',justifyContent:'center',alignItems:'center' },
-
   timeAndCallType: {
     flexDirection: 'row',
     justifyContent: 'flex-start',

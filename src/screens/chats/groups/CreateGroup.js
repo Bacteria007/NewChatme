@@ -13,7 +13,7 @@ import AppColors from '../../../assets/colors/Appcolors';
 import { Surface } from 'react-native-paper';
 import FontStyle from '../../../assets/styles/FontStyle';
 import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
-import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../../components/statusbars/Primary_StatusBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ReactNativeModal from 'react-native-modal';
 const CreateGroup = ({ navigation }) => {
