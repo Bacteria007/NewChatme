@@ -33,6 +33,7 @@ import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/U
 import { ThemeContext } from '../../context/ThemeContext';
 import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 const AfterSignUpProfileScreen = ({ navigation }) => {
   const { language, baseUrl, storedUser, getStoredUserDetails, selectedImageUri, storeImageUri } = useContext(AppContext);
@@ -46,7 +47,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState(false)
 
   // UseScreenFocus(getStoredUserDetails)
-
+  
   const handleProfileUpdate = async () => {
     const userid = await AsyncStorage.getItem('user');
     // const parseId = JSON.parse(userid);
