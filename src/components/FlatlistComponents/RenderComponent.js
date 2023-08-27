@@ -155,7 +155,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                 >
                     <TouchableOpacity onPress={() => {
                         showProfileModal()
-                        console.log("dp", dp)
+                        // console.log("dp", dp)
                     }}>
                         {dp == null ? (
                             <View style={HomeNeoCards.dpVew}>
@@ -188,13 +188,15 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                         </View>
                         <Text
                             style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
-                            {callingScreen !== 'Groups' ? (userLastMsg ? ((userLastMsg.content.length) > maxLength ? userLastMsg.content.substring(0, maxLength) + '...' : userLastMsg.content) : null) : (groupLastMsg ? ((groupLastMsg.text.length) > maxLength ?
-                                <Text>
-                                    <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name}{": "}</Text>
-                                    {groupLastMsg.text.substring(0, maxLength) + '...'}</Text> :
-                                <Text>
-                                    <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name}{": "}</Text>
-                                    {groupLastMsg.text}</Text>) : null)}
+                            {callingScreen !== 'Groups' ? (userLastMsg ? ((userLastMsg.content.length) > maxLength ? userLastMsg.content.substring(0, maxLength) + '...' : userLastMsg.content) : null)
+                                :
+                                (groupLastMsg ? ((groupLastMsg.text.length) > maxLength ?
+                                    <Text>
+                                        <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name == storedUser.name ? "You" : groupLastMsg.sender_name}{": "}</Text>
+                                        {groupLastMsg.text.substring(0, maxLength) + '...'}</Text> :
+                                    <Text>
+                                        <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name == storedUser.name ? "You" : groupLastMsg.sender_name}{": "}</Text>
+                                        {groupLastMsg.text}</Text>) : null)}
                         </Text>
                     </View>
                 </Neomorph>
@@ -243,5 +245,5 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
 export default RenderComponent;
 
 const styles = StyleSheet.create({
-    
+
 })
