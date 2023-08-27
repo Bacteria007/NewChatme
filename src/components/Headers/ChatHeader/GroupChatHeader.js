@@ -24,9 +24,11 @@ import { UserChatStatusBar } from '../../statusbars/Primary_StatusBar';
 import { Button, Divider, Menu, PaperProvider, shadow } from 'react-native-paper';
 import ReactNativeModal from 'react-native-modal';
 import FontStyle from '../../../assets/styles/FontStyle';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const GroupChatHeader = ({ item, navigation }) => {
-  const { baseUrl } = useContext(AppContext);
+  const { baseUrl, storedUser } = useContext(AppContext);
+  const { theme } = useContext(ThemeContext);
   const groupMembers = item.members
   const adminId = item.group_admin
   const [visible, setVisible] = React.useState(false);
@@ -91,12 +93,11 @@ const GroupChatHeader = ({ item, navigation }) => {
           </TouchableOpacity>
           <ReactNativeModal
             visible={visible}
-            animationType="slide"
             onDismiss={hideModal}
             onBackButtonPress={hideModal}
             onBackdropPress={hideModal}
-            style={{ margin: 0, justifyContent: 'flex-end' }}>
-            <View style={{ justifyContent: 'flex-start', alignItems: 'center', backgroundColor: AppColors.smokeWhite, padding: hp('3'), borderTopLeftRadius: 30, borderTopRightRadius: 30, elevation: 4 }}>
+            style={{ margin: 0, justifyContent: 'flex-end',backgroundColor:'rgba(0,0,0,0.2)' }}>
+            <View style={{ justifyContent: 'flex-start', alignItems: 'center', backgroundColor:theme.backgroundColor, padding: hp('3'), borderTopLeftRadius: 30, borderTopRightRadius: 30, elevation: 4 }}>
               <View style={{ flexDirection: 'row', height: hp('30') }}>
 
                 <FlatList
@@ -104,46 +105,46 @@ const GroupChatHeader = ({ item, navigation }) => {
                   data={sortedGroupMembers}
                   renderItem={({ item }) => {
                     return <View style={{ padding: 4 }}>
-                      <View style={{flexDirection:'row',alignItems:'center'}}>  
-                      {/* <View style={[UserChatHeaderStyle.dpContainerView]}>         */}
-                      {item.profileImage ?
-                        <Image
-                          source={{ uri: `${baseUrl}${item.profileImage}` }}
-                          style={[UserChatHeaderStyle.dpImageStyle]}
-                        /> :
-                        <Image
-                          source={require('../../../assets/imges/default/group.png')}
-                          style={[UserChatHeaderStyle.dpImageStyle]}
-                        />
-                      }
-                       {/* </View> */}
-                      <View style={{flexDirection:'column',marginLeft:wp('4')}}>
-                        <View style={{flexDirection:'row',justifyContent:'space-between',width:wp('70')}}>
-                        <Text
-                          style={{
-                            color: 'black',
-                            fontFamily: FontStyle.regularFont,
-                          }}>
-                          {item.name}
-                        </Text>
-                        {item._id == adminId ? (
-                          // <Text
-                          //   style={{
-                          //     color: AppColors.primary,
-                          //     fontFamily: FontStyle.semiBoldFont,
-                          //     fontSize: 14
-                          //   }}>
-                          //   Admin
-                          // </Text>
-                          <Icons.MaterialCommunityIcons name='shield-crown' color={AppColors.primary} size={20}/>
-                        ) : null}
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {/* <View style={[UserChatHeaderStyle.dpContainerView]}>         */}
+                        {item.profileImage ?
+                          <Image
+                            source={{ uri: `${baseUrl}${item.profileImage}` }}
+                            style={[UserChatHeaderStyle.dpImageStyle]}
+                          /> :
+                          <Image
+                            source={require('../../../assets/imges/default/group.png')}
+                            style={[UserChatHeaderStyle.dpImageStyle]}
+                          />
+                        }
+                        {/* </View> */}
+                        <View style={{ flexDirection: 'column', marginLeft: wp('4') }}>
+                          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp('70') }}>
+                            <Text
+                              style={{
+                                color: storedUser.name === item.name ? AppColors.primary : 'black',
+                                fontFamily: FontStyle.regularFont,
+                              }}>
+                              {storedUser.name === item.name ? "You" : item.name}
+                            </Text>
+                            {item._id == adminId ? (
+                              // <Text
+                              //   style={{
+                              //     color: AppColors.primary,
+                              //     fontFamily: FontStyle.semiBoldFont,
+                              //     fontSize: 14
+                              //   }}>
+                              //   Admin
+                              // </Text>
+                              <Icons.MaterialCommunityIcons name='shield-crown' color={AppColors.primary} size={20} />
+                            ) : null}
+                          </View>
+                          <Text style={{ color: 'gray', fontSize: 18 }}>
+                            {item.phoneNo}
+                          </Text>
                         </View>
-                      <Text style={{ color: 'gray', fontSize: 18 }}>
-                        {item.phoneNo}
-                      </Text>
                       </View>
-                      </View>
-                      <Divider style={{margin:8}}/>
+                      <Divider style={{ margin: 8 }} />
                     </View>
                   }}
                 />

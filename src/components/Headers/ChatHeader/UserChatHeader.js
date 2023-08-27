@@ -22,10 +22,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserChatStatusBar } from '../../statusbars/Primary_StatusBar';
 import { Button, Divider, Menu, PaperProvider, shadow } from 'react-native-paper';
 import ReactNativeModal from 'react-native-modal';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const UserChatHeader = ({ item, navigation }) => {
   const [callTime, setCallTime] = useState(0);
   const { baseUrl } = useContext(AppContext);
+  const { theme } = useContext(ThemeContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -96,63 +98,63 @@ const UserChatHeader = ({ item, navigation }) => {
 
   //        #############################################################################
   return (
-      <View style={[UserChatHeaderStyle.containerView]}>
-        <View style={[UserChatHeaderStyle.headerView]}>
-          <View style={[UserChatHeaderStyle.leftview]}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-              }}>
-              <Icons.Ionicons
-                name="arrow-back"
-                size={wp('6.5%')}
-                color={AppColors.black}
-                style={{ marginTop: hp('2.7%') }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={[UserChatHeaderStyle.leftInnerView]}>
-                <View style={[UserChatHeaderStyle.dpContainerView]}>
-                  { item.profileImage? 
+    <View style={[UserChatHeaderStyle.containerView]}>
+      <View style={[UserChatHeaderStyle.headerView]}>
+        <View style={[UserChatHeaderStyle.leftview]}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <Icons.Ionicons
+              name="arrow-back"
+              size={wp('6.5%')}
+              color={AppColors.black}
+              style={{ marginTop: hp('2.7%') }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <View style={[UserChatHeaderStyle.leftInnerView]}>
+              <View style={[UserChatHeaderStyle.dpContainerView]}>
+                {item.profileImage ?
                   <Image
                     source={{ uri: `${baseUrl}${item.profileImage}` }}
                     style={[UserChatHeaderStyle.dpImageStyle]}
-                  />:
+                  /> :
                   <Image
                     source={require('../../../assets/imges/default/userProfileDark.jpg')}
                     style={[UserChatHeaderStyle.dpImageStyle]}
                   />
-                  }
-                </View>
-                <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
-                  <Text style={[UserChatHeaderStyle.profileNameTextStyle]}>
-                    {item.name}
-                  </Text>
-                  {/* <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
+                }
+              </View>
+              <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
+                <Text style={[UserChatHeaderStyle.profileNameTextStyle]}>
+                  {item.name}
+                </Text>
+                {/* <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
                   Online
                 </Text> */}
-                </View>
               </View>
-            </TouchableOpacity>
-          </View>
-          <View style={[UserChatHeaderStyle.rightView]}>
-            <TouchableOpacity onPress={showModal}>
-              <Icons.Feather
-                name="more-vertical"
-                size={wp('7%')}
-                color={AppColors.black}
-              />
-            </TouchableOpacity>
-            <ReactNativeModal
-              visible={visible}
-              animationType="slide"
-              onDismiss={hideModal}
-              onBackButtonPress={hideModal}
-              onBackdropPress={hideModal}
-              style={{ margin: 0, justifyContent: 'flex-end'}}>
-              <View style={{ justifyContent: 'flex-start', alignItems: 'center', backgroundColor:AppColors.smokeWhite, padding: hp('3'),borderTopLeftRadius:30,borderTopRightRadius:30,elevation:4}}>
-               <View style={{paddingHorizontal:30,flexDirection:'row',justifyContent:'center',alignItems:'center',marginBottom:10 }}>
-                <Text style={[UserChatHeaderStyle.profileNameTextStyle,{marginHorizontal:10}]}>Audio call</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[UserChatHeaderStyle.rightView]}>
+          <TouchableOpacity onPress={showModal}>
+            <Icons.Feather
+              name="more-vertical"
+              size={wp('7%')}
+              color={AppColors.black}
+            />
+          </TouchableOpacity>
+          <ReactNativeModal
+            visible={visible}
+            onDismiss={hideModal}
+            onBackButtonPress={hideModal}
+            onBackdropPress={hideModal}
+            coverScreen={true}
+            style={{ margin: 0, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.1)' }}>
+            <View style={{ justifyContent: 'flex-start', alignItems: 'center', backgroundColor: theme.backgroundColor, padding: hp('3'), borderTopLeftRadius: 30, borderTopRightRadius: 30, elevation: 4 }}>
+              <View style={{ paddingHorizontal: 30, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+                <Text style={[UserChatHeaderStyle.profileNameTextStyle, { marginHorizontal: 10 }]}>Audio call</Text>
                 <ZegoSendCallInvitationButton
                   onPressed={() => {
                     hideModal();
@@ -167,9 +169,9 @@ const UserChatHeader = ({ item, navigation }) => {
                   isVideoCall={false}
                   resourceID={'incoming123'}
                 />
-                </View>
-                <View style={{paddingHorizontal:30,flexDirection:'row',justifyContent:'center',alignItems:'center' }}>
-                <Text style={[UserChatHeaderStyle.profileNameTextStyle,{marginHorizontal:10}]}>Video call</Text>
+              </View>
+              <View style={{ paddingHorizontal: 30, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={[UserChatHeaderStyle.profileNameTextStyle, { marginHorizontal: 10 }]}>Video call</Text>
                 <ZegoSendCallInvitationButton
                   onPressed={() => {
                     hideModal();
@@ -184,13 +186,13 @@ const UserChatHeader = ({ item, navigation }) => {
                   isVideoCall={true}
                   resourceID={'incoming123'}
                 />
-                </View>
               </View>
-            </ReactNativeModal>
-          </View>
-         
-          </View>
+            </View>
+          </ReactNativeModal>
+        </View>
+
       </View>
+    </View>
   );
 };
 

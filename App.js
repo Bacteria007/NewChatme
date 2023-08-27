@@ -1,8 +1,8 @@
 import 'react-native-gesture-handler';
 import React, { useContext, useEffect, useState } from 'react';
-import {Image,View,Text,TouchableOpacity,Alert,StatusBar,} from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import Animated, {  interpolate,  useAnimatedStyle,} from 'react-native-reanimated';
+import { Image, View, Text, TouchableOpacity, Alert, StatusBar, } from 'react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import Animated, { interpolate, useAnimatedStyle, } from 'react-native-reanimated';
 import Reels from './src/screens/reels/Reels';
 import Calls from './src/screens/calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
@@ -44,7 +44,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
-import {  ZegoCallInvitationDialog,  ZegoUIKitPrebuiltCallWaitingScreen,  ZegoUIKitPrebuiltCallInCallScreen,} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import { ZegoCallInvitationDialog, ZegoUIKitPrebuiltCallWaitingScreen, ZegoUIKitPrebuiltCallInCallScreen, } from '@zegocloud/zego-uikit-prebuilt-call-rn';
 import CreateGroup from './src/screens/chats/groups/CreateGroup';
 import Apis from './src/components/HelperFunctions/GlobalApiz/Apis';
 import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
@@ -59,6 +59,7 @@ const Drawer = createDrawerNavigator();
 const App = ({ navigation }) => {
   const { darkThemeActivator, theme, isUserLoggedin } =
     useContext(ThemeContext);
+
 
   let iconSize = 18;
   //Tab Variables Start
@@ -103,13 +104,13 @@ const App = ({ navigation }) => {
   };
 
   const TabScreens = () => {
-    const {theme}=useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext)
     const drawerStatus = useDrawerStatus();
     useEffect(() => {
       if (drawerStatus == 'open') {
         StatusBar.setBarStyle('dark-content');
         StatusBar.setBackgroundColor(AppColors.Mauve);
-      } else if(drawerStatus=='closed'){
+      } else if (drawerStatus == 'closed') {
         StatusBar.setBarStyle('dark-content');
         StatusBar.setBackgroundColor(AppColors.white);
       }
@@ -127,7 +128,15 @@ const App = ({ navigation }) => {
 
       ],
       overflow: 'hidden',
-      borderRadius: progress.value === 1 ? 18 : 0
+      borderRadius: progress.value === 1 ? 18 : 0,
+      shadowColor: 'rgba(0,0,0,1)', // Shadow color
+      shadowOpacity: 1, // Opacity of the shadow
+      shadowRadius: 10, // Radius of the shadow blur
+      shadowOffset: {
+        width: 0, // Horizontal offset
+        height: -10, // Vertical offset
+      },
+      elevation: 10,
 
     }));
 
@@ -223,7 +232,7 @@ const App = ({ navigation }) => {
   };
 
   const DrawerScreens = () => {
-    
+
     return (
       <View style={{ flex: 1 }}>
         <Drawer.Navigator
@@ -237,7 +246,7 @@ const App = ({ navigation }) => {
               width: wp('50%'),
               backgroundColor: drawerBackgroungColor,
             },
-            drawerLabelStyle: { fontFamily: FontStyle.mediumFont, fontSize: hp('1.6'),marginLeft:-16 },
+            drawerLabelStyle: { fontFamily: FontStyle.mediumFont, fontSize: hp('1.6'), marginLeft: -16 },
             // drawerLabelStyle: { fontFamily: FontStyle.regularFont, fontSize: hp('1.7'), marginLeft: wp('13') },
             drawerActiveBackgroundColor: activeBgColor,
             sceneContainerStyle: {
@@ -253,19 +262,20 @@ const App = ({ navigation }) => {
             console.log('baseurl', baseUrl);
             console.log('appcontext appjs', storedUser);
             return (
-              <View style={{ flex: 1}}>
+              <View style={{ flex: 1 }}>
                 {/* <View style={{ height: hp('70'), width: wp('50'), justifyContent: 'center', marginTop: hp('3') }}> */}
-                  <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
+                {/* <StatusBar backgroundColor={AppColors.Mauve} barStyle={'dark-content'}/> */}
+                <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
                   <Animated.View style={[Containers.centerContainer, { height: hp('25%') }]}>
                     <View style={{
                       height: wp('26.5%'),
                       width: wp('26.5%'),
                       borderRadius: wp('100%'),
-                      backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', alignSelf: 'center',marginTop:hp('5')
+                      backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginTop: hp('5')
                     }}>
                       <Image
                         source={{
-                          uri: `${baseUrl}${storedUser?.profileImage} `,
+                          uri: `${baseUrl}${storedUser?.profileImage}`,
                         }}
                         style={{
                           height: wp('25%'),
@@ -279,10 +289,10 @@ const App = ({ navigation }) => {
                       style={{ fontSize: hp('2.5%'), color: AppColors.black, fontFamily: FontStyle.regularFont, marginVertical: 6, textAlign: 'center' }}>
                       {storedUser?.name}
                     </Text>
-                    </Animated.View>
-                    <DrawerItemList {...props} />
-                  </DrawerContentScrollView>
-                  <TouchableOpacity
+                  </Animated.View>
+                  <DrawerItemList {...props} />
+                </DrawerContentScrollView>
+                <TouchableOpacity
                   onPress={() => {
                     logoutUser(props);
                   }}>
@@ -308,7 +318,7 @@ const App = ({ navigation }) => {
                     </Text>
                   </View>
                 </TouchableOpacity>
-              
+
                 {/* </View> */}
               </View>
             );
@@ -317,71 +327,71 @@ const App = ({ navigation }) => {
           <Drawer.Screen
             name="Home"
             component={TabScreens}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.MaterialCommunityIcons
-                color={focused ? activeTintColor : inActiveTintColor}
-                name={'home'}
-                // name={focused ? 'home' : 'ios-home-outline'}
-                size={iconSize}
-              />
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.MaterialCommunityIcons
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  name={'home'}
+                  // name={focused ? 'home' : 'ios-home-outline'}
+                  size={iconSize}
+                />
 
-            ),
-          }}
+              ),
+            }}
           />
           <Drawer.Screen
             name="UserProfile"
             component={UserProfile}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.MaterialIcons
-                name={'person'}
-                color={focused ? activeTintColor : inActiveTintColor}
-                size={iconSize}
-              />
-            ),
-          }}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.MaterialIcons
+                  name={'person'}
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  size={iconSize}
+                />
+              ),
+            }}
           />
           <Drawer.Screen
             name="AboutUs"
             component={AboutUs}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.Ionicons
-                name={'ios-information-circle-sharp'}
-                color={focused ? activeTintColor : inActiveTintColor}
-                size={iconSize}
-              />
-            ),
-          }}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.Ionicons
+                  name={'ios-information-circle-sharp'}
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  size={iconSize}
+                />
+              ),
+            }}
           />
           <Drawer.Screen
             name="Settings"
             component={Settings2}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.Ionicons
-                name={'ios-settings-sharp'}
-                color={focused ? activeTintColor : inActiveTintColor}
-                size={iconSize}
-              />
-            ),
-          }}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.Ionicons
+                  name={'ios-settings-sharp'}
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  size={iconSize}
+                />
+              ),
+            }}
           />
           <Drawer.Screen
             name="Terms And Conditions"
             component={TermsAndConditions}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.FontAwesome5
-                name="file-signature"
-                color={focused ? activeTintColor : inActiveTintColor}
-                size={iconSize}
-              />
-            )
-          }}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.FontAwesome5
+                  name="file-signature"
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  size={iconSize}
+                />
+              )
+            }}
           />
-       </Drawer.Navigator>
+        </Drawer.Navigator>
       </View>
     );
   };
@@ -392,7 +402,7 @@ const App = ({ navigation }) => {
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
           <ZegoCallInvitationDialog />
-          <Stack.Navigator options={{ headerShown: false }} initialRouteName='DrawerScreens'  >
+          <Stack.Navigator options={{ headerShown: false }} initialRouteName='WelcomeScreen'  >
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
