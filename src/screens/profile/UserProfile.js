@@ -12,15 +12,10 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar'
+import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar'
 import AppColors from '../../assets/colors/Appcolors';
 import Icon, { Icons } from '../../assets/Icons.js';
 import SelectInfo from './SelectInfo';
-import Animated, {
-  interpolate,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
-import { useDrawerProgress } from '@react-navigation/drawer';
 import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
 import { Avatar, Divider } from 'react-native-paper';
 import { ThemeContext } from '../../context/ThemeContext';
@@ -31,37 +26,15 @@ import AppContext from '../../context/AppContext';
 import AfterSignUpStyleSheet from '../../assets/styles/AuthStyleSheet/AfterSignUpStyleSheet/AfterSignUpStyleSheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/ProfileScreenStyleSheet';
+import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
 const UserProfile = props => {
-  const {
-    language,
-    baseUrl,
-    storedUser,
-    storeUserName,
-    getStoredUserDetails,
-    userName,
-    selectedImageUri,
-    storeImageUri,
-  } = useContext(AppContext);
+  const { language, baseUrl, storedUser, storeUserName, getStoredUserDetails, userName, selectedImageUri, storeImageUri } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const arrow_icon = 'chevron-right';
   const iconSize = wp('9%');
   const arrowColor = AppColors.black;
   const arrowSize = 17;
   const textColor = theme.profileNameColor;
-  const progress = useDrawerProgress();
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { perspective: 1000 },
-      { scale: interpolate(progress.value, [0, 1], [1, 0.8], 'clamp') },
-      // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
-      { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') },
-    ],
-    overflow: 'hidden',
-    // borderRadius:10
-  }));
-
-  // ****************************                 USE EFFECT     ********
-
   useEffect(() => {
     let userid = storedUser.userId;
     let userName = storedUser.name;
@@ -83,7 +56,7 @@ const UserProfile = props => {
   }, []);
 
   return (
-    <Animated.View style={[animatedStyle, { flex: 1 }]}>
+    <DrawerScreenswrapper>
       <View style={[ProfileScreenStyleSheet.container]}>
         <Primary_StatusBar />
         <InnerScreensHeader
@@ -321,7 +294,7 @@ const UserProfile = props => {
           </View>
         </TouchableOpacity>
       </View>
-    </Animated.View>
+    </DrawerScreenswrapper>
   );
 };
 

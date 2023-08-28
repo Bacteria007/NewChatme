@@ -67,7 +67,6 @@ const CreateGroup = ({ navigation }) => {
       console.error('Error fetching all users', error);
     }
   };
-
   const toggleSelection = item => {
     // jo database mn ssy array i hy users ki us mn isSelected field agr false hy to us item ko selected member wali array mn add krdo
     setAllUsers(prevUsers =>
@@ -90,7 +89,6 @@ const CreateGroup = ({ navigation }) => {
       }),
     );
   };
-
   const createNewGroup = async name => {
     const adminId = await AsyncStorage.getItem('user');
     const parseId = await JSON.parse(adminId);
@@ -262,13 +260,15 @@ const CreateGroup = ({ navigation }) => {
           onDismiss={hideModal}
           animationIn="slideInUp"
           animationOut="slideOutDown"
+          animationType="slide"
+          avoidKeyboard={false}
           style={{
-            backgroundColor: "rgba(0,0,0,0.4)",
+            backgroundColor: "rgba(0,0,0,0.2)",
             margin: 0,
             justifyContent: 'flex-end',
             height: hp('30')
           }}>
-          <Surface>
+          {/* <Surface> */}
             <View style={styles.modalView}>
               <TextInput
                 autoFocus={true}
@@ -302,7 +302,7 @@ const CreateGroup = ({ navigation }) => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </Surface>
+          {/* </Surface> */}
         </ReactNativeModal>
       </View>
     </SafeAreaView >
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
 
   },
   modalView: {
-    // backgroundColor: "#D8BFD8",
+    backgroundColor: "#fff",
     height: hp('25'),
     width: wp('100'),
     alignItems: 'center',

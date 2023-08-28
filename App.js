@@ -402,7 +402,7 @@ const App = ({ navigation }) => {
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
           <ZegoCallInvitationDialog />
-          <Stack.Navigator options={{ headerShown: false }} initialRouteName='WelcomeScreen'  >
+          <Stack.Navigator options={{ headerShown: false }} initialRouteName='DrawerScreens'  >
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}

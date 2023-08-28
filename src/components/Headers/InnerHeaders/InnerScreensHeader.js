@@ -23,7 +23,7 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
   return (
     <View style={[DrawerHeaderStyle.containerView]}>
       <Primary_StatusBar />
-      <View style={[DrawerHeaderStyle.headerView, { backgroundColor: theme.backgroundColor, elevation: 2 }]}>
+      <View style={DrawerHeaderStyle.headerView(theme.backgroundColor)}>
         <TouchableOpacity
           onPress={() => {
             navigation.goBack();

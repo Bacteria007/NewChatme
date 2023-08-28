@@ -83,15 +83,24 @@ const UserChat = props => {
     const data = await res.json()
     setMessageList(data);
   }
+  const initialize_socket=async()=>{
+    const joinData={
+      receiverId:receiver._id,
+      receiverName:receiver.name,
+      senderId:storedUser.userId,
+      senderName:storedUser.name,
+     }
+     socket.emit('join_room', joinData);
+     return () => {
+       socket.disconnect();
+     };
+  }
   useEffect(() => {
     messagesFromDb()
   }, [])
   useEffect(() => {
-    socket.emit('join_room', receiver._id);
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+    initialize_socket()
+  }, [socket]);
   // useEffect(() => {
   //   // Scroll to the end when messageList changes
   //   flatListRef.current.scrollToEnd({ animated: true });

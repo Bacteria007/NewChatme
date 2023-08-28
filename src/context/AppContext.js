@@ -7,7 +7,7 @@ const AppContext = React.createContext();
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
   const baseUrl='http://192.168.43.145:8888';
-  const socket = io.connect('http://192.168.43.145:8888');
+  // const socket = io.connect('http://192.168.43.145:8888');
   const [userName, setUserName] = useState();
   const [storedUser, setStoredUser] = useState('');
   const [language, setLanguage] = useState('English');
@@ -102,7 +102,7 @@ export const AppProvider = ({ children }) => {
         // fetchUserId,
         storeImageUri,
         getStoredUserDetails,
-        socket,
+        // socket,
       }}>
       {children}
     </AppContext.Provider>

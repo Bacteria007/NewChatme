@@ -67,13 +67,12 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
               height: Dimensions.get('window').height,
             }} />
         </View>}
-        <Text
-          style={[
+        <Text  style={[
             msgItem.senderId === storedUser.userId
               ? UserChatStyle.userTimestampText
               : UserChatStyle.otherTimestampText,
           ]}>
-          {msgItem.senderId == storedUser.userId ? '' : `${msgItem.mood} mood`}{' '}
+          {/* {msgItem.senderId == storedUser.userId ? '' : `${msgItem.mood} mood`}{' '} */}
           {moment(msgItem.createdAt).format('hh:mm a ')}
         </Text>
         </View>
