@@ -41,8 +41,8 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
         setProfileModal(false);
     };
     const blockContact = async (item) => {
-        console.log("discussion ma ", storedUser.userId)
-        console.log("discussion ma ", item._id)
+        // console.log("discussion ma ", storedUser.userId)
+        // console.log("discussion ma ", item._id)
         try {
             const response = await fetch(`${baseUrl}/blockContact?userId=${storedUser.userId}&contactId=${item._id}`, {
                 method: 'GET',
@@ -65,8 +65,8 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
 
     }
     const unblockContact = async (item) => {
-        console.log("discussion ma ", storedUser.userId)
-        console.log("discussion ma ", item._id)
+        // console.log("discussion ma ", storedUser.userId)
+        // console.log("discussion ma ", item._id)
         try {
             const response = await fetch(`${baseUrl}/unblockContact?userId=${storedUser.userId}&contactId=${item._id}`, {
                 method: 'GET',
@@ -127,8 +127,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
     UseScreenFocus(getUserLastMessage)
     useEffect(() => {
         getUserLastMessage();
-        getGroupLastMessage()
-
+        getGroupLastMessage();
     }, []);
     return (
         <TouchableOpacity
@@ -141,10 +140,8 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                     console.log("Comming form Groups")
                     navigation.navigate('GroupChat', { item: groups_item });
                 }
-
             }}
-            onLongPress={() => { handleLongPress(discussions_item) }}
-        >
+            onLongPress={() => { handleLongPress(discussions_item) }}>
             <View
                 style={HomeNeoCards.flatlistItemContainer}>
                 <Neomorph
@@ -213,7 +210,6 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
             >
                 <View style={HomeNeoCards.modalView}>
                     {dp == null ? (
-
                         <View style={HomeNeoCards.dpVew}>
                             <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
                                 {callingScreen === 'Discussions' || callingScreen === 'Contacts' ? (

@@ -59,7 +59,7 @@ const UserChatStyle = StyleSheet.create({
   },
   otherTimestampText: {
     color: 'black', fontSize: 10,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-end',
   },
   inputContainer: {
     flexDirection: 'row',

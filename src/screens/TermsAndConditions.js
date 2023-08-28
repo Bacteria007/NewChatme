@@ -30,7 +30,16 @@ const TermsAndConditions = ({ navigation }) => {
       { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') }
     ],
     overflow: 'hidden',
-    // borderRadius:10
+    borderRadius: progress.value === 1 ? 18 : 0,
+    shadowColor: 'rgba(0,0,0,1)', // Shadow color
+    shadowOpacity: 1, // Opacity of the shadow
+    shadowRadius: 10, // Radius of the shadow blur
+    shadowOffset: {
+      width: 0, // Horizontal offset
+      height: -10, // Vertical offset
+    },
+    elevation: 10,
+    
 
   }));
 

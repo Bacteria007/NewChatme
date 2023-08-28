@@ -19,7 +19,7 @@ const GlobalFunction = () => {
   };
 
   const renderFooter = (flatListRef, list) => {
-    if (list.length > 5) {
+    if (list.length > 15) {
       return (
         <TouchableOpacity
           onPress={() => {
