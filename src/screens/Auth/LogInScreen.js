@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/LogInStyleSheet';
-import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
+import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
 import AppColors from '../../assets/colors/Appcolors';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { Snackbar } from 'react-native-paper';
@@ -26,10 +26,12 @@ import FontStyle from '../../assets/styles/FontStyle';
 import { initializeZego } from '../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
 import { ThemeContext } from '../../context/ThemeContext';
 import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
+import messaging from '@react-native-firebase/messaging';
 
 const LogInScreen = ({ navigation }) => {
-  const { baseUrl, storeLoggedinStatus, storedUser, getStoredUserDetails } = useContext(AppContext)
-  const { theme } = useContext(ThemeContext)
+  const { baseUrl, storeLoggedinStatus, storedUser, getStoredUserDetails } =
+    useContext(AppContext);
+  const { theme } = useContext(ThemeContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -37,11 +39,22 @@ const LogInScreen = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordSnackWidth, setPasswordSnackWidth] = useState(false);
+  const [fcmToken, setFcmToken] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-  UseScreenFocus(getStoredUserDetails)
-  UseScreenFocus(initializeZego)
+  UseScreenFocus(getStoredUserDetails);
+
+  useEffect(() => {
+    // Get the FCM token when the component mounts (app starts or user logs in)
+    messaging()
+      .getToken()
+      .then(token => {
+        console.log('FCM Token:', token);
+        setFcmToken(token); // Set the fcmToken state
+        // Send this token to your backend to associate it with the user.
+      });
+  }, []);
 
   const showSnackbar = message => {
     setSnackbarMessage(message);
@@ -69,6 +82,7 @@ const LogInScreen = ({ navigation }) => {
     const formdata = new FormData();
     formdata.append('phoneNo', phoneNumber);
     formdata.append('password', password);
+    formdata.append('fcmToken', fcmToken);
     axios({
       method: 'post',
       url: `${baseUrl}/login`,
@@ -77,28 +91,38 @@ const LogInScreen = ({ navigation }) => {
     })
       .then(function (response) {
         if (response.data.match == true) {
-          console.log("login", response.data)
-          let res = response.data.loggedInUser
-          AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name }))
+          console.log('login', response.data);
+          let res = response.data.loggedInUser;
+          AsyncStorage.setItem(
+            'user',
+            JSON.stringify({
+              userId: res._id,
+              phoneNumber: res.phoneNo,
+              profileImage: res.profileImage,
+              name: res.name,
+              fcmToken: fcmToken,
+            }),
+          );
           // storeLoggedinStatus(true)
-          getStoredUserDetails()
-          console.log("async login", storedUser)
+          getStoredUserDetails();
+          console.log('async login', storedUser);
           initializeZego(res._id, res.name);
           navigation.navigate('DrawerScreens');
-        }
-        else {
+        } else {
           if (response.data.message === 'Invalid phone number or password') {
-            alert("Invalid phone number or password");
+            alert('Invalid phone number or password');
           } else {
-            alert("There was an issue in logging in,try again",
-              "No user found with this phone number or password");
+            alert(
+              'There was an issue in logging in,try again',
+              'No user found with this phone number or password',
+            );
           }
         }
       })
       .catch(function (response) {
         console.log(response);
       });
-  }
+  };
 
   useEffect(() => {
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
@@ -107,7 +131,7 @@ const LogInScreen = ({ navigation }) => {
 
   return (
     <View style={LogInStyleSheet.container(theme.backgroundColor)}>
-      <Primary_StatusBar/>
+      <Primary_StatusBar />
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
@@ -117,108 +141,127 @@ const LogInScreen = ({ navigation }) => {
           contentContainerStyle={LogInStyleSheet.scrollContainer}
           showsVerticalScrollIndicator={false}>
           <View style={LogInStyleSheet.contentContainer}>
-          <Image
-            source={require('../../assets/imges/AuthScreenPictures/LOgInPic/login4.png')}
-            style={[LogInStyleSheet.image]}
-          />
-          <Text style={[LogInStyleSheet.title]}>LogIn to Continue!</Text>
-
-          <View style={[LogInStyleSheet.countryContainer]}>
-            <CountryPicker
-              withFilter
-              withFlag
-              withCountryNameButton
-              withCallingCode
-              countryCode={selectedCountry?.cca2}
-              onSelect={handleCountrySelect}
-            // translation="eng"
+            <Image
+              source={require('../../assets/imges/AuthScreenPictures/LOgInPic/login4.png')}
+              style={[LogInStyleSheet.image]}
             />
-          </View>
+            <Text style={[LogInStyleSheet.title]}>LogIn to Continue!</Text>
 
-          <View style={[LogInStyleSheet.phoneNumberContainer]}>
-            <Text style={[LogInStyleSheet.countryCode]}>+{countryCode}</Text>
-            <TextInput
-              style={[LogInStyleSheet.phoneNumberInput]}
-              placeholder="Phone Number"
-              onChangeText={text => setPhoneNumber(text)}
-              keyboardType="numeric"
-              maxLength={15}
-              value={phoneNumber}
-            />
-          </View>
+            <View style={[LogInStyleSheet.countryContainer]}>
+              <CountryPicker
+                withFilter
+                withFlag
+                withCountryNameButton
+                withCallingCode
+                countryCode={selectedCountry?.cca2}
+                onSelect={handleCountrySelect}
+                // translation="eng"
+              />
+            </View>
 
-          <View style={[LogInStyleSheet.passwordContainer]}>
-            <TextInput
-              style={[LogInStyleSheet.passwordInput]}
-              secureTextEntry={passwordVisible}
-              placeholder="Password"
-              autoCapitalize='none'
-              onChangeText={text => setPassword(text)}
-            />
+            <View style={[LogInStyleSheet.phoneNumberContainer]}>
+              <Text style={[LogInStyleSheet.countryCode]}>+{countryCode}</Text>
+              <TextInput
+                style={[LogInStyleSheet.phoneNumberInput]}
+                placeholder="Phone Number"
+                onChangeText={text => setPhoneNumber(text)}
+                keyboardType="numeric"
+                maxLength={15}
+                value={phoneNumber}
+              />
+            </View>
+
+            <View style={[LogInStyleSheet.passwordContainer]}>
+              <TextInput
+                style={[LogInStyleSheet.passwordInput]}
+                secureTextEntry={passwordVisible}
+                placeholder="Password"
+                autoCapitalize="none"
+                onChangeText={text => setPassword(text)}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  setPasswordVisible(!passwordVisible);
+                }}>
+                <Icons.Feather
+                  name={passwordVisible === true ? 'eye' : 'eye-off'}
+                  style={[LogInStyleSheet.passwordIcon]}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={{ width: wp('85') }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ForgetPassword');
+                }}>
+                <Text style={[LogInStyleSheet.forgotpasswordText]}>
+                  Forgot Password?
+                </Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
               onPress={() => {
-                setPasswordVisible(!passwordVisible);
-              }}>
-              <Icons.Feather
-                name={passwordVisible === true ? 'eye' : 'eye-off'}
-                style={[LogInStyleSheet.passwordIcon]}
-              />
-            </TouchableOpacity>
-          </View>
-         <View style={{width:wp('85')}}>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate('ForgetPassword')
-          }} 
-          >
-            <Text style={[LogInStyleSheet.forgotpasswordText]}>Forgot Password?</Text>
-          </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              if ((phoneNumber == '') & (password == '')) {
-                setPasswordSnackWidth(!false);
-                showSnackbar('Enter Phone Number and Password');
-                return;
-              }
-              if (!isValidPhoneNumber()) {
-                if (phoneNumber === '') {
+                if ((phoneNumber == '') & (password == '')) {
                   setPasswordSnackWidth(!false);
-                  showSnackbar('Phone number must not be empty');
-                  return;
-                } else {
-                  setPasswordSnackWidth(!true);
-                  showSnackbar('Phone number is not valid');
+                  showSnackbar('Enter Phone Number and Password');
                   return;
                 }
-              }
-              if (password.length < 8) {
-                if (password === '') {
-                  setPasswordSnackWidth(!false);
-                  showSnackbar('Password must not be empty');
-                  return;
-                } else {
-                  setPasswordSnackWidth(!false);
-                  showSnackbar('Password contain atLeast 8 character');
-                  return;
+                if (!isValidPhoneNumber()) {
+                  if (phoneNumber === '') {
+                    setPasswordSnackWidth(!false);
+                    showSnackbar('Phone number must not be empty');
+                    return;
+                  } else {
+                    setPasswordSnackWidth(!true);
+                    showSnackbar('Phone number is not valid');
+                    return;
+                  }
                 }
-              } else {
-                console.log("clicked")
-                userLogin({ navigation })
-                // navigation.navigate('DrawerScreens');
-              }
+                if (password.length < 8) {
+                  if (password === '') {
+                    setPasswordSnackWidth(!false);
+                    showSnackbar('Password must not be empty');
+                    return;
+                  } else {
+                    setPasswordSnackWidth(!false);
+                    showSnackbar('Password contain atLeast 8 character');
+                    return;
+                  }
+                } else {
+                  console.log('clicked');
+                  userLogin({ navigation });
+                  // navigation.navigate('DrawerScreens');
+                }
 
-              // handleSubmit();
-              // handleSignUp({navigation})
-            }}
-            style={[LogInStyleSheet.TouchableButtonStyle]}>
-            <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
-          </TouchableOpacity>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: wp('3%') }}>
-            <Text style={{ fontFamily: FontStyle.mediumFont }}>Don't have an account?{' '}</Text>
-            <TouchableOpacity onPress={() => {
-              navigation.navigate('SignUpScreen')
-            }}><Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Signup</Text></TouchableOpacity>
-          </View>
+                // handleSubmit();
+                // handleSignUp({navigation})
+              }}
+              style={[LogInStyleSheet.TouchableButtonStyle]}>
+              <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
+            </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: wp('3%'),
+              }}>
+              <Text style={{ fontFamily: FontStyle.mediumFont }}>
+                Don't have an account?{' '}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('SignUpScreen');
+                }}>
+                <Text
+                  style={{
+                    color: AppColors.primary,
+                    fontFamily: FontStyle.mediumFont,
+                  }}>
+                  Signup
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -229,17 +272,17 @@ const LogInScreen = ({ navigation }) => {
         style={
           passwordSnackWidth === true
             ? {
-              backgroundColor: '#D3D3D3',
-              width: wp('80'),
-              marginBottom: hp('6'),
-              alignSelf: 'center',
-            }
+                backgroundColor: '#D3D3D3',
+                width: wp('80'),
+                marginBottom: hp('6'),
+                alignSelf: 'center',
+              }
             : {
-              backgroundColor: '#D3D3D3',
-              width: wp('55'),
-              marginBottom: hp('6'),
-              alignSelf: 'center',
-            }
+                backgroundColor: '#D3D3D3',
+                width: wp('55'),
+                marginBottom: hp('6'),
+                alignSelf: 'center',
+              }
         }>
         <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
       </Snackbar>

@@ -1,4 +1,4 @@
-import {PermissionsAndroid
+import {PermissionsAndroid 
   } from 'react-native';
 
  export const requestCameraAndAudioPermission = async () => {
@@ -19,4 +19,14 @@ import {PermissionsAndroid
     } catch (err) {
       console.warn(err);
     }
+  };
+
+  export const requestNotificationPermission = async () => {
+    const result = await request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
+    return result;
+  };
+  
+  export const checkNotificationPermission = async () => {
+    const result = await check(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
+    return result;
   };

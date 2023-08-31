@@ -14,7 +14,7 @@ import RenderComponent from '../../../components/FlatlistComponents/RenderCompon
 import BotDiscussion from './BotDscussion';
 import UseScreenFocus from '../../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import GlobalFunction from '../../../components/HelperFunctions/GlobalApiz/GlobalFunc';
-import { initializeZego } from '../../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
+
 import AppColors from '../../../assets/colors/Appcolors';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import FontStyle from '../../../assets/styles/FontStyle';
@@ -32,7 +32,7 @@ const Discussions = ({ navigation }) => {
   const [userNotFound, setUserNotFound] = useState(false)
 
   UseScreenFocus(getStoredUserDetails)
-  UseScreenFocus(initializeZego)
+
   const fetchContactList = async () => {
 
     console.log("discussion ma ", storedUser.userId)
@@ -79,6 +79,7 @@ const Discussions = ({ navigation }) => {
   // UseScreenFocus(fetchContactList)
 
   useEffect(() => {
+  
     fetchContactList()
   }, [])
 
