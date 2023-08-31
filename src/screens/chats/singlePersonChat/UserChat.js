@@ -23,7 +23,7 @@ import axios from 'axios';
 import AppColors from '../../../assets/colors/Appcolors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const socket = io.connect('http://192.168.43.145:8888');
+const socket = io.connect('http://192.168.166.238:8888');
 
 
 const UserChat = props => {

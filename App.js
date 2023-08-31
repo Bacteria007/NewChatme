@@ -1,8 +1,22 @@
 import 'react-native-gesture-handler';
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, View, Text, TouchableOpacity, Alert, StatusBar, } from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import Animated, { interpolate, useAnimatedStyle, } from 'react-native-reanimated';
+import {
+  Image,
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  StatusBar,
+} from 'react-native';
+import RNExitApp from 'react-native-exit-app';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import Reels from './src/screens/reels/Reels';
 import Calls from './src/screens/calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
@@ -18,7 +32,14 @@ import { Icons } from './src/assets/Icons'; // Navigation
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator, useDrawerProgress, useDrawerStatus, useIsDrawerOpen } from '@react-navigation/drawer';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  createDrawerNavigator,
+  useDrawerProgress,
+  useDrawerStatus,
+  useIsDrawerOpen,
+} from '@react-navigation/drawer';
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 import ChangeNumber from './src/screens/settings/security/ChangeNumber';
@@ -44,22 +65,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
-import { ZegoCallInvitationDialog, ZegoUIKitPrebuiltCallWaitingScreen, ZegoUIKitPrebuiltCallInCallScreen, } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import {
+  ZegoCallInvitationDialog,
+  ZegoUIKitPrebuiltCallWaitingScreen,
+  ZegoUIKitPrebuiltCallInCallScreen,
+} from '@zegocloud/zego-uikit-prebuilt-call-rn';
 import CreateGroup from './src/screens/chats/groups/CreateGroup';
 import Apis from './src/components/HelperFunctions/GlobalApiz/Apis';
 import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
 import Settings2 from './src/screens/settings/Settings2';
 import AllUsers from './src/screens/requests/AllUsers';
 import AllRequest from './src/screens/requests/AllRequests';
-
+import axios from 'axios';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+import {
+  checkNotificationPermission,
+  requestNotificationPermission,
+} from './src/components/Permission/Permission';
 
 const App = ({ navigation }) => {
-  const { darkThemeActivator, theme, isUserLoggedin } =
-    useContext(ThemeContext);
-
+  const { darkThemeActivator, theme } = useContext(ThemeContext);
 
   let iconSize = 18;
   //Tab Variables Start
@@ -82,29 +109,48 @@ const App = ({ navigation }) => {
   // const userid=async (()=>{
 
   // })
-  const loggedInUserId = AsyncStorage.getItem('user');
   // const {updateCurrentUserId}=useContext(AppContext);
   const blank = '';
   // const loggedInUser=AsyncStorage.getItem('user')
   const logoutUser = async ({ navigation }) => {
+    // YE NOTIFICATION K TOKEN KO LOGOUT PR NULL KRNY K LIYE API HAI
+
+    const baseUrl = 'http://192.168.166.238:8888';
+    const CurrentUser = await AsyncStorage.getItem('user');
+    const ParseUser = await JSON.parse(CurrentUser);
+    const CurrentUserId = ParseUser.userId;
+    const CurrentUserFcmToken = ParseUser.fcmToken;
     try {
-      // console.log('isUserLoggedin ', isUserLoggedin);
+      const formdata = new FormData();
+      formdata.append('fcmToken', CurrentUserFcmToken);
+
+      axios({
+        method: 'post',
+        url: `${baseUrl}/logOut?userId=${CurrentUserId}`,
+        data: formdata,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+        .then(function (response) {
+          if (response.match == true) {
+            console.log('put null in fcm token');
+          }
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
+
       await AsyncStorage.removeItem('user');
-      console.log('logout')
-      // storeLoggedinStatus(false)
-      // console.log('User removed from storage');
-      // updateCurrentUserId(''); // Clear the storedUser in the context
+      RNExitApp.exitApp();
+      console.log('logout');
       navigation.replace('LogInScreen');
     } catch (error) {
-      // console.log('Error while removing user from storage:', error);
+      console.log('Error while logging out:', error);
       Alert.alert('You are unable to logout, try again later!');
-      // updateCurrentUserId(blank); // Clear the storedUser in the context
-      // navigation.navigate('LogInScreen'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
     }
   };
 
   const TabScreens = () => {
-    const { theme } = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext);
     const drawerStatus = useDrawerStatus();
     useEffect(() => {
       if (drawerStatus == 'open') {
@@ -115,7 +161,7 @@ const App = ({ navigation }) => {
         StatusBar.setBackgroundColor(AppColors.white);
       }
     }, [drawerStatus]);
-    const progress = useDrawerProgress()
+    const progress = useDrawerProgress();
     // console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
       transform: [
@@ -125,7 +171,6 @@ const App = ({ navigation }) => {
         {
           translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp'),
         },
-
       ],
       overflow: 'hidden',
       borderRadius: progress.value === 1 ? 18 : 0,
@@ -137,7 +182,6 @@ const App = ({ navigation }) => {
         height: -10, // Vertical offset
       },
       elevation: 10,
-
     }));
 
     return (
@@ -232,7 +276,6 @@ const App = ({ navigation }) => {
   };
 
   const DrawerScreens = () => {
-
     return (
       <View style={{ flex: 1 }}>
         <Drawer.Navigator
@@ -246,7 +289,11 @@ const App = ({ navigation }) => {
               width: wp('50%'),
               backgroundColor: drawerBackgroungColor,
             },
-            drawerLabelStyle: { fontFamily: FontStyle.mediumFont, fontSize: hp('1.6'), marginLeft: -16 },
+            drawerLabelStyle: {
+              fontFamily: FontStyle.mediumFont,
+              fontSize: hp('1.6'),
+              marginLeft: -16,
+            },
             // drawerLabelStyle: { fontFamily: FontStyle.regularFont, fontSize: hp('1.7'), marginLeft: wp('13') },
             drawerActiveBackgroundColor: activeBgColor,
             sceneContainerStyle: {
@@ -255,7 +302,6 @@ const App = ({ navigation }) => {
           }}
           initialRouteName="Home"
           drawerContent={props => {
-
             // const { userData } = useUserContext();
             // const parsedUser = JSON.parse(userData._j);
             const { baseUrl, storedUser } = useContext(AppContext);
@@ -265,14 +311,22 @@ const App = ({ navigation }) => {
               <View style={{ flex: 1 }}>
                 {/* <View style={{ height: hp('70'), width: wp('50'), justifyContent: 'center', marginTop: hp('3') }}> */}
                 {/* <StatusBar backgroundColor={AppColors.Mauve} barStyle={'dark-content'}/> */}
-                <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
-                  <Animated.View style={[Containers.centerContainer, { height: hp('25%') }]}>
-                    <View style={{
-                      height: wp('26.5%'),
-                      width: wp('26.5%'),
-                      borderRadius: wp('100%'),
-                      backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginTop: hp('5')
-                    }}>
+                <DrawerContentScrollView
+                  {...props}
+                  showsVerticalScrollIndicator={false}>
+                  <Animated.View
+                    style={[Containers.centerContainer, { height: hp('25%') }]}>
+                    <View
+                      style={{
+                        height: wp('26.5%'),
+                        width: wp('26.5%'),
+                        borderRadius: wp('100%'),
+                        backgroundColor: 'white',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                        marginTop: hp('5'),
+                      }}>
                       <Image
                         source={{
                           uri: `${baseUrl}${storedUser?.profileImage}`,
@@ -281,12 +335,18 @@ const App = ({ navigation }) => {
                           height: wp('25%'),
                           width: wp('25%'),
                           borderRadius: wp('100%'),
-                          alignSelf: 'center'
+                          alignSelf: 'center',
                         }}
                       />
                     </View>
                     <Text
-                      style={{ fontSize: hp('2.5%'), color: AppColors.black, fontFamily: FontStyle.regularFont, marginVertical: 6, textAlign: 'center' }}>
+                      style={{
+                        fontSize: hp('2.5%'),
+                        color: AppColors.black,
+                        fontFamily: FontStyle.regularFont,
+                        marginVertical: 6,
+                        textAlign: 'center',
+                      }}>
                       {storedUser?.name}
                     </Text>
                   </Animated.View>
@@ -323,7 +383,6 @@ const App = ({ navigation }) => {
               </View>
             );
           }}>
-
           <Drawer.Screen
             name="Home"
             component={TabScreens}
@@ -335,7 +394,6 @@ const App = ({ navigation }) => {
                   // name={focused ? 'home' : 'ios-home-outline'}
                   size={iconSize}
                 />
-
               ),
             }}
           />
@@ -388,7 +446,7 @@ const App = ({ navigation }) => {
                   color={focused ? activeTintColor : inActiveTintColor}
                   size={iconSize}
                 />
-              )
+              ),
             }}
           />
         </Drawer.Navigator>
@@ -402,7 +460,9 @@ const App = ({ navigation }) => {
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
           <ZegoCallInvitationDialog />
-          <Stack.Navigator options={{ headerShown: false }} initialRouteName='DrawerScreens'  >
+          <Stack.Navigator
+            options={{ headerShown: false }}
+            initialRouteName="LogInScreen">
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
