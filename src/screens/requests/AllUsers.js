@@ -26,7 +26,7 @@ import { all } from 'axios';
 
 const AllUsers = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
-    const { baseUrl, storedUser } = useContext(AppContext);
+    const { baseUrl, currentUser,token } = useContext(AppContext);
     const [isSending, setIsSending] = useState(false);
     const [requestSent, setRequestSent] = useState(false);
     const [people, setPeople] = useState([]);
@@ -38,9 +38,10 @@ const AllUsers = ({ navigation }) => {
 
     const fetchPendingRequest = async () => {
         try {
-            const result = await fetch(`${baseUrl}/pendingRequests?userId=${storedUser.userId}`, {
+            const result = await fetch(`${baseUrl}/pendingRequests?userId=${currentUser.userId}`, {
                 method: 'get',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
@@ -48,6 +49,11 @@ const AllUsers = ({ navigation }) => {
 
                 const allFetchedRequests = await result.json()
                 // //console.log('all pending req.........', allFetchedRequests)
+                if(allFetchedRequests.data.message=="Please provide a valid token."){
+                    Alert.alert("Provide a valid token.")
+                  }else if(allFetchedRequests.data.message=='Please provide a token.'){
+                    Alert.alert('Token required')
+                  }else 
                 setAllPendingRequests(allFetchedRequests)
                 return allFetchedRequests
             }
@@ -61,9 +67,10 @@ const AllUsers = ({ navigation }) => {
     }
     const fetchWaitingRequest = async () => {
         try {
-            const result = await fetch(`${baseUrl}/waitingRequests?userId=${storedUser.userId}`, {
+            const result = await fetch(`${baseUrl}/waitingRequests?userId=${currentUser.userId}`, {
                 method: 'get',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
@@ -84,12 +91,14 @@ const AllUsers = ({ navigation }) => {
     }
     const fetchPeople = async () => {
         try {
-            const response = await fetch(`${baseUrl}/usersNotInContactList?userId=${storedUser.userId}`, {
+            const response = await fetch(`${baseUrl}/usersNotInContactList?userId=${currentUser.userId}`, {
                 method: 'GET',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
+            //yha b khud e kr lyna token k error msgs ko deal blky jha jha tmny kam kia un sab ma khud e krlo jesy deal krna
             if (response.ok) {
                 console.log("reqz::::::::::", waitingRequests)
                 const data = await response.json();
@@ -120,9 +129,10 @@ const AllUsers = ({ navigation }) => {
     }
     const fetchUserContactList = async () => {
         try {
-            const response = await fetch(`${baseUrl}/userContactList?userId=${storedUser.userId}`, {
+            const response = await fetch(`${baseUrl}/userContactList?userId=${currentUser.userId}`, {
                 method: 'GET',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
@@ -146,9 +156,10 @@ const AllUsers = ({ navigation }) => {
     const sendRequest = async (contact) => {
         setIsSending(true);
         try {
-            const response = await fetch(`${baseUrl}/sendRequest?requesterId=${storedUser.userId}&responderId=${contact._id}`, {
+            const response = await fetch(`${baseUrl}/sendRequest?requesterId=${currentUser.userId}&responderId=${contact._id}`, {
                 method: 'post',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
@@ -191,7 +202,7 @@ const AllUsers = ({ navigation }) => {
     }
     const cancelRequest = async (contact) => {
         console.log("''''''''''======''''''''''", contact)
-        const result = await fetch(`${baseUrl}/cancelRequest?requesterId=${storedUser.userId}&responderId=${contact._id}`, { method: 'get', headers: { 'Content-Type': 'application/json' } });
+        const result = await fetch(`${baseUrl}/cancelRequest?requesterId=${currentUser.userId}&responderId=${contact._id}`, { method: 'get', headers: { Authorization: `Bearer ${token}`,'Content-Type': 'application/json' } });
         if (result.ok) {
             await fetchPendingRequest()
             await fetchWaitingRequest()
@@ -355,7 +366,7 @@ const styles = StyleSheet.create({
 
 // const AllUsers = ({ navigation }) => {
 //     const { theme } = useContext(ThemeContext);
-//     const { baseUrl, storedUser } = useContext(AppContext);
+//     const { baseUrl, currentUser } = useContext(AppContext);
 //     const [isSending, setIsSending] = useState(false);
 //     const [requestSent, setRequestSent] = useState(false);
 //     const [people, setPeople] = useState([]);
@@ -367,7 +378,7 @@ const styles = StyleSheet.create({
 //     // FUNCTIONS-----------------------------
 //     const fetchPendingRequest = async () => {
 //         try {
-//             const result = await fetch(`${baseUrl}/pendingRequests?userId=${storedUser.userId}`, {
+//             const result = await fetch(`${baseUrl}/pendingRequests?userId=${currentUser.userId}`, {
 //                 method: 'get',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -390,7 +401,7 @@ const styles = StyleSheet.create({
 //     }
 //     const fetchWaitingRequest = async () => {
 //         try {
-//             const result = await fetch(`${baseUrl}/waitingRequests?userId=${storedUser.userId}`, {
+//             const result = await fetch(`${baseUrl}/waitingRequests?userId=${currentUser.userId}`, {
 //                 method: 'get',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -413,7 +424,7 @@ const styles = StyleSheet.create({
 //     }
 //     const fetchPeople = async () => {
 //         try {
-//             const response = await fetch(`${baseUrl}/usersNotInContactList?userId=${storedUser.userId}`, {
+//             const response = await fetch(`${baseUrl}/usersNotInContactList?userId=${currentUser.userId}`, {
 //                 method: 'GET',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -449,7 +460,7 @@ const styles = StyleSheet.create({
 //     };
 //     const fetchUserContactList = async () => {
 //         try {
-//             const response = await fetch(`${baseUrl}/userContactList?userId=${storedUser.userId}`, {
+//             const response = await fetch(`${baseUrl}/userContactList?userId=${currentUser.userId}`, {
 //                 method: 'GET',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -476,7 +487,7 @@ const styles = StyleSheet.create({
 //         setIsSending(true);
 
 //         try {
-//             const response = await fetch(`${baseUrl}/sendRequest?requesterId=${storedUser.userId}&responderId=${contact._id}`, {
+//             const response = await fetch(`${baseUrl}/sendRequest?requesterId=${currentUser.userId}&responderId=${contact._id}`, {
 //                 method: 'post',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -521,7 +532,7 @@ const styles = StyleSheet.create({
 //     };
 //     const cancelRequest = async (contact) => {
 //         console.log("''''''''''======''''''''''", contact)
-//         const result = await fetch(`${baseUrl}/cancelRequest?requesterId=${storedUser.userId}&responderId=${contact._id}`, { method: 'get', headers: { 'Content-Type': 'application/json' } });
+//         const result = await fetch(`${baseUrl}/cancelRequest?requesterId=${currentUser.userId}&responderId=${contact._id}`, { method: 'get', headers: { 'Content-Type': 'application/json' } });
 //         if (result.ok) {
 //             await fetchPendingRequest()
 //             await fetchWaitingRequest()

@@ -29,7 +29,7 @@ import HeaderNew from '../../components/Headers/AppHeaders/HeaderNew';
 import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 
 const Calls = ({ navigation }) => {
-  const { baseUrl } = useContext(AppContext);
+  const { baseUrl,token } = useContext(AppContext);
 
   //       ***************************                 STATES         **************************************
   const { theme, darkThemeActivator } = useContext(ThemeContext);
@@ -67,11 +67,18 @@ const Calls = ({ navigation }) => {
       await fetch(`${baseUrl}/allCalls?userId=${parseId}`, {
         method: 'GET',
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       }).then(async (response) => {
         const data = await response.json();
-        setAllCallList(data); // Set the callList received from the response
+        if(data.message=="Please provide a valid token."){
+          Alert.alert("Provide a valid token.")
+        }else if(data.message=='Please provide a token.'){
+          Alert.alert('Token required')
+        }else{
+          setAllCallList(data); // Set the callList received from the response
+        }
         console.log("Data of user is              ", data)
       }).catch((error) => {
         console.error('Error fetching call list:', error);

@@ -27,8 +27,8 @@ import Containers from '../../../assets/styles/Containers';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 
 const MyActivity = ({ navigation }) => {
-  const { baseUrl,storedUser } = useContext(AppContext);
-  const userId = storedUser.userId;
+  const { baseUrl,currentUser,token } = useContext(AppContext);
+  const userId = currentUser.userId;
   const [currentVideo, setCurrentVideo] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(null);
   const videoRef = useRef(null);
@@ -41,11 +41,18 @@ const MyActivity = ({ navigation }) => {
   const fetchUploadedVideos = async () => {
     fetch(`${baseUrl}/uploadedReels`, {
       method: 'POST',
+      headers:{
+        Authorization: `Bearer ${token}`,
+      }
     })
       .then(response => response.json())
       .then(data => {
         //console.log("##### all reels response ####", data.UploadedVideos)
-
+        if(data.message=="Please provide a valid token."){
+          Alert.alert("Provide a valid token.")
+        }else if(data.message=='Please provide a token.'){
+          Alert.alert('Token required')
+        }else{
         const videosWithSources = data.UploadedVideos.map(video => ({
           _id: video._id,
           uri: { uri: video.video },
@@ -59,6 +66,7 @@ const MyActivity = ({ navigation }) => {
         setAllUploads(videosWithSources);
         //console.log('allUploads --------^^^^^^^^^^^^^^^^^^^^  ', allUploads);
         //console.log(videosWithSources);
+      }
       })
       .catch(error => {
         //console.log(error);
@@ -76,11 +84,17 @@ const MyActivity = ({ navigation }) => {
     const response = await axios(`${baseUrl}/deleteReel`, {
       method: "post",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data"
       },
       data: formData
     });
-    if (response.data.deleted) {
+    if(response.data.message=="Please provide a valid token."){
+      Alert.alert("Provide a valid token.")
+    }else if(response.data.message=='Please provide a token.'){
+      Alert.alert('Token required')
+    }
+    else if (response.data.deleted) {
       // Reel deleted successfully
       //console.log('Reel deleted');
     } else {

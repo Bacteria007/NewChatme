@@ -38,10 +38,10 @@ import PushNotification from "react-native-push-notification";
 const GroupChat = props => {
     // VARIABLES
     const { item } = props.route.params;
-    const { baseUrl, storedUser,socket} = useContext(AppContext)
-    let userId = storedUser.userId
+    const { baseUrl, currentUser,socket,token} = useContext(AppContext)
+    let userId = currentUser.userId
     console.log("userId====",userId)
-    console.log("storedUser===",storedUser)
+    console.log("currentUser===",currentUser)
     const groupMembers = item.members;
     const adminId = item.group_admin;
     const groupId = item._id;
@@ -69,9 +69,9 @@ const GroupChat = props => {
 
         const msgData = {
             text: newMsg,
-            sender_id: storedUser.userId,
-            sender_name: storedUser.name,
-            sender_phone: storedUser.phoneNumber,
+            sender_id: currentUser.userId,
+            sender_name: currentUser.name,
+            sender_phone: currentUser.phoneNumber,
             group_id: groupId,
             readStatus: true,
             deliverStatus: true
@@ -104,10 +104,16 @@ const GroupChat = props => {
         await fetch(`${baseUrl}/message_history/?groupId=${groupId}`, {
             method: 'GET',
             headers: {
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         }).then(async (res) => {
             const msgs = await res.json()
+            if(msgs.message=="Please provide a valid token."){
+                Alert.alert("Provide a valid token.")
+              }else if(msgs.message=='Please provide a token.'){
+                Alert.alert('Token required')
+              }else
             setMsgList(msgs)
         }).catch((err) => {
             console.log(err)
@@ -130,7 +136,7 @@ const GroupChat = props => {
     }, [])
     const initialize_socket = async () => {
         socket.emit('join_group', groupId);
-        const name = storedUser.name;
+        const name = currentUser.name;
         socket.emit('user_connected', name);
         // Clean up when component unmounts
         return () => {

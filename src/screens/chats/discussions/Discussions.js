@@ -24,7 +24,7 @@ import { StatusBar } from 'react-native';
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
-  const { baseUrl, storedUser, getStoredUserDetails } = useContext(AppContext);
+  const { baseUrl,getToken, storedUser,token,currentUser, getStoredUserDetails } = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
@@ -35,24 +35,31 @@ const Discussions = ({ navigation }) => {
   const stColor=()=>{
     setStatusbarColor(AppColors.white)
   }
-  UseScreenFocus(getStoredUserDetails)
+  // UseScreenFocus(getStoredUserDetails)
   UseScreenFocus(initializeZego)
   UseScreenFocus(stColor)
   
   const fetchContactList = async () => {
 
-    // console.log("discussion ma ", storedUser.userId)
+    // console.log("discussion ma ", currentUser.userId)
     try {
-      const response = await fetch(`${baseUrl}/userContactList?userId=${storedUser.userId}`, {
+      const response = await fetch(`${baseUrl}/userContactList?userId=${currentUser.userId}`, {
         method: 'GET',
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       })
 
       const data = await response.json();
+      if(data.message=="Please provide a valid token."){
+        Alert.alert("Provide a valid token.")
+      }else if(data.message=='Please provide a token.'){
+        Alert.alert('Token required')
+      }else{
+        setContactList(data);
+      }
       // console.log('discussion from server', data)
-      setContactList(data);
     } catch (error) {
       console.error('Error fetching contact list:', error);
     }
@@ -80,8 +87,9 @@ const Discussions = ({ navigation }) => {
 
 
   useEffect(() => {
+    getToken()
     fetchContactList();
-  }, [contactList]);
+  }, []);
 
   return (
 

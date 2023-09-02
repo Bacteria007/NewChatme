@@ -27,10 +27,10 @@ import AppContext from '../../context/AppContext';
 import RNFS, { read } from 'react-native-fs';
 import FontStyle from '../../assets/styles/FontStyle';
 import { ThemeContext } from '../../context/ThemeContext';
-import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
+// import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 
 const SignUpScreen = ({ navigation }) => {
-  const { language,baseUrl,storeLoggedinStatus,getStoredUserDetails } = useContext(AppContext);
+  const { language,baseUrl,updateCurrentUser,storeImageUri,getToken,storeLoggedinStatus,getStoredUserDetails } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
@@ -90,9 +90,17 @@ const SignUpScreen = ({ navigation }) => {
             setErrorMessage(true)
             setAlreadyExist(response.data.newUser)
           }else{
-            AsyncStorage.setItem('user', JSON.stringify({userId:response.data.newUser._id,phoneNumber:response.data.newUser.phoneNo}))
-            getStoredUserDetails()
-          storeLoggedinStatus(true)
+            storeImageUri('')
+            console.log("signup res token",response.data.token)
+            updateCurrentUser({userId:response.data.newUser._id,phoneNumber:response.data.newUser.phoneNo})
+            AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(true))
+            AsyncStorage.setItem('Id',response.data.newUser._id)
+            AsyncStorage.setItem('phoneNo',response.data.newUser.phoneNo)
+            AsyncStorage.setItem('token', response.data.token);
+            getToken()
+            // AsyncStorage.setItem('user', JSON.stringify({userId:response.data.newUser._id,phoneNumber:response.data.newUser.phoneNo}))
+            // getStoredUserDetails()
+          // storeLoggedinStatus(true)
           navigation.navigate('AfterSignUpProfileScreen');
           }
       
@@ -242,7 +250,7 @@ const SignUpScreen = ({ navigation }) => {
           <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',margin:wp('3%')}}>
           <Text style={{fontFamily:FontStyle.mediumFont}}>Have an account?{' '}</Text>
           <TouchableOpacity onPress={()=>{
-            navigation.navigate('LogInScreen')
+            navigation.replace('LogInScreen')
           }}><Text style={{color:AppColors.primary,fontFamily:FontStyle.mediumFont}}>Login</Text></TouchableOpacity>
           </View>
         </ScrollView>

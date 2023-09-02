@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ReelHeader = ({navigation}) => {
   
-  const { baseUrl } = useContext(AppContext);
+  const { baseUrl,token } = useContext(AppContext);
   let options = {
     mediaType: 'video',
     maxWidth: 300,
@@ -40,6 +40,7 @@ const ReelHeader = ({navigation}) => {
       method: 'POST',
       body: formData,
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data', 
       },
     })

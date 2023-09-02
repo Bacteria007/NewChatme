@@ -14,8 +14,7 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
   const {
     language,
     baseUrl,
-    storedUser,
-    getStoredUserDetails,
+    currentUser,
     selectedImageUri,
     storeImageUri,
   } = useContext(AppContext);
@@ -27,20 +26,20 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
       }}>
       <View
         style={[
-          msgItem.senderId === storedUser.userId
+          msgItem.senderId === currentUser.userId
             ? UserChatStyle.userMessageContainer
             : UserChatStyle.otherMessageContainer,
         ]}>
         {msgItem.content != 'ChatMe_Image' ?
           <Text
             style={[
-              msgItem.senderId === storedUser.userId
+              msgItem.senderId === currentUser.userId
                 ? UserChatStyle.userMessageText
                 : UserChatStyle.otherMessageText,
             ]}>
             {msgItem.content}
           </Text> : <Text></Text>}
-        {msgItem.image && <Image source={{ uri: `${baseUrl}${msgItem.image}` }} style={{ height: hp('27%'), width: wp('50%') }} />}
+        {msgItem.image && <Image source={{ uri: `${baseUrl}${msgItem.image}` }} style={{ height: hp('30%'), width: wp('50%') }} />}
         {msgItem.document && <View style={{
           flex: 1,
           justifyContent: 'flex-start',
@@ -69,11 +68,11 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
         </View>}
         <Text
           style={[
-            msgItem.senderId === storedUser.userId
+            msgItem.senderId === currentUser.userId
               ? UserChatStyle.userTimestampText
               : UserChatStyle.otherTimestampText,
           ]}>
-          {msgItem.senderId == storedUser.userId ? '' : `${msgItem.mood} mood`}{' '}
+          {msgItem.senderId == currentUser.userId ? '' : `${msgItem.mood} mood`}{' '}
           {moment(msgItem.createdAt).format('hh:mm a ')}
         </Text>
         </View>

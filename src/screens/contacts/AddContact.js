@@ -28,7 +28,7 @@ import GlobalFunction from '../../components/HelperFunctions/GlobalApiz/GlobalFu
 const AddContact = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme, darkThemeActivator } = useContext(ThemeContext);
-  const { storedUser, baseUrl } = useContext(AppContext);
+  const { currentUser, baseUrl ,token} = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
@@ -40,27 +40,34 @@ const AddContact = ({ navigation }) => {
 
     console.log('desc', JSON.parse(userid));
     const parseId = JSON.parse(userid);
-    await fetch(`${baseUrl}/allUsers?userId=${storedUser.userId}`, {
+    await fetch(`${baseUrl}/allUsers?userId=${currentUser.userId}`, {
       method: 'GET',
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     })
       .then(async response => {
         const data = await response.json();
+        if(data.message=="Please provide a valid token."){
+          Alert.alert("Provide a valid token.")
+        }else if(data.message=='Please provide a token.'){
+          Alert.alert('Token required')
+        }else{
         const contactInformation = data.contactList.map(item => ({
           // ye iss liye kiya hai q k backend sy just id , name or phone number mil raha tha jb k mein id ko as a receiver id or sender id ko b bejna chahti thi jis k liye ye approach use ki mein ny
           recieverId: item._id,
           name: item.name,
-          userId: storedUser.userId,
+          userId: currentUser.userId,
           phoneNumber: item.phoneNo,
         }));
         const filteredChats = contactInformation.filter(
-          user => user.recieverId != storedUser.userId, // NAME KI BASE PR SEARCH HO RAHI HAI
+          user => user.recieverId != currentUser.userId, // NAME KI BASE PR SEARCH HO RAHI HAI
         );
         setSearchedChat(filteredChats);
         setContactList(filteredChats);
         console.log('contacts list', filteredChats);
+      }
       })
       .catch(error => {
         console.error('Error fetching contact list:', error);

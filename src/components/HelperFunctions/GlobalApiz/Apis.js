@@ -7,25 +7,31 @@ const CommonApis = () => {
     
     // const baseUrl='http://192.168.43.122:8888';
     const [userData,setUserata]=useState()
-    const { baseUrl ,storedUser} = useContext(AppContext);
+    const { baseUrl ,currentUser,token} = useContext(AppContext);
 
     const UserDetails = async () => {
         // const userId = await AsyncStorage.getItem('user');
         // const parseId =await JSON.parse(userId)
 
         try {
-            const user_data = await fetch(`${baseUrl}/getUserData/?userId=${storedUser.userId}`,
+            const user_data = await fetch(`${baseUrl}/getUserData/?userId=${currentUser.userId}`,
                 {
                     method: 'GET',
                     headers: {
+                        Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 },
             );
             const data=await user_data.json()
-            console.log("user id======================", storedUser.userId)
+            console.log("user id======================", currentUser.userId)
             console.log("user data============================", data)
-            if (data) {
+            if(data.message=="Please provide a valid token."){
+                Alert.alert("Provide a valid token.")
+              }else if(data.message=='Please provide a token.'){
+                Alert.alert('Token required')
+              }
+            else if (data) {
                 console.log('admin result==========================', data);
                 setUserata(data)
                 return userData

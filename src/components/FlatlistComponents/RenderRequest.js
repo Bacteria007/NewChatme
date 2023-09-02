@@ -12,7 +12,7 @@ import { Button } from "react-native-paper";
 
 const RenderRequest = ({ item }) => {
     const { theme } = useContext(ThemeContext);
-    const { baseUrl, storedUser } = useContext(AppContext);
+    const { baseUrl, currentUser ,token} = useContext(AppContext);
     const [isSending, setIsSending] = useState(false);
     const [requestSent, setRequestSent] = useState(false);
 
@@ -20,11 +20,10 @@ const RenderRequest = ({ item }) => {
         // console.log("contacst_item", contacts_item)
         await fetch({
             method: 'post',
-            url: `${baseUrl}/sendRequest?requesterId=${storedUser.userId}?responderId=${contacts_item.receiverId}`,
-            // headers: {
-            //     'Content-Type': 'multipart/form-data',
-            //     // 'Content-Type': 'application/json',
-            // },
+            url: `${baseUrl}/sendRequest?requesterId=${currentUser.userId}?responderId=${contacts_item.receiverId}`,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         }).then(async res => {
             // const result=await res.json()
             console.log('send regquest=========', res.message);

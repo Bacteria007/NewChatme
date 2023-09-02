@@ -28,7 +28,7 @@ import { ThemeContext } from '../../context/ThemeContext';
 import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 
 const LogInScreen = ({ navigation }) => {
-  const { baseUrl, storeLoggedinStatus, storedUser, getStoredUserDetails } = useContext(AppContext)
+  const { baseUrl,getToken,updateCurrentUser, storeLoggedinStatus, storedUser, getStoredUserDetails } = useContext(AppContext)
   const { theme } = useContext(ThemeContext)
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
@@ -40,7 +40,7 @@ const LogInScreen = ({ navigation }) => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-  UseScreenFocus(getStoredUserDetails)
+  // UseScreenFocus(getStoredUserDetails)
   UseScreenFocus(initializeZego)
 
   const showSnackbar = message => {
@@ -79,12 +79,21 @@ const LogInScreen = ({ navigation }) => {
         if (response.data.match == true) {
           console.log("login", response.data)
           let res = response.data.loggedInUser
-          AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name }))
+          updateCurrentUser({userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name})
+          // AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name }))
+          AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(true))
+          console.log("login token",response.data.token)
+          AsyncStorage.setItem('token', response.data.token);
+        AsyncStorage.setItem('profileImage',res.profileImage)
+        AsyncStorage.setItem('name',res.name)
+        AsyncStorage.setItem('Id',res._id)
+        AsyncStorage.setItem('phoneNo',res.phoneNo)
+        getToken()
           // storeLoggedinStatus(true)
-          getStoredUserDetails()
-          console.log("async login", storedUser)
+          // getStoredUserDetails()
+          // console.log("async login", storedUser)
           initializeZego(res._id, res.name);
-          navigation.navigate('DrawerScreens');
+          navigation.replace('DrawerScreens');
         }
         else {
           if (response.data.message === 'Invalid phone number or password') {
@@ -163,7 +172,7 @@ const LogInScreen = ({ navigation }) => {
                 setPasswordVisible(!passwordVisible);
               }}>
               <Icons.Feather
-                name={passwordVisible === true ? 'eye' : 'eye-off'}
+                name={passwordVisible === false ? 'eye' : 'eye-off'}
                 style={[LogInStyleSheet.passwordIcon]}
               />
             </TouchableOpacity>
@@ -219,7 +228,7 @@ const LogInScreen = ({ navigation }) => {
           <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: wp('3%') }}>
             <Text style={{ fontFamily: FontStyle.mediumFont }}>Don't have an account?{' '}</Text>
             <TouchableOpacity onPress={() => {
-              navigation.navigate('SignUpScreen')
+              navigation.replace('SignUpScreen')
             }}><Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Signup</Text></TouchableOpacity>
           </View>
           </View>

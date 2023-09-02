@@ -18,7 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ReactNativeModal from 'react-native-modal';
 const CreateGroup = ({ navigation }) => {
   // STATES
-  const { baseUrl, storedUser } = useContext(AppContext);
+  const { baseUrl, currentUser,token } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const [allUsers, setAllUsers] = useState([]);
   const [groupName, setgroupName] = useState('');
@@ -49,12 +49,13 @@ const CreateGroup = ({ navigation }) => {
       const response = await fetch(`${baseUrl}/allAvailableUsers`, {
         method: 'GET',
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
       const data = await response.json();
       const filteredUsers = data.filter(
-        user => user._id != storedUser.userId, // id KI BASE PR SEARCH HO RAHI HAI
+        user => user._id != currentUser.userId, // id KI BASE PR SEARCH HO RAHI HAI
       );
       // Add the 'isSelected' field to each item in the filteredUsers array
       const usersWithIsSelectedField = filteredUsers.map(user => ({
@@ -105,19 +106,25 @@ const CreateGroup = ({ navigation }) => {
     console.log('selectedMembers', selectedMembers);
     const formData = new FormData();
     formData.append('group_name', name);
-    formData.append('group_admin', storedUser.userId);
+    formData.append('group_admin', currentUser.userId);
     formData.append('members', JSON.stringify(selectedMembers));
     if (selectedMembers.length > 0) {
       await axios({
         method: 'post',
         url: `${baseUrl}/creategroup`,
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
           // 'Content-Type': 'application/json',
         },
         data: formData,
       })
         .then(async res => {
+          if(res.data.message=="Please provide a valid token."){
+            Alert.alert("Provide a valid token.")
+          }else if(res.data.message=='Please provide a token.'){
+            Alert.alert('Token required')
+          }else{
           // const result=await res.json()
           console.log('group create=========', res.data);
           console.log('group length===============', res.data.members.length);
@@ -126,6 +133,7 @@ const CreateGroup = ({ navigation }) => {
           setSelectedMembers(prevSelected =>
             prevSelected.map(member => ({ ...member, isSelected: false })),
           );
+        }
         })
         .catch(error => {
           console.log('error in creatng group', error);

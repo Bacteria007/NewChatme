@@ -24,7 +24,7 @@ import GlobalFunction from '../../../components/HelperFunctions/GlobalApiz/Globa
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
-  const { baseUrl, storedUser } = useContext(AppContext)
+  const { baseUrl, currentUser,token } = useContext(AppContext)
   const { theme, darkThemeActivator } = useContext(ThemeContext)
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
@@ -54,7 +54,13 @@ const AllGroups = ({ navigation }) => {
   };
   const fetchAllGroups = async () => {
     try {
-      const result = await fetch(`${baseUrl}/viewGroups/?userId=${storedUser.userId}`, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+      const result = await fetch(`${baseUrl}/viewGroups/?userId=${currentUser.userId}`, { 
+        method: 'GET', 
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+         } 
+      });
       if (result.ok) {
         const groups = await result.json()
         setAllGroups(groups)
