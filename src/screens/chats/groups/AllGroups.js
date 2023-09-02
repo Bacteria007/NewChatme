@@ -11,8 +11,7 @@ import { ThemeContext } from '../../../context/ThemeContext';
 import AppContext from '../../../context/AppContext';
 import FAB from 'react-native-fab';
 import RenderComponent from '../../../components/FlatlistComponents/RenderComponent';
-import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
-import HeaderNew from '../../../components/Headers/AppHeaders/HeaderNew';
+import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import AppColors from '../../../assets/colors/Appcolors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -21,6 +20,7 @@ import FontStyle from '../../../assets/styles/FontStyle';
 import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroups';
 import UseScreenFocus from '../../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import GlobalFunction from '../../../components/HelperFunctions/GlobalApiz/GlobalFunc';
+import Containers from '../../../assets/styles/Containers';
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
@@ -33,23 +33,23 @@ const AllGroups = ({ navigation }) => {
   const [allGroups, setAllGroups] = useState([])
   const gloabalFunctions = GlobalFunction()
 
+  const [groupNotFound, setGroupNotFound] = useState(false)
 
   // FUNCTIONS
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible)
   }
   const handleSearch = text => {
-    setSearchText(text);
-
+    setSearchText(text)
     if (text === '') {
       // If search query is empty, show all users
-      setSearchedGroups(allGroups);
+      setSearchedGroups(allGroups)
+      setGroupNotFound(false)
     } else {
       // Filter users based on search query
-      const filteredGroups = allGroups.filter(user =>
-        user.profileName.toLowerCase().includes(text.toLowerCase()),         // NAME KI BASE PR SEARCH HO RAHI HAI
-      );
-      setSearchedGroups(filteredGroups);
+      const filteredGroups = allGroups.filter(group => group.group_name.toLowerCase().includes(text.toLowerCase()))
+      setGroupNotFound(filteredGroups.length===0)
+      setSearchedGroups(filteredGroups)
     }
   };
   const fetchAllGroups = async () => {
@@ -107,14 +107,22 @@ const AllGroups = ({ navigation }) => {
           </Neomorph>
         </View>
       </TouchableOpacity>
+      {searchText !== '' && searchedGroups.length === 0 && groupNotFound === true ? (
+          <View style={Containers.centerContainer}>
+          <Text style={{ color: AppColors.coolgray, fontSize: 20, textAlign: 'center', fontFamily: FontStyle.regularFont }}>No group with this name.</Text>
+          </View>
+        ) : (
       <FlatList
         style={{ marginTop: 10 }}
         showsVerticalScrollIndicator={false}
-        data={searchedGroups == '' ? allGroups.length > 0 ? allGroups : [] : searchedGroups}
+        data={searchedGroups == '' ? (allGroups.length > 0 ? allGroups :  (<View style={Containers.centerContainer}>
+          <Text style={{ color: AppColors.coolgray, fontSize: 20, textAlign: 'center', fontFamily: FontStyle.regularFont }}>You have no groups</Text>
+        </View>)) : searchedGroups}
         renderItem={({ item }) => <RenderComponent name={item.group_name} dp={null} callingScreen={"Groups"} groups_item={item} navigation={navigation} noti={(val) => handleNotification(val)} />}
         ref={flatListRef}
         ListFooterComponent={gloabalFunctions.renderFooter(flatListRef, allGroups)}
       />
+        )}
     </View>
 
   );

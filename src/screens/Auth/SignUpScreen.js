@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import SignUpStyleSheet from '../../assets/styles/AuthStyleSheet/SignUpStyleSheet/SignUpStyleSheet';
-import Status_bar from '../../components/statusbars/Primary_StatusBar';
+import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
 import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -24,11 +24,10 @@ import {
 import { Icons } from '../../assets/Icons';
 import TranslationFile from '../../assets/translation/TranslationFile';
 import AppContext from '../../context/AppContext';
-import RNFS, { read } from 'react-native-fs';
 import FontStyle from '../../assets/styles/FontStyle';
 import { ThemeContext } from '../../context/ThemeContext';
 // import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
-
+import messaging from '@react-native-firebase/messaging';
 const SignUpScreen = ({ navigation }) => {
   const { language,baseUrl,updateCurrentUser,storeImageUri,getToken,storeLoggedinStatus,getStoredUserDetails } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
@@ -41,16 +40,17 @@ const SignUpScreen = ({ navigation }) => {
   const [passwordSnackWidth, setPasswordSnackWidth] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
-  const [alreadyExist, setAlreadyExist] = useState('')
-  const [errorMessage, setErrorMessage] = useState(false)
- 
+  const [alreadyExist, setAlreadyExist] = useState('');
+  const [errorMessage, setErrorMessage] = useState(false);
+  const [fcmToken, setFcmToken] = useState('');
+
   const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
 
   const showSnackbar = message => {
     setSnackbarMessage(message);
     setVisible(true);
   };
-// UseScreenFocus(getStoredUserDetails)
+  // UseScreenFocus(getStoredUserDetails)
   const isValidPhoneNumber = () => {
     try {
       const parsedPhoneNumber = phoneNumberUtil.parseAndKeepRawInput(
@@ -67,13 +67,23 @@ const SignUpScreen = ({ navigation }) => {
     setSelectedCountry(country);
     setCountryCode(country.callingCode);
   };
+  useEffect(() => {
+    // Get the FCM token when the component mounts (app starts or user logs in)
+    messaging()
+      .getToken()
+      .then(token => {
+        console.log('FCM Token:', token);
+        setFcmToken(token); // Set the fcmToken state
+        // Send this token to your backend to associate it with the user.
+      });
+  }, []);
 
   const handleSignUp = ({ navigation }) => {
-
     const formdata = new FormData();
     formdata.append('phoneNo', phoneNumber);
     formdata.append('password', password);
-    
+    formdata.append('fcmToken', fcmToken);
+
     axios({
       method: 'post',
       url: `${baseUrl}/signup`,
@@ -82,10 +92,11 @@ const SignUpScreen = ({ navigation }) => {
     })
       .then(function (response) {
         if (response.data.save === true) {
-          console.log("respose signup vala",response.data)
-          const uId=response.data.newUser._id
-          console.log("type of",typeof uId)
+          console.log('respose signup vala', response.data);
+          const uId = response.data.newUser._id;
+          console.log('type of', typeof uId);
           // console.log("asyncSignup",AsyncStorage.setItem('user', uId))
+
           if(response.data.newUser==="A user with the same phone number already exists."){
             setErrorMessage(true)
             setAlreadyExist(response.data.newUser)
@@ -102,20 +113,20 @@ const SignUpScreen = ({ navigation }) => {
             // getStoredUserDetails()
           // storeLoggedinStatus(true)
           navigation.navigate('AfterSignUpProfileScreen');
+
           }
-      
-      } else {
-        alert('Account cannot be created! Please try again later.');
-      }
-    })
+        } else {
+          alert('Account cannot be created! Please try again later.');
+        }
+      })
       .catch(function (response) {
         //handle error
         console.log(response);
       });
-  }
-//   )
-// }
-// AsyncStorage.removeItem("user")
+  };
+  //   )
+  // }
+  // AsyncStorage.removeItem("user")
   useEffect(() => {
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
     setCountryCode('92');
@@ -123,10 +134,7 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <View style={SignUpStyleSheet.container(theme.backgroundColor)}>
-      <Status_bar
-        darkModeBgColor={'black'}
-        lightModeBgColor={AppColors.primary}
-      />
+      <Primary_StatusBar />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
@@ -164,15 +172,23 @@ const SignUpScreen = ({ navigation }) => {
               value={phoneNumber}
             />
           </View>
-          {errorMessage&&
-            <Text style={{color:AppColors.red,marginBottom:hp('1%'),marginTop:hp('-1%')}}>{alreadyExist}</Text>}
+          {errorMessage && (
+            <Text
+              style={{
+                color: AppColors.red,
+                marginBottom: hp('1%'),
+                marginTop: hp('-1%'),
+              }}>
+              {alreadyExist}
+            </Text>
+          )}
 
           <View style={[SignUpStyleSheet.passwordContainer]}>
             <TextInput
               style={[SignUpStyleSheet.passwordInput]}
               secureTextEntry={passwordVisible}
               placeholder={TranslationFile[language].Password}
-              autoCapitalize='none'
+              autoCapitalize="none"
               onChangeText={text => setPassword(text)}
             />
             <TouchableOpacity
@@ -185,7 +201,7 @@ const SignUpScreen = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-         
+
           <TouchableOpacity
             onPress={() => {
               Keyboard.dismiss;
@@ -219,7 +235,6 @@ const SignUpScreen = ({ navigation }) => {
                   );
                   return;
                 } else {
-
                   setPasswordSnackWidth(!false);
                   showSnackbar(
                     TranslationFile[language]
@@ -228,16 +243,18 @@ const SignUpScreen = ({ navigation }) => {
 
                   if (!specialCharRegex.test(password)) {
                     setPasswordSnackWidth(!false);
-                    showSnackbar(TranslationFile[language].Password_must_contain_at_least_one_special_character);
+                    showSnackbar(
+                      TranslationFile[language]
+                        .Password_must_contain_at_least_one_special_character,
+                    );
                     return;
                   }
 
                   return;
-
                 }
               } else {
                 // navigation.replace('AfterSignUpProfileScreen');
-                handleSignUp({navigation})
+                handleSignUp({ navigation });
               }
 
               // handleSubmit();
@@ -247,35 +264,37 @@ const SignUpScreen = ({ navigation }) => {
               {TranslationFile[language].Next}
             </Text>
           </TouchableOpacity>
+
           <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',margin:wp('3%')}}>
           <Text style={{fontFamily:FontStyle.mediumFont}}>Have an account?{' '}</Text>
           <TouchableOpacity onPress={()=>{
             navigation.replace('LogInScreen')
           }}><Text style={{color:AppColors.primary,fontFamily:FontStyle.mediumFont}}>Login</Text></TouchableOpacity>
+
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
       <Snackbar
-            visible={visible}
-            onDismiss={() => setVisible(false)}
-            duration={2000}
-            style={
-              passwordSnackWidth === true
-                ? {
-                    backgroundColor: '#D3D3D3',
-                    width: wp('80'),
-                    marginBottom: hp('6'),
-                    alignSelf: 'center',
-                  }
-                : {
-                    backgroundColor: '#D3D3D3',
-                    width: wp('55'),
-                    marginBottom: hp('6'),
-                    alignSelf: 'center',
-                  }
-            }>
-            <Text style={[SignUpStyleSheet.text]}>{snackbarMessage}</Text>
-          </Snackbar>
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        duration={2000}
+        style={
+          passwordSnackWidth === true
+            ? {
+                backgroundColor: '#D3D3D3',
+                width: wp('80'),
+                marginBottom: hp('6'),
+                alignSelf: 'center',
+              }
+            : {
+                backgroundColor: '#D3D3D3',
+                width: wp('55'),
+                marginBottom: hp('6'),
+                alignSelf: 'center',
+              }
+        }>
+        <Text style={[SignUpStyleSheet.text]}>{snackbarMessage}</Text>
+      </Snackbar>
     </View>
   );
 };

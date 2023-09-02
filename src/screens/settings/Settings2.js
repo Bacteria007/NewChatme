@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         // elevation: 2,
-        marginTop: 10
+        marginTop: 13
     },
     itemStyle: {
         flexDirection: 'row',

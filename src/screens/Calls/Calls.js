@@ -25,7 +25,6 @@ import { Card } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppContext from '../../context/AppContext';
 import moment from 'moment';
-import HeaderNew from '../../components/Headers/AppHeaders/HeaderNew';
 import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 
 const Calls = ({ navigation }) => {
@@ -107,8 +106,9 @@ const Calls = ({ navigation }) => {
 
   //       ***************************            FLATLIST RENDER FUNCTION         **************************************
   const renderItem = ({ item }) => {
-    return (
-      <TouchableOpacity onLongPress={() => handleLongPress(item)}>
+    console.log("call item",item)
+        return (
+      <TouchableOpacity>
         <View style={HomeNeoCards.flatlistItemContainer}>
           <Neomorph
             darkShadowColor={AppColors.primary}
@@ -118,15 +118,13 @@ const Calls = ({ navigation }) => {
             <View style={HomeNeoCards.dpImageView}>
               <TouchableOpacity>
                 <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
-
                   <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
-
                 </View>
               </TouchableOpacity>
             </View>
             {/* msg view */}
             <View style={HomeNeoCards.name_CallIcon_Container}>
-              <View style={HomeNeoCards.nameAndTimeContainer}>
+              <View style={HomeNeoCards.callNameAndTimeContainer}>
                 <Text
                   style={[
                     HomeNeoCards.profileName(theme.profileNameColor)]}>

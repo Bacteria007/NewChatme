@@ -13,7 +13,7 @@ import AppColors from '../../../assets/colors/Appcolors';
 import { Surface } from 'react-native-paper';
 import FontStyle from '../../../assets/styles/FontStyle';
 import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
-import Primary_StatusBar from '../../../components/statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../../components/statusbars/Primary_StatusBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ReactNativeModal from 'react-native-modal';
 const CreateGroup = ({ navigation }) => {
@@ -68,7 +68,6 @@ const CreateGroup = ({ navigation }) => {
       console.error('Error fetching all users', error);
     }
   };
-
   const toggleSelection = item => {
     // jo database mn ssy array i hy users ki us mn isSelected field agr false hy to us item ko selected member wali array mn add krdo
     setAllUsers(prevUsers =>
@@ -91,7 +90,6 @@ const CreateGroup = ({ navigation }) => {
       }),
     );
   };
-
   const createNewGroup = async name => {
     const adminId = await AsyncStorage.getItem('user');
     const parseId = await JSON.parse(adminId);
@@ -165,7 +163,7 @@ const CreateGroup = ({ navigation }) => {
           )}
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-            <View style={HomeNeoCards.nameAndMsgContainer}>
+            <View style={HomeNeoCards.callNameAndTimeContainer}>
               <Text
                 style={HomeNeoCards.profileName(theme.profileNameColor)}>
                 {item.name}
@@ -247,8 +245,8 @@ const CreateGroup = ({ navigation }) => {
                 {selectedMembers.map(member => {
                   return (
                     <View key={member._id} style={styles.selectedMember}>
-                      <Text>{member.name}</Text>
-                      <Text>{member.phoneNo}</Text>
+                      <Text style={{fontFamily:FontStyle.mediumFont,fontSize:wp('3'),color:AppColors.primary}}>{member.name.length>7?member.name.substring(0,7)+'..':member.name}</Text>
+                      <Text style={{fontFamily:FontStyle.mediumFont,fontSize:wp('2.5'),color:AppColors.coolgray}}>{member.phoneNo}</Text>
                     </View>
                   );
                 })}
@@ -270,13 +268,15 @@ const CreateGroup = ({ navigation }) => {
           onDismiss={hideModal}
           animationIn="slideInUp"
           animationOut="slideOutDown"
+          animationType="slide"
+          avoidKeyboard={false}
           style={{
-            backgroundColor: "rgba(0,0,0,0.4)",
+            backgroundColor: "rgba(0,0,0,0.2)",
             margin: 0,
             justifyContent: 'flex-end',
             height: hp('30')
           }}>
-          <Surface>
+          {/* <Surface> */}
             <View style={styles.modalView}>
               <TextInput
                 autoFocus={true}
@@ -310,7 +310,7 @@ const CreateGroup = ({ navigation }) => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </Surface>
+          {/* </Surface> */}
         </ReactNativeModal>
       </View>
     </SafeAreaView >
@@ -350,9 +350,9 @@ const styles = StyleSheet.create({
     elevation: 4,
   }),
   selectedMember: {
-    height: hp('12'),
-    width: hp('12'),
-    borderRadius: hp('12'),
+    height: hp('10'),
+    width: hp('10'),
+    borderRadius: hp('5'),
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
 
   },
   modalView: {
-    // backgroundColor: "#D8BFD8",
+    backgroundColor: "#fff",
     height: hp('25'),
     width: wp('100'),
     alignItems: 'center',

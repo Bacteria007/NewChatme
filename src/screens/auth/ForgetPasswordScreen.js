@@ -14,7 +14,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import ForgetScreenStyle from '../../assets/styles/AuthStyleSheet/ForgetScreen/ForgetScreenStyle';
-import Primary_StatusBar from '../../components/statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
 import TranslationFile from '../../assets/translation/TranslationFile';
 import { Icons } from '../../assets/Icons';
 import { Snackbar } from 'react-native-paper';

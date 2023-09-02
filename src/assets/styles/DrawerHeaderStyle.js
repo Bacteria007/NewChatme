@@ -10,27 +10,30 @@ import AppColors from '../colors/Appcolors';
 const DrawerHeaderStyle = StyleSheet.create({
 
   containerView: {
-    height: hp('7%'),
+    height: hp('8%'),
     width:wp('100%'),
   //  paddingTop:hp('0.5%'),
     justifyContent: 'space-between',
     // backgroundColor: AppColors.primary,
 
   },
-  headerView: {
+  headerView: (bgcolor)=>({
     flex:1,
     flexDirection: 'row',   
     alignItems: 'center',
     justifyContent:'flex-start',
     // backgroundColor:'red',
-    paddingHorizontal:wp('3%')
+    backgroundColor:bgcolor,
+    padding:wp('3%'),
+    paddingHorizontal:wp('3.5%'),
+    elevation:4
     
-  },
+  }),
   screenNameStyle: {
     fontSize: wp('5.5%'),
     color: AppColors.white,
     fontFamily: FontStyle.regularFont,
-    marginLeft:wp('3%')
+    marginLeft:wp('3.5%')
   },
 
 });

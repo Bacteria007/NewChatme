@@ -8,6 +8,7 @@ import {
   Alert,
   StatusBar,
 } from 'react-native';
+import RNExitApp from 'react-native-exit-app';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -16,7 +17,6 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated';
-// SCREENS
 import Reels from './src/screens/reels/Reels';
 import Calls from './src/screens/calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
@@ -28,12 +28,18 @@ import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
 import Discussions from './src/screens/chats/discussions/Discussions';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
 import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
-
 import { Icons } from './src/assets/Icons'; // Navigation
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator, useDrawerProgress, useDrawerStatus, useIsDrawerOpen } from '@react-navigation/drawer';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  createDrawerNavigator,
+  useDrawerProgress,
+  useDrawerStatus,
+  useIsDrawerOpen,
+} from '@react-navigation/drawer';
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 import ChangeNumber from './src/screens/settings/security/ChangeNumber';
@@ -54,7 +60,6 @@ import Theme from './src/screens/settings/accountPreferences/Theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ForgetPasswordScreen from './src/screens/auth/ForgetPasswordScreen';
 import { LogBox } from 'react-native';
-import AddContact from './src/screens/contacts/AddContact';
 import FontStyle from './src/assets/styles/FontStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
@@ -69,21 +74,28 @@ import CreateGroup from './src/screens/chats/groups/CreateGroup';
 import Apis from './src/components/HelperFunctions/GlobalApiz/Apis';
 import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
 import Settings2 from './src/screens/settings/Settings2';
-import { UserProvider, useUserContext } from './src/context/UserContext';
 import AllUsers from './src/screens/requests/AllUsers';
 import AllRequest from './src/screens/requests/AllRequests';
+
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import Primary_StatusBar from './src/components/statusbars/Primary_StatusBar';
 import UseScreenFocus from './src/components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import FakeSplash from './src/screens/fakeSplash/FakeSplash';
 
+import axios from 'axios';
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+import {
+  checkNotificationPermission,
+  requestNotificationPermission,
+} from './src/components/Permission/Permission';
 
 const App = ({ navigation }) => {
-  const { darkThemeActivator, theme, isUserLoggedin ,updateCurrentUser} =
-    useContext(ThemeContext);
+
+  const { darkThemeActivator, theme } = useContext(ThemeContext);
+
 
   let iconSize = 18;
   //Tab Variables Start
@@ -106,13 +118,18 @@ const App = ({ navigation }) => {
   // const userid=async (()=>{
 
   // })
-  const loggedInUserId = AsyncStorage.getItem('user');
   // const {updateCurrentUserId}=useContext(AppContext);
   const blank = '';
   // const loggedInUser=AsyncStorage.getItem('user')
   // const {updateCurrentUser}=useContext(AppContext)
   const logoutUser = async ({ navigation }) => {
+    // YE NOTIFICATION K TOKEN KO LOGOUT PR NULL KRNY K LIYE API HAI
+
+    const baseUrl = 'http://192.168.166.238:8888';
+    const CurrentUserId = await AsyncStorage.getItem('Id');
+    const CurrentUserFcmToken = await AsyncStorage.getItem('fcmToken');
     try {
+
       // console.log('isUserLoggedin ', isUserLoggedin);
 await AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(false))
 await AsyncStorage.setItem('token','')
@@ -126,28 +143,51 @@ await AsyncStorage.setItem('phoneNo','')
       // storeLoggedinStatus(false)
       // console.log('User removed from storage');
       // updateCurrentUserId(''); // Clear the storedUser in the context
+      
+
+      const formdata = new FormData();
+      formdata.append('fcmToken', CurrentUserFcmToken);
+
+      axios({
+        method: 'post',
+        url: `${baseUrl}/logOut?userId=${CurrentUserId}`,
+        data: formdata,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+        .then(function (response) {
+          if (response.match == true) {
+            console.log('put null in fcm token');
+          }
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
+
+      await AsyncStorage.removeItem('user');
+      RNExitApp.exitApp();
+      console.log('logout');
       navigation.replace('Splash');
+      navigation.replace('LogInScreen');
+
     } catch (error) {
-      // console.log('Error while removing user from storage:', error);
+      console.log('Error while logging out:', error);
       Alert.alert('You are unable to logout, try again later!');
-      // updateCurrentUserId(blank); // Clear the storedUser in the context
-      // navigation.navigate('LogInScreen'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
     }
   };
 
   const TabScreens = () => {
-    const {theme}=useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext);
     const drawerStatus = useDrawerStatus();
     useEffect(() => {
       if (drawerStatus == 'open') {
         StatusBar.setBarStyle('dark-content');
         StatusBar.setBackgroundColor(AppColors.Mauve);
-      } else {
+      } else if (drawerStatus == 'closed') {
         StatusBar.setBarStyle('dark-content');
         StatusBar.setBackgroundColor(AppColors.white);
       }
     }, [drawerStatus]);
-    const progress = useDrawerProgress()
+    const progress = useDrawerProgress();
     // console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
       transform: [
@@ -157,11 +197,17 @@ await AsyncStorage.setItem('phoneNo','')
         {
           translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp'),
         },
-
       ],
       overflow: 'hidden',
-      borderRadius: progress.value === 1 ? 12 : 0
-
+      borderRadius: progress.value === 1 ? 18 : 0,
+      shadowColor: 'rgba(0,0,0,1)', // Shadow color
+      shadowOpacity: 1, // Opacity of the shadow
+      shadowRadius: 10, // Radius of the shadow blur
+      shadowOffset: {
+        width: 0, // Horizontal offset
+        height: -10, // Vertical offset
+      },
+      elevation: 10,
     }));
 
     return (
@@ -256,7 +302,6 @@ await AsyncStorage.setItem('phoneNo','')
   };
 
   const DrawerScreens = () => {
-
     return (
       <View style={{ flex: 1 }}>
         <Drawer.Navigator
@@ -270,7 +315,11 @@ await AsyncStorage.setItem('phoneNo','')
               width: wp('50%'),
               backgroundColor: drawerBackgroungColor,
             },
-            drawerLabelStyle: { fontFamily: FontStyle.mediumFont, fontSize: hp('1.6'),marginLeft:-16 },
+            drawerLabelStyle: {
+              fontFamily: FontStyle.mediumFont,
+              fontSize: hp('1.6'),
+              marginLeft: -16,
+            },
             // drawerLabelStyle: { fontFamily: FontStyle.regularFont, fontSize: hp('1.7'), marginLeft: wp('13') },
             drawerActiveBackgroundColor: activeBgColor,
             sceneContainerStyle: {
@@ -279,43 +328,55 @@ await AsyncStorage.setItem('phoneNo','')
           }}
           initialRouteName="Home"
           drawerContent={props => {
-
             // const { userData } = useUserContext();
             // const parsedUser = JSON.parse(userData._j);
             const { baseUrl, currentUser,updateCurrentUser } = useContext(AppContext);
             console.log('baseurl', baseUrl);
             console.log('appcontext appjs', currentUser);
             return (
-              <View style={{ flex: 1}}>
+              <View style={{ flex: 1 }}>
                 {/* <View style={{ height: hp('70'), width: wp('50'), justifyContent: 'center', marginTop: hp('3') }}> */}
-                  <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
-                  <Animated.View style={[Containers.centerContainer, { height: hp('25%') }]}>
-                    <View style={{
-                      height: wp('26.5%'),
-                      width: wp('26.5%'),
-                      borderRadius: wp('100%'),
-                      backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', alignSelf: 'center',marginTop:hp('5')
-                    }}>
+                {/* <StatusBar backgroundColor={AppColors.Mauve} barStyle={'dark-content'}/> */}
+                <DrawerContentScrollView
+                  {...props}
+                  showsVerticalScrollIndicator={false}>
+                  <Animated.View
+                    style={[Containers.centerContainer, { height: hp('25%') }]}>
+                    <View
+                      style={{
+                        height: wp('26.5%'),
+                        width: wp('26.5%'),
+                        borderRadius: wp('100%'),
+                        backgroundColor: 'white',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignSelf: 'center',
+                        marginTop: hp('5'),
+                      }}>
                       <Image
                         source={{
+
                           uri: `${baseUrl}${currentUser?.profileImage} `,
+
                         }}
                         style={{
                           height: wp('25%'),
                           width: wp('25%'),
                           borderRadius: wp('100%'),
-                          alignSelf: 'center'
+                          alignSelf: 'center',
                         }}
                       />
                     </View>
                     <Text
+
                       style={{ fontSize: hp('2.5%'), color: AppColors.black, fontFamily: FontStyle.regularFont, marginVertical: 6, textAlign: 'center' }}>
                       {currentUser?.name}
+
                     </Text>
-                    </Animated.View>
-                    <DrawerItemList {...props} />
-                  </DrawerContentScrollView>
-                  <TouchableOpacity
+                  </Animated.View>
+                  <DrawerItemList {...props} />
+                </DrawerContentScrollView>
+                <TouchableOpacity
                   onPress={() => {
                     logoutUser(props);
                   }}>
@@ -341,80 +402,78 @@ await AsyncStorage.setItem('phoneNo','')
                     </Text>
                   </View>
                 </TouchableOpacity>
-              
+
                 {/* </View> */}
               </View>
             );
           }}>
-
           <Drawer.Screen
             name="Home"
             component={TabScreens}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.MaterialCommunityIcons
-                color={focused ? activeTintColor : inActiveTintColor}
-                name={'home'}
-                // name={focused ? 'home' : 'ios-home-outline'}
-                size={iconSize}
-              />
-
-            ),
-          }}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.MaterialCommunityIcons
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  name={'home'}
+                  // name={focused ? 'home' : 'ios-home-outline'}
+                  size={iconSize}
+                />
+              ),
+            }}
           />
           <Drawer.Screen
             name="UserProfile"
             component={UserProfile}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.MaterialIcons
-                name={'person'}
-                color={focused ? activeTintColor : inActiveTintColor}
-                size={iconSize}
-              />
-            ),
-          }}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.MaterialIcons
+                  name={'person'}
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  size={iconSize}
+                />
+              ),
+            }}
           />
           <Drawer.Screen
             name="AboutUs"
             component={AboutUs}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.Ionicons
-                name={'ios-information-circle-sharp'}
-                color={focused ? activeTintColor : inActiveTintColor}
-                size={iconSize}
-              />
-            ),
-          }}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.Ionicons
+                  name={'ios-information-circle-sharp'}
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  size={iconSize}
+                />
+              ),
+            }}
           />
           <Drawer.Screen
             name="Settings"
             component={Settings2}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.Ionicons
-                name={'ios-settings-sharp'}
-                color={focused ? activeTintColor : inActiveTintColor}
-                size={iconSize}
-              />
-            ),
-          }}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.Ionicons
+                  name={'ios-settings-sharp'}
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  size={iconSize}
+                />
+              ),
+            }}
           />
           <Drawer.Screen
             name="Terms And Conditions"
             component={TermsAndConditions}
-          options={{
-            drawerIcon: ({ focused }) => (
-              <Icons.FontAwesome5
-                name="file-signature"
-                color={focused ? activeTintColor : inActiveTintColor}
-                size={iconSize}
-              />
-            )
-          }}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <Icons.FontAwesome5
+                  name="file-signature"
+                  color={focused ? activeTintColor : inActiveTintColor}
+                  size={iconSize}
+                />
+              ),
+            }}
           />
-       </Drawer.Navigator>
+        </Drawer.Navigator>
       </View>
     );
   };
@@ -425,7 +484,9 @@ await AsyncStorage.setItem('phoneNo','')
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
           <ZegoCallInvitationDialog />
+
           <Stack.Navigator options={{ headerShown: false }} initialRouteName='Splash'  >
+
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}

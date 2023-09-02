@@ -15,8 +15,9 @@ import { Icons } from '../../../../assets/Icons';
 import AppColors from '../../../../assets/colors/Appcolors';
 
 const GroupChatInput = ({ sendMessageFunc, inputVal, setter }) => {
-    
     const [height, setHeight] = useState(hp('7%')); // Initialize height with a default value
+    const iconsColor=AppColors.coolgray
+    const iconsColor2=AppColors.coolgray
     const maxInputHeight = hp('17'); // Maximum input height
     
     const onContentSizeChange = (event) => {
@@ -29,7 +30,7 @@ const GroupChatInput = ({ sendMessageFunc, inputVal, setter }) => {
                 <ScrollView style={UserChatInputStyle.scroll_inputText}>
                     <TextInput
                         style={UserChatInputStyle.input(height)}
-                        placeholder="Type here"
+                        placeholder="Type a message"
                         value={inputVal}
                         onChangeText={e => {
                             setter(e);
@@ -37,20 +38,21 @@ const GroupChatInput = ({ sendMessageFunc, inputVal, setter }) => {
                         keyboardType='default'
                         keyboardAppearance="dark"
                         multiline={true}
-                        placeholderTextColor={AppColors.gray}
+                        placeholderTextColor={iconsColor}
                         onContentSizeChange={onContentSizeChange}
                         // onContentSizeChange={()=>{onContentSizeChange()}}
                         underlineColorAndroid={'transparent'}
-                    />
+                        // cursorColor={AppColors.primary}
+                        />
                 </ScrollView>
                 <View style={UserChatInputStyle.camera_and_papercliper}>
                     <TouchableOpacity>
-                        <Icons.FontAwesome name="paperclip" size={wp('6.5%')} />
+                        <Icons.FontAwesome name="paperclip" size={wp('6.5%')} color={iconsColor}/>
                     </TouchableOpacity>
                     {inputVal !== '' ? (
                         null
                     ) : <TouchableOpacity>
-                        <Icons.FontAwesome name="camera" size={wp('5.5%')} />
+                        <Icons.FontAwesome name="camera" size={wp('5.5%')} color={iconsColor} />
                     </TouchableOpacity>}
                 </View>
             </View>
@@ -60,7 +62,7 @@ const GroupChatInput = ({ sendMessageFunc, inputVal, setter }) => {
                         <Icons.Ionicons
                             name="send-sharp"
                             size={wp('5.7%')}
-                            color={AppColors.white}
+                            color={iconsColor2}
                         />
                     </View>
                 </TouchableOpacity>
@@ -71,7 +73,7 @@ const GroupChatInput = ({ sendMessageFunc, inputVal, setter }) => {
                             <Icons.FontAwesome
                                 name="microphone"
                                 size={wp('5.7%')}
-                                color={AppColors.white}
+                                color={iconsColor2}
                             />
                         </View>
                     </TouchableOpacity>
@@ -80,4 +82,4 @@ const GroupChatInput = ({ sendMessageFunc, inputVal, setter }) => {
         </View>
     )
 }
-export default GroupChatInput
+export default GroupChatInput;

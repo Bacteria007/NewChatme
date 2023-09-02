@@ -14,7 +14,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import AfterSignUpStyleSheet from '../../assets/styles/AuthStyleSheet/AfterSignUpStyleSheet/AfterSignUpStyleSheet';
-import Primary_StatusBar from '../../components/statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
 import Appcolors from '../../assets/colors/Appcolors';
 import {
   widthPercentageToDP as wp,
@@ -35,6 +35,7 @@ import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScree
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 
 const AfterSignUpProfileScreen = ({ navigation }) => {
+
   const {
     language,
     baseUrl,
@@ -303,6 +304,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
               style={AfterSignUpStyleSheet.TextInputContainer}
               onChangeText={value => {
                 setName(value);
+                storeUserName(value)
               }}
               autoCapitalize="none"
             />

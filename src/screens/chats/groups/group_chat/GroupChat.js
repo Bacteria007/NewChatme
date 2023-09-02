@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import UserChatStyle from '../../../../assets/styles/UserChatStyle';
 import AppColors from '../../../../assets/colors/Appcolors';
-import Primary_StatusBar from '../../../../components/statusbars/Primary_StatusBar';
+import { Primary_StatusBar } from '../../../../components/statusbars/Primary_StatusBar';
 import {
     heightPercentageToDP as hp,
     widthPercentageToDP as wp,
@@ -32,12 +32,16 @@ import GroupMsgItem from '../../../../components/MessageItem/GroupMsgItem';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import GroupChatInput from './GroupChatInput';
 import PushNotification from "react-native-push-notification";
+import UserChatHeader from '../../../../components/Headers/ChatHeader/UserChatHeader';
+import GroupChatHeader from '../../../../components/Headers/ChatHeader/GroupChatHeader';
+import { io } from 'socket.io-client';
 
-// const socket = io.connect('http://192.168.43.145:8888');
+const socket = io.connect('http://192.168.43.145:8888');
 
 const GroupChat = props => {
     // VARIABLES
     const { item } = props.route.params;
+
     const { baseUrl, currentUser,socket,token} = useContext(AppContext)
     let userId = currentUser.userId
     console.log("userId====",userId)
@@ -76,23 +80,23 @@ const GroupChat = props => {
             readStatus: true,
             deliverStatus: true
         };
-        console.log("msg ^^^^^^^^^^^^^^^^",msgData)
+        console.log("msg ^^^^^^^^^^^^^^^^", msgData)
         await socket.emit('send_group_message', msgData);
         setNewMsg('');
     }
     const handleNotification = (item) => {
-        if (item.sender_id !=userId) {
+        if (item.sender_id != userId) {
             PushNotification.localNotification({
                 channelId: "1233",
                 title: `${item.sender_name}`.toUpperCase(),
                 message: `${item.text}`,
-                color:'red',
+                color: 'red',
                 // bigText:`${item.sender_name} = ${item.text}`
             })
         }
     }
     const handleGetCurrentMsg = (msgData) => {
-        
+
         if (msgData.sender_id != userId) {
             handleNotification(msgData)
         } else {
@@ -147,27 +151,15 @@ const GroupChat = props => {
         initialize_socket()
     }, []);
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <Provider>
-                <View styles={[UserChatStyle.contianer]}>
+        <GestureHandlerRootView style={{ flex: 1, backgroundColor: 'white' }}>
+                <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column' }}
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 22}>
                     <Primary_StatusBar />
-                    <Surface>
-                        <Appbar.Header>
-                            <Appbar.BackAction onPress={() => { props.navigation.goBack() }} />
-                            <Appbar.Content title={item.group_name} style={{ paddingTop: 7 }} />
-                            <Appbar.Action
-                                icon={() => <Icons.Ionicons name="people" size={24} />}
-                                color={AppColors.primary}
-                                onPress={()=>showModal()}
-                            />
-                            {/* <Appbar.Action icon="dots-vertical" onPress={console.log('dots pressed')} /> */}
-                        </Appbar.Header>
-                    </Surface>
-                    {/* Display the list of received messages */}
-                    <View style={{ height: hp('45') }}>
+                    <GroupChatHeader navigation={props.navigation} item={item}/>                   
+                    <View style={{ flex: 1 }}>
                         {msgList.length != 0 ?
                             <FlatList
-                            
                                 data={msgList.length != 0 ? msgList : []}
                                 // ref={flatListRef}
                                 renderItem={({ item }) => { return <GroupMsgItem msgData={item} /> }}
@@ -176,58 +168,13 @@ const GroupChat = props => {
                             :
                             <Text style={{ color: AppColors.primary }}>Start Conversation</Text>
                         }
-                        {/* {swipeToReply && <View style={{backgroundColor:'blue',height:wp('20'),width:wp('100')}}>
-                <Text style={{color:'white'}}>Reply to your friend</Text>
-                </View>} */}
+
                     </View>
-                    <Portal>
-                        <Modal
-                            visible={visible}
-                            onDismiss={() => { hideModal() }}
-                            contentContainerStyle={styles.modalContentContainer}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <FlatList
-                                inverted={true}
-                                    indicatorStyle="black"
-                                    data={groupMembers}
-                                    renderItem={({ item }) => (
-                                        <View style={{ padding: 4 }}>
-                                            <Text>
-                                                {item._id == adminId ? (
-                                                    <Text
-                                                        style={{
-                                                            color: AppColors.primary,
-                                                            fontFamily: FontStyle.boldFont,
-                                                            fontSize: 16,
-                                                        }}>
-                                                        Group created by
-                                                    </Text>
-                                                ) : null}
-                                                <Text
-                                                    style={{
-                                                        color: 'black',
-                                                        fontFamily: FontStyle.regularFont,
-                                                    }}>
-                                                    {item.name}
-                                                </Text>
-                                            </Text>
-                                            <Text style={{ color: 'gray', fontSize: 18 }}>
-                                                {item.phoneNo}
-                                            </Text>
-                                            <Divider />
-                                        </View>
-                                    )}
-                                />
-                            </View>
-                        </Modal>
-                    </Portal>
-                    {/* Textinput */}
+                   
                     <GroupChatInput inputVal={newMsg} setter={(msg) => setNewMsg(msg)} sendMessageFunc={() => {
                         sendMessage()
                     }} />
-                </View>
-                {/* </View> */}
-            </Provider>
+                </KeyboardAvoidingView>
         </GestureHandlerRootView>
     );
 };

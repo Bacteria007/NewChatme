@@ -66,6 +66,7 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
               height: Dimensions.get('window').height,
             }} />
         </View>}
+
         <Text
           style={[
             msgItem.senderId === currentUser.userId
@@ -73,11 +74,11 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
               : UserChatStyle.otherTimestampText,
           ]}>
           {msgItem.senderId == currentUser.userId ? '' : `${msgItem.mood} mood`}{' '}
+
           {moment(msgItem.createdAt).format('hh:mm a ')}
         </Text>
         </View>
     </TouchableOpacity>
   );
 };
-
 export default RenderChats

@@ -14,7 +14,7 @@ const UserChatInputStyle = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'flex-end',
     alignSelf:'flex-end',
-    // backgroundColor: AppColors.black,
+    backgroundColor: AppColors.white,
     paddingBottom: mb,
   }),
   main_input_and_mic: {
@@ -23,17 +23,18 @@ const UserChatInputStyle = StyleSheet.create({
     justifyContent: 'space-evenly',
     // alignItems: 'flex-end',
     // alignSelf:'flex-end',
-    // backgroundColor: AppColors.black,
+    backgroundColor: AppColors.white,
     // height:hp(''),
+    // marginTop:8
     
   },
   input_and_all_icons: {
     flexDirection: 'row',
     width: wp('83%'),
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    // alignItems: 'flex-end',
     borderRadius: wp('8%'),
-    borderColor: AppColors.primary,
+    borderColor: AppColors.Lilac,
     borderWidth: 1,
     backgroundColor: AppColors.white,
     marginBottom: hp('1%'),
@@ -74,7 +75,7 @@ const UserChatInputStyle = StyleSheet.create({
   microphoneContainerView: {
     height: hp('6%'),
     width: hp('6%'),
-    backgroundColor: AppColors.primary,
+    backgroundColor: AppColors.Lilac,
     borderRadius: hp('6%'),
     justifyContent: 'center',
     alignItems: 'center',
