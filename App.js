@@ -163,7 +163,7 @@ await AsyncStorage.setItem('phoneNo','')
           console.log(response);
         });
 
-      await AsyncStorage.removeItem('user');
+      await AsyncStorage.setItem('fcmToken','');
       RNExitApp.exitApp();
       console.log('logout');
       navigation.replace('Splash');
