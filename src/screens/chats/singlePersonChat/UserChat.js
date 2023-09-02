@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  LayoutAnimation,
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -23,16 +24,13 @@ import axios from 'axios';
 import AppColors from '../../../assets/colors/Appcolors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const socket = io.connect('http://192.168.166.238:8888');
-
-
 const UserChat = props => {
-  const { baseUrl, storedUser } = useContext(AppContext);
+  const { baseUrl, currentUser ,token,socket} = useContext(AppContext);
   const [changeHeader, setChangeHeader] = useState(false);
   const [imagMessage, setImagMessage] = useState('');
   const [document, setDocument] = useState('')
   const [msgId, setMsgId] = useState();
-  const scrollRef = useRef()
+  const scrollRef = useRef(null)
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
   const flatListRef = useRef(null);
@@ -46,15 +44,25 @@ const UserChat = props => {
 
     try {
       const response = await fetch(`${baseUrl}/deleteMessage`, {
-        method: 'POST', body: formData,
+        method: 'POST', 
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+      },
       });
 
       const data = await response.json(); // Parse the response body as JSON
+      if(data.message=="Please provide a valid token."){
+        Alert.alert("Provide a valid token.")
+      }else if(data.message=='Please provide a token.'){
+        Alert.alert('Token required')
+      }else{
       // setMessageList(data)
       setMessageList(list => [...list, data]);
       console.log('After Message deleted:', data);
       setChangeHeader(!changeHeader);
       // Reset the new contact input
+    }
     } catch (error) {
       console.error('Error deleting message:', error);
     }
@@ -74,13 +82,19 @@ const UserChat = props => {
 
   const messagesFromDb = async () => {
 
-    const res = await fetch(`${baseUrl}/messages?userId=${storedUser.userId}&receiverId=${receiver._id}`, {
+    const res = await fetch(`${baseUrl}/messages?userId=${currentUser.userId}&receiverId=${receiver._id}`, {
       method: 'GET',
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     })
     const data = await res.json()
+    if(data.message=="Please provide a valid token."){
+      Alert.alert("Provide a valid token.")
+    }else if(data.message=='Please provide a token.'){
+      Alert.alert('Token required')
+    }else
     setMessageList(data);
   }
   const initialize_socket=async()=>{
@@ -107,8 +121,7 @@ const UserChat = props => {
   // }, [messageList]);
   const scrollingStop = () => {
     const lastChildElement = scrollRef.current?.lastElementChild;
-    lastChildElement?.scrollIntoView({ behavior: 'smooth' });
-  }
+    lastChildElement?.scrollIntoView({ behavior: 'smooth' });  }
   useEffect(() => {
     scrollingStop()
     console.log('scrollref effect')

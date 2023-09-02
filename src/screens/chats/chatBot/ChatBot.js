@@ -24,7 +24,7 @@ import AppContext from '../../../context/AppContext';
 const ChatBot = props => {
 
   //***********************************      USE STATE    ************************* */
-  const { baseUrl, storedUser } = useContext(AppContext)
+  const { baseUrl, currentUser,token } = useContext(AppContext)
   const [data, setData] = useState([]);
   const [msgHistory, setMessageHistory] = useState([]);
   const [textInput, setTextInput] = useState('');
@@ -87,7 +87,7 @@ const ChatBot = props => {
 
   const storeInDb = async () => {
     const formData = new FormData();
-    formData.append("userId", storedUser.userId);
+    formData.append("userId", currentUser.userId);
     formData.append("userMsg", textInput);
     formData.append("botMsg", msgOfBot);
     console.log("bot_msg", msgOfBot);
@@ -95,6 +95,7 @@ const ChatBot = props => {
     const response = await fetch(`${baseUrl}/storeBotMsg`, {
       method: 'POST',
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
         // 'Content-Type': 'application/json',
       },

@@ -26,7 +26,7 @@ import FontStyle from '../../assets/styles/FontStyle';
 
 const AllRequest = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
-    const { baseUrl, storedUser } = useContext(AppContext);
+    const { baseUrl, storedUser ,currentUser,token} = useContext(AppContext);
     const [waitingRequests, setWaitingRequests] = useState([]);
     const [people, setPeople] = useState([]);
     const [allPendingRequests, setAllPendingRequests] = useState([])
@@ -34,12 +34,14 @@ const AllRequest = ({ navigation }) => {
     // FUNCTIONS-----------------------------
     const fetchPeople = async () => {
         try {
-            const response = await fetch(`${baseUrl}/usersNotInContactList?userId=${storedUser.userId}`, {
+            const response = await fetch(`${baseUrl}/usersNotInContactList?userId=${currentUser.userId}`, {
                 method: 'GET',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
+            //yha token k messages ko khud e deal kr lyna
             if (response.ok) {
                 console.log("reqz::::::::::", waitingRequests)
                 const data = await response.json();
@@ -64,15 +66,21 @@ const AllRequest = ({ navigation }) => {
     }
     const fetchPendingRequest = async () => {
         try {
-            const result = await fetch(`${baseUrl}/pendingRequests?userId=${storedUser.userId}`, {
+            const result = await fetch(`${baseUrl}/pendingRequests?userId=${currentUser.userId}`, {
                 method: 'get',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
             if (result.ok) {
                 const allFetchedRequests = await result.json()
                 // //console.log('all pending req.........', allFetchedRequests)
+                if(allFetchedRequests.data.message=="Please provide a valid token."){
+                    Alert.alert("Provide a valid token.")
+                  }else if(allFetchedRequests.data.message=='Please provide a token.'){
+                    Alert.alert('Token required')
+                  }else    
                 setAllPendingRequests(allFetchedRequests)
             }
             else {
@@ -84,15 +92,21 @@ const AllRequest = ({ navigation }) => {
 
     }
     const fetchWaitingRequest = async () => {
-        await fetch(`${baseUrl}/waitingRequests?userId=${storedUser.userId}`, {
+        await fetch(`${baseUrl}/waitingRequests?userId=${currentUser.userId}`, {
             method: 'get',
             headers: {
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         })
             .then(async (response) => {
                 const allFetchedRequests = await response.json()
                 //console.log('all pending req.........', allFetchedRequests)
+                if(allFetchedRequests.data.message=="Please provide a valid token."){
+                    Alert.alert("Provide a valid token.")
+                  }else if(allFetchedRequests.data.message=='Please provide a token.'){
+                    Alert.alert('Token required')
+                  }else    
                 setWaitingRequests(allFetchedRequests)
             })
             .catch((err) => {
@@ -102,10 +116,10 @@ const AllRequest = ({ navigation }) => {
     const acceptRequest = async (contact) => {
         console.log("contact in accept", contact)
         try {
-            const response = await fetch(`${baseUrl}/acceptRequest?responderId=${storedUser.userId}&requesterId=${contact.requesterId._id}&requestId=${contact._id}`, {
+            const response = await fetch(`${baseUrl}/acceptRequest?responderId=${currentUser.userId}&requesterId=${contact.requesterId._id}&requestId=${contact._id}`, {
                 method: 'post',
                 headers: {
-                    // 'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             });
@@ -128,9 +142,11 @@ const AllRequest = ({ navigation }) => {
 
         // console.log("contact in reject", contact)
         try {
-            const response = await fetch(`${baseUrl}/rejectRequest?responderId=${storedUser.userId}&requesterId=${contact.requesterId._id}&requestId=${contact._id}`, {
+            const response = await fetch(`${baseUrl}/rejectRequest?responderId=${currentUser.userId}&requesterId=${contact.requesterId._id}&requestId=${contact._id}`, {
                 method: 'get',
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json' }
             });
 
             if (response.ok) {

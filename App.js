@@ -76,7 +76,14 @@ import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
 import Settings2 from './src/screens/settings/Settings2';
 import AllUsers from './src/screens/requests/AllUsers';
 import AllRequest from './src/screens/requests/AllRequests';
+
+import { Neomorph } from 'react-native-neomorph-shadows-fixes';
+import Primary_StatusBar from './src/components/statusbars/Primary_StatusBar';
+import UseScreenFocus from './src/components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
+import FakeSplash from './src/screens/fakeSplash/FakeSplash';
+
 import axios from 'axios';
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -86,7 +93,9 @@ import {
 } from './src/components/Permission/Permission';
 
 const App = ({ navigation }) => {
+
   const { darkThemeActivator, theme } = useContext(ThemeContext);
+
 
   let iconSize = 18;
   //Tab Variables Start
@@ -112,15 +121,30 @@ const App = ({ navigation }) => {
   // const {updateCurrentUserId}=useContext(AppContext);
   const blank = '';
   // const loggedInUser=AsyncStorage.getItem('user')
+  // const {updateCurrentUser}=useContext(AppContext)
   const logoutUser = async ({ navigation }) => {
     // YE NOTIFICATION K TOKEN KO LOGOUT PR NULL KRNY K LIYE API HAI
 
     const baseUrl = 'http://192.168.166.238:8888';
-    const CurrentUser = await AsyncStorage.getItem('user');
-    const ParseUser = await JSON.parse(CurrentUser);
-    const CurrentUserId = ParseUser.userId;
-    const CurrentUserFcmToken = ParseUser.fcmToken;
+    const CurrentUserId = await AsyncStorage.getItem('Id');
+    const CurrentUserFcmToken = await AsyncStorage.getItem('fcmToken');
     try {
+
+      // console.log('isUserLoggedin ', isUserLoggedin);
+await AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(false))
+await AsyncStorage.setItem('token','')
+await AsyncStorage.setItem('profileImage','')
+await AsyncStorage.setItem('name','')
+await AsyncStorage.setItem('Id','')
+await AsyncStorage.setItem('phoneNo','')
+// await AsyncStorage.removeItem('user')
+      // await AsyncStorage.setItem('user',JSON.stringify({userId: null, phoneNumber: null, profileImage: null, name: null}));
+      console.log('logout')
+      // storeLoggedinStatus(false)
+      // console.log('User removed from storage');
+      // updateCurrentUserId(''); // Clear the storedUser in the context
+      
+
       const formdata = new FormData();
       formdata.append('fcmToken', CurrentUserFcmToken);
 
@@ -142,7 +166,9 @@ const App = ({ navigation }) => {
       await AsyncStorage.removeItem('user');
       RNExitApp.exitApp();
       console.log('logout');
+      navigation.replace('Splash');
       navigation.replace('LogInScreen');
+
     } catch (error) {
       console.log('Error while logging out:', error);
       Alert.alert('You are unable to logout, try again later!');
@@ -304,9 +330,9 @@ const App = ({ navigation }) => {
           drawerContent={props => {
             // const { userData } = useUserContext();
             // const parsedUser = JSON.parse(userData._j);
-            const { baseUrl, storedUser } = useContext(AppContext);
+            const { baseUrl, currentUser,updateCurrentUser } = useContext(AppContext);
             console.log('baseurl', baseUrl);
-            console.log('appcontext appjs', storedUser);
+            console.log('appcontext appjs', currentUser);
             return (
               <View style={{ flex: 1 }}>
                 {/* <View style={{ height: hp('70'), width: wp('50'), justifyContent: 'center', marginTop: hp('3') }}> */}
@@ -329,7 +355,9 @@ const App = ({ navigation }) => {
                       }}>
                       <Image
                         source={{
-                          uri: `${baseUrl}${storedUser?.profileImage}`,
+
+                          uri: `${baseUrl}${currentUser?.profileImage} `,
+
                         }}
                         style={{
                           height: wp('25%'),
@@ -340,14 +368,10 @@ const App = ({ navigation }) => {
                       />
                     </View>
                     <Text
-                      style={{
-                        fontSize: hp('2.5%'),
-                        color: AppColors.black,
-                        fontFamily: FontStyle.regularFont,
-                        marginVertical: 6,
-                        textAlign: 'center',
-                      }}>
-                      {storedUser?.name}
+
+                      style={{ fontSize: hp('2.5%'), color: AppColors.black, fontFamily: FontStyle.regularFont, marginVertical: 6, textAlign: 'center' }}>
+                      {currentUser?.name}
+
                     </Text>
                   </Animated.View>
                   <DrawerItemList {...props} />
@@ -460,12 +484,17 @@ const App = ({ navigation }) => {
       <SafeAreaProvider style={{ flex: 1 }}>
         <NavigationContainer>
           <ZegoCallInvitationDialog />
-          <Stack.Navigator
-            options={{ headerShown: false }}
-            initialRouteName="LogInScreen">
+
+          <Stack.Navigator options={{ headerShown: false }} initialRouteName='Splash'  >
+
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Splash"
+              component={FakeSplash}
               options={{ headerShown: false }}
             />
             <Stack.Screen

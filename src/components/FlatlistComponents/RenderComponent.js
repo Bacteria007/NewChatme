@@ -14,7 +14,7 @@ import FontStyle from "../../assets/styles/FontStyle";
 
 const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_item, contacts_item, navigation }) => {
     const { theme } = useContext(ThemeContext);
-    const { baseUrl, storedUser } = useContext(AppContext);
+    const { baseUrl, currentUser,token } = useContext(AppContext);
     const [profileModal, setProfileModal] = useState(false);
     const [userLastMsg, setUserLastMsg] = useState('');
     const [groupLastMsg, setGroupLastMsg] = useState('');
@@ -41,12 +41,15 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
         setProfileModal(false);
     };
     const blockContact = async (item) => {
-        // console.log("discussion ma ", storedUser.userId)
-        // console.log("discussion ma ", item._id)
+
+        console.log("discussion ma ", currentUser.userId)
+        console.log("discussion ma ", item._id)
+
         try {
-            const response = await fetch(`${baseUrl}/blockContact?userId=${storedUser.userId}&contactId=${item._id}`, {
+            const response = await fetch(`${baseUrl}/blockContact?userId=${currentUser.userId}&contactId=${item._id}`, {
                 method: 'GET',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
@@ -65,12 +68,15 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
 
     }
     const unblockContact = async (item) => {
-        // console.log("discussion ma ", storedUser.userId)
-        // console.log("discussion ma ", item._id)
+
+        console.log("discussion ma ", currentUser.userId)
+        console.log("discussion ma ", item._id)
+
         try {
-            const response = await fetch(`${baseUrl}/unblockContact?userId=${storedUser.userId}&contactId=${item._id}`, {
+            const response = await fetch(`${baseUrl}/unblockContact?userId=${currentUser.userId}&contactId=${item._id}`, {
                 method: 'GET',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
@@ -98,15 +104,20 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
     const getUserLastMessage = async () => {
         // console.log("req.query", discussions_item)
 
-        const res = await fetch(`${baseUrl}/userLatestMessage?userId=${storedUser.userId}&receiverId=${discussions_item._id}`, {
+        const res = await fetch(`${baseUrl}/userLatestMessage?userId=${currentUser.userId}&receiverId=${discussions_item._id}`, {
             method: 'GET',
             headers: {
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         })
         const data = await res.json()
         // console.log("----------", data)
-
+        if(data.message=="Please provide a valid token."){
+            Alert.alert("Provide a valid token.")
+          }else if(data.message=='Please provide a token.'){
+            Alert.alert('Token required')
+          }else
         setUserLastMsg(data);
     }
     const getGroupLastMessage = async () => {
@@ -114,10 +125,16 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
         const res = await fetch(`${baseUrl}/groupLatestMessage?groupId=${groups_item._id}`, {
             method: 'GET',
             headers: {
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         })
         const data = await res.json()
+        if(data.message=="Please provide a valid token."){
+            Alert.alert("Provide a valid token.")
+          }else if(data.message=='Please provide a token.'){
+            Alert.alert('Token required')
+          }else
         setGroupLastMsg(data);
         // console.log("i(((((())))))))))m", data)
 

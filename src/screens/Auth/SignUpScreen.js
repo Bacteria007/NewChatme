@@ -26,12 +26,10 @@ import TranslationFile from '../../assets/translation/TranslationFile';
 import AppContext from '../../context/AppContext';
 import FontStyle from '../../assets/styles/FontStyle';
 import { ThemeContext } from '../../context/ThemeContext';
+// import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import messaging from '@react-native-firebase/messaging';
-import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
-
 const SignUpScreen = ({ navigation }) => {
-  const { language, baseUrl, storeLoggedinStatus, getStoredUserDetails } =
-    useContext(AppContext);
+  const { language,baseUrl,updateCurrentUser,storeImageUri,getToken,storeLoggedinStatus,getStoredUserDetails } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
@@ -98,23 +96,24 @@ const SignUpScreen = ({ navigation }) => {
           const uId = response.data.newUser._id;
           console.log('type of', typeof uId);
           // console.log("asyncSignup",AsyncStorage.setItem('user', uId))
-          if (
-            response.data.newUser ===
-            'A user with the same phone number already exists.'
-          ) {
-            setErrorMessage(true);
-            setAlreadyExist(response.data.newUser);
-          } else {
-            AsyncStorage.setItem(
-              'user',
-              JSON.stringify({
-                userId: response.data.newUser._id,
-                phoneNumber: response.data.newUser.phoneNo,
-              }),
-            );
-            getStoredUserDetails();
-            storeLoggedinStatus(true);
-            navigation.navigate('AfterSignUpProfileScreen');
+
+          if(response.data.newUser==="A user with the same phone number already exists."){
+            setErrorMessage(true)
+            setAlreadyExist(response.data.newUser)
+          }else{
+            storeImageUri('')
+            console.log("signup res token",response.data.token)
+            updateCurrentUser({userId:response.data.newUser._id,phoneNumber:response.data.newUser.phoneNo})
+            AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(true))
+            AsyncStorage.setItem('Id',response.data.newUser._id)
+            AsyncStorage.setItem('phoneNo',response.data.newUser.phoneNo)
+            AsyncStorage.setItem('token', response.data.token);
+            getToken()
+            // AsyncStorage.setItem('user', JSON.stringify({userId:response.data.newUser._id,phoneNumber:response.data.newUser.phoneNo}))
+            // getStoredUserDetails()
+          // storeLoggedinStatus(true)
+          navigation.navigate('AfterSignUpProfileScreen');
+
           }
         } else {
           alert('Account cannot be created! Please try again later.');
@@ -265,28 +264,13 @@ const SignUpScreen = ({ navigation }) => {
               {TranslationFile[language].Next}
             </Text>
           </TouchableOpacity>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              margin: wp('3%'),
-            }}>
-            <Text style={{ fontFamily: FontStyle.mediumFont }}>
-              Have an account?{' '}
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('LogInScreen');
-              }}>
-              <Text
-                style={{
-                  color: AppColors.primary,
-                  fontFamily: FontStyle.mediumFont,
-                }}>
-                Login
-              </Text>
-            </TouchableOpacity>
+
+          <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',margin:wp('3%')}}>
+          <Text style={{fontFamily:FontStyle.mediumFont}}>Have an account?{' '}</Text>
+          <TouchableOpacity onPress={()=>{
+            navigation.replace('LogInScreen')
+          }}><Text style={{color:AppColors.primary,fontFamily:FontStyle.mediumFont}}>Login</Text></TouchableOpacity>
+
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

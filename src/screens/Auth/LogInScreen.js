@@ -29,9 +29,10 @@ import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/U
 import messaging from '@react-native-firebase/messaging';
 
 const LogInScreen = ({ navigation }) => {
-  const { baseUrl, storeLoggedinStatus, storedUser, getStoredUserDetails } =
-    useContext(AppContext);
-  const { theme } = useContext(ThemeContext);
+
+  const { baseUrl,getToken,updateCurrentUser, storeLoggedinStatus, storedUser, getStoredUserDetails } = useContext(AppContext)
+  const { theme } = useContext(ThemeContext)
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -43,7 +44,10 @@ const LogInScreen = ({ navigation }) => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-  UseScreenFocus(getStoredUserDetails);
+
+  // UseScreenFocus(getStoredUserDetails)
+  UseScreenFocus(initializeZego)
+
 
   useEffect(() => {
     // Get the FCM token when the component mounts (app starts or user logs in)
@@ -55,6 +59,7 @@ const LogInScreen = ({ navigation }) => {
         // Send this token to your backend to associate it with the user.
       });
   }, []);
+
 
   const showSnackbar = message => {
     setSnackbarMessage(message);
@@ -91,24 +96,28 @@ const LogInScreen = ({ navigation }) => {
     })
       .then(function (response) {
         if (response.data.match == true) {
-          console.log('login', response.data);
-          let res = response.data.loggedInUser;
-          AsyncStorage.setItem(
-            'user',
-            JSON.stringify({
-              userId: res._id,
-              phoneNumber: res.phoneNo,
-              profileImage: res.profileImage,
-              name: res.name,
-              fcmToken: fcmToken,
-            }),
-          );
+
+          console.log("login", response.data)
+          let res = response.data.loggedInUser
+          updateCurrentUser({userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name,fcmToken:fcmToken})
+          // AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name,fcmToken:fcmToken }))
+          AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(true))
+          console.log("login token",response.data.token)
+          AsyncStorage.setItem('token', response.data.token);
+        AsyncStorage.setItem('profileImage',res.profileImage)
+        AsyncStorage.setItem('name',res.name)
+        AsyncStorage.setItem('Id',res._id)
+          AsyncStorage.setItem('fcmToken',fcmToken)
+        AsyncStorage.setItem('phoneNo',res.phoneNo)
+        getToken()
           // storeLoggedinStatus(true)
-          getStoredUserDetails();
-          console.log('async login', storedUser);
+          // getStoredUserDetails()
+          // console.log("async login", storedUser)
           initializeZego(res._id, res.name);
-          navigation.navigate('DrawerScreens');
-        } else {
+          navigation.replace('DrawerScreens');
+        }
+        else {
+
           if (response.data.message === 'Invalid phone number or password') {
             alert('Invalid phone number or password');
           } else {
@@ -192,20 +201,21 @@ const LogInScreen = ({ navigation }) => {
             <View style={{ width: wp('85') }}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('ForgetPassword');
+                  navigation.replace('ForgetPassword');
                 }}>
                 <Text style={[LogInStyleSheet.forgotpasswordText]}>
                   Forgot Password?
                 </Text>
               </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                if ((phoneNumber == '') & (password == '')) {
-                  setPasswordSnackWidth(!false);
-                  showSnackbar('Enter Phone Number and Password');
-                  return;
-                }
+            </View>               
+          <TouchableOpacity
+            onPress={() => {
+              if ((phoneNumber == '') & (password == '')) {
+                setPasswordSnackWidth(!false);
+                showSnackbar('Enter Phone Number and Password');
+                return;
+              }
+
                 if (!isValidPhoneNumber()) {
                   if (phoneNumber === '') {
                     setPasswordSnackWidth(!false);
@@ -230,39 +240,24 @@ const LogInScreen = ({ navigation }) => {
                 } else {
                   console.log('clicked');
                   userLogin({ navigation });
-                  // navigation.navigate('DrawerScreens');
+                  // navigation.replace('DrawerScreens');
                 }
 
-                // handleSubmit();
-                // handleSignUp({navigation})
-              }}
-              style={[LogInStyleSheet.TouchableButtonStyle]}>
-              <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
-            </TouchableOpacity>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                margin: wp('3%'),
-              }}>
-              <Text style={{ fontFamily: FontStyle.mediumFont }}>
-                Don't have an account?{' '}
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('SignUpScreen');
-                }}>
-                <Text
-                  style={{
-                    color: AppColors.primary,
-                    fontFamily: FontStyle.mediumFont,
-                  }}>
-                  Signup
-                </Text>
-              </TouchableOpacity>
-            </View>
+
+              // handleSubmit();
+              // handleSignUp({navigation})
+            }}
+            style={[LogInStyleSheet.TouchableButtonStyle]}>
+            <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
+          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: wp('3%') }}>
+            <Text style={{ fontFamily: FontStyle.mediumFont }}>Don't have an account?{' '}</Text>
+            <TouchableOpacity onPress={() => {
+              navigation.replace('SignUpScreen')
+            }}><Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Signup</Text></TouchableOpacity>
           </View>
+
+
         </ScrollView>
       </KeyboardAvoidingView>
       <Snackbar

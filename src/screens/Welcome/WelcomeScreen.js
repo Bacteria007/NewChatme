@@ -56,7 +56,7 @@ const WelcomeScreen = ({ navigation }) => {
           <Text
             style={[WelcomeScreenStyles.TouchableButton1Text]}
             onPress={() => {
-              navigation.navigate('SignUpScreen');
+              navigation.replace('SignUpScreen');
             }}>
             {TranslationFile[language].Register_as_new_user}
           </Text>
@@ -64,7 +64,7 @@ const WelcomeScreen = ({ navigation }) => {
         <TouchableOpacity
           style={[WelcomeScreenStyles.TouchableButton2]}
           onPress={() => {
-            navigation.navigate('LogInScreen');
+            navigation.replace('LogInScreen');
           }}>
           <Text style={[WelcomeScreenStyles.TouchableButton2Text]}>
             {TranslationFile[language].Login_to_existing_account}

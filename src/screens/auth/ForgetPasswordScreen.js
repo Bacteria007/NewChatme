@@ -29,7 +29,7 @@ import AppColors from '../../assets/colors/Appcolors';
 
 
 const ForgetPasswordScreen = ({ navigation }) => {
-  const { language, baseUrl, storedUser, getStoredUserDetails, selectedImageUri, storeImageUri } = useContext(AppContext);
+  const { language, baseUrl,updateCurrentUser, getToken,storedUser, getStoredUserDetails, selectedImageUri, storeImageUri } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const [ques1, setQues1] = useState('');
   const [ques2, setQues2] = useState('');
@@ -114,8 +114,15 @@ const ForgetPasswordScreen = ({ navigation }) => {
           console.log('res aya after changing', data)
           if (data.login === true) {
             let res = data.updated
-            AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name }))
-
+            AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(true))
+            AsyncStorage.setItem('token', data.token);
+            AsyncStorage.setItem('profileImage',data.newImage.profileImage)
+        AsyncStorage.setItem('name',data.updated.name)
+        AsyncStorage.setItem('Id',response.data.newUser._id)
+        AsyncStorage.setItem('phoneNo',response.data.newUser.phoneNo)
+            // AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name }))
+            updateCurrentUser({userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name})
+            getToken()
             navigation.replace('DrawerScreens');
           } else {
             Alert.alert("There was an issue in logging in,try again")
@@ -123,23 +130,24 @@ const ForgetPasswordScreen = ({ navigation }) => {
         })
         .catch(error => console.log("res error", error));
 
-      const data = await response.json();
-      console.log('res after updating', data);
-      if (data.message === "This user name is not available.") {
-        setErrorMessage(true)
-        setAlreadyExist(data.message)
-      }
-      else {
-        AsyncStorage.getItem("user").then((userData) => {
-          if (userData) {
-            const existingData = JSON.parse(userData);
-            const updatedData = { ...existingData, name: data.updated.name };
-            console.log("update async", updatedData)
-            AsyncStorage.setItem("user", JSON.stringify(updatedData));
-          }
-          navigation.navigate('DrawerScreens');
-        });
-      }
+      // const data = await response.json();
+      // console.log('res after updating', data);
+      // if (data.message === "This user name is not available.") {
+      //   setErrorMessage(true)
+      //   setAlreadyExist(data.message)
+      // }
+      // else {
+      //   // AsyncStorage.getItem("user").then((userData) => {
+      //   //   if (userData) {
+      //   //     const existingData = JSON.parse(userData);
+      //   //     const updatedData = { ...existingData, name: data.updated.name };
+      //   //     console.log("update async", updatedData)
+      //   //     AsyncStorage.setItem("user", JSON.stringify(updatedData));
+      //   //   }
+      //     updateCurrentUser({userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name})
+      //     navigation.navigate('DrawerScreens');
+      //   // });
+      // }
     } catch (error) {
       console.error('Error updating profile:', error);
     }

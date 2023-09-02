@@ -11,7 +11,7 @@ import { Icons } from '../../assets/Icons';
 import AppColors from '../../assets/colors/Appcolors';
 
 const GroupMsgItem = ({ msgData }) => {
-  const { curentUser,storedUser } = useContext(AppContext);
+  const { curentUser,currentUser } = useContext(AppContext);
   // const currentId = JSON.parse(curentUser._j);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   // reply
@@ -57,7 +57,7 @@ const GroupMsgItem = ({ msgData }) => {
 // Checking  User
   const isCurrentUserFunc = async () => {
     const senderid = await msgData.sender_id;
-    return senderid === storedUser.userId;
+    return senderid === currentUser.userId;
   };
   const checkIsCurrentUser = async () => {
     const result = await isCurrentUserFunc();

@@ -22,7 +22,7 @@ import { widthPercentageToDP as wp} from 'react-native-responsive-screen';
 const Reals = props => {
   //   **********************************           VARIABLES               ****************************
   const { height, width } = Dimensions.get('window');
-  const { baseUrl,storedUser } = useContext(AppContext);
+  const { baseUrl ,token} = useContext(AppContext);
 
   //   **********************************          USE STATE               ****************************
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -63,15 +63,24 @@ const Reals = props => {
   const UploadedReels = async () => {
     fetch(`${baseUrl}/uploadedReels`, {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+    },
     })
       .then(response => response.json())
       .then(data => {
+        if(data.message=="Please provide a valid token."){
+          Alert.alert("Provide a valid token.")
+        }else if(data.message=='Please provide a token.'){
+          Alert.alert('Token required')
+        }else{
         const videosWithSources = data.UploadedVideos.map(video => ({
           uri: { uri: video.video }, // Convert the path to a source object
           desc: video.name,
         }));
 
         setUploadedReels(videosWithSources);
+      }
       })
       .catch(error => console.log(error));
   };
