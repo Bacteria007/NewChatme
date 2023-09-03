@@ -1,22 +1,9 @@
 import 'react-native-gesture-handler';
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  Image,
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-  StatusBar,
-} from 'react-native';
+import {  Image,  View,  Text,  TouchableOpacity,  Alert,  StatusBar,} from 'react-native';
 import RNExitApp from 'react-native-exit-app';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import Animated, {
-  interpolate,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
+import {  heightPercentageToDP as hp,  widthPercentageToDP as wp,} from 'react-native-responsive-screen';
+import Animated, {  interpolate,  useAnimatedStyle,} from 'react-native-reanimated';
 import Reels from './src/screens/reels/Reels';
 import Calls from './src/screens/calls/Calls';
 import AppColors from './src/assets/colors/Appcolors';
@@ -32,14 +19,7 @@ import { Icons } from './src/assets/Icons'; // Navigation
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  createDrawerNavigator,
-  useDrawerProgress,
-  useDrawerStatus,
-  useIsDrawerOpen,
-} from '@react-navigation/drawer';
+import {  DrawerContentScrollView,  DrawerItemList,  createDrawerNavigator,  useDrawerProgress,  useDrawerStatus,  useIsDrawerOpen,} from '@react-navigation/drawer';
 import TermsAndConditions from './src/screens/TermsAndConditions';
 import Containers from './src/assets/styles/Containers';
 import ChangeNumber from './src/screens/settings/security/ChangeNumber';
@@ -56,47 +36,31 @@ import StreamOutlineWhite from './src/assets/imges/footerIcons/streamOutlineBlac
 import StreamOutlineBlack from './src/assets/imges/footerIcons/streamOutlineWhite.svg';
 import { ThemeContext } from './src/context/ThemeContext';
 import AppContext, { AppProvider } from './src/context/AppContext';
-import Theme from './src/screens/settings/accountPreferences/Theme';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ForgetPasswordScreen from './src/screens/auth/ForgetPasswordScreen';
-import { LogBox } from 'react-native';
 import FontStyle from './src/assets/styles/FontStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-LogBox.ignoreAllLogs(); //Ignore all log notifications
-
-import {
-  ZegoCallInvitationDialog,
-  ZegoUIKitPrebuiltCallWaitingScreen,
-  ZegoUIKitPrebuiltCallInCallScreen,
-} from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import {  ZegoCallInvitationDialog,  ZegoUIKitPrebuiltCallWaitingScreen,  ZegoUIKitPrebuiltCallInCallScreen,} from '@zegocloud/zego-uikit-prebuilt-call-rn';
 import CreateGroup from './src/screens/chats/groups/CreateGroup';
 import Apis from './src/components/HelperFunctions/GlobalApiz/Apis';
 import GroupChat from './src/screens/chats/groups/group_chat/GroupChat';
-import Settings2 from './src/screens/settings/Settings2';
 import AllUsers from './src/screens/requests/AllUsers';
 import AllRequest from './src/screens/requests/AllRequests';
-
-import { Neomorph } from 'react-native-neomorph-shadows-fixes';
-import Primary_StatusBar from './src/components/statusbars/Primary_StatusBar';
-import UseScreenFocus from './src/components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import FakeSplash from './src/screens/fakeSplash/FakeSplash';
-
 import axios from 'axios';
+import {  checkNotificationPermission,  requestNotificationPermission,} from './src/components/Permission/Permission';
+import { LogBox } from 'react-native';
+import Settings from './src/screens/settings/Settings';
+// LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+// LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
-import {
-  checkNotificationPermission,
-  requestNotificationPermission,
-} from './src/components/Permission/Permission';
 
 const App = ({ navigation }) => {
 
   const { darkThemeActivator, theme } = useContext(ThemeContext);
-
-
   let iconSize = 18;
   //Tab Variables Start
   const reelsIconSize = 19;
@@ -125,7 +89,7 @@ const App = ({ navigation }) => {
   const logoutUser = async ({ navigation }) => {
     // YE NOTIFICATION K TOKEN KO LOGOUT PR NULL KRNY K LIYE API HAI
 
-    const baseUrl = 'http://192.168.43.122:8888';
+    const baseUrl = 'http://192.168.43.145:8888';
     const CurrentUserId = await AsyncStorage.getItem('Id');
     const CurrentUserFcmToken = await AsyncStorage.getItem('fcmToken');
     try {
@@ -449,7 +413,7 @@ await AsyncStorage.setItem('phoneNo','')
           />
           <Drawer.Screen
             name="Settings"
-            component={Settings2}
+            component={Settings}
             options={{
               drawerIcon: ({ focused }) => (
                 <Icons.Ionicons
@@ -555,11 +519,6 @@ await AsyncStorage.setItem('phoneNo','')
             />
 
             <Stack.Screen
-              name="mainScreen"
-              component={Settings2}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="changeNumber"
               component={ChangeNumber}
               options={{ headerShown: false }}
@@ -584,11 +543,7 @@ await AsyncStorage.setItem('phoneNo','')
               component={DeleteAccount}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name="theme"
-              component={Theme}
-              options={{ headerShown: false }}
-            />
+           
             <Stack.Screen
               name="Requests"
               component={AllRequest}
