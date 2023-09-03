@@ -14,6 +14,7 @@ import Containers from '../../../assets/styles/Containers';
 import LottieView from 'lottie-react-native';
 import MyActivityStyleSheet from '../../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
 
+
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)

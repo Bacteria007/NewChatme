@@ -125,7 +125,7 @@ const App = ({ navigation }) => {
   const logoutUser = async ({ navigation }) => {
     // YE NOTIFICATION K TOKEN KO LOGOUT PR NULL KRNY K LIYE API HAI
 
-    const baseUrl = 'http://192.168.166.238:8888';
+    const baseUrl = 'http://192.168.43.122:8888';
     const CurrentUserId = await AsyncStorage.getItem('Id');
     const CurrentUserFcmToken = await AsyncStorage.getItem('fcmToken');
     try {
@@ -167,7 +167,7 @@ await AsyncStorage.setItem('phoneNo','')
       RNExitApp.exitApp();
       console.log('logout');
       navigation.replace('Splash');
-      navigation.replace('LogInScreen');
+      // navigation.replace('LogInScreen');
 
     } catch (error) {
       console.log('Error while logging out:', error);
