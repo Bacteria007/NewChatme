@@ -1,66 +1,63 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { StyleSheet } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const SettingScreenStyle = StyleSheet.create({
-  containerView: {
-    // flex:1,
-    // height: hp('100'),
-    backgroundColor: AppColors.white,
-    // backgroundColor: '#F1F1F5',
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    height: hp('100'),
+    width: wp('100'),
+    // justifyContent: 'center', 
+    alignItems: 'center'
+
   },
-  containerView2: {
-    height: hp('72%'),
-    justifyContent: 'space-between',
-  },
-  sectionView: {
-    backgroundColor: AppColors.white,
-    elevation: 7,
-    // marginVertical:10
-  },
-  sectionHeadText: {
-    fontSize: wp('6%'),
-    fontFamily: FontStyle.mediumFont,
-    paddingHorizontal: wp('4%'),
-    color: AppColors.black,
-  },
-  touchableView: {
-    flexDirection: 'row',
-    height: hp('6%'),
-    justifyContent: 'space-between',
-    paddingHorizontal: wp('4%'),
-    alignItems: 'center',
-    borderBottomWidth: wp('0.1%'),
-  },
-  iconTextContainer: { flexDirection: 'row' },
-  touchableText: {
-    fontSize: wp('4.5%'),
-    fontFamily: FontStyle.regularFont,
-    color: AppColors.black,
-    marginLeft: wp('3%'),
-  },
-  modalView: {
-    width: wp('90%'),
-    height: hp('30%'),
-    backgroundColor: AppColors.white,
+  sectionsStyle: {
+    width: wp('100'),
+    borderRadius: 17,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
+    // elevation: 2,
+    marginTop: 13
   },
-  modalHeadText: {
-    fontSize: wp('6.5%'),
-    fontFamily: FontStyle.mediumFont,
+  itemStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: wp('97'),
+    // backgroundColor:"orange",
+    padding: 15,
+  },
+  itemName: color => ({
+    // fontFamily: FontStyle.regularFont,
+    fontSize: 15,
+    color: color,
+    marginLeft: 10,
+  }),
+  sectionHeadText: {
+    fontSize: wp('4%'),
+    // fontFamily: FontStyle.regularFont,
     color: AppColors.black,
   },
-  modalText: {
-    fontSize: wp('6%'),
-    fontFamily: FontStyle.lightFont,
-    color: AppColors.black,
+  dividerContainer: {
+    paddingHorizontal: 15, // Add horizontal padding here
   },
+  modalView: {
+    backgroundColor: "#fff",
+    height: hp('25'),
+    width: wp('100'),
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    alignSelf: 'center',
+  },
+  themeModal: {
+    backgroundColor: "rgba(0,0,0,0.4)",
+    margin: 0,
+    justifyContent: 'center',
+    height: hp('30'), alignSelf: 'center'
+  },
+  themeModalText: { color: AppColors.primary, fontFamily: FontStyle.regularFont, fontSize: 17 }
 });
 
 export default SettingScreenStyle;

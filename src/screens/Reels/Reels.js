@@ -17,7 +17,8 @@ import FontStyle from '../../assets/styles/FontStyle';
 import Containers from '../../assets/styles/Containers';
 import WebView from 'react-native-webview';
 import GenerateVideoHtml from './ReelsHtmlVideo';
-import { widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import LottieView from 'lottie-react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const Reals = props => {
   //   **********************************           VARIABLES               ****************************
@@ -130,17 +131,13 @@ const Reals = props => {
           onChangeIndex={changeIndex}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => {
-            const HtmlVideo=GenerateVideoHtml(baseUrl,item)
+            const HtmlVideo = GenerateVideoHtml(baseUrl, item, true, false)
             return (
               <View style={[ReelscreenStyle.flatlistContainerView]}>
                 <TouchableOpacity
                   style={[ReelscreenStyle.TouchableOpacityStyle]}
                   activeOpacity={1}
                   onPress={toggleVideoPlayback}
-                // onLongPress={() => {
-                //   handleLongPress(item)
-                //   console.log("reel item", item)
-                // }}
                 >
                   {isLoading ? (
                     <View style={ReelscreenStyle.LoaderView}>
@@ -154,7 +151,8 @@ const Reals = props => {
                     <WebView
                       originWhitelist={['*']}
                       source={{
-                        html: `${HtmlVideo}` }}
+                        html: `${HtmlVideo}`
+                      }}
                       style={[ReelscreenStyle.backgroundVideo]}
                     />
                   )}
@@ -166,16 +164,10 @@ const Reals = props => {
 
         />
         :
-        <View style={[Containers.centerContainer,{width:wp('60'),alignSelf:'center'}]}>
-
-          <Text
-            style={{
-              fontSize: 22,
-              color: 'white',
-              textAlign: 'center',
-              fontFamily: FontStyle.mediumFont,letterSpacing:2
-            }}>
-            Upload a new one by clicking plus icon 
+        <View style={ReelscreenStyle.lottieView}>
+          <LottieView source={require('../../assets/animations/Lottieanimations/video.json')} autoPlay style={ReelscreenStyle.lottieStyle} />
+          <Text style={ReelscreenStyle.lottieText}>
+            Upload a reel.
           </Text>
         </View>
       }

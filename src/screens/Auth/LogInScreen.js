@@ -30,7 +30,7 @@ import messaging from '@react-native-firebase/messaging';
 
 const LogInScreen = ({ navigation }) => {
 
-  const { baseUrl,getToken,updateCurrentUser, storeLoggedinStatus, storedUser, getStoredUserDetails } = useContext(AppContext)
+  const { baseUrl, getToken, updateCurrentUser, storeLoggedinStatus, storedUser, getStoredUserDetails } = useContext(AppContext)
   const { theme } = useContext(ThemeContext)
 
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -99,17 +99,17 @@ const LogInScreen = ({ navigation }) => {
 
           console.log("login", response.data)
           let res = response.data.loggedInUser
-          updateCurrentUser({userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name,fcmToken:fcmToken})
+          updateCurrentUser({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name, fcmToken: fcmToken })
           // AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name,fcmToken:fcmToken }))
-          AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(true))
-          console.log("login token",response.data.token)
+          AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(true))
+          console.log("login token", response.data.token)
           AsyncStorage.setItem('token', response.data.token);
-        AsyncStorage.setItem('profileImage',res.profileImage)
-        AsyncStorage.setItem('name',res.name)
-        AsyncStorage.setItem('Id',res._id)
-          AsyncStorage.setItem('fcmToken',fcmToken)
-        AsyncStorage.setItem('phoneNo',res.phoneNo)
-        getToken()
+          AsyncStorage.setItem('profileImage', res.profileImage)
+          AsyncStorage.setItem('name', res.name)
+          AsyncStorage.setItem('Id', res._id)
+          AsyncStorage.setItem('fcmToken', fcmToken)
+          AsyncStorage.setItem('phoneNo', res.phoneNo)
+          getToken()
           // storeLoggedinStatus(true)
           // getStoredUserDetails()
           // console.log("async login", storedUser)
@@ -155,59 +155,59 @@ const LogInScreen = ({ navigation }) => {
               style={[LogInStyleSheet.image]}
             />
             <Text style={[LogInStyleSheet.title]}>LogIn to Continue!</Text>
+          </View>
+          <View style={[LogInStyleSheet.countryContainer]}>
+            <CountryPicker
+              withFilter
+              withFlag
+              withCountryNameButton
+              withCallingCode
+              countryCode={selectedCountry?.cca2}
+              onSelect={handleCountrySelect}
+            // translation="eng"
+            />
+          </View>
 
-            <View style={[LogInStyleSheet.countryContainer]}>
-              <CountryPicker
-                withFilter
-                withFlag
-                withCountryNameButton
-                withCallingCode
-                countryCode={selectedCountry?.cca2}
-                onSelect={handleCountrySelect}
-                // translation="eng"
-              />
-            </View>
+          <View style={[LogInStyleSheet.phoneNumberContainer]}>
+            <Text style={[LogInStyleSheet.countryCode]}>+{countryCode}</Text>
+            <TextInput
+              style={[LogInStyleSheet.phoneNumberInput]}
+              placeholder="Phone Number"
+              onChangeText={text => setPhoneNumber(text)}
+              keyboardType="numeric"
+              maxLength={15}
+              value={phoneNumber}
+            />
+          </View>
 
-            <View style={[LogInStyleSheet.phoneNumberContainer]}>
-              <Text style={[LogInStyleSheet.countryCode]}>+{countryCode}</Text>
-              <TextInput
-                style={[LogInStyleSheet.phoneNumberInput]}
-                placeholder="Phone Number"
-                onChangeText={text => setPhoneNumber(text)}
-                keyboardType="numeric"
-                maxLength={15}
-                value={phoneNumber}
+          <View style={[LogInStyleSheet.passwordContainer]}>
+            <TextInput
+              style={[LogInStyleSheet.passwordInput]}
+              secureTextEntry={passwordVisible}
+              placeholder="Password"
+              autoCapitalize="none"
+              onChangeText={text => setPassword(text)}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                setPasswordVisible(!passwordVisible);
+              }}>
+              <Icons.Feather
+                name={passwordVisible === true ? 'eye' : 'eye-off'}
+                style={[LogInStyleSheet.passwordIcon]}
               />
-            </View>
-
-            <View style={[LogInStyleSheet.passwordContainer]}>
-              <TextInput
-                style={[LogInStyleSheet.passwordInput]}
-                secureTextEntry={passwordVisible}
-                placeholder="Password"
-                autoCapitalize="none"
-                onChangeText={text => setPassword(text)}
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  setPasswordVisible(!passwordVisible);
-                }}>
-                <Icons.Feather
-                  name={passwordVisible === true ? 'eye' : 'eye-off'}
-                  style={[LogInStyleSheet.passwordIcon]}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={{ width: wp('85') }}>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.replace('ForgetPassword');
-                }}>
-                <Text style={[LogInStyleSheet.forgotpasswordText]}>
-                  Forgot Password?
-                </Text>
-              </TouchableOpacity>
-            </View>               
+            </TouchableOpacity>
+          </View>
+          <View style={{ width: wp('85') }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.replace('ForgetPassword');
+              }}>
+              <Text style={[LogInStyleSheet.forgotpasswordText]}>
+                Forgot Password?
+              </Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             onPress={() => {
               if ((phoneNumber == '') & (password == '')) {
@@ -216,32 +216,32 @@ const LogInScreen = ({ navigation }) => {
                 return;
               }
 
-                if (!isValidPhoneNumber()) {
-                  if (phoneNumber === '') {
-                    setPasswordSnackWidth(!false);
-                    showSnackbar('Phone number must not be empty');
-                    return;
-                  } else {
-                    setPasswordSnackWidth(!true);
-                    showSnackbar('Phone number is not valid');
-                    return;
-                  }
-                }
-                if (password.length < 8) {
-                  if (password === '') {
-                    setPasswordSnackWidth(!false);
-                    showSnackbar('Password must not be empty');
-                    return;
-                  } else {
-                    setPasswordSnackWidth(!false);
-                    showSnackbar('Password contain atLeast 8 character');
-                    return;
-                  }
+              if (!isValidPhoneNumber()) {
+                if (phoneNumber === '') {
+                  setPasswordSnackWidth(!false);
+                  showSnackbar('Phone number must not be empty');
+                  return;
                 } else {
-                  console.log('clicked');
-                  userLogin({ navigation });
-                  // navigation.replace('DrawerScreens');
+                  setPasswordSnackWidth(!true);
+                  showSnackbar('Phone number is not valid');
+                  return;
                 }
+              }
+              if (password.length < 8) {
+                if (password === '') {
+                  setPasswordSnackWidth(!false);
+                  showSnackbar('Password must not be empty');
+                  return;
+                } else {
+                  setPasswordSnackWidth(!false);
+                  showSnackbar('Password contain atLeast 8 character');
+                  return;
+                }
+              } else {
+                console.log('clicked');
+                userLogin({ navigation });
+                // navigation.replace('DrawerScreens');
+              }
 
 
               // handleSubmit();
@@ -256,31 +256,31 @@ const LogInScreen = ({ navigation }) => {
               navigation.replace('SignUpScreen')
             }}><Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Signup</Text></TouchableOpacity>
           </View>
-
-          </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      <Snackbar
+      <View
         visible={visible}
         onDismiss={() => setVisible(false)}
         duration={2000}
         style={
           passwordSnackWidth === true
             ? {
-                backgroundColor: '#D3D3D3',
-                width: wp('80'),
-                marginBottom: hp('6'),
-                alignSelf: 'center',
-              }
+              backgroundColor: '#D3D3D3',
+              width: wp('80'),
+              marginBottom: hp('6'),
+              alignSelf: 'center',
+            }
             : {
-                backgroundColor: '#D3D3D3',
-                width: wp('55'),
-                marginBottom: hp('6'),
-                alignSelf: 'center',
-              }
+              backgroundColor: '#D3D3D3',
+              width: wp('55'),
+              marginBottom: hp('6'),
+              alignSelf: 'center',
+            }
         }>
-        <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
-      </Snackbar>
+        <Snackbar>
+          <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
+        </Snackbar>
+      </View>
     </View>
   );
 };

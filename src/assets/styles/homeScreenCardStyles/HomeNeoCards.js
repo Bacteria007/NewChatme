@@ -12,6 +12,8 @@ const HomeNeoCards = StyleSheet.create({
     flex: 1,
     height: hp('100%'),
     backgroundColor: bgColor,
+    alignItems: 'center',
+    justifyContent:'center'
   }),
   contentcontainer: {
     justifyContent: 'center',
@@ -40,6 +42,17 @@ const HomeNeoCards = StyleSheet.create({
     height: hp('10%'),
     width: wp('93%'),
     backgroundColor: cardColor,
+    paddingHorizontal: 14,
+    flex: 1,
+  }),
+  neomorphBlockedStyle: cardColor => ({
+    shadowRadius: 1.5,
+    borderRadius: wp('1.5'),
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: hp('10%'),
+    width: wp('93%'),
+    backgroundColor: AppColors.Plum,
     paddingHorizontal: 14,
     flex: 1,
   }),
@@ -163,8 +176,8 @@ const HomeNeoCards = StyleSheet.create({
   // CALLS SCREEN
   callNameAndTimeContainer: {
     flexDirection: 'column',
-    alignItems:'flex-start',
-    marginLeft:wp('3.5')
+    alignItems: 'flex-start',
+    marginLeft: wp('3.5')
   },
   name_CallIcon_Container: {
     flexDirection: 'row',

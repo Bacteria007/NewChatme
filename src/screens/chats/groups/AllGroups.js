@@ -21,6 +21,7 @@ import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroups';
 import UseScreenFocus from '../../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import GlobalFunction from '../../../components/HelperFunctions/GlobalApiz/GlobalFunc';
 import Containers from '../../../assets/styles/Containers';
+import LottieView from 'lottie-react-native';
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
@@ -48,11 +49,12 @@ const AllGroups = ({ navigation }) => {
     } else {
       // Filter users based on search query
       const filteredGroups = allGroups.filter(group => group.group_name.toLowerCase().includes(text.toLowerCase()))
-      setGroupNotFound(filteredGroups.length===0)
+      setGroupNotFound(filteredGroups.length === 0)
       setSearchedGroups(filteredGroups)
     }
   };
   const fetchAllGroups = async () => {
+    console.log(")))))",currentUser.userId)
     try {
       const result = await fetch(`${baseUrl}/viewGroups/?userId=${currentUser.userId}`, { 
         method: 'GET', 
@@ -64,7 +66,7 @@ const AllGroups = ({ navigation }) => {
       if (result.ok) {
         const groups = await result.json()
         setAllGroups(groups)
-        console.log('all groups', allGroups)
+        // console.log('all groups', allGroups)
         console.log('all groups length', allGroups.length)
       } else {
         console.log("no groups")
@@ -73,9 +75,6 @@ const AllGroups = ({ navigation }) => {
       console.log("error fetching groups")
     }
   }
-
-  UseScreenFocus(fetchAllGroups)
-
   useEffect(() => {
     fetchAllGroups()
   }, [])
@@ -83,11 +82,7 @@ const AllGroups = ({ navigation }) => {
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
       <Primary_StatusBar />
       <AppHeader navigation={navigation} headerTitle={'Groups'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("CreateGroup");
-        }}
-      >
+      <TouchableOpacity onPress={() => {navigation.navigate("CreateGroup")}} >
         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
           <Neomorph
             darkShadowColor={AppColors.primary}
@@ -108,21 +103,28 @@ const AllGroups = ({ navigation }) => {
         </View>
       </TouchableOpacity>
       {searchText !== '' && searchedGroups.length === 0 && groupNotFound === true ? (
-          <View style={Containers.centerContainer}>
+        <View style={Containers.centerContainer}>
           <Text style={{ color: AppColors.coolgray, fontSize: 20, textAlign: 'center', fontFamily: FontStyle.regularFont }}>No group with this name.</Text>
+        </View>
+      ) : (
+        allGroups.length != 0 ?
+          <FlatList
+            style={{ marginTop: 10 }}
+            showsVerticalScrollIndicator={false}
+            data={searchedGroups != '' ? searchedGroups : allGroups}
+            renderItem={({ item }) => <RenderComponent name={item.group_name} dp={null} callingScreen={"Groups"} groups_item={item} navigation={navigation} noti={(val) => handleNotification(val)} />}
+            ref={flatListRef}
+            ListFooterComponent={gloabalFunctions.renderFooter(flatListRef, allGroups)} />
+          : <View style={Containers.centerContainer}>
+            <LottieView source={require('../../../assets/animations/Lottieanimations/l11.json')} autoPlay style={{
+              height: hp('30'),
+              width: wp('60'),
+              justifyContent: 'center',
+              alignItems: 'center',
+            }} />
+            <Text style={{ color: AppColors.coolgray, fontSize: 20, textAlign: 'center', fontFamily: FontStyle.regularFont }}>No groups yet.</Text>
           </View>
-        ) : (
-      <FlatList
-        style={{ marginTop: 10 }}
-        showsVerticalScrollIndicator={false}
-        data={searchedGroups == '' ? (allGroups.length > 0 ? allGroups :  (<View style={Containers.centerContainer}>
-          <Text style={{ color: AppColors.coolgray, fontSize: 20, textAlign: 'center', fontFamily: FontStyle.regularFont }}>You have no groups</Text>
-        </View>)) : searchedGroups}
-        renderItem={({ item }) => <RenderComponent name={item.group_name} dp={null} callingScreen={"Groups"} groups_item={item} navigation={navigation} noti={(val) => handleNotification(val)} />}
-        ref={flatListRef}
-        ListFooterComponent={gloabalFunctions.renderFooter(flatListRef, allGroups)}
-      />
-        )}
+      )}
     </View>
 
   );

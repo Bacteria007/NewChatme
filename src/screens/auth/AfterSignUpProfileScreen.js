@@ -304,7 +304,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
               style={AfterSignUpStyleSheet.TextInputContainer}
               onChangeText={value => {
                 setName(value);
-                storeUserName(value)
+                // storeUserName(value)
               }}
               autoCapitalize="none"
             />

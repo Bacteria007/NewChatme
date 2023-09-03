@@ -17,7 +17,7 @@ import AppColors from '../../../../assets/colors/Appcolors';
 const GroupChatInput = ({ sendMessageFunc, inputVal, setter }) => {
     const [height, setHeight] = useState(hp('7%')); // Initialize height with a default value
     const iconsColor=AppColors.coolgray
-    const iconsColor2=AppColors.coolgray
+    const iconsColor2=AppColors.black
     const maxInputHeight = hp('17'); // Maximum input height
     
     const onContentSizeChange = (event) => {

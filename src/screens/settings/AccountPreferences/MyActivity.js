@@ -1,33 +1,21 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
-import {
-  View,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-  Text,
-  ScrollView,
-  TouchableHighlight
-} from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {  View,  FlatList,  TouchableOpacity,  Alert,  Text,  ScrollView,  TouchableHighlight} from 'react-native'
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
 import AppContext from '../../../context/AppContext';
-import Video from 'react-native-video';
 import LottieView from 'lottie-react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Card, IconButton, Modal, PaperProvider, Portal, TouchableRipple } from 'react-native-paper';
+import {  IconButton, TouchableRipple } from 'react-native-paper';
 import axios from 'react-native-axios';
 import WebView from 'react-native-webview';
-import ActivityVideoHtml from '../../reels/ActivityHtmlVideo';
-import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import AppColors from '../../../assets/colors/Appcolors';
 import Containers from '../../../assets/styles/Containers';
-import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
+import ReactNativeModal from 'react-native-modal';
+import GenerateVideoHtml from '../../reels/ReelsHtmlVideo';
+import MyActivityStyleSheet from '../../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const MyActivity = ({ navigation }) => {
   const { baseUrl,currentUser,token } = useContext(AppContext);
+  const { theme } = useContext(ThemeContext);
   const userId = currentUser.userId;
   const [currentVideo, setCurrentVideo] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(null);
@@ -37,6 +25,13 @@ const MyActivity = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [reelid, setReelid] = useState(null);
 
+  const showModal = () => {
+    setIsModalVisible(true)
+  }
+  const hideModal = () => {
+    setIsModalVisible(false)
+  }
+  
   // New function for fetching uploaded videos
   const fetchUploadedVideos = async () => {
     fetch(`${baseUrl}/uploadedReels`, {
@@ -132,54 +127,25 @@ const MyActivity = ({ navigation }) => {
     );
   };
   return (
-  <View style={{flex:1,backgroundColor:AppColors.white}}>
+    <View style={MyActivityStyleSheet.mainContainer(theme.backgroundColor)}>
       <InnerScreensHeader navigation={navigation} screenName="My uploads" />
-      <View style={Containers.centerContainer}>
+      <View style={MyActivityStyleSheet.reelsContainer}>
         {isLoading ? (
-          <View style={Containers.centercontent}>
-            <LottieView
+          <View style={MyActivityStyleSheet.lottieContainer}>
+            <LottieView  style={MyActivityStyleSheet.loadingLottieStyle} autoPlay loop
               source={require('../../../assets/animations/Lottieanimations/loading2.json')}
-              autoPlay
-              loop
-              style={{
-                height: hp('30'),
-                width: wp('60'),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
             />
-            <Text
-              style={{
-                fontSize: 20,
-                color: 'orange',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+            <Text style={MyActivityStyleSheet.loadingLottieText}>
               Loading! Please Wait
             </Text>
           </View>
         ) : (
-          <View>
+          <View style={Containers.centercontent}>
             {allUploads.length === 0 ? (
-              <View>
-                <LottieView
-                  source={require('../../../assets/animations/Lottieanimations/oops3.json')}
-                  autoPlay
-                  loop
-                  style={{
-                    height: hp('60'),
-                    width: wp('80'),
-                    left: 50,
-                    marginTop: -20,
-                  }}
-                />
-                <Text
-                  style={{
-                    marginTop: -100,
-                    fontSize: 20,
-                    color: 'black',
-                    textAlign: 'center',
-                  }}>
+              <View style={MyActivityStyleSheet.lottieContainer}>
+                <LottieView autoPlay loop style={MyActivityStyleSheet.noUploadsLottieStyle}
+                source={require('../../../assets/animations/Lottieanimations/l12.json')}                 />
+                <Text style={MyActivityStyleSheet.noUploadsText(theme.profileNameColor)}>
                   You don't have any uploads.
                 </Text>
               </View>
@@ -187,174 +153,93 @@ const MyActivity = ({ navigation }) => {
               <FlatList
                 data={allUploads}
                 key={1}
-                numColumns={2}
+                numColumns={3}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
-                  // Calculate the dimensions for each video in the grid
-                  const numColumns = 2;
-                  const spacing = 10; // Adjust the spacing between videos
-                  const videoWidth = (wp('100%') - (spacing * (numColumns - 1))) / numColumns;
-                  const videoHeight = (videoWidth * 16) / 16; // Assuming a 16:9 aspect ratio
-                  // ...
-                  const HtmlVideo = ActivityVideoHtml(baseUrl, item);
-                  //console.log("video html", HtmlVideo)
+                  const HtmlVideo = GenerateVideoHtml(baseUrl, item, false, true);
                   return (
-                    // <Swipeable overshootFriction={3}  renderRightActions={(progress, dragX) => renderRightActions(progress, dragX, item)}>
-                     <TouchableOpacity
-                     onPress={() => {
-                       setCurrentVideo(item);
-                       setCurrentIndex(index);
-                       setIsModalVisible(true);
-                       setReelid(item._id)
-                       //console.log("reel id", item._id)
-                     }}
-                     >
-                     <View style={[Containers.centerContainer, { padding: 10 }]}>
-                        <Neomorph
-                          darkShadowColor={AppColors.black}
-                          style={{
-                            shadowRadius: 3,
-                            width: wp('42'),
-                            height: hp('25'),
-                            backgroundColor: AppColors.white,
-                            shadowOpacity: 1,
-                            shadowOffset: { width: 2, height: 2 },
-                            shadowColor: 'blue'
-                          }}
+                    <TouchableOpacity
+                      onPress={() => {
+                        setCurrentVideo(item);
+                        setCurrentIndex(index);
+                        showModal();
+                        setReelid(item._id)
+                        //console.log("reel id", item._id)
+                      }}
+                    >
+                      <View style={MyActivityStyleSheet.reelsView}>
+                        <View
+                          style={MyActivityStyleSheet.reelStyle}
                         >
                           <WebView
                             originWhitelist={['*']}
                             source={{ html: `${HtmlVideo}` }}
-                            style={{
-                              width: wp('42'), height: hp('25'),
-                            }}
+                            style={MyActivityStyleSheet.reelStyle}
                             scrollEnabled={false}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
                             setDisplayZoomControls={false}
                             setBuiltInZoomControls={false}
                           />
-                        </Neomorph>
+                        </View>
                       </View>
-                      </TouchableOpacity>
-                    // </Swipeable>
-                    
+                    </TouchableOpacity>
                   )
                 }}
               />
             )}
+            <ReactNativeModal
+              visible={isModalVisible}
+              coverScreen={true}
+              style={MyActivityStyleSheet.reelsModal}
+            >
+              <View  style={MyActivityStyleSheet.viewInModal}>
+                {currentIndex !== null && allUploads[currentIndex] ? (
+                  <View>
+                    <View style={MyActivityStyleSheet.modalReelHeader}>
+                      <Text style={MyActivityStyleSheet.headerDescriptionText}>You Video: {allUploads[currentIndex].uri.uri}</Text>
+                      <TouchableRipple
+                        onPress={() => {
+                          //console.log("cur============", allUploads[currentIndex])
+                          deleteReel(allUploads[currentIndex]);
+                          setIsModalVisible(false);
+                        }}
+                        rippleColor="rgba(128, 0, 128, 0.5)"
+                      >
+                        <IconButton
+                          icon="delete"
+                          iconColor={"black"}
+                          size={20}
+                        />
+                      </TouchableRipple>
+                      <TouchableRipple
+                        onPress={() => setIsModalVisible(false)}
+                        rippleColor="rgba(128, 0, 128, 0.5)"
+                      >
+                        <IconButton
+                          icon="close"
+                          iconColor={"black"}
+                          size={20}
+                        />
+                      </TouchableRipple>
+                    </View>
+                    <WebView
+                      containerStyle={MyActivityStyleSheet.webviewContainerStyle}
+                      source={{ html: GenerateVideoHtml(baseUrl, allUploads[currentIndex], true, false) }}
+                      style={MyActivityStyleSheet.webviewContainerStyle}
+                      mediaPlaybackRequiresUserAction={false}
+                    />
+                  </View>
+                ) : null}
+              </View>
+            </ReactNativeModal>
           </View>
         )}
-      {/* Modal */}
-      <Modal
-  visible={isModalVisible}
-// onDismiss={() => setIsModalVisible(false)}
->
-  <View
-    style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>        
-    {currentIndex !== null && allUploads[currentIndex] ? (
-      <>
-        <View style={{ height: hp('7%'), width: wp('90%'), backgroundColor: 'white', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Text style={{ textAlign: 'left', flex: 1, marginLeft: 5, color: 'black' }}>You Video: {allUploads[currentIndex].uri.uri}</Text>
-          <TouchableRipple
-            onPress={() => {
-              //console.log("cur============", allUploads[currentIndex])
-              deleteReel(allUploads[currentIndex]);
-              setIsModalVisible(false);
-            }}
-            rippleColor="rgba(0, 0, 0, 0.6)"        
-          >
-            <IconButton
-              icon="delete"
-              iconColor={"black"}
-              size={20}
-            />
-          </TouchableRipple>
-          <TouchableRipple
-            onPress={() => setIsModalVisible(false)}
-            rippleColor="rgba(0, 0, 0, .6)"        
-          >
-            <IconButton
-              icon="close"
-              iconColor={"black"}
-              size={20}
-            />
-          </TouchableRipple>
-        </View>
-        <WebView
-          source={{html:ActivityVideoHtml(baseUrl,allUploads[currentIndex])}}
-          style={{ height: hp('50%'), width: wp('90%') }}
-        />
-      </>  
-    ) : null}
-  </View>
-</Modal>
-      
       </View>
-     
-      </View>
-   
+    </View>
+
   );
 };
 
 export default MyActivity;
-
-{/* <TouchableOpacity
-  onPress={() => {
-    setCurrentVideo(item);
-    setCurrentIndex(index);
-    setIsModalVisible(true);
-    setReelid(item._id)
-    //console.log("reel id", item._id)
-  }}
-  style={{flex:1}} */}
-// 
-
-// ======================
-//   <Modal
-//   visible={isModalVisible}
-// // onDismiss={() => setIsModalVisible(false)}
-// >
-//   <View
-//     style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>        
-//     {currentIndex !== null && allUploads[currentIndex] ? (
-//       <>
-//         <View style={{ height: hp('7%'), width: wp('90%'), backgroundColor: 'white', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-//           <Text style={{ textAlign: 'left', flex: 1, marginLeft: 5, color: 'black' }}>You Video: {allUploads[currentIndex].uri.uri}</Text>
-//           <TouchableRipple
-//             onPress={() => {
-//               //console.log("cur============", allUploads[currentIndex])
-//               deleteReel(allUploads[currentIndex])
-//             }}
-//             rippleColor="rgba(0, 0, 0, 0.6)"        
-//           >
-//             <IconButton
-//               icon="delete"
-//               iconColor={"black"}
-//               size={20}
-//             />
-//           </TouchableRipple>
-//           <TouchableRipple
-//             onPress={() => setIsModalVisible(false)}
-//             rippleColor="rgba(0, 0, 0, .6)"        
-//           >
-//             <IconButton
-//               icon="close"
-//               iconColor={"black"}
-//               size={20}
-//             />
-//           </TouchableRipple>
-//         </View>
-//         <Video
-//           source={{ uri: `${baseUrl}${allUploads[currentIndex]._id}` }}
-//           resizeMode="cover"
-//           muted={false}
-//           style={{ height: hp('50%'), width: wp('90%') }}
-//           repeat={true}
-//           ref={videoRef}
-//         />
-//       </>  
-//     ) : null}
-//   </View>
-// </Modal>

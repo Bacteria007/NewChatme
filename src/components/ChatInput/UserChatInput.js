@@ -31,26 +31,25 @@ const UserChatInput = ({
   setDocument,
   currentMessage,
   setCurrentMessage,
+  chatId
 }) => {
-  const { baseUrl, storedUser } = useContext(AppContext);
-  // console.log("item%%%%%%%%%%%", item)
+  const { baseUrl, currentUser } = useContext(AppContext);
+  console.log("contat id: %%%%%%%%%%%", chatId)
   const apiKey = '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';
   const iconsColor = AppColors.coolgray
-  const iconsColor2 = AppColors.coolgray
+  const iconsColor2 = AppColors.black
   const screenDimensions = Dimensions.get('window');
   const [isSending, setIsSending] = useState(false);
   const [selectedImage, setSelectedImage] = useState([])
   const [height, setHeight] = useState(hp('2%')); // Initialize height with a default value
   const [marginBottom, setMarginBottom] = useState(hp('0.1%'))
   const [isScrollEnabled, setIsScrollEnabled] = useState(false);
-
   const [inputHeight, setInputHeight] = useState(0);
 
   const handleContentSizeChange = (contentHeight) => {
     setInputHeight(Math.min(contentHeight, 6 * 18)); // Assuming each line has an average height of 18
     setIsScrollEnabled(contentHeight / 18 > 6); // Assuming each line has an average height of 18
   };  // onContentSizeChange={(e) => handleContentSizeChange(e.nativeEvent.contentSize.width, e.nativeEvent.contentSize.height)}
-
   const sendMessage = async () => {
     setIsSending(true);
     await axios
@@ -74,8 +73,9 @@ const UserChatInput = ({
           const messageData = {
             content: currentMessage.trim(),
             name: receiver.name,
-            senderId: storedUser.userId,
+            senderId: currentUser.userId,
             receiverId: receiver._id,
+            chatId:chatId,
             mood: moodOfUser,
           };
           console.log('frontend', messageData);
@@ -92,8 +92,9 @@ const UserChatInput = ({
         const messageData = {
           content: currentMessage.trim(),
           name: receiver.name,
-          senderId: storedUser.userId,
+          senderId: currentUser.userId,
           receiverId: receiver._id,
+          chatId:chatId,
           mood: 'normal',
         };
         console.log('frontend', messageData);
@@ -104,7 +105,6 @@ const UserChatInput = ({
         setIsSending(false);
       });
   };
-
   const sendImageMessage = () => {
     launchImageLibrary({
       maxWidth: 800,
@@ -174,8 +174,8 @@ const UserChatInput = ({
         formData.append('content', 'document');
       }
       formData.append('name', item.name);
-      formData.append('senderId', storedUser.userId);
-      formData.append('recieverId', receiver._id);
+      formData.append('senderId', currentUser.userId);
+      formData.append('chatId', chatId);
 
       doc.forEach(item => {
         formData.append('document', {
@@ -223,13 +223,11 @@ const UserChatInput = ({
       setKeyboardOpen(true);
     }
   };
-
   const handleBlur = () => {
     if (keyboardOpen) {
       setKeyboardOpen(false);
     }
   };
-
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () => {
       setKeyboardOpen(true);

@@ -34,59 +34,59 @@ const RenderRequest = ({ item }) => {
 useEffect(()=>{
     
 },[requestSent])
-    return (
-        <View>
-            <View
-                style={HomeNeoCards.flatlistItemContainer}>
-                <Neomorph
-                    darkShadowColor={AppColors.primary} // <- set this
-                    lightShadowColor={AppColors.primary}// <- this
-                    swapShadows
-                    style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
-                >
-                    {dp == null ? (
-                        <View style={HomeNeoCards.dpVew}>
-                            <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
-                                {callingScreen === 'Discussions' || callingScreen === 'Contacts' ? (
-                                    <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
-                                ) : (
-                                    <Icons.MaterialIcons name={'people'} size={29} color={theme.groupDpIconColor} />
-                                )}
-                            </View>
+return (
+    <View>
+        <View
+            style={HomeNeoCards.flatlistItemContainer}>
+            <Neomorph
+                darkShadowColor={AppColors.primary} // <- set this
+                lightShadowColor={AppColors.primary}// <- this
+                swapShadows
+                style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
+            >
+                {dp == null ? (
+                    <View style={HomeNeoCards.dpVew}>
+                        <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
+                            {callingScreen === 'Discussions' || callingScreen === 'Contacts' ? (
+                                <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
+                            ) : (
+                                <Icons.MaterialIcons name={'people'} size={29} color={theme.groupDpIconColor} />
+                            )}
                         </View>
-                    ) : (
-                        <Image source={{ uri: `${baseUrl}${dp}` }} style={HomeNeoCards.dpImage} />
-                    )}
-                   {/* profile name view */}
-                    <View style={HomeNeoCards.nameAndMsgContainer}>
-                        <Text
-                            style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                            {item.name}
-                        </Text>
-                        <Text
-                            style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
-                            {item.phoneNo}
-                        </Text>
                     </View>
-                    <Button mode="contained"
-                        style={{
-                            width: wp('25'),
-                            alignSelf: 'center',
-                            margin: 10,
-                            backgroundColor: theme.buttonsColor
-                        }}
-                        onPress={() => sendRequest().then(() => { setIsSending(true); setRequestSent(true) })}
-                        accessibilityLabel="Send Label">
-                        {isSending ? (
-                            <ActivityIndicator size="small" color="#ffffff" /> // Show loading animation
-                        ) : (
-                            <Text style={[UserChatStyle.sendButtonText]}>{requestSent?"Cancel":"Send Request"}</Text>
-                        )}
-                    </Button>
-                </Neomorph>
-            </View>
+                ) : (
+                    <Image source={{ uri: `${baseUrl}${dp}` }} style={HomeNeoCards.dpImage} />
+                )}
+               {/* profile name view */}
+                <View style={HomeNeoCards.nameAndMsgContainer}>
+                    <Text
+                        style={HomeNeoCards.profileName(theme.profileNameColor)}>
+                        {item.name}
+                    </Text>
+                    <Text
+                        style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
+                        {item.phoneNo}
+                    </Text>
+                </View>
+                <Button mode="contained"
+                    style={{
+                        width: wp('25'),
+                        alignSelf: 'center',
+                        margin: 10,
+                        backgroundColor: theme.buttonsColor
+                    }}
+                    onPress={() => sendRequest().then(() => { setIsSending(true); setRequestSent(true) })}
+                    accessibilityLabel="Send Label">
+                    {isSending ? (
+                        <ActivityIndicator size="small" color="#ffffff" /> // Show loading animation
+                    ) : (
+                        <Text style={[UserChatStyle.sendButtonText]}>{requestSent?"Cancel":"Send Request"}</Text>
+                    )}
+                </Button>
+            </Neomorph>
         </View>
-    );
+    </View>
+);
 };
 
 export default RenderRequest;
