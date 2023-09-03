@@ -14,7 +14,7 @@ import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 import { Icons } from '../../../assets/Icons';
 import {Primary_StatusBar} from '../../statusbars/Primary_StatusBar';
 import { ThemeContext } from '../../../context/ThemeContext';
-import { Appbar, Surface } from 'react-native-paper';
+import { Appbar, Surface, TouchableRipple } from 'react-native-paper';
 
 
 const InnerScreensHeader = ({ navigation, screenName }) => {
@@ -24,17 +24,21 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
     <View style={[DrawerHeaderStyle.containerView]}>
       <Primary_StatusBar />
       <View style={DrawerHeaderStyle.headerView(theme.backgroundColor)}>
-        <TouchableOpacity
+        <TouchableRipple
           onPress={() => {
             navigation.goBack();
-          }}>
+          }}
+          rippleColor="rgba(0, 0, 0, 0.3)"
+          borderless
+          style={DrawerHeaderStyle.backBtn}
+          >
           <Icons.Ionicons
             name="arrow-back"
             size={wp('7%')}
             color={theme.headerIconsColor}
             style={{ marginLeft: wp('2%') }}
           />
-        </TouchableOpacity>
+        </TouchableRipple>
         <Text style={[DrawerHeaderStyle.screenNameStyle, { color: theme.headerIconsColor }]}>{screenName}</Text>
       </View>
     </View>

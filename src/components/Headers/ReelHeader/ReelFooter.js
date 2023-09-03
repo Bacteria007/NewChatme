@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import ReelFooterStyle from '../../../assets/styles/ReelStyleSheet/ReelFooterStyle';
 import { Icons } from '../../../assets/Icons';
 import Animated from 'react-native-reanimated';
@@ -8,8 +8,12 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import AppColors from '../../../assets/colors/Appcolors';
+import AppContext from '../../../context/AppContext';
 
-const ReelFooter = ({ onPressShare }) => {
+const ReelFooter = ({ onPressShare,item }) => {
+  console.log("reel foter++++++++++",item)
+  const { baseUrl ,currentUser} = useContext(AppContext);
+
   return (
     <View style={[ReelFooterStyle.containerView]}>
       <Animated.View
@@ -18,12 +22,20 @@ const ReelFooter = ({ onPressShare }) => {
         }}>
         <View style={[ReelFooterStyle.leftContainer]}>
           <View style={[ReelFooterStyle.imageContainer]}>
+            {item.profileImage?
             <Image
-              source={require('../../../assets/imges/landscaper-homepage-work-01-600x351.jpg')}
+              source={{uri:`${baseUrl}${item.profileImage}`}}
               style={[ReelFooterStyle.imageStyle]}
             />
+            :
+            <Image
+              source={require('../../../assets/imges/default/userProfileDark.jpg')}
+              style={[ReelFooterStyle.imageStyle]}
+            />
+            
+            }
           </View>
-          <Text style={[ReelFooterStyle.profileName]}>User name</Text>
+          <Text style={[ReelFooterStyle.profileName]}>{item.name==currentUser.name ? "You" : item.name}</Text>
         </View>
       </Animated.View>
       <View style={[ReelFooterStyle.rightContainer]}>

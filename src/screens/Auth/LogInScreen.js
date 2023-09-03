@@ -30,7 +30,7 @@ import messaging from '@react-native-firebase/messaging';
 
 const LogInScreen = ({ navigation }) => {
 
-  const { baseUrl, getToken, updateCurrentUser, storeLoggedinStatus, storedUser, getStoredUserDetails } = useContext(AppContext)
+  const { baseUrl, getToken, updateCurrentUser, storeLoggedinStatus } = useContext(AppContext)
   const { theme } = useContext(ThemeContext)
 
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -141,7 +141,6 @@ const LogInScreen = ({ navigation }) => {
   return (
     <View style={LogInStyleSheet.container(theme.backgroundColor)}>
       <Primary_StatusBar />
-
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
@@ -250,11 +249,12 @@ const LogInScreen = ({ navigation }) => {
             style={[LogInStyleSheet.TouchableButtonStyle]}>
             <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: wp('3%') }}>
+          <View style={LogInStyleSheet.signupLineContainer}>
             <Text style={{ fontFamily: FontStyle.mediumFont }}>Don't have an account?{' '}</Text>
             <TouchableOpacity onPress={() => {
               navigation.replace('SignUpScreen')
-            }}><Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Signup</Text></TouchableOpacity>
+            }}>
+              <Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Signup</Text></TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

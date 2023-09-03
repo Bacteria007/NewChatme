@@ -47,13 +47,13 @@ const Discussions = ({ navigation }) => {
       })
 
       const data = await response.json();
-      if(data.message=="Please provide a valid token."){
-        Alert.alert("Provide a valid token.")
-      }else if(data.message=='Please provide a token.'){
-        Alert.alert('Token required')
-      }else{
+      // if(data.message=="Please provide a valid token."){
+      //   Alert.alert("Provide a valid token.")
+      // }else if(data.message=='Please provide a token.'){
+      //   Alert.alert('Token required')
+      // }else{
         setContactList(data);
-      }
+      // }
       // console.log('discussion from server', data)
     } catch (error) {
       console.error('Error fetching contact list:', error);

@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ReelHeader = ({navigation}) => {
   
-  const { baseUrl,token } = useContext(AppContext);
+  const { baseUrl,token,currentUser } = useContext(AppContext);
   let options = {
     mediaType: 'video',
     maxWidth: 300,
@@ -24,12 +24,12 @@ const ReelHeader = ({navigation}) => {
   const iconcolor = AppColors.white;
 
   const uploadVideo = async Response => {
-    const userData = await AsyncStorage.getItem('user');
+    // const userData = await AsyncStorage.getItem('user');
 
-    const  userParseData = JSON.parse(userData);
-    const parseId = userParseData.userId;
+    // const  userParseData = JSON.parse(userData);
+    // const parseId = userParseData.userId;
     const formData = new FormData();
-    formData.append('userId', parseId);
+    formData.append('userId', currentUser.userId);
     formData.append('name', 'Video');
     formData.append('video', {
       uri: Response.uri,

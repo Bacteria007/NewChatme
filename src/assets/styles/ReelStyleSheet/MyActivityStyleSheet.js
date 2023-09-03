@@ -1,13 +1,30 @@
 import { StyleSheet } from 'react-native';
-import {widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import AppColors from '../../colors/Appcolors';
 
 const MyActivityStyleSheet = StyleSheet.create({
-    mainContainer: bgcolor => ({ flex: 1, backgroundColor: bgcolor }),
-    reelsContainer: { flex: 1, justifyContent: 'flex-start' },
-    lottieContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    mainContainer: bgcolor => ({
+        flex: 1,
+        backgroundColor: bgcolor
+    }),
+    reelsContainer: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        // backgroundColor:'red'
+    },
+    lottieContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        // backgroundColor: 'red',
+        height:hp('100'),
+        width:wp('100')
+
+    },
     loadingLottieStyle: {
-        height: hp('20'),
+        height: hp('30'),
         width: wp('60'),
         justifyContent: 'center',
         alignItems: 'center',
@@ -15,14 +32,13 @@ const MyActivityStyleSheet = StyleSheet.create({
     noUploadsLottieStyle: {
         height: hp('30'),
         width: wp('60'),
-        justifyContent: 'center',
-        alignItems: 'center',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        alignSelf: 'center',
     },
     loadingLottieText: {
         fontSize: 20,
         color: 'orange',
-        alignItems: 'center',
-        justifyContent: 'center',
         textAlign: 'center',
     },
     noUploadsText: textColor => ({
