@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, FlatList, ScrollView, TextInput, Alert, Image, } from 'react-native';
+import { Text, TouchableOpacity, View, FlatList, ScrollView, TextInput, Alert, Image, ActivityIndicator, } from 'react-native';
 import AppContext from '../../../context/AppContext';
-import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../../context/ThemeContext';
@@ -11,11 +10,14 @@ import axios from 'axios';
 import CommonApis from '../../../components/HelperFunctions/GlobalApiz/Apis';
 import AppColors from '../../../assets/colors/Appcolors';
 import { Surface } from 'react-native-paper';
-import FontStyle from '../../../assets/styles/FontStyle';
-import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
-import {Primary_StatusBar} from '../../../components/statusbars/Primary_StatusBar';
+import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ReactNativeModal from 'react-native-modal';
+import CreateGroupScreenStyle from '../../../assets/styles/GroupScreenStyle/CreateGroupScreenStyle';
+import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
+import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
+import FontStyle from '../../../assets/styles/FontStyle';
+
 const CreateGroup = ({ navigation }) => {
   // STATES
   const { baseUrl, currentUser,token } = useContext(AppContext);
@@ -25,6 +27,7 @@ const CreateGroup = ({ navigation }) => {
   const [selectedMembers, setSelectedMembers] = useState([]);
   const commonApis = CommonApis();
   const [selectedMembersCount, setSelectedMembersCount] = useState(0);
+  const [isCreating, setIsCreating] = useState(false)
 
   const incrementMemberCount = () => {
     setSelectedMembersCount(prevCount => prevCount + 1);
@@ -91,96 +94,83 @@ const CreateGroup = ({ navigation }) => {
     );
   };
   const createNewGroup = async name => {
-    const adminId = await AsyncStorage.getItem('user');
-    const parseId = await JSON.parse(adminId);
-
+    if (selectedMembers.length >= 2) {
+      setIsCreating(true)
     const admin_data = await commonApis.UserDetails();
-    console.log(
-      'admin data============================================',
-      admin_data,
-    );
-    // setSelectedMembers( [...selectedMembers, admin_data]);
+    console.log('admin data=========', admin_data);
     selectedMembers.push(admin_data);
     console.log('selectedMembers', selectedMembers);
     const formData = new FormData();
     formData.append('group_name', name);
     formData.append('group_admin', currentUser.userId);
     formData.append('members', JSON.stringify(selectedMembers));
-    if (selectedMembers.length > 0) {
+    // if (selectedMembers.length >=2) {
       await axios({
         method: 'post',
         url: `${baseUrl}/creategroup`,
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
-          // 'Content-Type': 'application/json',
         },
         data: formData,
       })
         .then(async res => {
-          if(res.data.message=="Please provide a valid token."){
-            Alert.alert("Provide a valid token.")
-          }else if(res.data.message=='Please provide a token.'){
-            Alert.alert('Token required')
-          }else{
-          // const result=await res.json()
+          // if(res.data.message=="Please provide a valid token."){
+          //   Alert.alert("Provide a valid token.")
+          // }else if(res.data.message=='Please provide a token.'){
+          //   Alert.alert('Token required')
+          // }else{
           console.log('group create=========', res.data);
           console.log('group length===============', res.data.members.length);
+          setIsCreating(true)
           setSelectedMembers([]);
           // Change isSelected field to false for all members in selectedMembers array
           setSelectedMembers(prevSelected =>
             prevSelected.map(member => ({ ...member, isSelected: false })),
           );
-        }
+          // navigation.navigate('Groups');
+        // }
         })
         .catch(error => {
           console.log('error in creatng group', error);
         });
-    } else {
-      Alert.alert('pleaes add at least one member');
-    }
+      } else {
+        Alert.alert('pleaes add at least 3 member');
+      }
+    // } else {
+    //   Alert.alert('pleaes add at least 3 member');
+    // }
   };
   const renderItem = ({ item }) => {
     return (
-      <View
-        style={HomeNeoCards.flatlistItemContainer}>
+      <View style={HomeNeoCards.flatlistItemContainer}>
         <Neomorph
           darkShadowColor={AppColors.primary} // <- set this
           lightShadowColor={AppColors.primary}// <- this
           swapShadows
           style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
         >
-          {!item.profileImage ? (
-            <View style={HomeNeoCards.dpVew}>
-              <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
-
-                <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
-
-              </View>
-            </View>
-          ) : (
-            <Image source={{ uri: `${baseUrl}${item.profileImage}` }} style={HomeNeoCards.dpImage} />
-          )}
-
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
-            <View style={HomeNeoCards.callNameAndTimeContainer}>
-              <Text
-                style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                {item.name}
-              </Text>
+            <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center'}}>
+              {!item.profileImage ? (
+                <View style={HomeNeoCards.dpVew}>
+                  <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
+                    <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
+                  </View>
+                </View>
+              ) : (
+                <Image source={{ uri: `${baseUrl}${item.profileImage}` }} style={HomeNeoCards.dpImage} />
+              )}
+                <Text  style={CreateGroupScreenStyle.profileName(theme.profileNameColor)}>
+                  {item.name}
+                </Text>
             </View>
-
-            {/* select member*/}
+            {/* select btn*/}
             <TouchableOpacity
               onPress={() => toggleSelection(item)}
-              style={{
-                height: hp('5%'),
-                width: wp('13%'),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+              style={CreateGroupScreenStyle.addBtn}>
               {item.isSelected ? (
-                <View style={styles.doneButton(AppColors.primary)}>
+                <View style={CreateGroupScreenStyle.doneButton(AppColors.primary)}>
                   <Icons.AntDesign name="close" size={21} color={theme.addBtnTextColor} />
                 </View>
               ) : (
@@ -209,10 +199,9 @@ const CreateGroup = ({ navigation }) => {
   // selectedmember array mn jab member ad kry to foran nai hoty dosri dfa click krny pr hoty is liye ye lgaya ta k jab array update ho useeffect chal jaye
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {/* <InnerScreensHeader screenName={"Create Group"} navigation={navigation}/> */}
       <Primary_StatusBar />
-      <View style={styles.headerContainer}>
-        <View style={styles.header(theme.backgroundColor)}>
+      <View style={CreateGroupScreenStyle.headerContainer}>
+        <View style={CreateGroupScreenStyle.header(theme.backgroundColor)}>
           <View style={{ flexDirection: 'row', flex: 1 }}>
             <TouchableOpacity
               onPress={() => {
@@ -237,16 +226,16 @@ const CreateGroup = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.container}>
+      <View style={CreateGroupScreenStyle.container}>
         {selectedMembers.length > 0 ? (
           <Surface>
-            <View style={styles.memberlistContainer}>
+            <View style={CreateGroupScreenStyle.memberlistContainer}>
               <ScrollView horizontal>
                 {selectedMembers.map(member => {
                   return (
-                    <View key={member._id} style={styles.selectedMember}>
-                      <Text style={{fontFamily:FontStyle.mediumFont,fontSize:wp('3'),color:AppColors.primary}}>{member.name.length>7?member.name.substring(0,7)+'..':member.name}</Text>
-                      <Text style={{fontFamily:FontStyle.mediumFont,fontSize:wp('2.5'),color:AppColors.coolgray}}>{member.phoneNo}</Text>
+                    <View key={member._id} style={CreateGroupScreenStyle.nameAndDpOfSelected}>
+                      <Image style={CreateGroupScreenStyle.memberDp} source={{ uri: `${baseUrl}${member.profileImage}` }} />
+                      <Text style={CreateGroupScreenStyle.memberName}>{member.name.length > 7 ? member.name.substring(0, 7) + '..' : member.name}</Text>
                     </View>
                   );
                 })}
@@ -260,7 +249,7 @@ const CreateGroup = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           data={allUsers.length > 0 ? allUsers : null}
           renderItem={renderItem}
-          style={{marginTop:15}}
+          style={{ marginTop: 15 }}
         />
         <ReactNativeModal
           visible={visible}
@@ -270,46 +259,38 @@ const CreateGroup = ({ navigation }) => {
           animationOut="slideOutDown"
           animationType="slide"
           avoidKeyboard={false}
-          style={{
-            backgroundColor: "rgba(0,0,0,0.2)",
-            margin: 0,
-            justifyContent: 'flex-end',
-            height: hp('30')
-          }}>
+          style={CreateGroupScreenStyle.modalStyle}>
           {/* <Surface> */}
-            <View style={styles.modalView}>
-              <TextInput
-                autoFocus={true}
-                cursorColor={AppColors.primary}
-                style={{
-                  borderBottomWidth: wp('0.1%'),
-                  borderBottomColor: AppColors.primary,
-                  width: wp('100%'),
-                  paddingHorizontal: 10
-                }}
-                selectTextOnFocus={true}
-                value={groupName}
-                onChangeText={e => {
-                  setgroupName(e);
-                }}
-                placeholder="Group Name"
-                keyboardType='default'
-              />
-              <TouchableOpacity
-
-                style={{
-                  width: wp('40'),
-                  alignSelf: 'center',
-                  backgroundColor: theme.buttonsColor,
-                  justifyContent: 'center', alignItems: 'center', padding: 5, borderRadius: wp('20')
-                }}
-                onPress={() => createNewGroup(groupName).then(() => { hideModal(), setgroupName(''), navigation.navigate('Groups') })}>
+          <View style={CreateGroupScreenStyle.modalView}>
+            <TextInput
+              autoFocus={true}
+              cursorColor={AppColors.primary}
+              style={{
+                borderBottomWidth: wp('0.1%'),
+                borderBottomColor: AppColors.primary,
+                width: wp('100%'),
+                paddingHorizontal: 10
+              }}
+              selectTextOnFocus={true}
+              value={groupName}
+              onChangeText={e => {
+                setgroupName(e);
+              }}
+              placeholder="Group Name"
+              keyboardType='default'
+            />
+            <TouchableOpacity
+              style={CreateGroupScreenStyle.createBtn}
+              onPress={() => createNewGroup(groupName).then(() => { hideModal(), setgroupName('') })}>
+              {isCreating ?
+                <ActivityIndicator size="small" color={"white"} /> :
                 <Text
                   style={{ color: theme.buttonsTextColor, fontFamily: FontStyle.regularFont }}>
                   Create Now
                 </Text>
-              </TouchableOpacity>
-            </View>
+              }
+            </TouchableOpacity>
+          </View>
           {/* </Surface> */}
         </ReactNativeModal>
       </View>
@@ -318,125 +299,3 @@ const CreateGroup = ({ navigation }) => {
 };
 
 export default CreateGroup;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: AppColors.white,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: hp('100'),
-    width: wp('100'),
-  },
-  memberlistContainer: {
-    flexDirection: 'row',
-    height: hp('15'),
-    width: wp('100'),
-    // borderBottomColor: AppColors.primary,
-    // borderBottomWidth: 0.3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: AppColors.Mauve,
-
-  },
-  doneButton: (btnColor) => ({
-    height: hp('4.5'),
-    width: hp('4.5'),
-    borderRadius: hp('4.5'),
-    backgroundColor: btnColor,
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    elevation: 4,
-  }),
-  selectedMember: {
-    height: hp('10'),
-    width: hp('10'),
-    borderRadius: hp('5'),
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 6,
-  },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-  header: (bgcolor) => ({
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: wp('3%'),
-    backgroundColor: bgcolor,
-  }),
-  headerContainer: {
-    height: hp('7'),
-    width: wp('100')
-
-  },
-  modalView: {
-    backgroundColor: "#fff",
-    height: hp('25'),
-    width: wp('100'),
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    alignSelf: 'center',
-  },
-
-
-});
-
-
-{/* <Button
-          mode="contained"
-          style={{
-            width: wp('40'),
-            alignSelf: 'center',
-            margin: 10,
-            backgroundColor: theme.buttonsColor,
-          }}
-          onPress={() => toggleModal()}>
-          <Text>Create Now</Text>
-        </Button>         
-        <Portal>
-          <Modal
-            visible={visible}
-            onDismiss={hideModal}
-            contentContainerStyle={{
-              backgroundColor: 'white',
-              height: hp('30'),
-              width: wp('87'),
-              alignSelf: 'center',
-              padding: wp('4'),
-              borderRadius: 5,
-              justifyContent: 'space-evenly',
-            }}>
-            <TextInput
-              label="Group Name"
-              mode="outlined"
-              value={groupName}
-              onChangeText={e => {
-                setgroupName(e);
-              }}
-              placeholder="Group Name"
-              selectTextOnFocus
-            />
-            <Button
-              mode="contained"
-              style={{
-                width: wp('40'),
-                alignSelf: 'center',
-                margin: 10,
-                backgroundColor: theme.buttonsColor,
-              }}
-              onPress={() => createNewGroup(groupName).then(() => { hideModal(), setgroupName('') })}>
-              <Text
-                style={{ color: theme.buttonsTextColor, fontFamily: FontStyle.regularFont }}>
-                Create Group
-              </Text>
-            </Button>
-          </Modal>
-        </Portal> */}

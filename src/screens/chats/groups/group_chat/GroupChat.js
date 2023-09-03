@@ -1,74 +1,33 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-    ImageBackground,
-    StyleSheet,
-    Text,
-    View,
-    TextInput,
-    ScrollView,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    FlatList,
-} from 'react-native';
-import UserChatStyle from '../../../../assets/styles/UserChatStyle';
+import { StyleSheet, Text, View, KeyboardAvoidingView, FlatList, } from 'react-native';
 import AppColors from '../../../../assets/colors/Appcolors';
 import { Primary_StatusBar } from '../../../../components/statusbars/Primary_StatusBar';
-import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import { Icons } from '../../../../assets/Icons';
-import {
-    Appbar,
-    Divider,
-    Modal,
-    Portal,
-    Provider,
-    Surface,
-} from 'react-native-paper';
-import FontStyle from '../../../../assets/styles/FontStyle';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp, } from 'react-native-responsive-screen';
 import AppContext from '../../../../context/AppContext';
 import GroupMsgItem from '../../../../components/MessageItem/GroupMsgItem';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import GroupChatInput from './GroupChatInput';
 import PushNotification from "react-native-push-notification";
-import UserChatHeader from '../../../../components/Headers/ChatHeader/UserChatHeader';
 import GroupChatHeader from '../../../../components/Headers/ChatHeader/GroupChatHeader';
 import { io } from 'socket.io-client';
-
 const socket = io.connect('http://192.168.43.145:8888');
 
 const GroupChat = props => {
     // VARIABLES
     const { item } = props.route.params;
 
-    const { baseUrl, currentUser,socket,token} = useContext(AppContext)
+    const { baseUrl, currentUser, token } = useContext(AppContext)
     let userId = currentUser.userId
-    console.log("userId====",userId)
-    console.log("currentUser===",currentUser)
-    const groupMembers = item.members;
-    const adminId = item.group_admin;
+    console.log("userId====", userId)
+    console.log("currentUser===", currentUser)
     const groupId = item._id;
     const [newMsg, setNewMsg] = useState('');
     const [msgList, setMsgList] = useState([]);
-    const [height, setHeight] = useState(hp('7%')); // Initialize height with a default value
-    const [visible, setVisible] = React.useState(false);
-
-    const showModal = () => setVisible(true);
-    const hideModal = () => setVisible(false);
     const flatListRef = useRef(null);
 
     // FUNCTIONS
 
-    useEffect(() => {
-        if (flatListRef.current && msgList.length > 0) {
-            const lastIndex = msgList.length - 1;
-            flatListRef.current.scrollToOffset({ offset: lastIndex, animated: true })
-        }
-    }, [msgList]);
-    const onContentSizeChange = event => {
-        setHeight(event.nativeEvent.contentSize.height);
-    };
+
     const sendMessage = async () => {
 
         const msgData = {
@@ -113,18 +72,24 @@ const GroupChat = props => {
             },
         }).then(async (res) => {
             const msgs = await res.json()
-            if(msgs.message=="Please provide a valid token."){
+            if (msgs.message == "Please provide a valid token.") {
                 Alert.alert("Provide a valid token.")
-              }else if(msgs.message=='Please provide a token.'){
+            } else if (msgs.message == 'Please provide a token.') {
                 Alert.alert('Token required')
-              }else
-            setMsgList(msgs)
+            } else
+                setMsgList(msgs)
         }).catch((err) => {
             console.log(err)
         })
     }
 
     // EFFECTS  
+    useEffect(() => {
+        if (flatListRef.current && msgList.length > 0) {
+            const lastIndex = msgList.length - 1;
+            flatListRef.current.scrollToOffset({ offset: lastIndex, animated: true })
+        }
+    }, [msgList]);
     // get currently sent message
     useEffect(() => {
         // Listen for the "getCurrentMsg" event
@@ -152,29 +117,29 @@ const GroupChat = props => {
     }, []);
     return (
         <GestureHandlerRootView style={{ flex: 1, backgroundColor: 'white' }}>
-                <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column' }}
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 22}>
-                    <Primary_StatusBar />
-                    <GroupChatHeader navigation={props.navigation} item={item}/>                   
-                    <View style={{ flex: 1 }}>
-                        {msgList.length != 0 ?
-                            <FlatList
-                                data={msgList.length != 0 ? msgList : []}
-                                // ref={flatListRef}
-                                renderItem={({ item }) => { return <GroupMsgItem msgData={item} /> }}
-                                keyExtractor={(item, index) => index.toString()} // Use a unique key for each item
-                            />
-                            :
-                            <Text style={{ color: AppColors.primary }}>Start Conversation</Text>
-                        }
+            <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column' }}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 22}>
+                <Primary_StatusBar />
+                <GroupChatHeader navigation={props.navigation} item={item} />
+                <View style={{ flex: 1 }}>
+                    {msgList.length != 0 ?
+                        <FlatList
+                            data={msgList.length != 0 ? msgList : []}
+                            // ref={flatListRef}
+                            renderItem={({ item }) => { return <GroupMsgItem msgData={item} /> }}
+                            keyExtractor={(item, index) => index.toString()} // Use a unique key for each item
+                        />
+                        :
+                        <Text style={{ color: AppColors.primary }}>Start Conversation</Text>
+                    }
 
-                    </View>
-                   
-                    <GroupChatInput inputVal={newMsg} setter={(msg) => setNewMsg(msg)} sendMessageFunc={() => {
-                        sendMessage()
-                    }} />
-                </KeyboardAvoidingView>
+                </View>
+
+                <GroupChatInput inputVal={newMsg} setter={(msg) => setNewMsg(msg)} sendMessageFunc={() => {
+                    sendMessage()
+                }} />
+            </KeyboardAvoidingView>
         </GestureHandlerRootView>
     );
 };

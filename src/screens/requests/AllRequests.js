@@ -1,32 +1,20 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import {
-    FlatList,
-    Image,
-    Text,
-    TouchableOpacity,
-    View,
-    StyleSheet,
-    Alert, ActivityIndicator
-} from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View, StyleSheet, Alert } from 'react-native';
 import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
-import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
-import RenderComponent from '../../components/FlatlistComponents/RenderComponent';
+import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
 import { ThemeContext } from '../../context/ThemeContext';
 import Containers from '../../assets/styles/Containers';
 import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
 import AppContext from '../../context/AppContext';
-import RenderRequest from '../../components/FlatlistComponents/RenderRequest';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
-import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 import AppColors from '../../assets/colors/Appcolors';
 import { Icons } from '../../assets/Icons';
-import { Button } from 'react-native-paper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontStyle from '../../assets/styles/FontStyle';
 
 const AllRequest = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
-    const { baseUrl, storedUser ,currentUser,token} = useContext(AppContext);
+    const { baseUrl, storedUser, currentUser, token } = useContext(AppContext);
     const [waitingRequests, setWaitingRequests] = useState([]);
     const [people, setPeople] = useState([]);
     const [allPendingRequests, setAllPendingRequests] = useState([])
@@ -76,11 +64,6 @@ const AllRequest = ({ navigation }) => {
             if (result.ok) {
                 const allFetchedRequests = await result.json()
                 // //console.log('all pending req.........', allFetchedRequests)
-                if(allFetchedRequests.data.message=="Please provide a valid token."){
-                    Alert.alert("Provide a valid token.")
-                  }else if(allFetchedRequests.data.message=='Please provide a token.'){
-                    Alert.alert('Token required')
-                  }else    
                 setAllPendingRequests(allFetchedRequests)
             }
             else {
@@ -102,12 +85,12 @@ const AllRequest = ({ navigation }) => {
             .then(async (response) => {
                 const allFetchedRequests = await response.json()
                 //console.log('all pending req.........', allFetchedRequests)
-                if(allFetchedRequests.data.message=="Please provide a valid token."){
-                    Alert.alert("Provide a valid token.")
-                  }else if(allFetchedRequests.data.message=='Please provide a token.'){
-                    Alert.alert('Token required')
-                  }else    
-                setWaitingRequests(allFetchedRequests)
+                // if (allFetchedRequests.data.message == "Please provide a valid token.") {
+                //     Alert.alert("Provide a valid token.")
+                // } else if (allFetchedRequests.data.message == 'Please provide a token.') {
+                //     Alert.alert('Token required')
+                // } else
+                    setWaitingRequests(allFetchedRequests)
             })
             .catch((err) => {
                 console.log('error fetching req.........', err)
@@ -144,9 +127,10 @@ const AllRequest = ({ navigation }) => {
         try {
             const response = await fetch(`${baseUrl}/rejectRequest?responderId=${currentUser.userId}&requesterId=${contact.requesterId._id}&requestId=${contact._id}`, {
                 method: 'get',
-                headers: { 
+                headers: {
                     Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json' }
+                    'Content-Type': 'application/json'
+                }
             });
 
             if (response.ok) {
@@ -179,7 +163,7 @@ const AllRequest = ({ navigation }) => {
                     swapShadows
                     style={[HomeNeoCards.neomorphStyle(theme.homeCardColor), { justifyContent: 'space-between' }]}
                 >
-                    <View style={{ flexDirection: 'row',flex:1 }}>
+                    <View style={{ flexDirection: 'row', flex: 1 }}>
                         {!item.requesterId.profileImage ? (
                             <View style={[HomeNeoCards.dpVew]}>
                                 <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
@@ -199,24 +183,26 @@ const AllRequest = ({ navigation }) => {
                             </Text>
                         </View>
                     </View>
-                    <View style={{flexDirection:'row',justifyContent:'space-around',width:wp('35')}}>
-                   
-                    <TouchableOpacity
-                        onPress={() => acceptRequest(item)}
-                        style={{
-                            // backgroundColor:AppColors.Mauve,
-                            paddingHorizontal:7,paddingVertical:5,borderRadius:7}}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: wp('35') }}>
+
+                        <TouchableOpacity
+                            onPress={() => acceptRequest(item)}
+                            style={{
+                                // backgroundColor:AppColors.Mauve,
+                                paddingHorizontal: 7, paddingVertical: 5, borderRadius: 7
+                            }}
                         >
-                        <Text style={{ color:"green",fontFamily:FontStyle.mediumFont,fontSize:wp('3') }}>Accept</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => rejectRequest(item)}
-                        style={{
-                            // backgroundColor:"#eadff0",
-                            paddingHorizontal:7,paddingVertical:5,borderRadius:7}}
+                            <Text style={{ color: "green", fontFamily: FontStyle.mediumFont, fontSize: wp('3') }}>Accept</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => rejectRequest(item)}
+                            style={{
+                                // backgroundColor:"#eadff0",
+                                paddingHorizontal: 7, paddingVertical: 5, borderRadius: 7
+                            }}
                         >
-                        <Text style={{ color:'red',fontFamily:FontStyle.mediumFont,fontSize:wp('3'),textAlign:'center' }}>Reject </Text>
-                    </TouchableOpacity>
+                            <Text style={{ color: 'red', fontFamily: FontStyle.mediumFont, fontSize: wp('3'), textAlign: 'center' }}>Reject </Text>
+                        </TouchableOpacity>
                     </View>
                 </Neomorph>
             </View>
@@ -231,6 +217,7 @@ const AllRequest = ({ navigation }) => {
     return (
         <View style={Containers.whiteCenterContainer(theme.backgroundColor)}>
             <View>
+                <Primary_StatusBar/>
                 <InnerScreensHeader screenName={"All Request"} navigation={navigation} />
                 {/* <Text style={{ marginTop: 20, fontSize: 20, color: AppColors.primary, textAlign: 'center' }}>All Requests</Text> */}
                 <FlatList data={waitingRequests} renderItem={({ item }) => renderPeople(item)} style={{ marginTop: 20 }} />

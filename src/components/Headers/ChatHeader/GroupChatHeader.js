@@ -27,7 +27,7 @@ import FontStyle from '../../../assets/styles/FontStyle';
 import { ThemeContext } from '../../../context/ThemeContext';
 
 const GroupChatHeader = ({ item, navigation }) => {
-  const { baseUrl, storedUser } = useContext(AppContext);
+  const { baseUrl, currentUser } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const groupMembers = item.members
   const adminId = item.group_admin
@@ -122,10 +122,10 @@ const GroupChatHeader = ({ item, navigation }) => {
                           <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp('70') }}>
                             <Text
                               style={{
-                                color: storedUser.name === item.name ? AppColors.primary : 'black',
+                                color: currentUser.name === item.name ? AppColors.primary : 'black',
                                 fontFamily: FontStyle.regularFont,
                               }}>
-                              {storedUser.name === item.name ? "You" : item.name}
+                              {currentUser.name === item.name ? "You" : item.name}
                             </Text>
                             {item._id == adminId ? (
                               // <Text

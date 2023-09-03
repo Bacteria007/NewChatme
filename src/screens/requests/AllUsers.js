@@ -10,7 +10,7 @@ import {
 
 } from 'react-native';
 import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
-import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
+import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
 import { ThemeContext } from '../../context/ThemeContext';
 import Containers from '../../assets/styles/Containers';
 import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
@@ -21,20 +21,20 @@ import AppColors from '../../assets/colors/Appcolors';
 import { Icons } from '../../assets/Icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
-import { io } from 'socket.io-client';
-import { all } from 'axios';
+import FontStyle from '../../assets/styles/FontStyle';
+import { ActivityIndicator } from 'react-native';
 
 const AllUsers = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
-    const { baseUrl, currentUser,token } = useContext(AppContext);
+    const { baseUrl, currentUser, token } = useContext(AppContext);
     const [isSending, setIsSending] = useState(false);
     const [requestSent, setRequestSent] = useState(false);
     const [people, setPeople] = useState([]);
     const [badgeCount, setBadgeCount] = useState(0);
     const [allPendingRequests, setAllPendingRequests] = useState([])
     const [waitingRequests, setWaitingRequests] = useState([])
-    const [userContactList, setUserContactList] = useState([])
-       // FUNCTIONS-----------------------------
+    const [clickedItem, setClickedItem] = useState(null);
+    // FUNCTIONS-----------------------------
 
     const fetchPendingRequest = async () => {
         try {
@@ -49,13 +49,15 @@ const AllUsers = ({ navigation }) => {
 
                 const allFetchedRequests = await result.json()
                 // //console.log('all pending req.........', allFetchedRequests)
-                if(allFetchedRequests.data.message=="Please provide a valid token."){
-                    Alert.alert("Provide a valid token.")
-                  }else if(allFetchedRequests.data.message=='Please provide a token.'){
-                    Alert.alert('Token required')
-                  }else 
-                setAllPendingRequests(allFetchedRequests)
-                return allFetchedRequests
+                // if (allFetchedRequests.data.message == "Please provide a valid token.") {
+                //     Alert.alert("Provide a valid token.")
+                // } else if (allFetchedRequests.data.message == 'Please provide a token.') {
+                //     Alert.alert('Token required')
+                // } else{
+
+                    setAllPendingRequests(allFetchedRequests)
+                    return allFetchedRequests
+                // }
             }
             else {
                 console.log("error fetching pending request")
@@ -91,7 +93,7 @@ const AllUsers = ({ navigation }) => {
     }
     const fetchPeople = async () => {
         try {
-            const response = await fetch(`${baseUrl}/usersNotInContactList?userId=${currentUser.userId}`, {
+            const response = await fetch(`${baseUrl}/nonFriendUsers?userId=${currentUser.userId}`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -105,54 +107,15 @@ const AllUsers = ({ navigation }) => {
                 console.log("data::::::::::", data);
                 await fetchPendingRequest();
                 await fetchWaitingRequest();
-                await fetchUserContactList();
-                if (userContactList.length > 0) {
-                    const filteredUsers = data.filter((user) =>
-                        !userContactList.some((list) => list._id === user._id)
-                    );
-                    setPeople(filteredUsers);
-                    return filteredUsers
-                }
-                else {
-                    setPeople(data)
-                }
+                setPeople(data)
             } else {
                 console.log("error fetching people")
-
             }
         } catch (error) {
             console.log("error fetching people", error)
-
         }
-
-
     }
-    const fetchUserContactList = async () => {
-        try {
-            const response = await fetch(`${baseUrl}/userContactList?userId=${currentUser.userId}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (response.ok) {
-                const data = await response.json()
-                console.log("usercontactlist", data)
-                setUserContactList(data)
-                return data
-
-            } else {
-                console.log("error fetching people")
-
-            }
-        } catch (error) {
-            console.log("error fetching people", error)
-
-        }
-
-
-    }
+  
     const sendRequest = async (contact) => {
         setIsSending(true);
         try {
@@ -202,7 +165,7 @@ const AllUsers = ({ navigation }) => {
     }
     const cancelRequest = async (contact) => {
         console.log("''''''''''======''''''''''", contact)
-        const result = await fetch(`${baseUrl}/cancelRequest?requesterId=${currentUser.userId}&responderId=${contact._id}`, { method: 'get', headers: { Authorization: `Bearer ${token}`,'Content-Type': 'application/json' } });
+        const result = await fetch(`${baseUrl}/cancelRequest?requesterId=${currentUser.userId}&responderId=${contact._id}`, { method: 'get', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } });
         if (result.ok) {
             await fetchPendingRequest()
             await fetchWaitingRequest()
@@ -214,22 +177,19 @@ const AllUsers = ({ navigation }) => {
     }
 
 
-    // HOOKS---------------------------------
-
-    const fetchData = async () => {
-        await fetchPeople();
-        await fetchWaitingRequest();
-        await fetchPendingRequest();
-        await fetchUserContactList();
-    };
-
-    useEffect(() => {
-        fetchData();
+     // Hooks---------------------------------
+     useEffect(() => {
+        fetchPeople();
+        console.log("people", people)
     }, []);
-
-    UseScreenFocus(fetchData);
-
-
+    useEffect(() => {
+        fetchPendingRequest();
+        console.log("allPendingRequests", allPendingRequests)
+    }, []);
+    useEffect(() => {
+        fetchWaitingRequest();
+        console.log("waitingRequests", waitingRequests)
+    }, []);
     useEffect(() => {
         console.log("issending", isSending)
     }, [isSending, requestSent]);
@@ -238,7 +198,7 @@ const AllUsers = ({ navigation }) => {
 
     const renderPeople = (item) => {
         // console.log("item__",item)
-        
+
         return (
 
             <View style={HomeNeoCards.flatlistItemContainer}>
@@ -260,30 +220,29 @@ const AllUsers = ({ navigation }) => {
                             <Image source={{ uri: `${baseUrl}${item.profileImage}` }} style={HomeNeoCards.dpImage} />
                         )}
                         {/* profile name view */}
-                        <View style={{paddingHorizontal:14,justifyContent:'center'}}>
+                        <View style={{ paddingHorizontal: 14, justifyContent: 'center' }}>
                             <Text style={HomeNeoCards.profileName(theme.profileNameColor)}>
                                 {item.name}
                             </Text>
                         </View>
                     </View>
-                    {allPendingRequests.some(pendingRequest => pendingRequest.responderId._id == item._id) ? (
+
+                    {waitingRequests.length > 0 && waitingRequests.some(waitingRequest => waitingRequest.requesterId._id == item._id) ? (
+                        <Text style={{ color: AppColors.gray, fontSize: 14, fontFamily: FontStyle.regularFont }}>
+                            Requested...</Text>
+                    ) : allPendingRequests.length > 0 && allPendingRequests.some(pendingRequest => pendingRequest.responderId._id == item._id) ? (
                         <TouchableOpacity onPress={() => cancelRequest(item)}>
                             <Neomorph swapShadows style={HomeNeoCards.addUserinGroup(AppColors.Mauve)}>
                                 <Text style={{ color: AppColors.white, fontSize: 14 }}>
                                     Cancel</Text>
                             </Neomorph>
                         </TouchableOpacity>
-                    ) : waitingRequests.some(waitingRequest => waitingRequest.requesterId._id == item._id) ? (
-                        <TouchableWithoutFeedback>
-                            {/* <Neomorph swapShadows style={HomeNeoCards.addUserinGroup(AppColors.white)}> */}
-                            <Text style={{ color: AppColors.gray, fontSize: 14 }}>
-                                Requested...</Text>
-                            {/* </Neomorph> */}
-                        </TouchableWithoutFeedback>
-                    ): (
-                        <TouchableOpacity onPress={() => { sendRequest(item) }}>
+                    ) : (
+                        <TouchableOpacity onPress={() => {setClickedItem(item);  sendRequest(item) }}>
                             <Neomorph swapShadows style={HomeNeoCards.addUserinGroup(AppColors.primary)}>
-                                <Text style={{ color: AppColors.white, fontSize: 14 }}>Add</Text>
+                                {clickedItem === item && isSending ? <ActivityIndicator size="small" color={"white"} /> :
+                                    <Text style={{ color: AppColors.white, fontSize: 14 }}>Add</Text>
+                                }
                             </Neomorph>
                         </TouchableOpacity>
                     )}
@@ -295,7 +254,7 @@ const AllUsers = ({ navigation }) => {
     return (
         <View style={Containers.whiteCenterContainer(theme.backgroundColor)}>
             <View>
-                <AppHeader headerTitle={"People"}   navigation={navigation} />
+                <AppHeader headerTitle={"People"} navigation={navigation} />
                 <FlatList data={people} renderItem={({ item }) => renderPeople(item)} />
             </View>
         </View>

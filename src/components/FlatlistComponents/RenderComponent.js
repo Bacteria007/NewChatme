@@ -10,7 +10,6 @@ import ReactNativeModal from "react-native-modal";
 import AppContext from "../../context/AppContext";
 import moment from "moment";
 import UseScreenFocus from "../HelperFunctions/AutoRefreshScreen/UseScreenFocus";
-import FontStyle from "../../assets/styles/FontStyle";
 
 const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_item, contacts_item, navigation }) => {
     const { theme } = useContext(ThemeContext);
@@ -43,10 +42,10 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
     const blockContact = async (item) => {
 
         console.log("discussion ma ", currentUser.userId)
-        console.log("discussion ma ", item._id)
+        console.log("discussion ma ", item)
 
         try {
-            const response = await fetch(`${baseUrl}/blockContact?userId=${currentUser.userId}&contactId=${item._id}`, {
+            const response = await fetch(`${baseUrl}/blockContact?userId=${currentUser.userId}&friendId=${item.contactData._id}`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -56,6 +55,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
             if (response.ok) {
                 const data = await response.json();
                 console.log('blocked contact from db', data);
+                // item.isFriend = false
                 ToastAndroid.showWithGravity(
                     'blocked successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER,);
             } else {
@@ -70,10 +70,10 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
     const unblockContact = async (item) => {
 
         console.log("discussion ma ", currentUser.userId)
-        console.log("discussion ma ", item._id)
+        console.log("discussion ma ", item)
 
         try {
-            const response = await fetch(`${baseUrl}/unblockContact?userId=${currentUser.userId}&contactId=${item._id}`, {
+            const response = await fetch(`${baseUrl}/unblockContact?userId=${currentUser.userId}&friendId=${item.contactData._id}`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -83,6 +83,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
             if (response.ok) {
                 const data = await response.json();
                 console.log("contact unblocked successfully", data);
+                // item.isFriend = true
                 ToastAndroid.showWithGravity(
                     ' unblocked successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER);
             } else {
@@ -95,16 +96,18 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
 
     }
     const handleLongPress = (item) => {
+        console.log("iiiiii", item)
+
         Alert.alert(
-            'Delete Chat', 'All Media and chat history wil be deleted',
-            [{ text: 'Block', onPress: () => { blockContact(item) } }, { text: 'UnBlock', onPress: () => { unblockContact(item) } }],
+            `${item.isFriend ? 'Block User' : 'Unblock User'}`, `${item.contactData.name}`,
+            [item.isFriend ? { text: 'Block', onPress: () => { blockContact(item) } } : { text: 'UnBlock', onPress: () => { unblockContact(item) } }],
             { cancelable: true },
         )
     }
     const getUserLastMessage = async () => {
         // console.log("req.query", discussions_item)
 
-        const res = await fetch(`${baseUrl}/userLatestMessage?userId=${currentUser.userId}&receiverId=${discussions_item._id}`, {
+        const res = await fetch(`${baseUrl}/userLatestMessage?chatId=${discussions_item._id}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -150,23 +153,31 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
         <TouchableOpacity
             onPress={() => {
                 if (callingScreen === "Discussions") {
-                    console.log("Comming form Discussions", discussions_item)
-                    navigation.navigate('UserChat', { receiver: discussions_item });
+                    console.log("discussions_item||||||||||||||||||", discussions_item)
+                    if (discussions_item.isFriend) {
+                        console.log("Comming form Discussions", discussions_item)
+                        navigation.navigate('UserChat', { contact: discussions_item });
+                    } else {
+                        ToastAndroid.showWithGravity(`${name} is blocked.`, ToastAndroid.SHORT, ToastAndroid.CENTER);
+                    }
                 }
                 else if (callingScreen === "Groups") {
                     console.log("Comming form Groups")
                     navigation.navigate('GroupChat', { item: groups_item });
                 }
             }}
-            onLongPress={() => { handleLongPress(discussions_item) }}>
-            <View
-                style={HomeNeoCards.flatlistItemContainer}>
+            onLongPress={() => {
+                if (callingScreen === "Discussions") {
+                    handleLongPress(discussions_item)
+                }
+            }}>
+            <View style={HomeNeoCards.flatlistItemContainer}>
                 <Neomorph
                     darkShadowColor={AppColors.primary} // <- set this
                     lightShadowColor={AppColors.primary}// <- this
                     swapShadows
                     style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
-                >
+                     >
                     <TouchableOpacity onPress={() => {
                         showProfileModal()
                         // console.log("dp", dp)
@@ -195,7 +206,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
 
                             </Text>
                             <Text
-                                style={HomeNeoCards.lastMsgTime(theme.lastMsgColor)}>
+                                style={HomeNeoCards.lastMsgTime(AppColors.primary)}>
                                 {callingScreen !== 'Groups' ? (userLastMsg ? (formatMessageDate(userLastMsg.createdAt)) : null)
                                     : (groupLastMsg ? (formatMessageDate(groupLastMsg.createdAt)) : null)}
                             </Text>
@@ -206,10 +217,10 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                                 :
                                 (groupLastMsg ? ((groupLastMsg.text.length) > maxLength ?
                                     <Text>
-                                        <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name == storedUser.name ? "You" : groupLastMsg.sender_name}{": "}</Text>
+                                        <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name == currentUser.name ? "You" : groupLastMsg.sender_name}{": "}</Text>
                                         {groupLastMsg.text.substring(0, maxLength) + '...'}</Text> :
                                     <Text>
-                                        <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name == storedUser.name ? "You" : groupLastMsg.sender_name}{": "}</Text>
+                                        <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name == currentUser.name ? "You" : groupLastMsg.sender_name}{": "}</Text>
                                         {groupLastMsg.text}</Text>) : null)}
                         </Text>
                     </View>
@@ -256,7 +267,3 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
 };
 
 export default RenderComponent;
-
-const styles = StyleSheet.create({
-
-})

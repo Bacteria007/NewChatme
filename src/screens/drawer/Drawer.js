@@ -23,7 +23,7 @@ import AppContext from '../../context/AppContext';
     widthPercentageToDP as wp,
   } from 'react-native-responsive-screen';
 import { useContext } from 'react';
-import Settings2 from '../settings/Settings2';
+import Settings2 from '../settings/Settings';
 import { Icons } from '../../assets/Icons';
 import Animated , { interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import Containers from '../../assets/styles/Containers';
@@ -199,12 +199,12 @@ const TabScreens = () => {
         await AsyncStorage.removeItem('user');
         // storeLoggedinStatus(false)
         console.log('User removed from storage');
-        // updateCurrentUserId(''); // Clear the storedUser in the context
+        // updateCurrentUserId(''); // Clear the currentUserin the context
         navigation.replace('LogInScreen');
       } catch (error) {
         console.log('Error while removing user from storage:', error);
         Alert.alert('You are unable to logout, try again later!');
-        // updateCurrentUserId(blank); // Clear the storedUser in the context
+        // updateCurrentUserId(blank); // Clear the currentUserin the context
         // navigation.navigate('LogInScreen'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
       }
     };
