@@ -11,8 +11,8 @@ const AppContext = React.createContext();
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
 
-  const baseUrl='http://192.168.1.119:8888';
-  const socket = io.connect('http://192.168.1.119:8888');
+  const baseUrl='http://192.168.43.122:8888';
+  const socket = io.connect('http://192.168.43.122:8888');
 
   const [userName, setUserName] = useState();
   const [storedUser, setStoredUser] = useState('');
@@ -100,14 +100,15 @@ export const AppProvider = ({ children }) => {
   //   console.log("conditional effect")
   // },[storedUser])
 
-  useEffect(() => {
+  useEffect(async() => {
     // Retrieve the selected language from AsyncStorage
-    AsyncStorage.getItem('selectedLanguage')
+    await AsyncStorage.getItem('selectedLanguage')
       .then(selectedLanguage => {
         if (selectedLanguage) {
           storeLanguage(selectedLanguage);
         } else {
-          storeLanguage(RNLocalize.getLocales()[0].languageCode);
+          storeLanguage("English");
+          // storeLanguage(RNLocalize.getLocales()[0].languageCode);
         }
       })
       .catch(error => {

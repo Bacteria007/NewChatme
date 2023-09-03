@@ -7,64 +7,12 @@ import Lottie from 'lottie-react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import FontStyle from '../../assets/styles/FontStyle';
 import axios from 'axios';
-import Primary_StatusBar from '../../components/statusbars/Primary_StatusBar';
+import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
 
 
 const FakeSplash = ({navigation}) => {
-    // const sendMessage = async () => {
-    //     setIsSending(true);
-    //     await axios
-    //       .post(
-    //         'https://api.openai.com/v1/engines/text-davinci-003/completions',
-    //         {
-    //           prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
-    //           max_tokens: 1024,
-    //           temperature: 0.5,
-    //         },
-    //         {
-    //           headers: {
-    //             Authorization: `Bearer ${apiKey}`,
-    //           },
-    //         },
-    //       )
-    //       .then(async response => {
-    //         const moodOfUser = response.data.choices[0].text.trim();
-    
-    //         if (moodOfUser != '') {
-    //           const messageData = {
-    //             content: currentMessage.trim(),
-    //             name: receiver.name,
-    //             senderId: currentUser.userId,
-    //             receiverId: receiver._id,
-    //             mood: moodOfUser,
-    //           };
-    //           console.log('frontend', messageData);
-    
-    //           await socket.emit('send_message', messageData);
-    //           setMessageList(list => [...list, messageData]);
-    //           setCurrentMessage('');
-    //           setIsSending(false);
-    //         }
-    //         setIsSending(false);
-    //       })
-    //       .catch(async error => {
-    //         console.error('Error detecting mood:', error);
-    //         const messageData = {
-    //           content: currentMessage.trim(),
-    //           name: receiver.name,
-    //           senderId: currentUser.userId,
-    //           receiverId: receiver._id,
-    //           mood: 'normal',
-    //         };
-    //         console.log('frontend', messageData);
-    
-    //         await socket.emit('send_message', messageData);
-    //         setMessageList(list => [...list, messageData]);
-    //         setCurrentMessage('');
-    //         setIsSending(false);
-    //       });
-    //   };
       const {updateCurrentUser,updateToken,baseUrl} = useContext(AppContext);
+
       const checkUserStatus=async()=>{
         const currentUserStatus= await AsyncStorage.getItem('isUserLoggedIn')
         const storedToken = await AsyncStorage.getItem('token');
@@ -73,6 +21,7 @@ const FakeSplash = ({navigation}) => {
        const Id=await AsyncStorage.getItem('Id')
        const phoneNo=await AsyncStorage.getItem('phoneNo')
         console.log("splash",currentUserStatus)
+        
         if(currentUserStatus==='true'){
           console.log("async sy user true check kia", `Bearer ${storedToken}` )
           if (storedToken) {
@@ -97,6 +46,10 @@ const FakeSplash = ({navigation}) => {
               navigation.replace('LogInScreen');
             }
           }
+          else{
+            console.log("async sy user true check kia lkn token nai")
+            navigation.replace('LogInScreen');
+          }
       }
       else {
           console.log("async sy user false check kia")
@@ -115,4 +68,4 @@ const FakeSplash = ({navigation}) => {
   )
 }
 
-export default FakeSplash
+export default FakeSplash;

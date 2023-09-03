@@ -19,6 +19,7 @@ import AppColors from '../../../assets/colors/Appcolors';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import FontStyle from '../../../assets/styles/FontStyle';
 import Containers from '../../../assets/styles/Containers';
+import { initializeZego } from '../../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
 
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************

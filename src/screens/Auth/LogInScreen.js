@@ -257,7 +257,7 @@ const LogInScreen = ({ navigation }) => {
             }}><Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Signup</Text></TouchableOpacity>
           </View>
 
-
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
       <Snackbar
