@@ -19,9 +19,11 @@ import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
 import AppSubHeaderStyle from '../../../assets/styles/AppSubHeaderStyle';
 import { ThemeContext } from '../../../context/ThemeContext';
 import BotChatHeaderStyle from '../../../assets/styles/BotStyleSheet/BotChatHeaderStyle';
-import {Primary_StatusBar} from '../../statusbars/Primary_StatusBar';
+import { Primary_StatusBar } from '../../statusbars/Primary_StatusBar';
 import { SearchBar } from '@rneui/base';
 import FontStyle from '../../../assets/styles/FontStyle';
+import { TouchableRipple } from 'react-native-paper';
+import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange }) => {
 
   const { updateTheme, theme, darkThemeActivator, changeThemeState } = useContext(ThemeContext);
@@ -95,22 +97,22 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
         <Primary_StatusBar />
         <View style={[AppHeaderStyle.headerView]}>
           <View style={AppHeaderStyle.drawerAndName_Container}>
-            <TouchableOpacity
-              style={{ flexDirection: 'row' }}
+            <TouchableRipple
+              rippleColor="rgba(0, 0, 0, 0.3)"
+              style={AppHeaderStyle.rippleBtn}
+              borderless
               onPress={() => { navigation.toggleDrawer() }}>
 
               {darkThemeActivator ? <MenuLeftWhite /> : <MenuLeftBlack />}
-            </TouchableOpacity>
-
+            </TouchableRipple>
             <Text style={[AppHeaderStyle.appNameStyle, { color: theme.headerIconsColor }]}>{headerTitle}</Text>
-
             <View>
               {headerTitle == "People" ?
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("Requests");
                   }}>
-                  <Text style={{ color: AppColors.primary, fontFamily: FontStyle.regularFont,fontSize:11 }}>Requests</Text>
+                  <Text style={{ color: AppColors.primary, fontFamily: FontStyle.regularFont, fontSize: 11 }}>Requests</Text>
                   {/* <Icons.MaterialCommunityIcons
                     name="bell"
                     size={wp('7%')}
@@ -121,7 +123,10 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
                 </TouchableOpacity>
                 :
                 darkThemeActivator ? (
-                  <TouchableOpacity
+                  <TouchableRipple
+                    rippleColor="rgba(0, 0, 0, 0.3)"
+                    style={AppHeaderStyle.rippleBtn}
+                    borderless
                     onPress={() => {
                       LightThemeChanger();
                     }}>
@@ -130,9 +135,12 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
                       color={theme.headerIconsColor}
                       size={wp('6%')}
                     />
-                  </TouchableOpacity>
+                  </TouchableRipple>
                 ) : (
-                  <TouchableOpacity
+                  <TouchableRipple
+                    rippleColor="rgba(0, 0, 0, 0.3)"
+                    style={AppHeaderStyle.rippleBtn}
+                    borderless
                     onPress={() => {
                       DarkThemeChanger();
                     }}>
@@ -141,7 +149,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
                       color={theme.headerIconsColor}
                       size={wp('6%')}
                     />
-                  </TouchableOpacity>
+                  </TouchableRipple>
                 )
               }
 

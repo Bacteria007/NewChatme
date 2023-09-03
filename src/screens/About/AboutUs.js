@@ -6,17 +6,18 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import AppColors from '../../assets/colors/Appcolors'
 // import { version } from '../../../package.json'; // Import version number from package.json
 
-
+import DeviceInfo from 'react-native-device-info';
 const AboutUs = ({navigation}) => {
+  const appVersion = DeviceInfo.getVersion();
   return (
    <DrawerScreenswrapper>
-    <View style={styles.container}>
     <InnerScreensHeader screenName={"AboutUs"} navigation={navigation}/>
+    <View style={styles.container}>
       <Text style={styles.title}>About Us</Text>
       <Text style={styles.description}>
         Welcome to our app! Here, you'll find information about our app and the team behind it.
       </Text>
-      {/* <Text style={styles.version}>App Version: {version}</Text> */}
+      <Text style={styles.version}>App Version: {appVersion}</Text>
     </View>      
     </DrawerScreenswrapper>
     
@@ -29,6 +30,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: AppColors.white,
+    height:hp('100'),
+    width:wp('100')
   },
   title: {
     fontSize: 24,

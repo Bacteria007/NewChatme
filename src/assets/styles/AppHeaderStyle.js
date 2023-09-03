@@ -35,7 +35,7 @@ const AppHeaderStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal:wp('5'),
+    paddingHorizontal:wp('2'),
     // backgroundColor: 'red',
 
   },
@@ -60,6 +60,8 @@ const AppHeaderStyle = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center'
   },
   botImgStyle: { height: hp('4.5%'), width: hp('4.5%') },
+  rippleBtn:{ height: hp('5'), width: hp('5'), borderRadius: hp('5'), justifyContent: 'center', alignItems: 'center' }
+  
 });
 
 export default AppHeaderStyle;

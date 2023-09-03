@@ -6,16 +6,27 @@ import {
 import AppColors from '../../../colors/Appcolors';
 
 const LogInStyleSheet = StyleSheet.create({
-  container:(bgcolor)=>({
+  container: bgcolor => ({
     flex: 1,
     alignItems: 'center',
     paddingTop: hp('1'),
-    backgroundColor:bgcolor
+    backgroundColor: bgcolor,
   }),
 
   scrollContainer: {
     paddingBottom: hp('5%'), // Adjust the value based on your content's bottom padding
-  },contentContainer:{height:hp('85'),width:wp('100'),justifyContent:'center',alignItems:'center'},
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor:'red',
+    flex:1
+  },
+  contentContainer: {
+    // height: hp('85'),
+    width: wp('100'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor:'red'
+  },
 
   title: {
     fontSize: hp('3'),
@@ -85,11 +96,11 @@ const LogInStyleSheet = StyleSheet.create({
   },
   forgotpasswordText: {
     marginBottom: hp('5'),
-    alignSelf:'flex-end',
-    marginTop:hp('1'),
-    color:AppColors.black,
-    fontFamily:'Poppins-Regular',
-    textAlign:'right',
+    alignSelf: 'flex-end',
+    marginTop: hp('1'),
+    color: AppColors.black,
+    fontFamily: 'Poppins-Regular',
+    textAlign: 'right',
   },
   phoneNumberInput: {
     fontSize: wp('5'),
@@ -122,7 +133,12 @@ const LogInStyleSheet = StyleSheet.create({
     fontSize: wp('5'),
     color: AppColors.white,
     fontFamily: 'Poppins-Regular',
-   
+  },
+  signupLineContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: wp('3%'),
   },
 });
 export default LogInStyleSheet;

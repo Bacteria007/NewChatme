@@ -35,6 +35,7 @@ const DrawerHeaderStyle = StyleSheet.create({
     fontFamily: FontStyle.regularFont,
     marginLeft:wp('3.5%')
   },
+  backBtn:{height:hp('5'),width:hp('5'),borderRadius:hp('5'),justifyContent:'center'},
 
 });
 

@@ -105,7 +105,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
         )
     }
     const getUserLastMessage = async () => {
-        // console.log("req.query", discussions_item)
+        console.log("req.query", discussions_item)
 
         const res = await fetch(`${baseUrl}/userLatestMessage?chatId=${discussions_item._id}`, {
             method: 'GET',
@@ -124,7 +124,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
         setUserLastMsg(data);
     }
     const getGroupLastMessage = async () => {
-        // console.log("i(((((())))))))))m", groups_item._id)
+        console.log("i(((((())))))))))m", groups_item._id)
         const res = await fetch(`${baseUrl}/groupLatestMessage?groupId=${groups_item._id}`, {
             method: 'GET',
             headers: {

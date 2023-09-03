@@ -51,16 +51,6 @@ const Reals = props => {
   };
 
   // ------------------------
-  const onBuffer = e => {
-    console.log('buffering....', e);
-  };
-
-  // ------------------------
-  const onError = e => {
-    console.log('error raised', e);
-  };
-
-  // ------------------------
   const UploadedReels = async () => {
     fetch(`${baseUrl}/uploadedReels`, {
       method: 'POST',
@@ -69,19 +59,21 @@ const Reals = props => {
     },
     })
       .then(response => response.json())
-      .then(data => {
-        if(data.message=="Please provide a valid token."){
-          Alert.alert("Provide a valid token.")
-        }else if(data.message=='Please provide a token.'){
-          Alert.alert('Token required')
-        }else{
-        const videosWithSources = data.UploadedVideos.map(video => ({
-          uri: { uri: video.video }, // Convert the path to a source object
-          desc: video.name,
-        }));
-
+      .then(async data => {
+        // if(data.message=="Please provide a valid token."){
+        //   Alert.alert("Provide a valid token.")
+        // }else if(data.message=='Please provide a token.'){
+        //   Alert.alert('Token required')
+        // }else{
+          const videosWithSources = data.UploadedVideos.map(video => ({
+            uri: { uri: video.video }, // Convert the path to a source object
+            desc: video.name,
+            reelUploader:video.userId
+          }));
+          
+          // console.log("fetch reel response",videosWithSources)
         setUploadedReels(videosWithSources);
-      }
+      // }
       })
       .catch(error => console.log(error));
   };
@@ -105,7 +97,7 @@ const Reals = props => {
 
   useEffect(() => {
     UploadedReels();
-  }, [uploadedReels]);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -157,7 +149,7 @@ const Reals = props => {
                     />
                   )}
                 </TouchableOpacity>
-                <ReelFooter onPressShare={() => shareVideo()} />
+                <ReelFooter onPressShare={() => shareVideo()} item={item.reelUploader}/>
               </View>
             );
           }}
