@@ -11,8 +11,7 @@ const AppContext = React.createContext();
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
 
-  const baseUrl='http://192.168.43.122:8888';
-  const socket = io.connect('http://192.168.43.122:8888');
+  const baseUrl='http://192.168.43.145:8888';
 
   const [userName, setUserName] = useState();
   const [storedUser, setStoredUser] = useState('');
@@ -22,13 +21,6 @@ export const AppProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
   const [selectedImageUri, setSelectedImageUri] = useState('');
   const [token, setToken] = useState(AsyncStorage.getItem('token'))
-
-  // const fetchUserId = async () => {
-  //   const user = await AsyncStorage.getItem('user');
-  //   const userId= await JSON.parse(user);
-  //   console.log("user id in all gloabl", JSON.parse(userId));
-  //   return userId;
-  // }
 
   const updateToken=(e)=>{
     setToken(e)
@@ -58,24 +50,7 @@ export const AppProvider = ({ children }) => {
   const storeLoggedinStatus=val=>{
     setIsUserLoggedin(val)
   }
-  // const getStoredUserDetails = async () => {
-  //   const userData = await AsyncStorage.getItem('user');
-  //   console.log("asyncUser",userData)
-  //       console.log('User ID get context:', typeof userData);
-  //       console.log('User ID get context parse:', JSON.parse(userData));
-  //       const pid= await JSON.parse(userData)
-  //       setStoredUser(pid)
-  //       console.log("pid",pid.userId)
-  //       return pid;
-     
-  // };
-
-  // useEffect(()=>{
-  //   getStoredUserDetails()
-  // },[])
-
-
-  useEffect(() => {
+ useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       // Check if the app is in the foreground
       if (AppState.currentState === 'active') {
@@ -94,12 +69,6 @@ export const AppProvider = ({ children }) => {
 
 
   // ********************************************     USE EFFECT FOR LANGUAGE RETRIVE FROM ASYNC STORAGE   ***************
-
-  // useEffect(()=>{
-  //   getUserID()
-  //   console.log("conditional effect")
-  // },[storedUser])
-
   useEffect(async() => {
     // Retrieve the selected language from AsyncStorage
     await AsyncStorage.getItem('selectedLanguage')
@@ -134,15 +103,8 @@ export const AppProvider = ({ children }) => {
         updateCurrentUser,
         getToken,
         updateToken,
-        // updateCurrentUserId,
         storeLoggedinStatus,
-        // getUserID,
-        // fetchUserId,
         storeImageUri,
-
-        // getStoredUserDetails,
-        socket,
-
       }}>
       {children}
     </AppContext.Provider>

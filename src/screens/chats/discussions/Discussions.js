@@ -18,7 +18,7 @@ import MyActivityStyleSheet from '../../../assets/styles/ReelStyleSheet/MyActivi
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
-  const { baseUrl,getToken, storedUser,token,currentUser, getStoredUserDetails } = useContext(AppContext);
+  const { baseUrl,getToken,token,currentUser } = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
