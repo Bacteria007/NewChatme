@@ -11,7 +11,7 @@ import AppColors from '../../../assets/colors/Appcolors';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import { io } from 'socket.io-client';
 
-const socket = io.connect('http://192.168.43.145:8888');
+const socket = io.connect('http://192.168.112.238:8888');
 
 const UserChat = props => {
   const { baseUrl, currentUser, token } = useContext(AppContext);

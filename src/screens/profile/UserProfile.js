@@ -29,7 +29,7 @@ import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/Prof
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
 
 const UserProfile = props => {
-  const { language, baseUrl, storedUser, storeUserName, getStoredUserDetails, userName, selectedImageUri, storeImageUri } = useContext(AppContext);
+  const { language,token, baseUrl, storedUser, storeUserName,currentUser,updateCurrentUser, getStoredUserDetails, userName, selectedImageUri, storeImageUri } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const arrow_icon = 'chevron-right';
   const iconSize = wp('9%');
@@ -37,11 +37,16 @@ const UserProfile = props => {
   const arrowSize = 17;
   const textColor = theme.profileNameColor;
   useEffect(() => {
-    let userid = storedUser.userId;
-    let userName = storedUser.name;
+   
+    let userid = currentUser.userId;
+    let userName = currentUser.name;
     storeUserName(userName);
     fetch(`${baseUrl}/getProfileImage?logegedId=${userid}`, {
       method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
     })
       .then(response => {
         if (!response.ok) {
@@ -57,6 +62,7 @@ const UserProfile = props => {
   }, []);
 
   return (
+    
     <DrawerScreenswrapper>
       <View style={[ProfileScreenStyleSheet.container]}>
         <Primary_StatusBar />
@@ -112,7 +118,7 @@ const UserProfile = props => {
                     maxHeight: 800,
                   }).then(async Response => {
                     const formdata = new FormData();
-                    formdata.append('_id', storedUser.userId);
+                    formdata.append('_id', currentUser.userId);
                     formdata.append('name', 'profileImage');
                     formdata.append('profileImage', {
                       uri: Response.assets[0].uri,
@@ -132,19 +138,22 @@ const UserProfile = props => {
                         return response.json();
                       })
                       .then(data => {
-                        console.log('res aya');
+                       
                         storeImageUri(data.newImage.profileImage);
-                        AsyncStorage.getItem('user').then(userData => {
+                        const updateimgOfCurrentUser ={...currentUser,profileImage: data.newImage.profileImage,}
+                        updateCurrentUser(updateimgOfCurrentUser)
+                        AsyncStorage.getItem('profileImage').then(userData => {
                           if (userData) {
-                            const existingData = JSON.parse(userData);
-                            const updatedData = {
-                              ...existingData,
-                              profileImage: data.newImage.profileImage,
-                            };
-                            console.log('async updatedion chli', updatedData);
+                            // const existingData = JSON.parse(userData);
+                            // const updatedData = {
+                            //   // ...existingData,
+                            //   profileImage: data.newImage.profileImage,
+                            // };
+                            // console.log('async updatedion chli', updatedData);
                             AsyncStorage.setItem(
-                              'user',
-                              JSON.stringify(updatedData),
+                              'profileImage',
+                            data.newImage.profileImage,
+                            
                             );
                           }
                         });

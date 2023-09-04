@@ -26,7 +26,7 @@ import { ThemeContext } from '../../../context/ThemeContext';
 
 const UserChatHeader = ({ item, navigation }) => {
   const [callTime, setCallTime] = useState(0);
-  const { baseUrl } = useContext(AppContext);
+  const { baseUrl,currentUser } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -55,12 +55,7 @@ const UserChatHeader = ({ item, navigation }) => {
   };
   //        #############################################################################
   const addCallDetailInBackend = async call => {
-    const userData = await AsyncStorage.getItem('user');
-
-    const userParseData = JSON.parse(userData);
-    const parseId = userParseData.userId;
-
-
+   
 
     // CAll Date
     const datestamp = new Date().toLocaleDateString([], {
@@ -70,7 +65,7 @@ const UserChatHeader = ({ item, navigation }) => {
 
     const formData = new FormData();
 
-    formData.append('userId', parseId);
+    formData.append('userId', currentUser.userId);
     formData.append('callName', call);
     formData.append('callDate', datestamp);
     formData.append('recieverId', item._id);

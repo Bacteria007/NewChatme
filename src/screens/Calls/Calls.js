@@ -22,21 +22,20 @@ import { ThemeContext } from '../../context/ThemeContext';
 import { Icons } from '../../assets/Icons';
 import AppColors from '../../assets/colors/Appcolors';
 import { Card } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import AppContext from '../../context/AppContext';
 import moment from 'moment';
 import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 
 const Calls = ({ navigation }) => {
-  const { baseUrl,token } = useContext(AppContext);
+  const { baseUrl, token, currentUser } = useContext(AppContext);
 
   //       ***************************                 STATES         **************************************
   const { theme, darkThemeActivator } = useContext(ThemeContext);
   const [searchedCalls, setSearchedCalls] = useState([]); // USE STATE FOR SEARCHING TEXT
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [allCallList, setAllCallList] = useState([]);
-  const [currentUserID, setCurrentUserID] = useState('');
-  let parseId;
+
   //       ***************************                 VARIABLES         **************************************
   const iconSize = hp('2.5%');
   const currentDate = new Date().toLocaleDateString([], {
@@ -49,39 +48,29 @@ const Calls = ({ navigation }) => {
     fetchCallList();
   }, []);
 
-
-
   //       ***************************              FUNCTIONS         **************************************
   const fetchCallList = async () => {
-
-
-    const userData = await AsyncStorage.getItem('user');
-
-    const userParseData = JSON.parse(userData);
-    parseId = userParseData.userId;
-    console.log("User ID iS                    ", parseId)
-
-
     try {
-      await fetch(`${baseUrl}/allCalls?userId=${parseId}`, {
+      await fetch(`${baseUrl}/allCalls?userId=${currentUser.userId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      }).then(async (response) => {
-        const data = await response.json();
-        if(data.message=="Please provide a valid token."){
-          Alert.alert("Provide a valid token.")
-        }else if(data.message=='Please provide a token.'){
-          Alert.alert('Token required')
-        }else{
-          setAllCallList(data); // Set the callList received from the response
-        }
-        console.log("Data of user is              ", data)
-      }).catch((error) => {
-        console.error('Error fetching call list:', error);
       })
+        .then(async response => {
+          const data = await response.json();
+          if (data.message == 'Please provide a valid token.') {
+            Alert.alert('Provide a valid token.');
+          } else if (data.message == 'Please provide a token.') {
+            Alert.alert('Token required');
+          } else {
+            setAllCallList(data); // Set the callList received from the response
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching call list:', error);
+        });
     } catch (error) {
       console.error('Error fetching call list:', error);
     }
@@ -102,53 +91,77 @@ const Calls = ({ navigation }) => {
     }
   };
 
-  const reversedData = allCallList.length > 0 ? allCallList.slice().reverse() : allCallList; // flatlist call wali ko reverse krny k liye
+  const reversedData =
+    allCallList.length > 0 ? allCallList.slice().reverse() : allCallList; // flatlist call wali ko reverse krny k liye
 
   //       ***************************            FLATLIST RENDER FUNCTION         **************************************
   const renderItem = ({ item }) => {
-    console.log("call item",item)
-        return (
+    return (
       <TouchableOpacity>
         <View style={HomeNeoCards.flatlistItemContainer}>
           <Neomorph
             darkShadowColor={AppColors.primary}
             swapShadows
-            style={[
-              HomeNeoCards.neomorphStyle(theme.homeCardColor)]}>
+            style={[HomeNeoCards.neomorphStyle(theme.homeCardColor)]}>
             <View style={HomeNeoCards.dpImageView}>
               <TouchableOpacity>
-                <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
-                  <Icons.MaterialIcons name={'person'} size={29} color={theme.groupDpIconColor} />
-                </View>
+                {item.userId === currentUser.userId ? (
+                  <>
+                    <Image
+                      source={{ uri: `${baseUrl}${item.userImg}` }}
+                      style={[
+                        HomeNeoCards.dpImage,
+                        { justifyContent: 'center', alignItems: 'center' },
+                      ]}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Image
+                      source={{ uri: `${baseUrl}${item.recieverImg}` }}
+                      style={[
+                        HomeNeoCards.dpImage,
+                        {
+                          justifyContent: 'center',
+                          borderRadius: hp('2.5%'),
+                          alignItems: 'center',
+                        },
+                      ]}
+                    />
+                  </>
+                )}
               </TouchableOpacity>
             </View>
             {/* msg view */}
             <View style={HomeNeoCards.name_CallIcon_Container}>
               <View style={HomeNeoCards.callNameAndTimeContainer}>
                 <Text
-                  style={[
-                    HomeNeoCards.profileName(theme.profileNameColor)]}>
-                  {item.userId === parseId ? (
+                  style={[HomeNeoCards.profileName(theme.profileNameColor)]}>
+                  {item.userId === currentUser.userId ? (
                     <>
-                      <Text>{item.recieverName}</Text>
+                      <Text>{item.userName}</Text>
                     </>
                   ) : (
                     <>
-                      <Text>{item.userName}</Text>
+                      <Text>{item.recieverName}</Text>
                     </>
                   )}
                 </Text>
                 <View style={HomeNeoCards.timeAndCallType}>
-                  {item.userId === parseId ? (
+                  {item.userId === currentUser.userId ? (
                     <>
                       {item.OutgoingCall == 'outgoing' ? (
                         <Icons.MaterialCommunityIcons
                           name="call-made"
-                          color='red'
+                          color="red"
                           size={iconSize}
                         />
                       ) : (
-                        ''
+                        <Icons.MaterialCommunityIcons
+                          name="call-received"
+                          color={'red'}
+                          size={iconSize}
+                        />
                       )}
                     </>
                   ) : (
@@ -160,12 +173,15 @@ const Calls = ({ navigation }) => {
                           size={iconSize}
                         />
                       ) : (
-                        ''
+                        <Icons.MaterialCommunityIcons
+                          name="call-made"
+                          color="red"
+                          size={iconSize}
+                        />
                       )}
                     </>
                   )}
-                  <Text
-                    style={[HomeNeoCards.lastMsg(theme.lastMsgColor)]}>
+                  <Text style={[HomeNeoCards.lastMsg(theme.lastMsgColor)]}>
                     {item.callDate === currentDate ? 'Today' : item.callDate},{' '}
                     {moment(item.callTime).format('hh:mm a ')}
                   </Text>
@@ -188,7 +204,6 @@ const Calls = ({ navigation }) => {
               </View>
             </View>
           </Neomorph>
-
         </View>
       </TouchableOpacity>
     );
@@ -202,16 +217,20 @@ const Calls = ({ navigation }) => {
         handleSearchOnChange={handleSearch}
         searchQuery={searchText}
       /> */}
-      <AppHeader navigation={navigation} headerTitle={'Calls'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+      <AppHeader
+        navigation={navigation}
+        headerTitle={'Calls'}
+        handleSearchOnChange={handleSearch}
+        searchQuery={searchText}
+      />
       <FlatList
         style={{ marginTop: 10 }}
         showsVerticalScrollIndicator={false}
         data={searchedCalls == '' ? reversedData : searchedCalls}
         renderItem={renderItem}
-      // keyExtractor={(item) => { item.callerId.toString() }}
-      // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
+        // keyExtractor={(item) => { item.callerId.toString() }}
+        // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
       />
-
     </View>
   );
 };
