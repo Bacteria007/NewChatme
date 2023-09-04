@@ -67,18 +67,21 @@ const SignUpScreen = ({ navigation }) => {
     setSelectedCountry(country);
     setCountryCode(country.callingCode);
   };
-  useEffect(() => {
+  const getFcmToken = async () => {
     // Get the FCM token when the component mounts (app starts or user logs in)
-    messaging()
+    await messaging()
       .getToken()
       .then(token => {
-        console.log('FCM Token:', token);
+        console.log('FCM Token***&&&&&&&&&&&&&&&&&&&&&&&:', token);
         setFcmToken(token); // Set the fcmToken state
         // Send this token to your backend to associate it with the user.
-      }).catch((err)=>{
-        console.log('err in FCM Token signup|||||||||||:', err);
-        
+      }).catch((err) => {
+        console.log('err in FCM Token login***&&&&&&&&&&&&&&&&&&&&&&&:', err);
+
       })
+  }
+  useEffect(() => {
+    getFcmToken()
   }, []);
 
   const handleSignUp = ({ navigation }) => {
