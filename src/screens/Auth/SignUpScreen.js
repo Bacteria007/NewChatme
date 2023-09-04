@@ -75,7 +75,10 @@ const SignUpScreen = ({ navigation }) => {
         console.log('FCM Token:', token);
         setFcmToken(token); // Set the fcmToken state
         // Send this token to your backend to associate it with the user.
-      });
+      }).catch((err)=>{
+        console.log('err in FCM Token signup|||||||||||:', err);
+        
+      })
   }, []);
 
   const handleSignUp = ({ navigation }) => {
