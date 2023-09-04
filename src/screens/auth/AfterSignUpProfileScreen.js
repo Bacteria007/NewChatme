@@ -45,7 +45,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
     getStoredUserDetails,
     selectedImageUri,
     storeImageUri,
-    token,getToken,
+    token,getToken,storeUserName
   } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
 
@@ -97,6 +97,8 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
         AsyncStorage.setItem('name', data.updated.name);
         const idOfUser = currentUser.userId;
         const nameofUser = data.updated.name;
+        storeUserName(nameofUser);
+  
         initializeZego(idOfUser, nameofUser);
         navigation.replace('DrawerScreens');
       } else {

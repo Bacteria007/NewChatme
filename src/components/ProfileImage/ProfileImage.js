@@ -2,11 +2,15 @@ import { View, Text, Image } from 'react-native'
 import React, { useEffect } from 'react'
 
 const ProfileImage = () => {
-    const { language, baseUrl,currentUser,selectedImageUri,storeImageUri } = useContext(AppContext);
+    const { token, baseUrl,currentUser,selectedImageUri,storeImageUri } = useContext(AppContext);
 
      useEffect(()=>{
         fetch(`${baseUrl}/getProfileImage?userId=${currentUser.userId}`, {
           method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
         })
         .then((response) => {
           if (!response.ok) {

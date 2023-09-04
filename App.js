@@ -89,25 +89,12 @@ const App = ({ navigation }) => {
   const logoutUser = async ({ navigation }) => {
     // YE NOTIFICATION K TOKEN KO LOGOUT PR NULL KRNY K LIYE API HAI
 
-    const baseUrl = 'http://192.168.43.145:8888';
+    const baseUrl = 'http://192.168.112.238:8888';
     const CurrentUserId = await AsyncStorage.getItem('Id');
     const CurrentUserFcmToken = await AsyncStorage.getItem('fcmToken');
     try {
 
-      // console.log('isUserLoggedin ', isUserLoggedin);
-await AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(false))
-await AsyncStorage.setItem('token','')
-await AsyncStorage.setItem('profileImage','')
-await AsyncStorage.setItem('name','')
-await AsyncStorage.setItem('Id','')
-await AsyncStorage.setItem('phoneNo','')
-// await AsyncStorage.removeItem('user')
-      // await AsyncStorage.setItem('user',JSON.stringify({userId: null, phoneNumber: null, profileImage: null, name: null}));
-      console.log('logout')
-      // storeLoggedinStatus(false)
-      // console.log('User removed from storage');
-      // updateCurrentUserId(''); // Clear the storedUser in the context
-      
+   
 
       const formdata = new FormData();
       formdata.append('fcmToken', CurrentUserFcmToken);
@@ -127,9 +114,16 @@ await AsyncStorage.setItem('phoneNo','')
           console.log(response);
         });
 
-      await AsyncStorage.setItem('fcmToken','');
+      // await AsyncStorage.setItem('fcmToken','');
+      await AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(false))
+await AsyncStorage.setItem('token','')
+await AsyncStorage.setItem('profileImage','')
+await AsyncStorage.setItem('name','')
+await AsyncStorage.setItem('Id','')
+await AsyncStorage.setItem('phoneNo','')
+console.log('logout');
       RNExitApp.exitApp();
-      console.log('logout');
+    
       navigation.replace('Splash');
       // navigation.replace('LogInScreen');
 
@@ -294,7 +288,7 @@ await AsyncStorage.setItem('phoneNo','')
           drawerContent={props => {
             // const { userData } = useUserContext();
             // const parsedUser = JSON.parse(userData._j);
-            const { baseUrl, currentUser,updateCurrentUser } = useContext(AppContext);
+            const { baseUrl, currentUser} = useContext(AppContext);
             console.log('baseurl', baseUrl);
             console.log('appcontext appjs', currentUser);
             return (

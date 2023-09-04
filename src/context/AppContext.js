@@ -11,9 +11,9 @@ const AppContext = React.createContext();
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
 
-  const baseUrl='http://192.168.43.145:8888';
+  const baseUrl='http://192.168.112.238:8888';
 
-  const [userName, setUserName] = useState();
+  const [userName, setUserName] = useState('');
   const [storedUser, setStoredUser] = useState('');
   const [language, setLanguage] = useState('English');
   const [isUserLoggedin, setIsUserLoggedin] = useState(false);
@@ -25,6 +25,8 @@ export const AppProvider = ({ children }) => {
   const updateToken=(e)=>{
     setToken(e)
   }
+
+  
   const getToken=async()=>{
     console.log("token context",await AsyncStorage.getItem('token'))
     setToken(await AsyncStorage.getItem('token'))

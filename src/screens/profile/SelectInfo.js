@@ -18,19 +18,15 @@ const SelectInfo = ({ iconName2, props }) => {
   const selectedTextColor = 'black';
   const titleTextColor = 'grey';
 
-  const {
-    userName,
-    storedUser,
-    storeUserName,
-    baseUrl,
-  } = useContext(AppContext);
+  const { userName, storeUserName, currentUser, baseUrl, updateCurrentUser } =
+    useContext(AppContext);
 
   const [userinput, setUserinput] = useState(userName);
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const StoreUpdatedNameInDb = () => {
     const formData = new FormData();
-    formData.append('_id', storedUser.userId);
+    formData.append('_id', currentUser.userId);
     formData.append('name', userinput);
     fetch(`${baseUrl}/updateProfileName`, {
       method: 'POST',
@@ -45,15 +41,16 @@ const SelectInfo = ({ iconName2, props }) => {
       .then(data => {
         console.log('Backend sy result aya', data);
         storeUserName(data.result.name);
-        AsyncStorage.getItem('user').then(userData => {
+        const updateNameOfCurrentUser = {
+          ...currentUser,
+          name: data.result.name,
+        };
+
+        updateCurrentUser(updateNameOfCurrentUser);
+
+        AsyncStorage.getItem('name').then(userData => {
           if (userData) {
-            const existingData = JSON.parse(userData);
-            const updatedData = {
-              ...existingData,
-              name: data.result.name,
-            };
-            console.log('async updatedion chli', updatedData);
-            AsyncStorage.setItem('user', JSON.stringify(updatedData));
+            AsyncStorage.setItem('name', data.result.name);
           }
         });
       })
@@ -61,7 +58,7 @@ const SelectInfo = ({ iconName2, props }) => {
   };
 
   useEffect(() => {
-    let userNaame = storedUser.name;
+    let userNaame = currentUser.name;
     storeUserName(userNaame);
   }, []);
   useEffect(() => {
