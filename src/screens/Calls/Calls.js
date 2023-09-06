@@ -26,6 +26,7 @@ import { Card } from 'react-native-paper';
 import AppContext from '../../context/AppContext';
 import moment from 'moment';
 import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
+import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 
 const Calls = ({ navigation }) => {
   const { baseUrl, token, currentUser } = useContext(AppContext);
@@ -46,6 +47,9 @@ const Calls = ({ navigation }) => {
   //       ***************************             USE EFFECT HOOK         **************************************
   useEffect(() => {
     fetchCallList();
+    const unsub = navigation.addListener('focus',()=>{
+        fetchCallList();
+    });
   }, []);
 
   //       ***************************              FUNCTIONS         **************************************
@@ -76,6 +80,7 @@ const Calls = ({ navigation }) => {
     }
   };
 
+  UseScreenFocus(fetchCallList);
   const handleSearch = text => {
     setSearchText(text);
 

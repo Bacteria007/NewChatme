@@ -75,6 +75,7 @@ const AllGroups = ({ navigation }) => {
       console.log("error fetching groups")
     }
   }
+  UseScreenFocus(fetchAllGroups)
   useEffect(() => {
     fetchAllGroups()
   }, [])

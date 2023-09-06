@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
-import { FlatList, Image, Text, TouchableOpacity, View, StyleSheet, Alert } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { FlatList, Image, Text, TouchableOpacity, View, StyleSheet, ToastAndroid } from 'react-native';
 import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
 import { ThemeContext } from '../../context/ThemeContext';
@@ -14,66 +14,9 @@ import FontStyle from '../../assets/styles/FontStyle';
 
 const AllRequest = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
-    const { baseUrl, storedUser, currentUser, token } = useContext(AppContext);
+    const { baseUrl, currentUser, token } = useContext(AppContext);
     const [waitingRequests, setWaitingRequests] = useState([]);
-    const [people, setPeople] = useState([]);
-    const [allPendingRequests, setAllPendingRequests] = useState([])
-
-    // FUNCTIONS-----------------------------
-    const fetchPeople = async () => {
-        try {
-            const response = await fetch(`${baseUrl}/usersNotInContactList?userId=${currentUser.userId}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            });
-            //yha token k messages ko khud e deal kr lyna
-            if (response.ok) {
-                console.log("reqz::::::::::", waitingRequests)
-                const data = await response.json();
-                console.log("data::::::::::", data)
-                if (waitingRequests.length > 0) {
-                    // const filteredUsers = data.filter((user) => !waitingRequests.some(waitingRequest => waitingRequest.requesterId._id === user._id))
-                    // setPeople(filteredUsers);
-                    setPeople(data)
-                } else {
-                    setPeople(data)
-                }
-            } else {
-                console.log("error fetching people")
-
-            }
-        } catch (error) {
-            console.log("error fetching people", error)
-
-        }
-
-
-    }
-    const fetchPendingRequest = async () => {
-        try {
-            const result = await fetch(`${baseUrl}/pendingRequests?userId=${currentUser.userId}`, {
-                method: 'get',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            })
-            if (result.ok) {
-                const allFetchedRequests = await result.json()
-                // //console.log('all pending req.........', allFetchedRequests)
-                setAllPendingRequests(allFetchedRequests)
-            }
-            else {
-                console.log("error fetching pending request")
-            }
-        } catch (error) {
-            console.log("error fetching pending request", error)
-        }
-
-    }
+    // FUNCTIONS----------------------------
     const fetchWaitingRequest = async () => {
         await fetch(`${baseUrl}/waitingRequests?userId=${currentUser.userId}`, {
             method: 'get',
@@ -90,7 +33,7 @@ const AllRequest = ({ navigation }) => {
                 // } else if (allFetchedRequests.data.message == 'Please provide a token.') {
                 //     Alert.alert('Token required')
                 // } else
-                    setWaitingRequests(allFetchedRequests)
+                setWaitingRequests(allFetchedRequests)
             })
             .catch((err) => {
                 console.log('error fetching req.........', err)
@@ -99,7 +42,7 @@ const AllRequest = ({ navigation }) => {
     const acceptRequest = async (contact) => {
         console.log("contact in accept", contact)
         try {
-            const response = await fetch(`${baseUrl}/acceptRequest?responderId=${currentUser.userId}&requesterId=${contact.requesterId._id}&requestId=${contact._id}`, {
+            const response = await fetch(`${baseUrl}/acceptRequest?senderId=${currentUser.userId}&receiverId=${contact.senderId._id}&requestId=${contact._id}`, {
                 method: 'post',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -108,14 +51,12 @@ const AllRequest = ({ navigation }) => {
             });
 
             if (response.ok) {
-                await fetchPeople();
-                await fetchPendingRequest();
-                await fetchWaitingRequest();
-                // console.log("accept res//////////", res)
-                const res = await response.json()
-
+                ToastAndroid.showWithGravity('user added in friend list.', ToastAndroid.SHORT, ToastAndroid.CENTER,);
+                const res = await response.json();
+                console.log("accept request ka response", res)
             } else {
-                //console.log('Error sending request');
+                ToastAndroid.showWithGravity('user is not added in friend list.', ToastAndroid.SHORT, ToastAndroid.CENTER,);
+                console.log('Error accepting request');
             }
         } catch (error) {
             console.log('Network request failed', error);
@@ -125,7 +66,7 @@ const AllRequest = ({ navigation }) => {
 
         // console.log("contact in reject", contact)
         try {
-            const response = await fetch(`${baseUrl}/rejectRequest?responderId=${currentUser.userId}&requesterId=${contact.requesterId._id}&requestId=${contact._id}`, {
+            const response = await fetch(`${baseUrl}/rejectRequest?senderId=${currentUser.userId}&receiverId=${contact.senderId._id}&requestId=${contact._id}`, {
                 method: 'get',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -134,23 +75,30 @@ const AllRequest = ({ navigation }) => {
             });
 
             if (response.ok) {
-                await fetchPeople();
-                await fetchPendingRequest();
-                await fetchWaitingRequest();
-                const res = await response.json()
-                console.log("reject res >>>>>>>>>>", res)
+                ToastAndroid.showWithGravity('request rejected successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER,);
+                const res = await response.json();
+                console.log("reject request ka response", res)
             } else if (response.status == 404) {
                 console.log('reject request not found');
 
             } else {
-
+                ToastAndroid.showWithGravity('cannot perform reject.', ToastAndroid.SHORT, ToastAndroid.CENTER,);
                 console.log('Error rejecting request');
             }
+
         } catch (error) {
             console.log('Error rejecting request', error);
         }
     }
-    const renderPeople = (item) => {
+    // HOOKS---------------------------------
+    useEffect(() => {
+        fetchWaitingRequest();
+        const unsub = navigation.addListener('focus', () => {
+            fetchWaitingRequest();
+        });
+    }, [])
+    // Render requests
+    const renderRequests = (item) => {
 
         return (
 
@@ -173,13 +121,13 @@ const AllRequest = ({ navigation }) => {
                                 </View>
                             </View>
                         ) : (
-                            <Image source={{ uri: `${baseUrl}${item.requesterId.profileImage}` }} style={HomeNeoCards.dpImage} />
+                            <Image source={{ uri: `${baseUrl}${item.senderId.profileImage}` }} style={HomeNeoCards.dpImage} />
                         )}
                         {/* profile name view */}
                         <View style={HomeNeoCards.nameAndMsgContainer}>
                             <Text
                                 style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                                {item.requesterId.name.length > 10 ? item.requesterId.name.substring(0, 10) + '...' : item.requesterId.name}
+                                {item.senderId.name.length > 10 ? item.senderId.name.substring(0, 10) + '...' : item.senderId.name}
                             </Text>
                         </View>
                     </View>
@@ -208,24 +156,17 @@ const AllRequest = ({ navigation }) => {
             </View>
         );
     }
-
-    // HOOKS---------------------------------
-    useEffect(() => {
-        fetchWaitingRequest()
-    }, [])
-
     return (
         <View style={Containers.whiteCenterContainer(theme.backgroundColor)}>
             <View>
-                <Primary_StatusBar/>
+                <Primary_StatusBar />
                 <InnerScreensHeader screenName={"All Request"} navigation={navigation} />
                 {/* <Text style={{ marginTop: 20, fontSize: 20, color: AppColors.primary, textAlign: 'center' }}>All Requests</Text> */}
-                <FlatList data={waitingRequests} renderItem={({ item }) => renderPeople(item)} style={{ marginTop: 20 }} />
+                <FlatList data={waitingRequests} renderItem={({ item }) => renderRequests(item)} style={{ marginTop: 20 }} />
             </View>
         </View>
     )
 }
-
 export default AllRequest
 
 const styles = StyleSheet.create({

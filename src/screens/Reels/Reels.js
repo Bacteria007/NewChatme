@@ -1,10 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  TouchableOpacity,
-  View,
-  Dimensions,
-} from 'react-native';
+import {  ActivityIndicator,  TouchableOpacity,  View,  Dimensions,} from 'react-native';
 import AppColors from '../../assets/colors/Appcolors';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import ReelHeader from '../../components/Headers/ReelHeader/ReelHeader';
@@ -13,16 +8,12 @@ import ReelFooter from '../../components/Headers/ReelHeader/ReelFooter';
 import AppContext from '../../context/AppContext';
 import Share from 'react-native-share';
 import { Text } from 'react-native-paper';
-import FontStyle from '../../assets/styles/FontStyle';
-import Containers from '../../assets/styles/Containers';
 import WebView from 'react-native-webview';
 import GenerateVideoHtml from './ReelsHtmlVideo';
 import LottieView from 'lottie-react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const Reals = props => {
   //   **********************************           VARIABLES               ****************************
-  const { height, width } = Dimensions.get('window');
   const { baseUrl ,token} = useContext(AppContext);
 
   //   **********************************          USE STATE               ****************************
@@ -30,10 +21,8 @@ const Reals = props => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [uploadedReels, setUploadedReels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
   //   **********************************          USE REF               ****************************
   const videoRef = useRef(null);
-
   //   **********************************          FUNCTIONS               ****************************
   const shareVideo = async () => {
     const videoUri = `${baseUrl}${uploadedReels[currentIndex]?.uri.uri}`;
@@ -49,7 +38,6 @@ const Reals = props => {
       console.log('Error sharing video:', error);
     }
   };
-
   // ------------------------
   const UploadedReels = async () => {
     fetch(`${baseUrl}/uploadedReels`, {
@@ -77,26 +65,21 @@ const Reals = props => {
       })
       .catch(error => console.log(error));
   };
-
   // ------------------------
-
   const toggleVideoPlayback = () => {
     setIsVideoPlaying(!isVideoPlaying);
   };
-
   // ------------------------
-
   const changeIndex = ({ index }) => {
     setCurrentIndex(index);
   };
-
-
-
-
   //   **********************************          USE EFFECTS               ****************************
 
   useEffect(() => {
     UploadedReels();
+    const unsub = navigation.addListener('focus', () => {
+      uploadedReels();
+  });
   }, []);
 
   useEffect(() => {
@@ -110,8 +93,6 @@ const Reals = props => {
       videoRef.current.seek(0);
     }
   }, [currentIndex, videoRef.current]);
-
-  // RETURN
   return (
     <View style={[ReelscreenStyle.containerStyle]}>
       {/* HEADER COMPONENT OF REEL */}

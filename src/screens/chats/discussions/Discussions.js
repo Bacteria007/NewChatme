@@ -77,6 +77,9 @@ const Discussions = ({ navigation }) => {
   useEffect(() => {
     getToken()
     fetchContactList();
+    const unsub = navigation.addListener('focus',()=>{
+      fetchContactList();
+  });
   }, []);
 
   return (
