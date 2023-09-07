@@ -80,7 +80,6 @@ const Calls = ({ navigation }) => {
     }
   };
 
-  UseScreenFocus(fetchCallList);
   const handleSearch = text => {
     setSearchText(text);
 
