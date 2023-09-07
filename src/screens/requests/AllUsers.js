@@ -35,7 +35,6 @@ const AllUsers = ({ navigation }) => {
     const [waitingRequests, setWaitingRequests] = useState([])
     const [clickedItem, setClickedItem] = useState(null);
     // FUNCTIONS-----------------------------
-
     const fetchPendingRequest = async () => {
         try {
             const result = await fetch(`${baseUrl}/pendingRequests?userId=${currentUser.userId}`, {
@@ -55,8 +54,8 @@ const AllUsers = ({ navigation }) => {
                 //     Alert.alert('Token required')
                 // } else{
 
-                    setAllPendingRequests(allFetchedRequests)
-                    return allFetchedRequests
+                setAllPendingRequests(allFetchedRequests)
+                return allFetchedRequests
                 // }
             }
             else {
@@ -115,11 +114,10 @@ const AllUsers = ({ navigation }) => {
             console.log("error fetching people", error)
         }
     }
-  
     const sendRequest = async (contact) => {
         setIsSending(true);
         try {
-            const response = await fetch(`${baseUrl}/sendRequest?requesterId=${currentUser.userId}&responderId=${contact._id}`, {
+            const response = await fetch(`${baseUrl}/sendRequest?senderId=${currentUser.userId}&receiverId=${contact._id}`, {
                 method: 'post',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -165,7 +163,7 @@ const AllUsers = ({ navigation }) => {
     }
     const cancelRequest = async (contact) => {
         console.log("''''''''''======''''''''''", contact)
-        const result = await fetch(`${baseUrl}/cancelRequest?requesterId=${currentUser.userId}&responderId=${contact._id}`, { method: 'get', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } });
+        const result = await fetch(`${baseUrl}/cancelRequest?senderId=${currentUser.userId}&receiverId=${contact._id}`, { method: 'get', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } });
         if (result.ok) {
             await fetchPendingRequest()
             await fetchWaitingRequest()
@@ -176,26 +174,30 @@ const AllUsers = ({ navigation }) => {
         else { console.log("cannot cancel reuest") }
     }
 
-
-     // Hooks---------------------------------
-     useEffect(() => {
+    // Hooks---------------------------------
+    useEffect(() => {
         fetchPeople();
-        console.log("people", people)
-    }, []);
-    useEffect(() => {
-        fetchPendingRequest();
-        console.log("allPendingRequests", allPendingRequests)
-    }, []);
-    useEffect(() => {
-        fetchWaitingRequest();
-        console.log("waitingRequests", waitingRequests)
+        console.log("people", people);
+        const unsub = navigation.addListener('focus', () => {
+            fetchPeople()
+        }, []);
+        useEffect(() => {
+            fetchPendingRequest();
+            console.log("allPendingRequests", allPendingRequests);
+            fetchPendingRequest();
+        }, []);
+        useEffect(() => {
+            fetchWaitingRequest();
+            console.log("waitingRequests", waitingRequests);
+            const unsub = navigation.addListener('focus', () => {
+                fetchWaitingRequest();
+            });
+        });
     }, []);
     useEffect(() => {
         console.log("issending", isSending)
     }, [isSending, requestSent]);
-
     // =============
-
     const renderPeople = (item) => {
         // console.log("item__",item)
 
@@ -238,7 +240,7 @@ const AllUsers = ({ navigation }) => {
                             </Neomorph>
                         </TouchableOpacity>
                     ) : (
-                        <TouchableOpacity onPress={() => {setClickedItem(item);  sendRequest(item) }}>
+                        <TouchableOpacity onPress={() => { setClickedItem(item); sendRequest(item) }}>
                             <Neomorph swapShadows style={HomeNeoCards.addUserinGroup(AppColors.primary)}>
                                 {clickedItem === item && isSending ? <ActivityIndicator size="small" color={"white"} /> :
                                     <Text style={{ color: AppColors.white, fontSize: 14 }}>Add</Text>
