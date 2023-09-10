@@ -54,7 +54,7 @@ const AllGroups = ({ navigation }) => {
     }
   };
   const fetchAllGroups = async () => {
-    console.log(")))))",currentUser.userId)
+    // console.log(")))))",currentUser.userId)
     try {
       const result = await fetch(`${baseUrl}/viewGroups/?userId=${currentUser.userId}`, { 
         method: 'GET', 

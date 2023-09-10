@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { FlatList, View, SafeAreaView, Text, StyleSheet } from 'react-native';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 import { ThemeContext } from '../../../context/ThemeContext';
@@ -31,35 +31,37 @@ const Discussions = ({ navigation }) => {
     setStatusbarColor(AppColors.white)
   }
   // UseScreenFocus(getStoredUserDetails)
-  // UseScreenFocus(initializeZego)
   // UseScreenFocus(stColor)
   
-  const fetchContactList = async () => {
+  const fetchContactList =useCallback(async () => {
 
-    // console.log("discussion ma ", currentUser.userId)
     try {
-      const response = await fetch(`${baseUrl}/userContacts?userId=${currentUser.userId}`, {
+     await fetch(`${baseUrl}/userContacts?userId=${currentUser.userId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
+      }).then(async(response)=>{
+        const data = await response.json();
+        // if(data.message=="Please provide a valid token."){
+        //   Alert.alert("Provide a valid token.")
+        // }else if(data.message=='Please provide a token.'){
+        //   Alert.alert('Token required')
+        // }else{
+          setContactList(data);
+        // }
+        // console.log('discussion from server', data)
+      }).catch((error)=>{
+        console.error('Error fetching contact list:', error);
       })
 
-      const data = await response.json();
-      // if(data.message=="Please provide a valid token."){
-      //   Alert.alert("Provide a valid token.")
-      // }else if(data.message=='Please provide a token.'){
-      //   Alert.alert('Token required')
-      // }else{
-        setContactList(data);
-      // }
-      // console.log('discussion from server', data)
+    
     } catch (error) {
       console.error('Error fetching contact list:', error);
     }
 
-  }
+  }, [baseUrl, currentUser.userId, token]);
   const handleSearch = text => {
     setSearchText(text);
     if (text === '') {
@@ -77,10 +79,10 @@ const Discussions = ({ navigation }) => {
   useEffect(() => {
     getToken()
     fetchContactList();
-    const unsub = navigation.addListener('focus',()=>{
+    navigation.addListener('focus',()=>{
       fetchContactList();
   });
-  }, []);
+  }, [fetchContactList]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

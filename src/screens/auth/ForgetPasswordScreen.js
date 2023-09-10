@@ -163,7 +163,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
       <ScrollView
         showsVerticalScrollIndicator={false}>
         <Image
-          source={require('../../assets/imges/AuthScreenPictures/ForgetPassPic/forgot4.png')}
+          source={require('../../assets/imges/AuthScreenPictures/ForgetPassPic/ForgetPic2.png')}
           style={[ForgetScreenStyle.image]}
         />
         {/* *************************************************************************************************** */}

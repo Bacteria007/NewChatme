@@ -31,10 +31,10 @@ const UserChatInput = ({
   setDocument,
   currentMessage,
   setCurrentMessage,
-  chatId
+  chatId,
+  messageget
 }) => {
   const { baseUrl, currentUser } = useContext(AppContext);
-  console.log("contat id: %%%%%%%%%%%", chatId)
   const apiKey = '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';
   const iconsColor = AppColors.coolgray
   const iconsColor2 = AppColors.black
@@ -78,11 +78,10 @@ const UserChatInput = ({
             chatId:chatId,
             mood: moodOfUser,
           };
-          console.log('frontend', messageData);
-
           await socket.emit('send_message', messageData);
           setMessageList(list => [...list, messageData]);
           setCurrentMessage('');
+          messageget()
           setIsSending(false);
         }
         setIsSending(false);
@@ -97,11 +96,11 @@ const UserChatInput = ({
           chatId:chatId,
           mood: 'normal',
         };
-        console.log('frontend', messageData);
 
         await socket.emit('send_message', messageData);
         setMessageList(list => [...list, messageData]);
         setCurrentMessage('');
+        messageget()
         setIsSending(false);
       });
   };
@@ -120,7 +119,6 @@ const UserChatInput = ({
         Response.assets.map((item) => {
           setSelectedImage(oldSelected => [...oldSelected, item.uri, item.type, item.fileName])
         })
-        console.log("selected img", selectedImage)
       }
 
       // const formdata = new FormData();
@@ -166,7 +164,7 @@ const UserChatInput = ({
       // const doc = await DocumentPicker.pickMultiple({
       //   type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
       // })
-      console.log("doc", doc)
+     
       const formData = new FormData();
       if (currentMessage !== '') {
         formData.append('content', currentMessage.trim());
@@ -199,7 +197,6 @@ const UserChatInput = ({
       });
 
       if (response.ok) {
-        console.log('Document uploaded successfully');
         setDocument(response.result)
       } else {
         console.log('Document upload failed');
@@ -316,7 +313,7 @@ const UserChatInput = ({
             {isSending ? (
               <ActivityIndicator size="small" color={iconsColor2} /> // Show loading animation
             ) : (
-              // <Text style={[UserChatStyle.sendButtonText]}>Send</Text>
+              
               <Icons.Ionicons name='send-sharp' size={wp('5.7%')} color={iconsColor2} />
             )}
           </View>
