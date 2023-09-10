@@ -51,8 +51,8 @@ import axios from 'axios';
 import {  checkNotificationPermission,  requestNotificationPermission,} from './src/components/Permission/Permission';
 import { LogBox } from 'react-native';
 import Settings from './src/screens/settings/Settings';
-// LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-// LogBox.ignoreAllLogs(); //Ignore all log notifications
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -89,7 +89,7 @@ const App = ({ navigation }) => {
   const logoutUser = async ({ navigation }) => {
     // YE NOTIFICATION K TOKEN KO LOGOUT PR NULL KRNY K LIYE API HAI
 
-    const baseUrl = 'http://192.168.112.238:8888';
+    const baseUrl = 'http://192.168.78.238:8888';
     const CurrentUserId = await AsyncStorage.getItem('Id');
     const CurrentUserFcmToken = await AsyncStorage.getItem('fcmToken');
     try {

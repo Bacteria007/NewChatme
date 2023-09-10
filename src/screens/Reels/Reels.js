@@ -77,8 +77,8 @@ const Reals = props => {
 
   useEffect(() => {
     UploadedReels();
-    const unsub = navigation.addListener('focus', () => {
-      uploadedReels();
+    props.navigation.addListener('focus', () => {
+      UploadedReels();
   });
   }, []);
 

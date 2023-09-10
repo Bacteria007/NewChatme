@@ -93,7 +93,7 @@ const AllRequest = ({ navigation }) => {
     // HOOKS---------------------------------
     useEffect(() => {
         fetchWaitingRequest();
-        const unsub = navigation.addListener('focus', () => {
+        navigation.addListener('focus', () => {
             fetchWaitingRequest();
         });
     }, [])
@@ -112,7 +112,7 @@ const AllRequest = ({ navigation }) => {
                     style={[HomeNeoCards.neomorphStyle(theme.homeCardColor), { justifyContent: 'space-between' }]}
                 >
                     <View style={{ flexDirection: 'row', flex: 1 }}>
-                        {!item.requesterId.profileImage ? (
+                        {!item.senderId.profileImage ? (
                             <View style={[HomeNeoCards.dpVew]}>
                                 <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
 

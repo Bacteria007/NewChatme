@@ -178,22 +178,23 @@ const AllUsers = ({ navigation }) => {
     useEffect(() => {
         fetchPeople();
         console.log("people", people);
-        const unsub = navigation.addListener('focus', () => {
+    navigation.addListener('focus', () => {
             fetchPeople()
+        }, []);
         }, []);
         useEffect(() => {
             fetchPendingRequest();
             console.log("allPendingRequests", allPendingRequests);
-            fetchPendingRequest();
+            // fetchPendingRequest();
         }, []);
         useEffect(() => {
             fetchWaitingRequest();
             console.log("waitingRequests", waitingRequests);
-            const unsub = navigation.addListener('focus', () => {
+           navigation.addListener('focus', () => {
                 fetchWaitingRequest();
             });
-        });
-    }, []);
+        },[]);
+    // }, );
     useEffect(() => {
         console.log("issending", isSending)
     }, [isSending, requestSent]);
@@ -229,10 +230,10 @@ const AllUsers = ({ navigation }) => {
                         </View>
                     </View>
 
-                    {waitingRequests.length > 0 && waitingRequests.some(waitingRequest => waitingRequest.requesterId._id == item._id) ? (
+                    {waitingRequests.length > 0 && waitingRequests.some(waitingRequest => waitingRequest.senderId._id == item._id) ? (
                         <Text style={{ color: AppColors.gray, fontSize: 14, fontFamily: FontStyle.regularFont }}>
                             Requested...</Text>
-                    ) : allPendingRequests.length > 0 && allPendingRequests.some(pendingRequest => pendingRequest.responderId._id == item._id) ? (
+                    ) : allPendingRequests.length > 0 && allPendingRequests.some(pendingRequest => pendingRequest.receiverId._id == item._id) ? (
                         <TouchableOpacity onPress={() => cancelRequest(item)}>
                             <Neomorph swapShadows style={HomeNeoCards.addUserinGroup(AppColors.Mauve)}>
                                 <Text style={{ color: AppColors.white, fontSize: 14 }}>
@@ -260,7 +261,7 @@ const AllUsers = ({ navigation }) => {
                 <FlatList data={people} renderItem={({ item }) => renderPeople(item)} />
             </View>
         </View>
-    )
+    );
 }
 
 export default AllUsers

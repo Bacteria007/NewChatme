@@ -143,11 +143,16 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
 
     }
 
-    UseScreenFocus(getGroupLastMessage)
-    UseScreenFocus(getUserLastMessage)
+    // UseScreenFocus(getGroupLastMessage)
+    // UseScreenFocus(getUserLastMessage)
     useEffect(() => {
         getUserLastMessage();
         getGroupLastMessage();
+         navigation.addListener('focus',()=>{
+            getGroupLastMessage()
+            getUserLastMessage
+        })
+       
     }, []);
     return (
         <TouchableOpacity

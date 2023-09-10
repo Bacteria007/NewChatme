@@ -58,7 +58,7 @@ const ForgetScreenStyle = StyleSheet.create({
   },
   image: {
     width: wp('70%'),
-    height: hp('32%'),
+    height: hp('30%'),
     alignSelf: 'center',
   },
   quesView: {

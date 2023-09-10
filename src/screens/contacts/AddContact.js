@@ -35,10 +35,7 @@ const AddContact = ({ navigation }) => {
   const [contactList, setContactList] = useState([]);
 
   const fetchContactList = async () => {
-    const userid = await AsyncStorage.getItem('user');
-
-    console.log('desc', JSON.parse(userid));
-    const parseId = JSON.parse(userid);
+ 
     await fetch(`${baseUrl}/allUsers?userId=${currentUser.userId}`, {
       method: 'GET',
       headers: {
