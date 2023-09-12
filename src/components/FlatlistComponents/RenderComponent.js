@@ -11,7 +11,7 @@ import AppContext from "../../context/AppContext";
 import moment from "moment";
 import UseScreenFocus from "../HelperFunctions/AutoRefreshScreen/UseScreenFocus";
 
-const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_item, contacts_item, navigation }) => {
+const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingScreen, discussions_item, groups_item, contacts_item, navigation }) => {
     const { theme } = useContext(ThemeContext);
     const { baseUrl, currentUser,token } = useContext(AppContext);
     const [profileModal, setProfileModal] = useState(false);
@@ -41,8 +41,8 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
     };
     const blockContact = async (item) => {
 
-        console.log("discussion ma ", currentUser.userId)
-        console.log("discussion ma ", item)
+        // console.log("discussion ma ", currentUser.userId)
+        // console.log("discussion ma ", item)
 
         try {
             const response = await fetch(`${baseUrl}/blockContact?userId=${currentUser.userId}&friendId=${item.contactData._id}`, {
@@ -67,10 +67,57 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
         }
 
     }
+
+    //    **********                 YE DELETE WALA KAAM HAI ***********************
+    const deleteContact = async (item) => {
+
+        // console.log("discussion ma ", currentUser.userId)
+        // console.log("discussion ma ", item)
+
+        try {
+            const response = await fetch(`${baseUrl}/deleteContact?userId=${currentUser.userId}&_id=${item._id}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+            if (response.ok) {
+                const data = await response.json();
+                
+                  
+                  const updatedContactList = contact.filter(contact => {
+                    if (contact._id === item._id) {
+                      // Agar msgList k msg ki Id or msgId equal hoo to screen pr na display krwao
+                      return false; // Remove the deleted message
+                    }
+                    return true; // Keep other messages
+                  });
+                  contactsSetList(updatedContactList);
+
+                console.log('deleted contact from db',updatedContactList);
+                // item.isFriend = false
+                ToastAndroid.showWithGravity(
+                    'deleted successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER,);
+
+            } else {
+                console.log('Error in deleting contact:', response.status);
+                ToastAndroid.showWithGravity('Cannot blocked', ToastAndroid.SHORT, ToastAndroid.CENTER);
+            }
+        } catch (error) {
+            console.error('Error in deleting contact: ', error);
+        }
+
+    }
+
+    //    ******************************************************************************
+
+
+
     const unblockContact = async (item) => {
 
-        console.log("discussion ma ", currentUser.userId)
-        console.log("discussion ma ", item)
+        // console.log("discussion ma ", currentUser.userId)
+        // console.log("discussion ma ", item)
 
         try {
             const response = await fetch(`${baseUrl}/unblockContact?userId=${currentUser.userId}&friendId=${item.contactData._id}`, {
@@ -82,7 +129,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
             })
             if (response.ok) {
                 const data = await response.json();
-                console.log("contact unblocked successfully", data);
+                // console.log("contact unblocked successfully", data);
                 // item.isFriend = true
                 ToastAndroid.showWithGravity(
                     ' unblocked successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -96,13 +143,27 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
 
     }
     const handleLongPress = (item) => {
-        console.log("iiiiii", item)
+        // console.log("iiiiii", item)
 
         Alert.alert(
             `${item.isFriend ? 'Block User' : 'Unblock User'}`, `${item.contactData.name}`,
             [item.isFriend ? { text: 'Block', onPress: () => { blockContact(item) } } : { text: 'UnBlock', onPress: () => { unblockContact(item) } }],
             { cancelable: true },
         )
+    }
+    const handleLongPressforDelete = (item) => {
+        // console.log("iiiiii", item)
+        Alert.alert(
+            `${item.isFriend ? 'Delete User' : 'Unblock User'}`,
+            item.isFriend ? 'Del this user?' : 'Unblock this user?',
+            [
+              item.isFriend
+                ? { text: 'Delete', onPress: () => { deleteContact(item) } }
+                : { text: 'Unblock', onPress: () => { unblockContact(item) } },
+            ],
+            { cancelable: true }
+          );
+      
     }
     const getUserLastMessage = async () => {
         console.log("req.query", discussions_item)
@@ -158,9 +219,9 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
         <TouchableOpacity
             onPress={() => {
                 if (callingScreen === "Discussions") {
-                    console.log("discussions_item||||||||||||||||||", discussions_item)
+                    // console.log("discussions_item||||||||||||||||||", discussions_item)
                     if (discussions_item.isFriend) {
-                        console.log("Comming form Discussions", discussions_item)
+                        // console.log("Comming form Discussions", discussions_item)
                         navigation.navigate('UserChat', { contact: discussions_item });
                     } else {
                         ToastAndroid.showWithGravity(`${name} is blocked.`, ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -173,7 +234,8 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
             }}
             onLongPress={() => {
                 if (callingScreen === "Discussions") {
-                    handleLongPress(discussions_item)
+                    // handleLongPress(discussions_item)
+                    handleLongPressforDelete(discussions_item)
                 }
             }}>
             <View style={HomeNeoCards.flatlistItemContainer}>

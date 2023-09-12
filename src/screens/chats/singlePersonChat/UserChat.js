@@ -57,24 +57,9 @@ const UserChat = props => {
       } else if (data.message == 'Please provide a token.') {
         Alert.alert('Token required');
       } else {
-        const filterMsgs = data.filter(message => {
-          // Check if senderID and currentUser.id are equal and deletedBySender is true
-          if (
-            message.senderId === currentUser.userId &&
-            message.deletedBySender === true
-          ) {
-            return false; // Don't include this message in the filtered list
-          } else if (
-            message.recieverId === currentUser.userId &&
-            message.deletedByReceiver === true
-          ) {
-            return false; // Don't include this message in the filtered list
-          }
-
-          return true; // Include other messages in the filtered list
-        });
         
-        const updatedMessageList = filterMsgs.filter(message => {
+        
+        const updatedMessageList = messageList.filter(message => {
           if (message._id === msgId) {
             // Agar msgList k msg ki Id or msgId equal hoo to screen pr na display krwao
             return false; // Remove the deleted message
@@ -133,7 +118,6 @@ const UserChat = props => {
 
         return true; // Include other messages in the filtered list
       });
-      // setMessageList(list => [...list,filterMsgs ]);
       setMessageList(filterMsgs);
       
     }
