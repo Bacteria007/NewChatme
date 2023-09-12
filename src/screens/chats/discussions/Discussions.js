@@ -49,9 +49,24 @@ const Discussions = ({ navigation }) => {
         // }else if(data.message=='Please provide a token.'){
         //   Alert.alert('Token required')
         // }else{
-          setContactList(data);
-        // }
-        // console.log('discussion from server', data)
+          const filterContact = data.filter(contact => {
+            // Check if senderID and currentUser.id are equal and deletedBySender is true
+            if (
+              contact.userId === currentUser.userId &&
+              contact.deletedBySender === true
+            ) {
+              return false; // Don't include this message in the filtered list
+            } else if (
+              contact.friendId === currentUser.userId &&
+              contact.deletedByReceiver === true
+            ) {
+              return false; // Don't include this message in the filtered list
+            }
+    
+            return true; // Include other messages in the filtered list
+          });
+            setContactList(filterContact);
+       
       }).catch((error)=>{
         console.error('Error fetching contact list:', error);
       })
@@ -109,6 +124,10 @@ const Discussions = ({ navigation }) => {
                     dp={item.contactData.profileImage}
                     callingScreen={"Discussions"}
                     discussions_item={item}
+                   contactsSetList ={(cl)=>{    // Ye ContactList ka setter beja hai
+                      setContactList(cl)
+                    }} 
+                    contact ={contactList}    // Ye ContactList ka getter beja hai
                     navigation={navigation}
                   />
                 )}
