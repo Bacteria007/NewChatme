@@ -1,16 +1,15 @@
+import { useContext } from 'react';
 import {
-    Image,
-    View,
-    Text,
-    TouchableOpacity,
-    Alert,
-  } from 'react-native';
-import {
-    DrawerContentScrollView,
-    DrawerItemList,
-    createDrawerNavigator,
-  } from '@react-navigation/drawer';
-  import TermsAndConditions from '../TermsAndConditions';
+  Image,
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  StyleSheet
+} from 'react-native';
+import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator, useDrawerProgress, useDrawerStatus, useIsDrawerOpen, } from '@react-navigation/drawer';
+
+import TermsAndConditions from '../TermsAndConditions';
 // import TabScreens from './TabScreens';
 import UserProfile from '../profile/UserProfile';
 import AboutUs from '../about/AboutUs';
@@ -18,365 +17,213 @@ import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../context/ThemeContext';
 import AppContext from '../../context/AppContext';
-  import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
-  } from 'react-native-responsive-screen';
-import { useContext } from 'react';
-import Settings2 from '../settings/Settings';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp, } from 'react-native-responsive-screen';
 import { Icons } from '../../assets/Icons';
-import Animated , { interpolate, useAnimatedStyle } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import Containers from '../../assets/styles/Containers';
-
-// ======================TAB  
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Reels from '../reels/Reels';
-import Calls from '../calls/Calls';
-import Groups from '../chats/groups/AllGroups';
-import Discussions from '../chats/discussions/Discussions';
-import StreamOutlineWhite from '../../assets/imges/footerIcons/streamOutlineBlack.svg';
-import StreamOutlineBlack from '../../assets/imges/footerIcons/streamOutlineWhite.svg';
-import AddContact from '../contacts/AddContact';
 import FontStyle from '../../assets/styles/FontStyle';
-import { useDrawerProgress } from '@react-navigation/drawer';
+import Settings from '../settings/Settings';
+import TabScreens from './TabScreens';
+import axios from 'axios';
+import RNExitApp from 'react-native-exit-app';
 
 
-// ================
-
-
-
-const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 const DrawerScreens = () => {
-     //  DRAWER VARIABLES START
-    const {isUserLoggedin } = useContext(AppContext);
-    const { darkThemeActivator, theme } = useContext(ThemeContext);
-    let iconSize = 18
-    const drawerBackgroungColor=theme.drawerColor
-    const activeTintColor=AppColors.black
-    const inActiveTintColor=AppColors.black
-    const activeBgColor=AppColors.white
-    const inActiveBgColor=AppColors.transparent
-    const myFontFamily=FontStyle.regularFont
-// DRAWER VARIABLES END
+  const { theme } = useContext(ThemeContext);
+  const { baseUrl, currentUser } = useContext(AppContext);
+  console.log('baseurl', baseUrl);
+  console.log('appcontext appjs', currentUser);
 
-// ==================
+  let iconSize = 18;
+  //Drawer Variables Start
+  const myFontFamily = FontStyle.regularFont;
+  const drawerBackgroungColor = theme.drawerColor;
+  const activeTintColor = AppColors.black;
+  const inActiveTintColor = AppColors.black;
+  const activeBgColor = 'rgba(255,255,255,0.8)';
+  const inActiveBgColor = AppColors.transparent;
+  //Drawer Variables End
+  const blank = '';
+  const logoutUser = async ({ navigation }) => {
+    // YE NOTIFICATION K TOKEN KO LOGOUT PR NULL KRNY K LIYE API HAI
+    const CurrentUserId = await AsyncStorage.getItem('Id');
+    const CurrentUserFcmToken = await AsyncStorage.getItem('fcmToken');
+    try {
+      const formdata = new FormData();
+      formdata.append('fcmToken', CurrentUserFcmToken);
 
+      axios({
+        method: 'post',
+        url: `${baseUrl}/logOut?userId=${CurrentUserId}`,
+        data: formdata,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+        .then(function (response) {
+          if (response.match == true) {
+            console.log('put null in fcm token');
+          }
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
 
-const TabScreens = () => {
+      // await AsyncStorage.setItem('fcmToken','');
+      await AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(false))
+      await AsyncStorage.setItem('token', '')
+      await AsyncStorage.setItem('profileImage', '')
+      await AsyncStorage.setItem('name', '')
+      await AsyncStorage.setItem('Id', '')
+      await AsyncStorage.setItem('phoneNo', '')
+      console.log(currentUser.name, 'logout');
+      RNExitApp.exitApp();
 
-    const {theme,darkThemeActivator} =useContext(ThemeContext)
-    const iconSize = 18
-    const reelsIconSize = 19
-    const focusedColor = theme.focusedTabIconsColor
-    const notfocusedColor=theme.notfocusedColor
-    const tabColor=theme.tabColor
-    const myFontFamily=FontStyle.regularFont
-    let progress = useDrawerProgress();
-    console.log('progress', progress);
-    const animatedStyle = useAnimatedStyle(() => ({
-        transform: [
-            { perspective: 1000 },
-            { scale: interpolate(progress.value, [0, 1], [1, 0.7], 'clamp') },
-            // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
-            {
-                translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp'),
-            },
-        ],
-        overflow: 'hidden',
-        // borderRadius:progress.value===1?12:0
-    }));
+      navigation.replace('Splash');
+      // navigation.replace('LogInScreen');
 
-    return (
-        <Animated.View style={[animatedStyle, { flex: 1 }]}>
-            <Tab.Navigator
-                initialRouteName="Groups"
-                screenOptions={({ route, focused }) => ({
-                    headerShown: false,
-                    tabBarIndicatorStyle: { backgroundColor: 'transparent' },
-                    tabBarStyle: {
-                        height: hp('8%'),
-                        borderTopWidth: 0,
-                        borderTopColor: darkThemeActivator
-                            ? AppColors.darkTheme
-                            : AppColors.transparent,
-                        justifyContent: 'flex-end',
-                        alignItems: 'center',
-                        backgroundColor: tabColor,
-
-                    },
-
-                    tabBarLabelStyle: {
-                        fontWeight: 'bold',
-                        fontSize: wp('3.5%'),
-                        marginBottom: hp('1%'),
-                        marginTop: hp('0%'),
-                        fontFamily:myFontFamily
-                    },
-                    tabBarItemStyle: { backgroundColor: tabColor },
-                    tabBarActiveTintColor: focusedColor,
-                    tabBarInactiveTintColor: notfocusedColor,
-                    tabBarHideOnKeyboard: 'true',
-                    tabBarPressColor: 'rgba(255,255,255,0.6)',
-                    tabBarIcon: ({ focused }) => {
-                        let iconColor = focused ? focusedColor : notfocusedColor
-
-                        if (route.name === 'Chats') {
-                            return (
-                                <Icons.Ionicons
-                                    size={iconSize}
-                                    name={
-                                        focused
-                                            ? 'ios-chatbubbles-sharp'
-                                            : 'ios-chatbubbles-outline'
-                                    }
-                                    color={iconColor}
-
-                                />
-                            );
-                        } else if (route.name === 'Calls') {
-                            return (
-                                <Icons.Ionicons
-                                    size={iconSize}
-                                    name={focused ? 'call-sharp' : 'call-outline'}
-                                    color={iconColor}
-
-                                />
-                            );
-                        } else if (route.name === 'Contacts') {
-                            return (
-                                <Icons.MaterialCommunityIcons
-                                    size={iconSize}
-                                    name={focused ? 'contacts' : 'contacts-outline'}
-                                    color={iconColor}
-
-                                />
-                            );
-                        } else if (route.name === 'Reels') {
-                            return focused ? (
-                                <Icons.FontAwesome5
-                                    name="stream"
-                                    size={reelsIconSize}
-                                    color={iconColor}
-
-                                />
-                            ) : darkThemeActivator ? (
-                                <StreamOutlineBlack />
-                            ) : (
-                                <StreamOutlineWhite />
-                            );
-                        } else if (route.name === 'Groups') {
-                            return (
-                                <Icons.Ionicons
-                                    size={iconSize}
-                                    name={focused ? 'people-sharp' : 'people-outline'}
-                                    color={iconColor}
-
-                                />
-                            );
-                        }
-                    },
-                })}>
-                <Tab.Screen name="Chats" component={Discussions} />
-                <Tab.Screen name="Groups" component={Groups} />
-                <Tab.Screen name="Calls" component={Calls} />
-                <Tab.Screen name="Reels" component={Reels} />
-                <Tab.Screen name="Contacts" component={AddContact} />
-            </Tab.Navigator>
-        </Animated.View>
-    );
+    } catch (error) {
+      console.log('Error while logging out:', error);
+      Alert.alert('You are unable to logout, try again later!');
+    }
+  };
+  return (
+    <View style={{ flex: 1 }}>
+      <Drawer.Navigator
+        screenOptions={{
+          headerShown: false,
+          overlayColor: 'transparent',
+          drawerType: 'slide',
+          drawerActiveTintColor: activeTintColor,
+          drawerInactiveTintColor: inActiveTintColor,
+          drawerStyle: {
+            width: wp('50%'),
+            backgroundColor: drawerBackgroungColor,
+          },
+          drawerLabelStyle: {
+            fontFamily: FontStyle.mediumFont,
+            fontSize: hp('1.6'),
+            marginLeft: -16,
+          },
+          drawerActiveBackgroundColor: activeBgColor,
+          sceneContainerStyle: {
+            backgroundColor: drawerBackgroungColor,
+          },
+        }}
+        initialRouteName="Home"
+        drawerContent={props => {
+          return (
+            <View style={{ flex: 1 }}>
+              <DrawerContentScrollView
+                {...props}
+                showsVerticalScrollIndicator={false}>
+                <Animated.View
+                  style={[Containers.centerContainer, { height: hp('25%') }]}>
+                  <View style={styles.imageView}>
+                    <Image source={{ uri: `${baseUrl}${currentUser?.profileImage} ` }} style={styles.imageStyle} />
+                  </View>
+                  <Text style={styles.userNameText}>
+                    {currentUser?.name}
+                  </Text>
+                </Animated.View>
+                <DrawerItemList {...props} />
+              </DrawerContentScrollView>
+              <TouchableOpacity
+                onPress={() => {
+                  logoutUser(props);
+                }}>
+                <View style={styles.logoutView}>
+                  <Icons.AntDesign name="logout" color={AppColors.black} size={iconSize}
+                  />
+                  <Text style={styles.logoutText}>  Logout </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          );
+        }}>
+        <Drawer.Screen
+          name="Home"
+          component={TabScreens}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.MaterialCommunityIcons color={focused ? activeTintColor : inActiveTintColor} name={'home'} size={iconSize}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="UserProfile"
+          component={UserProfile}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.MaterialIcons name={'person'} color={focused ? activeTintColor : inActiveTintColor} size={iconSize}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="AboutUs"
+          component={AboutUs}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.Ionicons name={'ios-information-circle-sharp'} color={focused ? activeTintColor : inActiveTintColor} size={iconSize}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Settings"
+          component={Settings}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.Ionicons name={'ios-settings-sharp'} color={focused ? activeTintColor : inActiveTintColor} size={iconSize}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Terms And Conditions"
+          component={TermsAndConditions}
+          options={{
+            drawerIcon: ({ focused }) => (
+              <Icons.FontAwesome5 name="file-signature" color={focused ? activeTintColor : inActiveTintColor} size={iconSize}
+              />
+            ),
+          }}
+        />
+      </Drawer.Navigator>
+    </View>
+  );
 };
 
-
-// ==================
-
-
-// FINCTIONS
-    const logoutUser = async ({ navigation }) => {
-      try {
-        console.log("isUserLoggedin ", isUserLoggedin)
-        await AsyncStorage.removeItem('user');
-        // storeLoggedinStatus(false)
-        console.log('User removed from storage');
-        // updateCurrentUserId(''); // Clear the currentUserin the context
-        navigation.replace('LogInScreen');
-      } catch (error) {
-        console.log('Error while removing user from storage:', error);
-        Alert.alert('You are unable to logout, try again later!');
-        // updateCurrentUserId(blank); // Clear the currentUserin the context
-        // navigation.navigate('LogInScreen'); // Navigate even if there's an error (you may handle it differently as per your app's logic)
-      }
-    };
-
-    return (
-      <View style={{ flex: 1 }}>
-        <Drawer.Navigator
-          screenOptions={{
-            headerShown: false,
-            overlayColor: 'white',
-            drawerType: 'slide',
-            drawerActiveTintColor: activeTintColor,
-            drawerInactiveTintColor: inActiveTintColor,
-            drawerStyle: {
-              width: wp('50%'),
-              backgroundColor: drawerBackgroungColor,
-            },
-            drawerLabelStyle: { marginLeft: wp('-6%'),fontFamily:myFontFamily },
-            drawerActiveBackgroundColor: activeBgColor,
-            sceneContainerStyle: {
-              backgroundColor:drawerBackgroungColor,
-            },
-            // drawerHideStatusBarOnOpen: true,
-            // swipeEnabled:false,  //--->> for drawerHideStatusBarOnOpen
-          }}
-          // backBehavior='history'
-          initialRouteName="Settings"
-          drawerContent={props => {
-            return (
-              <View style={{ flex: 1 }}>
-                <DrawerContentScrollView {...props}>
-                  <Animated.View
-                    style={[Containers.centerContainer, { height: hp('25%') }]}>
-                    <Image
-                      source={require('../../assets/imges/w11.jpg')}
-                      style={{
-                        height: wp('25%'),
-                        width: wp('25%'),
-                        borderRadius: wp('100%'),
-                      }}
-                    />
-                    <Text
-                      style={{ fontSize: hp('3%'), color: AppColors.black }}>
-                      User Name
-                    </Text>
-                  </Animated.View>
-                  <DrawerItemList {...props} />
-                </DrawerContentScrollView>
-                <TouchableOpacity
-                  onPress={() => {
-                    logoutUser(props);
-                  }}>
-                  <View
-                    style={{
-                      paddingLeft: wp('5%'),
-                      paddingBottom: hp('4%'),
-                      flexDirection: 'row',
-                    }}>
-                    <Icons.AntDesign
-                      name="logout"
-                      color={AppColors.black}
-                      size={iconSize}
-                    />
-                    <Text
-                      style={{
-                        fontSize: wp('4%'),
-                        fontFamily: FontStyle.regularFont,
-                        color: AppColors.black,
-                        marginLeft: wp('3.5%'),
-                      }}>
-                      Logout
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            );
-          }}>
-          <Drawer.Screen
-            name="Home"
-            component={TabScreens}
-            options={{
-              drawerIcon: ({ focused }) => (
-                <Icons.MaterialCommunityIcons
-                  name={'home'}
-                  color={AppColors.black}
-                  // name={focused ? 'ios-home' : 'ios-home-outline'}
-                  // color={focused ? AppColors.white : AppColors.black}
-                  size={iconSize}
-                />
-                // <Icons.Ionicons
-                //   name={'ios-home'}
-                //   color={AppColors.black}
-                //   // name={focused ? 'ios-home' : 'ios-home-outline'}
-                //   // color={focused ? AppColors.white : AppColors.black}
-                //   size={iconSize}
-                // />
-              ),
-            }}
-          />
-          <Drawer.Screen
-            name="UserProfile"
-            component={UserProfile}
-            options={{
-              drawerIcon: ({ focused }) => (
-                <Icons.MaterialIcons
-                  name={'person'}
-                  color={AppColors.black}
-                  // name={focused ? 'person' : 'person-outline'}
-                  // color={focused ? AppColors.white : AppColors.black}
-                  size={iconSize}
-                />
-              ),
-            }}
-          />
-          <Drawer.Screen
-            name="AboutUs"
-            component={AboutUs}
-            options={{
-              drawerIcon: ({ focused }) => (
-                <Icons.Ionicons
-                  name={'ios-information-circle-sharp'}
-                  color={AppColors.black}
-                  // name={
-                  //   focused
-                  //     ? 'ios-information-circle-sharp'
-                  //     : 'ios-information-circle-outline'
-                  // }
-                  // color={focused ? AppColors.white : AppColors.black}
-                  size={iconSize}
-                />
-              ),
-            }}
-          />
-          <Drawer.Screen
-            name="Settings"
-            component={Settings2}
-            options={{
-              drawerIcon: ({ focused }) => (
-                <Icons.Ionicons
-                  name={'ios-settings-sharp'}
-                  color={AppColors.black}
-                  // name={focused ? 'ios-settings-sharp' : 'ios-settings-outline'}
-                  // color={focused ? AppColors.white : AppColors.black}
-                  size={iconSize}
-                />
-              ),
-            }}
-          />
-          <Drawer.Screen
-            name="Terms And Conditions"
-            component={TermsAndConditions}
-            options={{
-              drawerIcon: ({ focused }) => (
-                // focused ? (
-                <Icons.FontAwesome5
-                  name="file-signature"
-                  color={AppColors.black}
-                  size={iconSize}
-                />
-              ),
-              // ) : (
-              //   <Icons.MaterialCommunityIcons
-              //     name="file-sign"
-              //     color={focused ? AppColors.white : AppColors.black}
-              //     size={iconSize}
-              //   />
-              // ),
-            }}
-          />
-        </Drawer.Navigator>
-      </View>
-    );
-  };
-
-  export default DrawerScreens
+export default DrawerScreens;
+const styles = StyleSheet.create({
+  logoutText: {
+    fontSize: wp('4%'),
+    fontFamily: FontStyle.regularFont,
+    color: AppColors.black,
+    marginLeft: wp('3.5%'),
+  },
+  logoutView: {
+    paddingLeft: wp('5%'),
+    paddingBottom: hp('4%'),
+    flexDirection: 'row',
+  },
+  userNameText: { fontSize: hp('2.5%'), color: AppColors.black, fontFamily: FontStyle.regularFont, marginVertical: 6, textAlign: 'center' },
+  imageView: {
+    height: wp('26.5%'),
+    width: wp('26.5%'),
+    borderRadius: wp('100%'),
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: hp('5'),
+  },
+  imageStyle: {
+    height: wp('25%'),
+    width: wp('25%'),
+    borderRadius: wp('100%'),
+    alignSelf: 'center',
+  },
+})

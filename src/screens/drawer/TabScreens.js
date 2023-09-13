@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+import { useContext, useEffect, } from 'react';
+import { StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Reels from '../reels/Reels';
 import Calls from '../calls/Calls';
@@ -7,69 +8,83 @@ import Discussions from '../chats/discussions/Discussions';
 import StreamOutlineWhite from '../../assets/imges/footerIcons/streamOutlineBlack.svg';
 import StreamOutlineBlack from '../../assets/imges/footerIcons/streamOutlineWhite.svg';
 import { ThemeContext } from '../../context/ThemeContext';
-import AddContact from '../contacts/AddContact';
 import FontStyle from '../../assets/styles/FontStyle';
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
-import { useDrawerProgress } from '@react-navigation/drawer';
+import { useDrawerProgress, useDrawerStatus } from '@react-navigation/drawer';
 import { Icons } from '../../assets/Icons';
 import AppColors from '../../assets/colors/Appcolors';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp, } from 'react-native-responsive-screen';
+import AllUsers from '../requests/AllUsers';
 
-  import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
-  } from 'react-native-responsive-screen';
-  
 const Tab = createBottomTabNavigator();
 
 const TabScreens = () => {
-
-    const {theme,darkThemeActivator} =useContext(ThemeContext)
-    const iconSize = 18
-    const reelsIconSize = 19
-    const focusedColor = theme.focusedTabIconsColor
-    const notfocusedColor=theme.notfocusedColor
-    const tabColor=theme.tabColor
-    const myFontFamily=FontStyle.regularFont
-    let progress = useDrawerProgress();
-    console.log('progress', progress);
+    const { darkThemeActivator, theme } = useContext(ThemeContext);
+    let iconSize = 18;
+    // //Tab Variables Start
+    const reelsIconSize = 19;
+    const focusedColor = theme.focusedTabIconsColor;
+    const notfocusedColor = theme.notFocusedTabIconsColor;
+    const tabColor = theme.tabColor;
+    const tabFontBold = FontStyle.boldFont;
+    const tabFontSemiBold = FontStyle.semiBoldFont;
+    const drawerStatus = useDrawerStatus();
+    useEffect(() => {
+        if (drawerStatus == 'open') {
+            console.log("drawer is opened")
+            StatusBar.setBarStyle('dark-content');
+            StatusBar.setBackgroundColor(AppColors.Mauve);
+        } else if (drawerStatus == 'closed') {
+            console.log("drawer is closed")
+            StatusBar.setBarStyle('dark-content');
+            StatusBar.setBackgroundColor(AppColors.white);
+        }
+    }, [drawerStatus]);
+    const progress = useDrawerProgress();
+    // console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [
             { perspective: 1000 },
-            { scale: interpolate(progress.value, [0, 1], [1, 0.7], 'clamp') },
+            { scale: interpolate(progress.value, [0, 1], [1, 0.75], 'clamp') },
             // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
             {
                 translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp'),
             },
         ],
         overflow: 'hidden',
-        // borderRadius:progress.value===1?12:0
+        borderRadius: progress.value === 1 ? 18 : 0,
+        shadowColor: 'rgba(0,0,0,1)', // Shadow color
+        shadowOpacity: 1, // Opacity of the shadow
+        shadowRadius: 10, // Radius of the shadow blur
+        shadowOffset: {
+            width: 0, // Horizontal offset
+            height: -10, // Vertical offset
+        },
+        elevation: 10,
     }));
 
+
     return (
+
         <Animated.View style={[animatedStyle, { flex: 1 }]}>
             <Tab.Navigator
-                initialRouteName="Groups"
-                screenOptions={({ route, focused }) => ({
+                initialRouteName="Chats"
+                screenOptions={({ route }) => ({
                     headerShown: false,
                     tabBarIndicatorStyle: { backgroundColor: 'transparent' },
                     tabBarStyle: {
                         height: hp('8%'),
                         borderTopWidth: 0,
-                        borderTopColor: darkThemeActivator
-                            ? AppColors.darkTheme
-                            : AppColors.transparent,
+                        borderTopColor: darkThemeActivator ? AppColors.darkTheme : AppColors.transparent,
                         justifyContent: 'flex-end',
                         alignItems: 'center',
                         backgroundColor: tabColor,
-
                     },
-
                     tabBarLabelStyle: {
-                        fontWeight: 'bold',
-                        fontSize: wp('3.5%'),
+                        fontSize: wp('2.8%'),
                         marginBottom: hp('1%'),
                         marginTop: hp('0%'),
-                        fontFamily:myFontFamily
+                        fontFamily: tabFontSemiBold,
                     },
                     tabBarItemStyle: { backgroundColor: tabColor },
                     tabBarActiveTintColor: focusedColor,
@@ -77,46 +92,23 @@ const TabScreens = () => {
                     tabBarHideOnKeyboard: 'true',
                     tabBarPressColor: 'rgba(255,255,255,0.6)',
                     tabBarIcon: ({ focused }) => {
-                        let iconColor = focused ? focusedColor : notfocusedColor
-
+                        let iconColor = focused ? focusedColor : notfocusedColor;
                         if (route.name === 'Chats') {
                             return (
-                                <Icons.Ionicons
-                                    size={iconSize}
-                                    name={
-                                        focused
-                                            ? 'ios-chatbubbles-sharp'
-                                            : 'ios-chatbubbles-outline'
-                                    }
-                                    color={iconColor}
-
-                                />
+                                <Icons.Ionicons size={iconSize} name={focused ? 'ios-chatbubbles-sharp' : 'ios-chatbubbles-outline'} color={iconColor} />
                             );
                         } else if (route.name === 'Calls') {
                             return (
-                                <Icons.Ionicons
-                                    size={iconSize}
-                                    name={focused ? 'call-sharp' : 'call-outline'}
-                                    color={iconColor}
-
+                                <Icons.Ionicons size={iconSize} name={focused ? 'call-sharp' : 'call-outline'} color={iconColor}
                                 />
                             );
                         } else if (route.name === 'Contacts') {
                             return (
-                                <Icons.MaterialCommunityIcons
-                                    size={iconSize}
-                                    name={focused ? 'contacts' : 'contacts-outline'}
-                                    color={iconColor}
-
-                                />
+                                <Icons.MaterialCommunityIcons size={iconSize} name={focused ? 'contacts' : 'contacts-outline'} color={iconColor} />
                             );
                         } else if (route.name === 'Reels') {
                             return focused ? (
-                                <Icons.FontAwesome5
-                                    name="stream"
-                                    size={reelsIconSize}
-                                    color={iconColor}
-
+                                <Icons.FontAwesome5 name="stream" size={reelsIconSize} color={iconColor}
                                 />
                             ) : darkThemeActivator ? (
                                 <StreamOutlineBlack />
@@ -125,11 +117,7 @@ const TabScreens = () => {
                             );
                         } else if (route.name === 'Groups') {
                             return (
-                                <Icons.Ionicons
-                                    size={iconSize}
-                                    name={focused ? 'people-sharp' : 'people-outline'}
-                                    color={iconColor}
-
+                                <Icons.Ionicons size={iconSize} name={focused ? 'people-sharp' : 'people-outline'} color={iconColor}
                                 />
                             );
                         }
@@ -139,10 +127,10 @@ const TabScreens = () => {
                 <Tab.Screen name="Groups" component={Groups} />
                 <Tab.Screen name="Calls" component={Calls} />
                 <Tab.Screen name="Reels" component={Reels} />
-                <Tab.Screen name="Contacts" component={AddContact} />
+                <Tab.Screen name="Contacts" component={AllUsers} />
             </Tab.Navigator>
         </Animated.View>
     );
 };
 
-export default TabScreens;
+export default TabScreens
