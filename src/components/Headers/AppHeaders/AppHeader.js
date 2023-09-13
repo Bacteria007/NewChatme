@@ -92,9 +92,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
   return (
 
     <View>
-      {/* <Wave style={{ position: 'absolute' }}  /> */}
       <View style={AppHeaderStyle.mainHeader(theme.headerColor)}>
-        <Primary_StatusBar />
         <View style={[AppHeaderStyle.headerView]}>
           <View style={AppHeaderStyle.drawerAndName_Container}>
             <TouchableRipple

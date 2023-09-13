@@ -142,7 +142,7 @@ const AllUsers = ({ navigation }) => {
                 // Update people array to mark the user as requested
                 // setPeople(prevPeople => {
                 //     return prevPeople.map(user => {
-                //         if (user._id === res.requesterId._id) {
+                //         if (user._id === res.senderId._id) {
                 //             return { ...user, requested: true };
                 //         }
                 //         return user;
@@ -178,22 +178,24 @@ const AllUsers = ({ navigation }) => {
     useEffect(() => {
         fetchPeople();
         console.log("people", people);
-    navigation.addListener('focus', () => {
+        navigation.addListener('focus', () => {
             fetchPeople()
-        }, []);
-        }, []);
-        useEffect(() => {
-            fetchPendingRequest();
-            console.log("allPendingRequests", allPendingRequests);
-            // fetchPendingRequest();
-        }, []);
-        useEffect(() => {
+        });
+    }, []);
+    useEffect(() => {
+        fetchPendingRequest();
+        console.log("allPendingRequests", allPendingRequests);
+        navigation.addListener('focus', () => {
+            fetchPendingRequest()
+        });
+    }, []);
+    useEffect(() => {
+        fetchWaitingRequest();
+        console.log("waitingRequests", waitingRequests);
+        navigation.addListener('focus', () => {
             fetchWaitingRequest();
-            console.log("waitingRequests", waitingRequests);
-           navigation.addListener('focus', () => {
-                fetchWaitingRequest();
-            });
-        },[]);
+        });
+    }, []);
     // }, );
     useEffect(() => {
         console.log("issending", isSending)
