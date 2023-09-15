@@ -27,6 +27,7 @@ import AppContext from '../../context/AppContext';
 import moment from 'moment';
 import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
+import ChangedChatHeader from '../../components/Headers/ChatHeader/ChangedChatHeader';
 
 const Calls = ({ navigation }) => {
   const { baseUrl, token, currentUser } = useContext(AppContext);
@@ -36,6 +37,8 @@ const Calls = ({ navigation }) => {
   const [searchedCalls, setSearchedCalls] = useState([]); // USE STATE FOR SEARCHING TEXT
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [allCallList, setAllCallList] = useState([]);
+  const [changeHeader, setChangeHeader] = useState(false);
+  const [callId, setCallId] = useState('');
 
   //       ***************************                 VARIABLES         **************************************
   const iconSize = hp('2.5%');
@@ -47,7 +50,7 @@ const Calls = ({ navigation }) => {
   //       ***************************             USE EFFECT HOOK         **************************************
   useEffect(() => {
     fetchCallList();
-    const unsub = navigation.addListener('focus',()=>{
+     navigation.addListener('focus',()=>{
         fetchCallList();
     });
   }, []);
@@ -69,7 +72,25 @@ const Calls = ({ navigation }) => {
           } else if (data.message == 'Please provide a token.') {
             Alert.alert('Token required');
           } else {
-            setAllCallList(data); // Set the callList received from the response
+            const filterCallList = data.filter(call => {
+              
+              if (
+                call.userId === currentUser.userId &&
+                call.deletedBySender === true
+              ) {
+                return false; // Don't include this message in the filtered list
+              } else if (
+                call.recieverId === currentUser.userId &&
+                call.deletedByReceiver === true
+              ) {
+                return false; // Don't include this message in the filtered list
+              }
+      
+              return true; // Include other messages in the filtered list
+            });
+       
+            setAllCallList(filterCallList); // Set the callList received from the response
+            
           }
         })
         .catch(error => {
@@ -98,63 +119,91 @@ const Calls = ({ navigation }) => {
   const reversedData =
     allCallList.length > 0 ? allCallList.slice().reverse() : allCallList; // flatlist call wali ko reverse krny k liye
 
+    // DELETE WALA FUNCTION
+
+    const DeleteCall = async callId => {
+   
+      const formData = new FormData();
+      formData.append('_id', callId);
+      formData.append('userId', currentUser.userId);
+  
+      try {  
+        const response = await fetch(`${baseUrl}/deleteCall`, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        const data = await response.json(); // Parse the response body as JSON
+        if (data.message == 'Please provide a valid token.') {
+          Alert.alert('Provide a valid token.');
+        } else if (data.message == 'Please provide a token.') {
+          Alert.alert('Token required');
+        } else {
+          
+          
+          const updatedcallList = allCallList.filter(call => {
+            if (call._id === callId) {
+            
+              return false; // Remove the deleted message
+            }
+            return true; // Keep other messages
+          });
+          setAllCallList(updatedcallList);
+  
+          setChangeHeader(!changeHeader);
+        }
+      } catch (error) {
+        console.error('Error deleting call:', error);
+      }
+    };
+
   //       ***************************            FLATLIST RENDER FUNCTION         **************************************
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity 
+      onLongPress={
+        ()=>{
+          setChangeHeader(true)
+          setCallId(item._id)
+        }
+      }
+      >
         <View style={HomeNeoCards.flatlistItemContainer}>
           <Neomorph
+        
             darkShadowColor={AppColors.primary}
             swapShadows
-            style={[HomeNeoCards.neomorphStyle(theme.homeCardColor)]}>
+            style={[HomeNeoCards.neomorphStyle(theme.homeCardColor)]}
+            >
             <View style={HomeNeoCards.dpImageView}>
-              <TouchableOpacity>
-                {item.userId === currentUser.userId ? (
+              <TouchableOpacity >
+               
                   <>
                     <Image
-                      source={{ uri: `${baseUrl}${item.userImg}` }}
+                      source={{ uri: `${baseUrl}${item.callData.profileImage}` }}
                       style={[
                         HomeNeoCards.dpImage,
                         { justifyContent: 'center', alignItems: 'center' },
                       ]}
                     />
                   </>
-                ) : (
-                  <>
-                    <Image
-                      source={{ uri: `${baseUrl}${item.recieverImg}` }}
-                      style={[
-                        HomeNeoCards.dpImage,
-                        {
-                          justifyContent: 'center',
-                          borderRadius: hp('2.5%'),
-                          alignItems: 'center',
-                        },
-                      ]}
-                    />
-                  </>
-                )}
+                
               </TouchableOpacity>
             </View>
-            {/* msg view */}
+          
             <View style={HomeNeoCards.name_CallIcon_Container}>
               <View style={HomeNeoCards.callNameAndTimeContainer}>
                 <Text
                   style={[HomeNeoCards.profileName(theme.profileNameColor)]}>
-                  {item.userId === currentUser.userId ? (
-                    <>
-                      <Text>{item.userName}</Text>
-                    </>
-                  ) : (
-                    <>
-                      <Text>{item.recieverName}</Text>
-                    </>
-                  )}
+                
+                      <Text>{item.callData.name}</Text>
+                   
                 </Text>
                 <View style={HomeNeoCards.timeAndCallType}>
-                  {item.userId === currentUser.userId ? (
-                    <>
-                      {item.OutgoingCall == 'outgoing' ? (
+                      {item.isIncomingOrOutgoing == 'outgoing' ? (
                         <Icons.MaterialCommunityIcons
                           name="call-made"
                           color="red"
@@ -163,28 +212,11 @@ const Calls = ({ navigation }) => {
                       ) : (
                         <Icons.MaterialCommunityIcons
                           name="call-received"
-                          color={'red'}
+                          color={'green'}
                           size={iconSize}
                         />
                       )}
-                    </>
-                  ) : (
-                    <>
-                      {item.OutgoingCall == 'incoming' ? (
-                        <Icons.MaterialCommunityIcons
-                          name="call-received"
-                          color={'red'}
-                          size={iconSize}
-                        />
-                      ) : (
-                        <Icons.MaterialCommunityIcons
-                          name="call-made"
-                          color="red"
-                          size={iconSize}
-                        />
-                      )}
-                    </>
-                  )}
+                    
                   <Text style={[HomeNeoCards.lastMsg(theme.lastMsgColor)]}>
                     {item.callDate === currentDate ? 'Today' : item.callDate},{' '}
                     {moment(item.callTime).format('hh:mm a ')}
@@ -215,18 +247,26 @@ const Calls = ({ navigation }) => {
 
   return (
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
-      {/* <CallsScreenHeader
-        navigation={navigation}
-        headerTitle={'Calls'}
-        handleSearchOnChange={handleSearch}
-        searchQuery={searchText}
-      /> */}
-      <AppHeader
+      
+      {changeHeader !== true ? 
+        <AppHeader
         navigation={navigation}
         headerTitle={'Calls'}
         handleSearchOnChange={handleSearch}
         searchQuery={searchText}
       />
+      : 
+      <ChangedChatHeader
+      ID={callId}
+      navigation={navigation}
+      setChangeHeader={setChangeHeader}
+      DeleteFunction={()=>{
+        DeleteCall(callId)
+      }}
+
+      />
+      }
+    
       <FlatList
         style={{ marginTop: 10 }}
         showsVerticalScrollIndicator={false}

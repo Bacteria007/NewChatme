@@ -95,7 +95,7 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
                   });
                   contactsSetList(updatedContactList);
 
-                console.log('deleted contact from db',updatedContactList);
+
                 // item.isFriend = false
                 ToastAndroid.showWithGravity(
                     'deleted successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER,);

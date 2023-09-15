@@ -18,6 +18,7 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
     selectedImageUri,
     storeImageUri,
   } = useContext(AppContext);
+  console.log("mesg iuyirdtyfugkihl",msgItem)
   return (
     <TouchableOpacity
       onLongPress={() => {

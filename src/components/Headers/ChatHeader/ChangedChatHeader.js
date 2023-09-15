@@ -14,7 +14,7 @@ import ZegoUIKitPrebuiltCallService, {
 import * as ZIM from 'zego-zim-react-native';
 import * as ZPNs from 'zego-zpns-react-native';
 
-const ChangedChatHeader = ({ DeleteMessage,setChangeHeader, msgId, navigation }) => {
+const ChangedChatHeader = ({ DeleteFunction,setChangeHeader, ID, navigation }) => {
   // const DeleteMessage= async(msgId)=>{
   //   const formData = new FormData();
   //   formData.append("_id", msgId);
@@ -64,7 +64,7 @@ const ChangedChatHeader = ({ DeleteMessage,setChangeHeader, msgId, navigation })
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            DeleteMessage(msgId);
+            DeleteFunction(ID);
           }}>
           <Icons.FontAwesome5
             name="trash"

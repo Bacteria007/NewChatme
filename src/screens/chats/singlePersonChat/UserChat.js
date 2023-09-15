@@ -22,7 +22,7 @@ import AppColors from '../../../assets/colors/Appcolors';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import { io } from 'socket.io-client';
 
-const socket = io.connect('http://192.168.78.238:8888');
+const socket = io.connect('http://192.168.229.238:8888');
 
 const UserChat = props => {
   const { baseUrl, currentUser, token } = useContext(AppContext);
@@ -165,10 +165,10 @@ const UserChat = props => {
           <UserChatHeader item={receiver} navigation={props.navigation} />
         ) : (
           <ChangedChatHeader
-            msgId={msgId}
+            ID={msgId}
             navigation={props.navigation}
             setChangeHeader={setChangeHeader}
-            DeleteMessage={() => {
+            DeleteFunction={() => {
               DeleteMessage(msgId);
             }}
           />
