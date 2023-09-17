@@ -95,6 +95,7 @@ const CreateGroup = ({ navigation }) => {
   };
   const createNewGroup = async name => {
     if (selectedMembers.length >= 2) {
+      if(name!=''){
       setIsCreating(true)
     const admin_data = await commonApis.UserDetails();
     console.log('admin data=========', admin_data);
@@ -124,16 +125,23 @@ const CreateGroup = ({ navigation }) => {
           console.log('group length===============', res.data.members.length);
           setIsCreating(true)
           setSelectedMembers([]);
+          
           // Change isSelected field to false for all members in selectedMembers array
           setSelectedMembers(prevSelected =>
             prevSelected.map(member => ({ ...member, isSelected: false })),
           );
+          const yaha=res.data.members.isSelected(false);
+          console.log("yaha+++++++++++++++",yaha)
           // navigation.navigate('Groups');
         // }
         })
         .catch(error => {
           console.log('error in creatng group', error);
         });
+      } else{
+
+        Alert.alert('pleaes enter subject of group');
+      }
       } else {
         Alert.alert('pleaes add at least 3 member');
       }
@@ -142,6 +150,7 @@ const CreateGroup = ({ navigation }) => {
     // }
   };
   const renderItem = ({ item }) => {
+    console.log("---craedet---",item)
     return (
       <View style={HomeNeoCards.flatlistItemContainer}>
         <Neomorph
@@ -232,10 +241,11 @@ const CreateGroup = ({ navigation }) => {
             <View style={CreateGroupScreenStyle.memberlistContainer}>
               <ScrollView horizontal>
                 {selectedMembers.map(member => {
+                  console.log("-------memeber img-------",member)
                   return (
                     <View key={member._id} style={CreateGroupScreenStyle.nameAndDpOfSelected}>
                       <Image style={CreateGroupScreenStyle.memberDp} source={{ uri: `${baseUrl}${member.profileImage}` }} />
-                      <Text style={CreateGroupScreenStyle.memberName}>{member.name.length > 7 ? member.name.substring(0, 7) + '..' : member.name}</Text>
+                      <Text style={CreateGroupScreenStyle.memberName}>{member.name?(member.name.length > 7 ? member.name.substring(0, 7) + '..' : member.name):'no user name'}</Text>
                     </View>
                   );
                 })}
@@ -255,9 +265,9 @@ const CreateGroup = ({ navigation }) => {
           visible={visible}
           onBackButtonPress={hideModal}
           onDismiss={hideModal}
-          animationIn="slideInUp"
-          animationOut="slideOutDown"
-          animationType="slide"
+          animationIn='bounceIn'
+          animationOut='bounceOut'
+          animationType='bounce'
           avoidKeyboard={false}
           style={CreateGroupScreenStyle.modalStyle}>
           {/* <Surface> */}
@@ -269,14 +279,16 @@ const CreateGroup = ({ navigation }) => {
                 borderBottomWidth: wp('0.1%'),
                 borderBottomColor: AppColors.primary,
                 width: wp('100%'),
-                paddingHorizontal: 10
+                paddingHorizontal: 10,
+                fontFamily:FontStyle.regularFont,
               }}
+              placeholderTextColor={theme.profileNameColor}
               selectTextOnFocus={true}
               value={groupName}
               onChangeText={e => {
                 setgroupName(e);
               }}
-              placeholder="Group Name"
+              placeholder="Group Subject"
               keyboardType='default'
             />
             <TouchableOpacity

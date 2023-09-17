@@ -118,8 +118,8 @@ const AllGroups = ({ navigation }) => {
             ListFooterComponent={gloabalFunctions.renderFooter(flatListRef, allGroups)} />
           : <View style={Containers.centerContainer}>
             <LottieView source={require('../../../assets/animations/Lottieanimations/l11.json')} autoPlay style={{
-              height: hp('30'),
-              width: wp('60'),
+              height: wp('50'),
+              width: wp('50'),
               justifyContent: 'center',
               alignItems: 'center',
             }} />

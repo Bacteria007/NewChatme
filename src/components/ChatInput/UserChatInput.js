@@ -251,7 +251,7 @@ const UserChatInput = ({
               { width: wp('58%'), alignSelf: 'center', alignItems: 'center' },
               { height: inputHeight, maxHeight: 6 * 18 },
             ]}
-            placeholder="Type here"
+            placeholder="Message"
             value={currentMessage}
             onChangeText={(txt) => { setCurrentMessage(txt) }}
             keyboardType='twitter'

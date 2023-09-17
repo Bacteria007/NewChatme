@@ -22,7 +22,7 @@ import AppColors from '../../../assets/colors/Appcolors';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import { io } from 'socket.io-client';
 
-const socket = io.connect('http://192.168.229.238:8888');
+const socket = io.connect('http://192.168.43.145:8888');
 
 const UserChat = props => {
   const { baseUrl, currentUser, token } = useContext(AppContext);
@@ -36,8 +36,9 @@ const UserChat = props => {
   const flatListRef = useRef(null);
   const { contact } = props.route.params;
   const receiver = contact.contactData;
+
   const DeleteMessage = async msgId => {
-   
+
     const formData = new FormData();
     formData.append('_id', msgId);
     formData.append('userId', currentUser.userId);
@@ -57,8 +58,8 @@ const UserChat = props => {
       } else if (data.message == 'Please provide a token.') {
         Alert.alert('Token required');
       } else {
-        
-        
+
+
         const updatedMessageList = messageList.filter(message => {
           if (message._id === msgId) {
             // Agar msgList k msg ki Id or msgId equal hoo to screen pr na display krwao
@@ -119,7 +120,7 @@ const UserChat = props => {
         return true; // Include other messages in the filtered list
       });
       setMessageList(filterMsgs);
-      
+
     }
   };
   const initialize_socket = async () => {
@@ -136,7 +137,10 @@ const UserChat = props => {
       socket.disconnect();
     };
   };
+  
+  
   useEffect(() => {
+   
     messagesFromDb();
   }, []);
   useEffect(() => {
@@ -165,7 +169,7 @@ const UserChat = props => {
           <UserChatHeader item={receiver} navigation={props.navigation} />
         ) : (
           <ChangedChatHeader
-            ID={msgId}
+            msgId={msgId}
             navigation={props.navigation}
             setChangeHeader={setChangeHeader}
             DeleteFunction={() => {
@@ -195,14 +199,14 @@ const UserChat = props => {
               contentContainerStyle={[UserChatStyle.messagesContainer]}
               keyExtractor={(item, index) => index.toString()}
               onContentSizeChange={scrollingStop}
-              // onContentSizeChange={() =>{
-              //   flatListRef.current.scrollToEnd({ animated: true }),
+            // onContentSizeChange={() =>{
+            //   flatListRef.current.scrollToEnd({ animated: true }),
 
-              //   scrollRef.current?.scrollToEnd({ animated: true })}
-              // }
-              // onLayout={() =>
-              //   flatListRef.current.scrollToEnd({ animated: true })
-              // }
+            //   scrollRef.current?.scrollToEnd({ animated: true })}
+            // }
+            // onLayout={() =>
+            //   flatListRef.current.scrollToEnd({ animated: true })
+            // }
             />
           </View>
           <UserChatInput

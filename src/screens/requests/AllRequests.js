@@ -40,7 +40,7 @@ const AllRequest = ({ navigation }) => {
             })
     }
     const acceptRequest = async (contact) => {
-        console.log("contact in accept", contact)
+        console.log("contact in accept-----------", contact)
         try {
             const response = await fetch(`${baseUrl}/acceptRequest?senderId=${currentUser.userId}&receiverId=${contact.senderId._id}&requestId=${contact._id}`, {
                 method: 'post',

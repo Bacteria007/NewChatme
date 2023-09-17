@@ -27,7 +27,6 @@ import AllRequest from './src/screens/requests/AllRequests';
 import FakeSplash from './src/screens/fakeSplash/FakeSplash';
 import { LogBox } from 'react-native';
 import DrawerScreens from './src/screens/drawer/Drawer';
-import SignUpScreen2 from './src/screens/auth/SignUpScreen2';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 

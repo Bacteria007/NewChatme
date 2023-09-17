@@ -87,7 +87,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
     updateTheme(newTheme);
     changeThemeState()
   };
-
+const rippleColor='rgba(0,0,0,0.2)'
 
   return (
 
@@ -96,7 +96,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
         <View style={[AppHeaderStyle.headerView]}>
           <View style={AppHeaderStyle.drawerAndName_Container}>
             <TouchableRipple
-              rippleColor="rgba(0, 0, 0, 0.3)"
+              rippleColor={rippleColor}
               style={AppHeaderStyle.rippleBtn}
               borderless
               onPress={() => { navigation.toggleDrawer() }}>
@@ -122,7 +122,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
                 :
                 darkThemeActivator ? (
                   <TouchableRipple
-                    rippleColor="rgba(0, 0, 0, 0.3)"
+                    rippleColor={rippleColor}
                     style={AppHeaderStyle.rippleBtn}
                     borderless
                     onPress={() => {
@@ -136,7 +136,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
                   </TouchableRipple>
                 ) : (
                   <TouchableRipple
-                    rippleColor="rgba(0, 0, 0, 0.3)"
+                    rippleColor={rippleColor}
                     style={AppHeaderStyle.rippleBtn}
                     borderless
                     onPress={() => {

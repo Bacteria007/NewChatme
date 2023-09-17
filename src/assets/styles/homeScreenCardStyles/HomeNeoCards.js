@@ -110,18 +110,18 @@ const HomeNeoCards = StyleSheet.create({
   }),
   profileName: textColor => ({
     fontFamily: FontStyle.regularFont,
-    fontSize: 16,
+    fontSize: wp('3.8'),
     color: textColor,
     letterSpacing: 0.3,
   }),
   lastMsg: textColor => ({
     fontFamily: FontStyle.regularFont,
-    fontSize: 11,
+    fontSize: wp('3'),
     color: textColor,
   }),
   lastMsgTime: textColor => ({
     fontFamily: FontStyle.mediumFont,
-    fontSize: wp('2.5'),
+    fontSize: wp('2.3'),
     color: textColor,
   }),
   nameAndMsgContainer: {
