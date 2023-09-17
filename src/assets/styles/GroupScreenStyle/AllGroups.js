@@ -35,13 +35,13 @@ const GroupStyles = StyleSheet.create({
       },
       newGroupNameStyle: darkThemeActivator => ({
         fontFamily: FontStyle.regularFont,
-        fontSize: 17,
+        fontSize: wp('3.9'),
         color: darkThemeActivator ? "white" : AppColors.primary,
         marginLeft: 10,
         letterSpacing: 1,
         textShadowColor: darkThemeActivator ? AppColors.primary: 'rgba(255, 0, 0, 0.2)',
-        textShadowOffset: { width: 2, height: 2 }, // Shadow offset
-        textShadowRadius: 2, // Shadow radius
+        textShadowOffset: { width: 1.5, height: 1.5 }, // Shadow offset
+        textShadowRadius: 1.5, // Shadow radius
     
       }),
 })

@@ -65,7 +65,7 @@ const CreateGroupScreenStyle = StyleSheet.create({
     borderRadius: wp('20'),
   },
   modalStyle: {
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor:'rgba(0,0,0,0.2)',
     margin: 0,
     justifyContent: 'flex-end',
     height: hp('30'),

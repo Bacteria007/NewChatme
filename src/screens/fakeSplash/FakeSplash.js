@@ -62,7 +62,7 @@ const FakeSplash = ({navigation}) => {
   return (
     <View style={{justifyContent:'center',alignItems:'center',flex:1,backgroundColor:AppColors.white}}>
       <Primary_StatusBar />
-      <Lottie source={require('../../assets/animations/Lottieanimations/Splash.json')} autoPlay loop style={{ height: wp('60%'), width: wp("60%") }} />
+      <Lottie source={require('../../assets/animations/Lottieanimations/Splash.json')} autoPlay loop style={{ height: wp('50%'), width: wp("50%") }} />
       <Text style={{fontSize:wp('6%'),fontFamily:FontStyle.mediumFont,color:AppColors.purple,marginTop:hp('-5%')}}>ChatMe</Text>
     </View>
   )

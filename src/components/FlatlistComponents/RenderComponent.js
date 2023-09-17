@@ -211,7 +211,7 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
         getGroupLastMessage();
          navigation.addListener('focus',()=>{
             getGroupLastMessage()
-            getUserLastMessage
+            getUserLastMessage()
         })
        
     }, []);

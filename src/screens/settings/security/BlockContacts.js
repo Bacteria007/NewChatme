@@ -20,7 +20,7 @@ const BlockContacts = ({ navigation }) => {
 
     console.log("discussion ma ", currentUser.userId)
     try {
-      const response = await fetch(`${baseUrl}/blockedContactList?userId=${currentUser.userId}`, {
+      const response = await fetch(`${baseUrl}/viewBlockedContacts?userId=${currentUser.userId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -47,8 +47,8 @@ const BlockContacts = ({ navigation }) => {
       if (response.ok) {
         const data = await response.json();
         console.log("contact unblocked successfully", data);
-        item.isFriend = true
-        item.isBlocked = false
+        // item.isFriend = true
+        // item.isBlocked = false
         ToastAndroid.showWithGravity('unblocked successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER);
         removeBlockedContact(item)
         // navigation.replace('DrawerScreens')
