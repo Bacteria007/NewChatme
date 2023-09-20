@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {  ActivityIndicator,  TouchableOpacity,  View,  Dimensions,} from 'react-native';
+import {  ActivityIndicator,  TouchableOpacity,  View,  Dimensions, StatusBar,} from 'react-native';
 import AppColors from '../../assets/colors/Appcolors';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import ReelHeader from '../../components/Headers/ReelHeader/ReelHeader';
@@ -96,6 +96,7 @@ const Reals = props => {
   return (
     <View style={[ReelscreenStyle.containerStyle]}>
       {/* HEADER COMPONENT OF REEL */}
+      {/* <StatusBar backgroundColor={"black"} barStyle={'light-content'}/> */}
       <ReelHeader navigation={props.navigation} />
       {uploadedReels.length != 0 ?
         <SwiperFlatList

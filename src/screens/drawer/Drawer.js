@@ -37,15 +37,13 @@ const DrawerScreens = () => {
   console.log('appcontext appjs', currentUser);
 
   let iconSize = 18;
-  //Drawer Variables Start
-  const myFontFamily = FontStyle.regularFont;
+  const ff = FontStyle.regularFont;
+  const fs = hp('1.4')
   const drawerBackgroungColor = theme.drawerColor;
   const activeTintColor = AppColors.black;
   const inActiveTintColor = AppColors.black;
-  const activeBgColor = 'rgba(255,255,255,0.8)';
-  const inActiveBgColor = AppColors.transparent;
-  //Drawer Variables End
-  const blank = '';
+  const activeBgColor = 'rgba(255,255,255,0.6)';
+
   const logoutUser = async ({ navigation }) => {
     // YE NOTIFICATION K TOKEN KO LOGOUT PR NULL KRNY K LIYE API HAI
     const CurrentUserId = await AsyncStorage.getItem('Id');
@@ -90,6 +88,7 @@ const DrawerScreens = () => {
   return (
     <View style={{ flex: 1 }}>
       <Drawer.Navigator
+        initialRouteName="Home"
         screenOptions={{
           headerShown: false,
           overlayColor: 'transparent',
@@ -101,16 +100,16 @@ const DrawerScreens = () => {
             backgroundColor: drawerBackgroungColor,
           },
           drawerLabelStyle: {
-            fontFamily: FontStyle.mediumFont,
-            fontSize: hp('1.6'),
-            marginLeft: -16,
+            fontFamily: ff,
+            fontSize: fs,
+            marginLeft: -20,
           },
           drawerActiveBackgroundColor: activeBgColor,
+          drawerItemStyle: { height: hp('5.5'), width: wp('40'), justifyContent: 'center' },
           sceneContainerStyle: {
             backgroundColor: drawerBackgroungColor,
           },
         }}
-        initialRouteName="Home"
         drawerContent={props => {
           return (
             <View style={{ flex: 1 }}>

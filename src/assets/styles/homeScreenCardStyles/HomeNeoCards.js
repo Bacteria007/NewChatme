@@ -91,6 +91,7 @@ const HomeNeoCards = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: bgColor,
+
   }),
   dpImageView: {
     // marginLeft: 10,
@@ -100,14 +101,9 @@ const HomeNeoCards = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: 'red',
+    
   },
-  dpHeader: bgcolor => ({
-    height: hp('5'),
-    backgroundColor: bgcolor,
-    width: wp('61.4%'),
-    paddingHorizontal: 5,
-    justifyContent: 'center',
-  }),
+ 
   profileName: textColor => ({
     fontFamily: FontStyle.regularFont,
     fontSize: wp('3.8'),
@@ -116,13 +112,13 @@ const HomeNeoCards = StyleSheet.create({
   }),
   lastMsg: textColor => ({
     fontFamily: FontStyle.regularFont,
-    fontSize: wp('3'),
+    fontSize: wp('2.4'),
     color: textColor,
   }),
-  lastMsgTime: textColor => ({
-    fontFamily: FontStyle.mediumFont,
+  lastMsgTime: darkThemeActivator => ({
+    fontFamily: FontStyle.regularFont,
     fontSize: wp('2.3'),
-    color: textColor,
+    color: darkThemeActivator ? AppColors.white:AppColors.primary,
   }),
   nameAndMsgContainer: {
     flexDirection: 'column',
@@ -145,31 +141,41 @@ const HomeNeoCards = StyleSheet.create({
     padding: 5,
   },
   senderName: {
-    fontSize: wp('2.7'),
+    fontSize: wp('2.5'),
     color: AppColors.primary,
-    fontFamily: FontStyle.semiBoldFont,
+    fontFamily: FontStyle.mediumFont,
   },
   // RENDER COMPONENT PROFILE PIC MODAL STYLE START
   modalContainer: {
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: 'rgba(0,0,0,0.4)',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
     margin: 0,
     width: wp('100'),
   },
-  modalView: {
-    // backgroundColor: 'rgba(0,0,0,0.3)',
-    backgroundColor: AppColors.transparent,
-    // height: hp('35'),
-    // width: wp('75'),
+  dpHeader: {
+    height: hp('5'),
+    backgroundColor:  AppColors.white,
+    padding:5,
+    paddingHorizontal:13,
+    alignSelf:'flex-start',
+    // width: hp('30%'),
+    // position:'absolute'
+  },
+  modalView:{
+    backgroundColor: AppColors.white,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+    // padding:10,
+    // height: hp('40'),
+    // width: wp('75'),
+    // position:'relative'
   },
   dpInModal: {
-    height: hp('30%'),
-    width: hp('30%'),
+    height: hp('35%'),
+    width: hp('35%'),
     resizeMode: 'cover',
   },
   // RENDER COMPONENT PROFILE PIC MODAL STYLE  END

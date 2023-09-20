@@ -36,8 +36,8 @@ const TabScreens = () => {
             StatusBar.setBackgroundColor(AppColors.Mauve);
         } else if (drawerStatus == 'closed') {
             console.log("drawer is closed")
-            StatusBar.setBarStyle('dark-content');
-            StatusBar.setBackgroundColor(AppColors.white);
+            StatusBar.setBarStyle(theme.statusBarText);
+            StatusBar.setBackgroundColor(theme.backgroundColor);
         }
     }, [drawerStatus]);
     const progress = useDrawerProgress();
@@ -121,6 +121,7 @@ const TabScreens = () => {
                                 />
                             );
                         }
+                       
                     },
                 })}>
                 <Tab.Screen name="Chats" component={Discussions} />

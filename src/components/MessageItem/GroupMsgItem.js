@@ -86,12 +86,14 @@ const GroupMsgItem = ({ msgData }) => {
           <Text style={{ color: AppColors.primary }}>
             {!isCurrentUser ? msgData.sender_name : 'You'}
           </Text>
-          <Text style={[{ color: AppColors.coolgray, fontSize: 15, textAlign: 'right' }]}>
+          <View style={{flexDirection:'row'}}>
+          <Text style={[{ color: AppColors.coolgray, fontSize: 15, textAlign: 'left' }]}>
             {msgData.text}
           </Text>
-          <Text style={{ fontSize: 10, textAlign: 'right' }}>
+          <Text style={{ fontSize: 10, marginLeft:10,textAlign:'right',alignSelf:'flex-end' }}>
             {moment(msgData.createdAt).format('hh:mm a ')}
           </Text>
+          </View>
         </View>
       </View>
     </Swipeable>

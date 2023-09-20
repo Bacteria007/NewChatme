@@ -1,4 +1,4 @@
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, StatusBar } from 'react-native';
 import React, { useState, useContext } from 'react';
 import ReelHeaderStyle from '../../../assets/styles/ReelStyleSheet/ReelHeaderStyle';
 import AppColors from '../../../assets/colors/Appcolors';

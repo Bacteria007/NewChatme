@@ -102,9 +102,7 @@ const AllRequest = ({ navigation }) => {
 
         return (
 
-            <View
-                style={HomeNeoCards.flatlistItemContainer}>
-
+            <View style={HomeNeoCards.flatlistItemContainer}>
                 <Neomorph
                     darkShadowColor={AppColors.primary} // <- set this
                     lightShadowColor={AppColors.primary}// <- this

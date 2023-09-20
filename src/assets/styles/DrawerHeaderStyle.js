@@ -26,7 +26,7 @@ const DrawerHeaderStyle = StyleSheet.create({
     backgroundColor:bgcolor,
     padding:wp('3%'),
     paddingHorizontal:wp('3.5%'),
-    elevation:4
+    // elevation:4
     
   }),
   screenNameStyle: {

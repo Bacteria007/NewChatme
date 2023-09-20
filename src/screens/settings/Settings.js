@@ -1,8 +1,8 @@
-import {View, Text, TouchableOpacity} from 'react-native';
-import React, { useContext,useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useContext, useState } from 'react';
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
 import AppColors from '../../assets/colors/Appcolors';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AppContext from '../../context/AppContext';
 import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
 import { Avatar, Card, Divider } from 'react-native-paper';
@@ -11,9 +11,12 @@ import { Icons } from '../../assets/Icons';
 import ReactNativeModal from 'react-native-modal';
 import Containers from '../../assets/styles/Containers';
 import SettingScreenStyle from '../../assets/styles/SettingScreenStyle';
+import { Neomorph } from 'react-native-neomorph-shadows-fixes';
+import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
+import CustomDivider from '../../components/CustomDivider';
 
 const Settings = ({ navigation }) => {
-    const { theme } = useContext(ThemeContext);
+    const { theme, darkThemeActivator } = useContext(ThemeContext);
     const [visible, setVisible] = useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
@@ -22,7 +25,7 @@ const Settings = ({ navigation }) => {
     const arrow_icon = 'chevron-right';
     const iconSize = wp('9%');
     const iconSizeSmall = wp('5%');
-    const arrowColor = AppColors.black;
+    const arrowColor = theme.profileNameColor;
     const arrowSize = 17;
     const textColor = theme.profileNameColor;
 
@@ -30,10 +33,10 @@ const Settings = ({ navigation }) => {
     return (
         <DrawerScreenswrapper>
             <InnerScreensHeader screenName={'Settings'} navigation={navigation} />
-            <View style={SettingScreenStyle.container}>
+            <View style={SettingScreenStyle.container(theme.backgroundColor)}>
                 {/* <Text style={SettingScreenStyle.sectionHeadText}>Security</Text> */}
                 {/* Security */}
-                <Card style={SettingScreenStyle.sectionsStyle}>
+                <Card style={SettingScreenStyle.sectionsStyle(theme.backgroundColor)}>
                     <TouchableOpacity
                         onPress={() => {
                             navigation.navigate('changePassword');
@@ -54,9 +57,11 @@ const Settings = ({ navigation }) => {
                                 color={arrowColor}
                             />
                         </View>
-                        <View style={SettingScreenStyle.dividerContainer}>
-                            <Divider />
-                        </View>
+                        {darkThemeActivator ? <CustomDivider /> :
+                            <View style={SettingScreenStyle.dividerContainer}>
+                                <Divider />
+                            </View>
+                        }
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -78,9 +83,11 @@ const Settings = ({ navigation }) => {
                                 color={arrowColor}
                             />
                         </View>
-                        <View style={SettingScreenStyle.dividerContainer}>
-                            <Divider />
-                        </View>
+                        {darkThemeActivator ? <CustomDivider /> :
+                            <View style={SettingScreenStyle.dividerContainer}>
+                                <Divider />
+                            </View>
+                        }
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -105,7 +112,7 @@ const Settings = ({ navigation }) => {
                     </TouchableOpacity>
                 </Card>
                 {/*  Account preferences */}
-                <Card style={SettingScreenStyle.sectionsStyle}>
+                <Card style={SettingScreenStyle.sectionsStyle(theme.backgroundColor)}>
                     <TouchableOpacity
                         onPress={() => {
                             toggleModal();
@@ -126,9 +133,11 @@ const Settings = ({ navigation }) => {
                                 color={arrowColor}
                             />
                         </View>
-                        <View style={SettingScreenStyle.dividerContainer}>
-                            <Divider />
-                        </View>
+                        {darkThemeActivator ? <CustomDivider /> :
+                            <View style={SettingScreenStyle.dividerContainer}>
+                                <Divider />
+                            </View>
+                        }
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -150,9 +159,11 @@ const Settings = ({ navigation }) => {
                                 color={arrowColor}
                             />
                         </View>
-                        <View style={SettingScreenStyle.dividerContainer}>
-                            <Divider />
-                        </View>
+                        {darkThemeActivator ? <CustomDivider /> :
+                            <View style={SettingScreenStyle.dividerContainer}>
+                                <Divider />
+                            </View>
+                        }
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -177,7 +188,7 @@ const Settings = ({ navigation }) => {
                     </TouchableOpacity>
                 </Card>
                 {/*  App language */}
-                <Card style={SettingScreenStyle.sectionsStyle}>
+                <Card style={SettingScreenStyle.sectionsStyle(theme.backgroundColor)}>
                     <TouchableOpacity
                         onPress={() => {
                             navigation.navigate('appLanguage');
@@ -201,12 +212,13 @@ const Settings = ({ navigation }) => {
                                 color={arrowColor}
                             />
                         </View>
-                        <View style={SettingScreenStyle.dividerContainer}>
-                            <Divider />
-                        </View>
-
+                        {darkThemeActivator ? <CustomDivider /> :
+                            <View style={SettingScreenStyle.dividerContainer}>
+                                <Divider />
+                            </View>
+                        }
                     </TouchableOpacity>
-                    <TouchableOpacity  onPress={() => { navigation.navigate('notification')}}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('notification') }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
                                 size={iconSize}
@@ -223,9 +235,11 @@ const Settings = ({ navigation }) => {
                                 color={arrowColor}
                             />
                         </View>
-                        <View style={SettingScreenStyle.dividerContainer}>
-                            <Divider />
-                        </View>
+                        {darkThemeActivator ? <CustomDivider /> :
+                            <View style={SettingScreenStyle.dividerContainer}>
+                                <Divider />
+                            </View>
+                        }
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -253,23 +267,23 @@ const Settings = ({ navigation }) => {
                 {/* notifications */}
             </View>
             <View style={Containers.centercontent}>
-            <ReactNativeModal
-             visible={visible}
-             onBackButtonPress={hideModal}
-             onDismiss={hideModal}
-             animationIn="slideInUp"
-             animationOut="slideOutDown"
-             style={SettingScreenStyle.themeModal}
-            >
-                <View style={SettingScreenStyle.modalView}>
-                <TouchableOpacity>
-                    <Text style={SettingScreenStyle.themeModalText}>Dark Theme</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text style={SettingScreenStyle.themeModalText}>Light Theme</Text>
-                </TouchableOpacity>
-                </View>
-            </ReactNativeModal>
+                <ReactNativeModal
+                    visible={visible}
+                    onBackButtonPress={hideModal}
+                    onDismiss={hideModal}
+                    animationIn="slideInUp"
+                    animationOut="slideOutDown"
+                    style={SettingScreenStyle.themeModal}
+                >
+                    <View style={SettingScreenStyle.modalView}>
+                        <TouchableOpacity>
+                            <Text style={SettingScreenStyle.themeModalText}>Dark Theme</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Text style={SettingScreenStyle.themeModalText}>Light Theme</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ReactNativeModal>
             </View>
         </DrawerScreenswrapper>
     );

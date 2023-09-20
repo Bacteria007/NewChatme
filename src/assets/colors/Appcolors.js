@@ -27,7 +27,7 @@ const AppColors = {
     groupDpIcon:"rgba(0,0,0,0.9)",
     dpCircleColor:"rgba(255, 255, 255,0.7)",
     darkHomeCards:"rgba(0,0,0,1)",
-    headerSearchBar:"rgba(255, 255, 255,0.3)",
+    headerSearchBar:"rgba(255, 255, 255,0.15)",
     headerSearchText:"rgba(255, 255, 255,0.8)",
     headerColor:"rgb(0, 0, 0)"
 
@@ -37,8 +37,8 @@ const AppColors = {
     groupDpIcon:'#fff',
     dpCircleColor:"rgba(0, 0, 0,0.3)",
     darkHomeCards:"rgba(255,255,255,0.1)",
-    headerSearchBar:"rgba(0,0,0,0.1)",
-    headerSearchText:"rgba(0,0,0,0,0.7)",
+    headerSearchBar:"rgb(239, 239, 239)",
+    headerSearchText:"rgba(0,0,0,0.65)",
     headerColor:"white"
   },
   coolgray: '#383949', //pehlywala

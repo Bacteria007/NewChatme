@@ -16,7 +16,7 @@ const AppSubHeaderStyle = StyleSheet.create({
   }),
   inputContainer: {
     height: hp('6%'),
-    width: wp('95%'),
+    width: wp('92'),
     borderRadius: 25,
   },
   searchText: {

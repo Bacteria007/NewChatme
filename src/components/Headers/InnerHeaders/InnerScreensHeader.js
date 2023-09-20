@@ -22,8 +22,8 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
 
   return (
     <View style={[DrawerHeaderStyle.containerView]}>
-      <Primary_StatusBar />
       <View style={DrawerHeaderStyle.headerView(theme.backgroundColor)}>
+      <Primary_StatusBar />
         <TouchableRipple
           onPress={() => {
             navigation.goBack();

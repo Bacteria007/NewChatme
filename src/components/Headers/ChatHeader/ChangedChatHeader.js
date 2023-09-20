@@ -15,42 +15,10 @@ import * as ZIM from 'zego-zim-react-native';
 import * as ZPNs from 'zego-zpns-react-native';
 
 const ChangedChatHeader = ({ DeleteFunction,setChangeHeader, ID, navigation }) => {
-  // const DeleteMessage= async(msgId)=>{
-  //   const formData = new FormData();
-  //   formData.append("_id", msgId);
-
-  //   try {
-  //     const response = await fetch(`${baseUrl}/deleteMessage`, {
-  //       method: 'POST',
-  //       // headers: {
-  //       //   'Content-Type': 'application/json',
-  //       // },
-  //       body: formData,
-  //     });
-
-  //     const data = await response.json(); // Parse the response body as JSON
-  //     // setMessageList(data)
-  //     setMessageList((list) => [...list, data]);
-  //     console.log('After Message deleted:', data);
-  //     // Reset the new contact input
-
-  //   } catch (error) {
-  //     console.error('Error deleting message:', error);
-  //   }
-
-  // }
-
+ 
   return (
-    <View style={[UserChatHeaderStyle.containerView]}>
-      <View
-        style={[
-          {
-            flexDirection: 'row',
-            paddingHorizontal: wp('5%'),
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          },
-        ]}>
+    <View style={[UserChatHeaderStyle.changedHeaderContainerView]}>
+      <View style={UserChatHeaderStyle.changedHeaderInnerView}>
         <TouchableOpacity
           onPress={() => {
             setChangeHeader(false);

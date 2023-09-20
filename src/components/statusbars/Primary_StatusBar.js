@@ -6,7 +6,7 @@ import AppColors from '../../assets/colors/Appcolors';
 
 export const Primary_StatusBar = () => {
   const { theme } = useContext(ThemeContext)
-    return <StatusBar barStyle={theme.statusBarText} backgroundColor={theme.statusBarBg} animated={true} />
+    return <StatusBar barStyle={theme.statusBarText} backgroundColor={theme.backgroundColor} animated={true} />
 }
 
  

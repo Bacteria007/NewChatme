@@ -3,8 +3,7 @@ import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
-
+  TouchableOpacity
 } from 'react-native';
 import Icon, { Icons } from '../../../assets/Icons';
 import {
@@ -22,7 +21,7 @@ import BotChatHeaderStyle from '../../../assets/styles/BotStyleSheet/BotChatHead
 import { Primary_StatusBar } from '../../statusbars/Primary_StatusBar';
 import { SearchBar } from '@rneui/base';
 import FontStyle from '../../../assets/styles/FontStyle';
-import { TouchableRipple } from 'react-native-paper';
+import { Searchbar, TouchableRipple } from 'react-native-paper';
 import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange }) => {
 
@@ -65,7 +64,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
       notFocusedTabIconsColor: AppColors.inActiveIconsColor,
       focusedTabIconsColor: AppColors.primary,
       headerIconsColor: AppColors.black,
-      headerSearchBar: AppColors.lightThemeColors.headerSearchBar,
+      headerSearchBar: AppColors.tab,
       headerSearchText: AppColors.lightThemeColors.headerSearchText,
       homeCardColor: AppColors.white,
       profileNameColor: AppColors.black,
@@ -87,7 +86,7 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
     updateTheme(newTheme);
     changeThemeState()
   };
-const rippleColor='rgba(0,0,0,0.2)'
+  const rippleColor = 'rgba(0,0,0,0.2)'
 
   return (
 
@@ -95,14 +94,15 @@ const rippleColor='rgba(0,0,0,0.2)'
       <View style={AppHeaderStyle.mainHeader(theme.headerColor)}>
         <View style={[AppHeaderStyle.headerView]}>
           <View style={AppHeaderStyle.drawerAndName_Container}>
-            <TouchableRipple
-              rippleColor={rippleColor}
+            <TouchableOpacity
+              activeOpacity={0.1}
               style={AppHeaderStyle.rippleBtn}
-              borderless
+              // touchSoundDisabled={false}
+              // rippleColor={rippleColor}
+              // borderless
               onPress={() => { navigation.toggleDrawer() }}>
-
               {darkThemeActivator ? <MenuLeftWhite /> : <MenuLeftBlack />}
-            </TouchableRipple>
+            </TouchableOpacity>
             <Text style={[AppHeaderStyle.appNameStyle, { color: theme.headerIconsColor }]}>{headerTitle}</Text>
             <View>
               {headerTitle == "People" ?
@@ -154,21 +154,22 @@ const rippleColor='rgba(0,0,0,0.2)'
             </View>
           </View>
         </View>
-
+        {/* <Searchbar style={{height:hp('6'),width:wp('92'),justifyContent:'center',alignItems:'center'}} placeholder='Search' clearIcon={<Icons.AntDesign name='close' size={20} />} inputStyle={{color:'red',textAlignVertical:'center',marginBottom:20}}/> */}
         <SearchBar
           lightTheme
           onChangeText={handleSearchOnChange}      // YE AIK FUNCTION LY RAHA HAI DISCUSSION WALI SCREEN SY
           value={searchQuery}                     // ISS MEIN WO VALUE AIY GI JO K HUM SEARCH KR RAHY HAIN VALUE MREIN DATA DISCUSSION WALI SCREEN SY AA RAHA HAI
           elevation={0}
-          underlineColorAndroid="transparent"
-          placeholder={`Search ${headerTitle}`}
+          underlineColorAndroid={"transparent"}
+          placeholder={`Search`}
           placeholderTextColor={theme.headerSearchText} //light
           round
           showCancel
           containerStyle={[AppSubHeaderStyle.container(theme.headerColor)]}
           inputContainerStyle={[AppSubHeaderStyle.inputContainer, { backgroundColor: theme.headerSearchBar }]}
+          // inputContainerStyle={[AppSubHeaderStyle.inputContainer, { backgroundColor:AppColors.tab}]}
           inputStyle={{ color: theme.headerSearchText }}
-          searchIcon={{ color: theme.headerSearchText, size: 23 }}
+          searchIcon={{ color: theme.headerSearchText, size: 20 }}
           clearIcon={{ color: theme.headerSearchText }}
           leftIconContainerStyle={AppSubHeaderStyle.iconContainer}
           rightIconContainerStyle={AppSubHeaderStyle.iconContainer}

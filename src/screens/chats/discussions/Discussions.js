@@ -18,60 +18,53 @@ import MyActivityStyleSheet from '../../../assets/styles/ReelStyleSheet/MyActivi
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
-  const { baseUrl,getToken,token,currentUser } = useContext(AppContext);
+  const { baseUrl, getToken, token, currentUser } = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const globalFunctions = GlobalFunction()
   const [contactList, setContactList] = useState([]);
+  const [userNotFound, setUserNotFound] = useState(false);
 
-   const [userNotFound, setUserNotFound] = useState(false)
-  const [statusbarColor, setStatusbarColor] = useState(AppColors.white);
-  const stColor=()=>{
-    setStatusbarColor(AppColors.white)
-  }
-  // UseScreenFocus(getStoredUserDetails)
-  // UseScreenFocus(stColor)
-  
-  const fetchContactList =useCallback(async () => {
+  const fetchContactList = useCallback(async () => {
 
     try {
-     await fetch(`${baseUrl}/userContacts?userId=${currentUser.userId}`, {
+      await fetch(`${baseUrl}/userContacts?userId=${currentUser.userId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      }).then(async(response)=>{
+      }).then(async (response) => {
         const data = await response.json();
         // if(data.message=="Please provide a valid token."){
         //   Alert.alert("Provide a valid token.")
         // }else if(data.message=='Please provide a token.'){
         //   Alert.alert('Token required')
         // }else{
-          const filterContact = data.filter(contact => {
-            // Check if senderID and currentUser.id are equal and deletedBySender is true
-            if (
-              contact.userId === currentUser.userId &&
-              contact.deletedBySender === true
-            ) {
-              return false; // Don't include this message in the filtered list
-            } else if (
-              contact.friendId === currentUser.userId &&
-              contact.deletedByReceiver === true
-            ) {
-              return false; // Don't include this message in the filtered list
-            }
-    
-            return true; // Include other messages in the filtered list
-          });
-            setContactList(filterContact);
-       
-      }).catch((error)=>{
+        const filterContact = data.filter(contact => {
+          // Check if senderID and currentUser.id are equal and deletedBySender is true
+          if (
+            contact.userId === currentUser.userId &&
+            contact.deletedBySender === true
+          ) {
+            return false; // Don't include this message in the filtered list
+          } else if (
+            contact.friendId === currentUser.userId &&
+            contact.deletedByReceiver === true
+          ) {
+            return false; // Don't include this message in the filtered list
+          }
+
+          return true; // Include other messages in the filtered list
+        });
+        setContactList(filterContact);
+
+      }).catch((error) => {
         console.error('Error fetching contact list:', error);
       })
 
-    
+
     } catch (error) {
       console.error('Error fetching contact list:', error);
     }
@@ -92,11 +85,12 @@ const Discussions = ({ navigation }) => {
   }
 
   useEffect(() => {
+    console.log('fetchContactList>>>>>>')
     getToken()
     fetchContactList();
-    navigation.addListener('focus',()=>{
+    navigation.addListener('focus', () => {
       fetchContactList();
-  });
+    });
   }, [fetchContactList]);
 
   return (
@@ -118,19 +112,19 @@ const Discussions = ({ navigation }) => {
                 ref={flatListRef}
                 showsVerticalScrollIndicator={false}
                 data={searchedChat != '' ? searchedChat : contactList}
-                renderItem={({ item }) => (
-                  <RenderComponent
+                renderItem={({ item }) => {
+                  return <RenderComponent
                     name={item.contactData.name}
                     dp={item.contactData.profileImage}
                     callingScreen={"Discussions"}
                     discussions_item={item}
-                   contactsSetList ={(cl)=>{    // Ye ContactList ka setter beja hai
+                    contactsSetList={(cl) => {    // Ye ContactList ka setter beja hai
                       setContactList(cl)
-                    }} 
-                    contact ={contactList}    // Ye ContactList ka getter beja hai
+                    }}
+                    contact={contactList}    // Ye ContactList ka getter beja hai
                     navigation={navigation}
                   />
-                )}
+                }}
                 ListFooterComponent={globalFunctions.renderFooter(flatListRef, contactList)}
               />
               :
@@ -148,7 +142,7 @@ export default Discussions;
 const styles = StyleSheet.create({
   noFriendsText: {
     color: AppColors.coolgray,
-    fontSize: 20,
+    fontSize: 15,
     textAlign: 'center',
     fontFamily: FontStyle.regularFont
   },

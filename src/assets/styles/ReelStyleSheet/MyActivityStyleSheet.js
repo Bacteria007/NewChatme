@@ -51,8 +51,9 @@ const MyActivityStyleSheet = StyleSheet.create({
         borderColor: AppColors.white,
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
+       
     },
-    reelStyle: { width: wp('32.5'), height: wp('32') },
+    reelStyle: { width: wp('32.5'), height: wp('32')},
     reelsModal: {
         backgroundColor: 'rgba(0,0,0,0.5)',
         alignItems: 'center',

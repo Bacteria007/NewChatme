@@ -18,19 +18,14 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
     selectedImageUri,
     storeImageUri,
   } = useContext(AppContext);
-  console.log("mesg iuyirdtyfugkihl",msgItem)
+  console.log("mesg iuyirdtyfugkihl", msgItem)
   return (
     <TouchableOpacity
       onLongPress={() => {
         setChangeHeader(true);
         setMsgId(msgItem._id);
       }}>
-      <View
-        style={[
-          msgItem.senderId === currentUser.userId
-            ? UserChatStyle.userMessageContainer
-            : UserChatStyle.otherMessageContainer,
-        ]}>
+      <View style={UserChatStyle.userMessageContainer(msgItem.senderId === currentUser.userId)}>
         {msgItem.content != 'ChatMe_Image' ?
           <Text
             style={[
@@ -67,18 +62,16 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
               height: Dimensions.get('window').height,
             }} />
         </View>}
-
-        <Text
-          style={[
-            msgItem.senderId === currentUser.userId
-              ? UserChatStyle.userTimestampText
-              : UserChatStyle.otherTimestampText,
-          ]}>
-          {msgItem.senderId == currentUser.userId ? '' : `${msgItem.mood} mood`}{' '}
-
-          {moment(msgItem.createdAt).format('hh:mm a ')}
-        </Text>
+        <View style={UserChatStyle.timeAndMood}>
+          <Text
+            style={UserChatStyle.msgAndMoodText(msgItem.senderId === currentUser.userId)}>
+            {msgItem.senderId == currentUser.userId ? '' : `mood: ${msgItem.mood}`}{' '}
+          </Text>
+          <Text style={UserChatStyle.timeStyle}>
+            {moment(msgItem.createdAt).format('hh:mm a ')}
+          </Text>
         </View>
+      </View>
     </TouchableOpacity>
   );
 };

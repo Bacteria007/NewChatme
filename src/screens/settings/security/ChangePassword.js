@@ -15,9 +15,9 @@ const ChangePassword = ({navigation}) => {
   return (
     <View style={{flex:1,backgroundColor:theme.backgroundColor}}>
       <InnerScreensHeader navigation={navigation} screenName="Change password" />
-      <View style={[ChangeNumberStyle.mainViewStyle]}>
+      <View style={[ChangeNumberStyle.mainViewStyle(theme.backgroundColor)]}>
         <Text
-          style={[ChangeNumberStyle.headTextStyle]}>
+          style={ChangeNumberStyle.headTextStyle(theme.profileNameColor)}>
           Enter your old password to change current password:
         </Text>
         <TextInput

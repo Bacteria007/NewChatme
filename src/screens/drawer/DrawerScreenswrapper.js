@@ -1,9 +1,24 @@
-import React from 'react'
-import { Text, StyleSheet,View } from 'react-native'
+import React, { useContext, useEffect } from 'react'
+import { Text, StyleSheet,View, StatusBar } from 'react-native'
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
-import { useDrawerProgress } from '@react-navigation/drawer'
+import { useDrawerProgress, useDrawerStatus } from '@react-navigation/drawer'
+import AppColors from '../../assets/colors/Appcolors'
+import { ThemeContext } from '../../context/ThemeContext'
 
 const DrawerScreenswrapper = ({ children }) => {
+  const { theme } = useContext(ThemeContext)
+  const drawerStatus = useDrawerStatus();
+    useEffect(() => {
+        if (drawerStatus == 'open') {
+            console.log("drawer is opened")
+            StatusBar.setBarStyle('dark-content');
+            StatusBar.setBackgroundColor(AppColors.Mauve);
+        } else if (drawerStatus == 'closed') {
+            console.log("drawer is closed")
+            StatusBar.setBarStyle(theme.statusBarText);
+            StatusBar.setBackgroundColor(theme.backgroundColor);
+        }
+    }, [drawerStatus]);
 
   const progress = useDrawerProgress()
   const animatedStyle = useAnimatedStyle(() => ({

@@ -99,6 +99,31 @@ const ForgetScreenStyle = StyleSheet.create({
     borderWidth: hp('0.1'),
     height: hp('5.8'),
   },
+  countryCodeView: {
+    borderColor: AppColors.primary,
+    borderWidth: wp('0.25'),
+    height: hp('7'),
+    width: wp('25'),
+    justifyContent:'center',
+    alignItems:'center',
+    flexDirection:'row',
+    borderRadius:wp('1.5'),
+  },
+  countryCode: {
+    fontSize: wp('5'),
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: AppColors.black,
+  },
+phoneNumberInput: {
+    fontSize: wp('5'),
+    height: hp('7'),
+    width: wp('57'),
+    borderRadius: wp('1.5'),
+    borderColor: AppColors.primary,
+    borderWidth: wp('0.25'),
+    paddingHorizontal: wp('5'),
+  },
 });
 
 export default ForgetScreenStyle;
