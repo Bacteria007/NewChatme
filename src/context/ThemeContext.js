@@ -3,28 +3,27 @@ import AppColors from '../assets/colors/Appcolors';
 
 // Define the initial theme
 const initialTheme = {
-    tabColor: AppColors.tab,
     notFocusedTabIconsColor: AppColors.inActiveIconsColor,
-    focusedTabIconsColor: AppColors.primary,
-    headerIconsColor: AppColors.black,
-    headerSearchBar: AppColors.lightBlack,
-    headerSearchText:AppColors.black,
-    homeCardColor: AppColors.white,
-    profileNameColor: AppColors.black,
-    lastMsgColor: AppColors.lightBlack2,
-    groupDpIconColor: AppColors.lightThemeColors.groupDpIcon,
-    dpCircleColor: AppColors.lightThemeColors.dpCircleColor,
-    headerSearchBarIcons: AppColors.coolgray,
-    chatsHeaderBg:AppColors.primary,
-    statusBarBg:AppColors.bgprimary,
-    statusBarText: 'dark-content',
-    drawerColor:AppColors.Mauve,
-    backgroundColor:AppColors.white,
-    buttonsColor:AppColors.primary,
-    buttonsTextColor:AppColors.white,
-    addBtnColor:AppColors.black,
-    addBtnTextColor:AppColors.white,
-    headerColor:AppColors.white
+      focusedTabIconsColor: AppColors.primary,
+      headerIconsColor: AppColors.black,
+      headerSearchBar: AppColors.tab,
+      headerSearchText: AppColors.lightThemeColors.headerSearchText,
+      homeCardColor: AppColors.white,
+      profileNameColor: AppColors.black,
+      lastMsgColor: AppColors.lightBlack2,
+      groupDpIconColor: AppColors.lightThemeColors.groupDpIcon,
+      dpCircleColor: AppColors.lightThemeColors.dpCircleColor,
+      chatsHeaderBg: AppColors.transparent,
+      drawerColor: AppColors.Mauve,
+      statusBarBg: AppColors.bgprimary,
+      statusBarText: 'dark-content',
+      backgroundColor: AppColors.white,
+      tabColor: AppColors.tab,
+      buttonsColor: AppColors.primary,
+      buttonsTextColor: AppColors.white,
+      addBtnColor: AppColors.black,
+      addBtnTextColor: AppColors.white,
+      headerColor: AppColors.white
 };
 
 // Create the theme context

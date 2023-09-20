@@ -263,7 +263,6 @@ const Calls = ({ navigation }) => {
       DeleteFunction={()=>{
         DeleteCall(callId)
       }}
-
       />
       }
     

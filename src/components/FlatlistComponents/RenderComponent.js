@@ -11,14 +11,20 @@ import AppContext from "../../context/AppContext";
 import moment from "moment";
 import UseScreenFocus from "../HelperFunctions/AutoRefreshScreen/UseScreenFocus";
 
-const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingScreen, discussions_item, groups_item, contacts_item, navigation }) => {
-    const { theme } = useContext(ThemeContext);
-    const { baseUrl, currentUser,token } = useContext(AppContext);
+const RenderComponent = ({ name, dp, contact, contactList, contactsSetList, callingScreen, discussions_item, groups_item, contacts_item, navigation }) => {
+    const { theme, darkThemeActivator } = useContext(ThemeContext);
+    const { baseUrl, currentUser, token } = useContext(AppContext);
     const [profileModal, setProfileModal] = useState(false);
     const [userLastMsg, setUserLastMsg] = useState('');
     const [groupLastMsg, setGroupLastMsg] = useState('');
-    const maxLength = 25;
-    const nameMaxLength = 20;
+    const maxLength = 43;
+    const nameMaxLength = 23;
+    const showProfileModal = () => {
+        setProfileModal(true);
+    };
+    const hideProfileModal = () => {
+        setProfileModal(false);
+    };
     // Time format
     const formatMessageDate = (createdAt) => {
         const messageDate = moment(createdAt);
@@ -33,12 +39,6 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
             return messageDate.format('DD/MM/YYYY');
         }
     }
-    const showProfileModal = () => {
-        setProfileModal(true);
-    };
-    const hideProfileModal = () => {
-        setProfileModal(false);
-    };
     const blockContact = async (item) => {
 
         // console.log("discussion ma ", currentUser.userId)
@@ -67,8 +67,6 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
         }
 
     }
-
-    //    **********                 YE DELETE WALA KAAM HAI ***********************
     const deleteContact = async (item) => {
 
         // console.log("discussion ma ", currentUser.userId)
@@ -84,16 +82,16 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
             })
             if (response.ok) {
                 const data = await response.json();
-                
-                  
-                  const updatedContactList = contact.filter(contact => {
+
+
+                const updatedContactList = contact.filter(contact => {
                     if (contact._id === item._id) {
-                      // Agar msgList k msg ki Id or msgId equal hoo to screen pr na display krwao
-                      return false; // Remove the deleted message
+                        // Agar msgList k msg ki Id or msgId equal hoo to screen pr na display krwao
+                        return false; // Remove the deleted message
                     }
                     return true; // Keep other messages
-                  });
-                  contactsSetList(updatedContactList);
+                });
+                contactsSetList(updatedContactList);
 
 
                 // item.isFriend = false
@@ -109,11 +107,6 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
         }
 
     }
-
-    //    ******************************************************************************
-
-
-
     const unblockContact = async (item) => {
 
         // console.log("discussion ma ", currentUser.userId)
@@ -157,13 +150,13 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
             `${item.isFriend ? 'Delete User' : 'Unblock User'}`,
             item.isFriend ? 'Del this user?' : 'Unblock this user?',
             [
-              item.isFriend
-                ? { text: 'Delete', onPress: () => { deleteContact(item) } }
-                : { text: 'Unblock', onPress: () => { unblockContact(item) } },
+                item.isFriend
+                    ? { text: 'Delete', onPress: () => { deleteContact(item) } }
+                    : { text: 'Unblock', onPress: () => { unblockContact(item) } },
             ],
             { cancelable: true }
-          );
-      
+        );
+
     }
     const getUserLastMessage = async () => {
         console.log("req.query", discussions_item)
@@ -177,12 +170,12 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
         })
         const data = await res.json()
         // console.log("----------", data)
-        if(data.message=="Please provide a valid token."){
+        if (data.message == "Please provide a valid token.") {
             Alert.alert("Provide a valid token.")
-          }else if(data.message=='Please provide a token.'){
+        } else if (data.message == 'Please provide a token.') {
             Alert.alert('Token required')
-          }else
-        setUserLastMsg(data);
+        } else
+            setUserLastMsg(data);
     }
     const getGroupLastMessage = async () => {
         console.log("i(((((())))))))))m", groups_item._id)
@@ -194,26 +187,23 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
             },
         })
         const data = await res.json()
-        if(data.message=="Please provide a valid token."){
+        if (data.message == "Please provide a valid token.") {
             Alert.alert("Provide a valid token.")
-          }else if(data.message=='Please provide a token.'){
+        } else if (data.message == 'Please provide a token.') {
             Alert.alert('Token required')
-          }else
-        setGroupLastMsg(data);
+        } else
+            setGroupLastMsg(data);
         // console.log("i(((((())))))))))m", data)
 
     }
-
-    // UseScreenFocus(getGroupLastMessage)
-    // UseScreenFocus(getUserLastMessage)
     useEffect(() => {
         getUserLastMessage();
         getGroupLastMessage();
-         navigation.addListener('focus',()=>{
+        navigation.addListener('focus', () => {
             getGroupLastMessage()
             getUserLastMessage()
         })
-       
+
     }, []);
     return (
         <TouchableOpacity
@@ -244,7 +234,7 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
                     lightShadowColor={AppColors.primary}// <- this
                     swapShadows
                     style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
-                     >
+                >
                     <TouchableOpacity onPress={() => {
                         showProfileModal()
                         // console.log("dp", dp)
@@ -269,27 +259,31 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
                         <View style={HomeNeoCards.nameAndTimeContainer}>
                             <Text
                                 style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                                {name ? (name.length > nameMaxLength ? name.substring(0, nameMaxLength) + '...' : name) : null}
+                                {name && (name.length > nameMaxLength ? name.substring(0, nameMaxLength) + '...' : name)}
 
                             </Text>
                             <Text
-                                style={HomeNeoCards.lastMsgTime(AppColors.primary)}>
-                                {callingScreen !== 'Groups' ? (userLastMsg ? (formatMessageDate(userLastMsg.createdAt)) : null)
-                                    : (groupLastMsg ? (formatMessageDate(groupLastMsg.createdAt)) : null)}
+                                style={HomeNeoCards.lastMsgTime(darkThemeActivator)}>
+                                {callingScreen !== 'Groups' ? (userLastMsg && (formatMessageDate(userLastMsg.createdAt)))
+                                    : (groupLastMsg && (formatMessageDate(groupLastMsg.createdAt)))}
                             </Text>
                         </View>
-                        <Text
-                            style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
-                            {callingScreen !== 'Groups' ? (userLastMsg ? ((userLastMsg.content.length) > maxLength ? userLastMsg.content.substring(0, maxLength) + '...' : userLastMsg.content) : null)
-                                :
-                                (groupLastMsg ? ((groupLastMsg.text.length) > maxLength ?
-                                    <Text>
-                                        <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name == currentUser.name ? "You" : groupLastMsg.sender_name}{": "}</Text>
-                                        {groupLastMsg.text.substring(0, maxLength) + '...'}</Text> :
-                                    <Text>
-                                        <Text style={HomeNeoCards.senderName}>{groupLastMsg.sender_name == currentUser.name ? "You" : groupLastMsg.sender_name}{": "}</Text>
-                                        {groupLastMsg.text}</Text>) : null)}
-                        </Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text numberOfLines={1} style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
+                                {callingScreen !== 'Groups' ? (userLastMsg !== '' && ((userLastMsg.content.length) > maxLength ? userLastMsg.content.substring(0, maxLength) + '...' : userLastMsg.content))
+                                    :
+                                    (groupLastMsg !== '' && ((groupLastMsg.text.length) > maxLength ?
+                                        <Text>
+                                            <Text numberOfLines={1} style={HomeNeoCards.senderName}>{groupLastMsg.sender_name == currentUser.name ? "You" : groupLastMsg.sender_name}{": "}</Text>
+                                            {groupLastMsg.text.substring(0, maxLength) + '...'}</Text> :
+                                        <Text>
+                                            <Text numberOfLines={1} style={HomeNeoCards.senderName}>{groupLastMsg.sender_name == currentUser.name ? "You" : groupLastMsg.sender_name}{": "}</Text>
+                                            {groupLastMsg.text}</Text>))}
+                            </Text>
+                            {/* <View style={{ backgroundColor: "red", borderRadius: 10, paddingHorizontal: 5 }}>
+                                <Text style={{ color: 'white' }}>2</Text>
+                            </View> */}
+                        </View>
                     </View>
                 </Neomorph>
             </View>
@@ -304,25 +298,26 @@ const RenderComponent = ({ name, dp,contact,contactList,contactsSetList,callingS
                 onBackButtonPress={hideProfileModal}
             >
                 <View style={HomeNeoCards.modalView}>
+                    <View style={HomeNeoCards.dpHeader}>
+                        <Text
+                            style={HomeNeoCards.profileName(AppColors.black)}>
+
+                            {name ? (name.length > nameMaxLength ? name.substring(0, nameMaxLength) + '...' : name) : null}
+
+                        </Text>
+                    </View>
                     {dp == null ? (
-                        <View style={HomeNeoCards.dpVew}>
-                            <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
-                                {callingScreen === 'Discussions' || callingScreen === 'Contacts' ? (
-                                    <Image source={require('../../assets/imges/default/userProfileDark.jpg')} style={HomeNeoCards.dpInModal} />
-                                ) : (
-                                    <Image source={require('../../assets/imges/default/group.png')} style={HomeNeoCards.dpInModal} />
-                                )}
-                            </View>
+                        <View>
+                            {callingScreen === 'Discussions' ? (
+                                <Image source={require('../../assets/imges/default/userProfileDark.jpg')} style={HomeNeoCards.dpInModal} />
+                            ) : (
+                                <Image source={require('../../assets/imges/default/group.png')} style={HomeNeoCards.dpInModal} />
+                                // <Icons.MaterialIcons name={'people'} size={250} color={theme.profileNameColor} />
+                            )}
                         </View>
+
                     ) : (
                         <View>
-                            <View style={HomeNeoCards.dpHeader(theme.backgroundColor)}>
-                                <Text
-                                    style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                                    {name ? (name.length > nameMaxLength ? name.substring(0, nameMaxLength) + '...' : name) : null}
-
-                                </Text>
-                            </View>
                             <Image source={{ uri: `${baseUrl}${dp}` }} style={HomeNeoCards.dpInModal} />
                         </View>
                     )}

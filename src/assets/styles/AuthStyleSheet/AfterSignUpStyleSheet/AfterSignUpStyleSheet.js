@@ -71,14 +71,14 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     fontFamily: 'Poppins-Medium ',
     color: AppColors.primary,
   },
-  CameraIconView: {
+  CameraIconView:(darkThemeActivator)=>({
     height: hp('4%'),
     width: hp('4%'),
     borderRadius: 100,
-    backgroundColor: AppColors.black,
+    backgroundColor: darkThemeActivator ? 'white' : 'black' ,
     justifyContent: 'center',
     alignItems: 'center',
-  },
+  }),
   ImageBackTouchable: {
     backgroundColor: 'yellow',
     height: hp('20%'),

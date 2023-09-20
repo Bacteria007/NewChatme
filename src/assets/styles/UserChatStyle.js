@@ -12,55 +12,48 @@ const UserChatStyle = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor:AppColors.white
-    
+    backgroundColor: AppColors.white,
   },
   container2: {
     flex: 1,
     padding: 4,
-    backgroundColor:AppColors.white
+    backgroundColor: AppColors.white,
   },
   messagesContainer: {
     flexGrow: 1,
     justifyContent: 'flex-start',
   },
-  userMessageContainer: {
-    alignSelf: 'flex-end',
-    backgroundColor: AppColors.tab,
+  userMessageContainer: user => ({
+    alignSelf: user ? 'flex-end' : 'flex-start',
+    backgroundColor: user ? AppColors.tab : AppColors.Lilac,
     // backgroundColor: '#DCF8C6',
     borderRadius: 8,
     padding: 8,
     marginBottom: 8,
-    maxWidth: '70%',
-    marginRight:wp('1'),
-    elevation:4
+    maxWidth: wp('70%'),
+    marginRight: wp('1'),
+    elevation: 4,
+    flexDirection: 'column',
+  }),
+  timeAndMood: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    justifyContent:'space-between',
+    maxWidth: wp('70%'),
   },
-  userMessageText: {
-    color: 'black',
-  },
-  userTimestampText: {
-    color: 'black', fontSize: 10,
+  timeStyle: {
+    fontSize: 10,
+    marginLeft: 10,
+    textAlign: 'right',
     alignSelf: 'flex-end',
   },
-  otherMessageContainer: {
-    alignSelf: 'flex-start',
-    backgroundColor:AppColors.Lilac,
-    // backgroundColor: '#E5E5EA',
-    borderRadius: 8,
-    padding: 8,
-    marginBottom: 8,
-    maxWidth: '70%',
-    marginLeft:wp('1'),
-    elevation:4
+  msgAndMoodText: user => ({
+    color: 'black',
+    fontSize: 10,
+    alignSelf: user ? 'flex-end' : 'flex-end',
+    textAlign: 'left',
+  }),
 
-  },
-  otherMessageText: {
-    color: 'black',
-  },
-  otherTimestampText: {
-    color: 'black', fontSize: 10,
-    alignSelf: 'flex-end',
-  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -134,7 +127,11 @@ const UserChatStyle = StyleSheet.create({
     color: AppColors.white,
     fontSize: wp('3'),
   },
-  bottomActionContainerView: { flexDirection: 'row', position: 'absolute', top: hp('85.8%') },
+  bottomActionContainerView: {
+    flexDirection: 'row',
+    position: 'absolute',
+    top: hp('85.8%'),
+  },
   bottomLeftContainer: {
     flexDirection: 'row',
     backgroundColor: AppColors.white,
@@ -160,7 +157,7 @@ const UserChatStyle = StyleSheet.create({
     borderRadius: 100,
     paddingVertical: hp('1.9%'),
     paddingHorizontal: wp('4.6%'),
-  }
+  },
 });
 
 export default UserChatStyle;

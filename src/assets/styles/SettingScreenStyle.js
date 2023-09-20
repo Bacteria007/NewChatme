@@ -4,24 +4,27 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const SettingScreenStyle = StyleSheet.create({
-  container: {
+  container: (bgColor)=>({
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: bgColor,
     height: hp('100'),
     width: wp('100'),
     // justifyContent: 'center', 
-    alignItems: 'center'
+    alignItems: 'center',
+   
 
-  },
-  sectionsStyle: {
+  }),
+  sectionsStyle: (bgColor)=>({
     width: wp('100'),
     borderRadius: 17,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: bgColor,
     // elevation: 2,
-    marginTop: 13
-  },
+    marginTop: 13,
+    shadowRadius: 1.5,
+    borderRadius: wp('1.5'),
+  }),
   itemStyle: {
     flexDirection: 'row',
     alignItems: 'center',

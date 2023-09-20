@@ -11,9 +11,23 @@ const UserChatHeaderStyle = StyleSheet.create({
   containerView: {
     backgroundColor: AppColors.white,
     height: hp('8%'),
+    // width:wp('100'),
     // borderBottomWidth:1,
     // borderBottomColor:'grey'
-    // elevation: 4,
+  },
+  changedHeaderContainerView: {
+    backgroundColor: AppColors.white,
+    height: hp('8%'),
+    width:wp('100'),
+    // borderBottomWidth:1,
+    // borderBottomColor:'grey'
+    elevation: 4,
+  },
+  changedHeaderInnerView:{
+    flexDirection: 'row',
+    paddingHorizontal: wp('5%'),
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   headerView: {
     flexDirection: 'row',

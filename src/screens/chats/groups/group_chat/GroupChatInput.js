@@ -30,7 +30,7 @@ const GroupChatInput = ({ sendMessageFunc, inputVal, setter }) => {
                 <ScrollView style={UserChatInputStyle.scroll_inputText}>
                     <TextInput
                         style={UserChatInputStyle.input(height)}
-                        placeholder="Type a message"
+                        placeholder="Message"
                         value={inputVal}
                         onChangeText={e => {
                             setter(e);

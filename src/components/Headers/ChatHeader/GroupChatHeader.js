@@ -5,6 +5,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   FlatList,
+  StyleSheet,
 } from 'react-native';
 import React, { useContext, useState, useEffect } from 'react';
 import UserChatHeaderStyle from '../../../assets/styles/UserChatHeaderStyle';
@@ -25,6 +26,7 @@ import { Button, Divider, Menu, PaperProvider, shadow } from 'react-native-paper
 import ReactNativeModal from 'react-native-modal';
 import FontStyle from '../../../assets/styles/FontStyle';
 import { ThemeContext } from '../../../context/ThemeContext';
+import GroupHeaderStyle from '../../../assets/styles/GroupScreenStyle/GroupHeaderStyle';
 
 const GroupChatHeader = ({ item, navigation }) => {
   const { baseUrl, currentUser } = useContext(AppContext);
@@ -84,7 +86,7 @@ const GroupChatHeader = ({ item, navigation }) => {
         </View>
         <View style={[UserChatHeaderStyle.rightView]}>
           <TouchableOpacity onPress={showModal}>
-            {/* <Text>Members</Text> */}
+            {/* <Text style={GroupHeaderStyle.adminText}>Members</Text> */}
             <Icons.MaterialIcons
               name="people"
               size={wp('7%')}
@@ -96,16 +98,16 @@ const GroupChatHeader = ({ item, navigation }) => {
             onDismiss={hideModal}
             onBackButtonPress={hideModal}
             onBackdropPress={hideModal}
-            style={{ margin: 0, justifyContent: 'flex-end',backgroundColor:'rgba(0,0,0,0.2)' }}>
-            <View style={{ justifyContent: 'flex-start', alignItems: 'center', backgroundColor:theme.backgroundColor, padding: hp('3'), borderTopLeftRadius: 30, borderTopRightRadius: 30, elevation: 4 }}>
-              <View style={{ flexDirection: 'row', height: hp('30') }}>
+            style={GroupHeaderStyle.modalStyle}>
+            <View style={GroupHeaderStyle.modalMainView(theme.backgroundColor)}>
+              <View style={GroupHeaderStyle.modalItem}>
 
                 <FlatList
                   indicatorStyle="black"
                   data={sortedGroupMembers}
                   renderItem={({ item }) => {
                     return <View style={{ padding: 4 }}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <View style={GroupHeaderStyle.modalItemsContainer}>
                         {/* <View style={[UserChatHeaderStyle.dpContainerView]}>         */}
                         {item.profileImage ?
                           <Image
@@ -113,33 +115,25 @@ const GroupChatHeader = ({ item, navigation }) => {
                             style={[UserChatHeaderStyle.dpImageStyle]}
                           /> :
                           <Image
-                            source={require('../../../assets/imges/default/group.png')}
+                            source={require('../../../assets/imges/default/userProfileDark.jpg')}
                             style={[UserChatHeaderStyle.dpImageStyle]}
                           />
                         }
-                        {/* </View> */}
-                        <View style={{ flexDirection: 'column', marginLeft: wp('4') }}>
-                          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp('70') }}>
+                        {/* name and phoneNo view */}
+                        <View style={GroupHeaderStyle.nameAndPhone}>
+                          <View style={GroupHeaderStyle.nameView}>
                             <Text
-                              style={{
-                                color: currentUser.name === item.name ? AppColors.primary : 'black',
-                                fontFamily: FontStyle.regularFont,
-                              }}>
+                              style={GroupHeaderStyle.nameStyle(currentUser.name === item.name || item._id == adminId, item._id == adminId)}>
                               {currentUser.name === item.name ? "You" : item.name}
                             </Text>
-                            {item._id == adminId ? (
-                              // <Text
-                              //   style={{
-                              //     color: AppColors.primary,
-                              //     fontFamily: FontStyle.semiBoldFont,
-                              //     fontSize: 14
-                              //   }}>
-                              //   Admin
-                              // </Text>
-                              <Icons.MaterialCommunityIcons name='shield-crown' color={AppColors.primary} size={20} />
-                            ) : null}
+                            {item._id == adminId && (
+                              <View style={GroupHeaderStyle.adminBtn}>
+                                <Text style={GroupHeaderStyle.adminText}>Admin</Text>
+                              </View>
+                              // <Icons.MaterialCommunityIcons name='shield-crown' color={AppColors.primary} size={17} />
+                            )}
                           </View>
-                          <Text style={{ color: 'gray', fontSize: 18 }}>
+                          <Text style={GroupHeaderStyle.phoneText}>
                             {item.phoneNo}
                           </Text>
                         </View>
