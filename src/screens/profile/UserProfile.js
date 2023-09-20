@@ -27,6 +27,7 @@ import AfterSignUpStyleSheet from '../../assets/styles/AuthStyleSheet/AfterSignU
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/ProfileScreenStyleSheet';
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
+import CustomDivider from '../../components/CustomDivider';
 
 const UserProfile = props => {
   const { language,token, baseUrl, storedUser, storeUserName,currentUser,updateCurrentUser, getStoredUserDetails, userName, selectedImageUri, storeImageUri } = useContext(AppContext);
@@ -64,14 +65,14 @@ const UserProfile = props => {
   return (
     
     <DrawerScreenswrapper>
-      <View style={[ProfileScreenStyleSheet.container]}>
-        <Primary_StatusBar />
+      <View style={[ProfileScreenStyleSheet.container(theme.backgroundColor)]}>
+        {/* <Primary_StatusBar /> */}
         <InnerScreensHeader
           screenName={'Profile'}
           navigation={props.navigation}
         />
         {/* main view for profile img */}
-        <View style={[ProfileScreenStyleSheet.innerContainer]}>
+        <View style={[ProfileScreenStyleSheet.innerContainer(theme.backgroundColor)]}>
           <ImageBackground
             source={{ uri: `${baseUrl}${selectedImageUri}` }}
             //  source={require('../../assets/imges/default/6.jpg')}
@@ -197,9 +198,7 @@ const UserProfile = props => {
               color={arrowColor}
             />
           </View>
-          <View style={ProfileScreenStyleSheet.dividerContainer}>
-            <Divider />
-          </View>
+          <CustomDivider/>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -223,9 +222,7 @@ const UserProfile = props => {
               color={arrowColor}
             />
           </View>
-          <View style={ProfileScreenStyleSheet.dividerContainer}>
-            <Divider />
-          </View>
+          <CustomDivider/>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -249,9 +246,7 @@ const UserProfile = props => {
               color={arrowColor}
             />
           </View>
-          <View style={ProfileScreenStyleSheet.dividerContainer}>
-            <Divider />
-          </View>
+          <CustomDivider/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -276,9 +271,7 @@ const UserProfile = props => {
               color={arrowColor}
             />
           </View>
-          <View style={ProfileScreenStyleSheet.dividerContainer}>
-            <Divider />
-          </View>
+          <CustomDivider/>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
