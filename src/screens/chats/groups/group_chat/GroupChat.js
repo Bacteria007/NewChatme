@@ -10,7 +10,7 @@ import GroupChatInput from './GroupChatInput';
 import PushNotification from "react-native-push-notification";
 import GroupChatHeader from '../../../../components/Headers/ChatHeader/GroupChatHeader';
 import { io } from 'socket.io-client';
-const socket = io.connect('http://192.168.43.145:8888');
+const socket = io.connect('http://192.168.0.115:8888');
 
 const GroupChat = props => {
     // VARIABLES

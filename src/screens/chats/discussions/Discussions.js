@@ -14,7 +14,6 @@ import Containers from '../../../assets/styles/Containers';
 import LottieView from 'lottie-react-native';
 import MyActivityStyleSheet from '../../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
 
-
 const Discussions = ({ navigation }) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
@@ -103,7 +102,7 @@ const Discussions = ({ navigation }) => {
         </View>
         {searchText !== '' && searchedChat.length === 0 && userNotFound === true ? (
           <View style={Containers.centerContainer}>
-            <Text style={styles.noFriendsText}>No user with this name.</Text>
+            <Text style={HomeNeoCards.noSearchResultText}>No user with this name.</Text>
           </View>
         ) :
           (
@@ -130,20 +129,11 @@ const Discussions = ({ navigation }) => {
               :
               <View style={Containers.centerContainer}>
                 <LottieView source={require('../../../assets/animations/Lottieanimations/l8.json')} autoPlay style={MyActivityStyleSheet.noUploadsLottieStyle} />
-                <Text style={styles.noFriendsText}>Add friends.</Text>
+                <Text style={HomeNeoCards.noSearchResultText}>Add friends.</Text>
               </View>
           )}
       </View>
     </SafeAreaView>
   )
 }
-export default Discussions;
-
-const styles = StyleSheet.create({
-  noFriendsText: {
-    color: AppColors.coolgray,
-    fontSize: 15,
-    textAlign: 'center',
-    fontFamily: FontStyle.regularFont
-  },
-})
+export default Discussions
