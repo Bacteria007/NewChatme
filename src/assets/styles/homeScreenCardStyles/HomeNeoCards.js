@@ -202,6 +202,13 @@ const HomeNeoCards = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'flex-end',
   },
+  // 
+  noSearchResultText: {
+    color: AppColors.gray,
+    fontSize: hp('1.7'),
+    textAlign: 'center',
+    fontFamily: FontStyle.mediumFont
+  }
 });
 
 export default HomeNeoCards;

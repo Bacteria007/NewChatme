@@ -105,7 +105,7 @@ const AllGroups = ({ navigation }) => {
       </TouchableOpacity>
       {searchText !== '' && searchedGroups.length === 0 && groupNotFound === true ? (
         <View style={Containers.centerContainer}>
-          <Text style={{ color: AppColors.coolgray, fontSize: 20, textAlign: 'center', fontFamily: FontStyle.regularFont }}>No group with this name.</Text>
+          <Text style={HomeNeoCards.noSearchResultText}>No group with this name.</Text>
         </View>
       ) : (
         allGroups.length != 0 ?
@@ -123,7 +123,7 @@ const AllGroups = ({ navigation }) => {
               justifyContent: 'center',
               alignItems: 'center',
             }} />
-            <Text style={{ color: AppColors.coolgray, fontSize: 20, textAlign: 'center', fontFamily: FontStyle.regularFont }}>No groups yet.</Text>
+            <Text style={HomeNeoCards.noSearchResultText}>No groups yet.</Text>
           </View>
       )}
     </View>

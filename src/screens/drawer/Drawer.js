@@ -42,7 +42,7 @@ const DrawerScreens = () => {
   const drawerBackgroungColor = theme.drawerColor;
   const activeTintColor = AppColors.black;
   const inActiveTintColor = AppColors.black;
-  const activeBgColor = 'rgba(255,255,255,0.6)';
+  const activeBgColor = 'rgba(255,255,255,1)';
 
   const logoutUser = async ({ navigation }) => {
     // YE NOTIFICATION K TOKEN KO LOGOUT PR NULL KRNY K LIYE API HAI
@@ -105,7 +105,7 @@ const DrawerScreens = () => {
             marginLeft: -20,
           },
           drawerActiveBackgroundColor: activeBgColor,
-          drawerItemStyle: { height: hp('5.5'), width: wp('40'), justifyContent: 'center' },
+          drawerItemStyle: { height: hp('5.5'), width: wp('38'), justifyContent: 'center' },
           sceneContainerStyle: {
             backgroundColor: drawerBackgroungColor,
           },
