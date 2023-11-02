@@ -26,22 +26,22 @@ const ProfileScreenStyleSheet = StyleSheet.create({
     borderBottomRightRadius: hp('8%'),
     opacity: 0.5,
   },
-  NeoMorphStyle: {
-    shadowRadius: 3,
-    borderRadius: 90,
-    backgroundColor: '#d8dfe7', // Change this color to match your design
-    width: 130,
-    height: 130,
+  outerNeomorph: {
+    shadowRadius: 5,
+    borderRadius: hp('16'),
+    backgroundColor: AppColors.smokeWhite, // Change this color to match your design
+    width: hp('16'),
+    height: hp('16'),
     justifyContent: 'center',
     alignItems: 'center',
   },
-  NeoMorphStyle2: {
-    shadowRadius: 3,
-    borderRadius: 100,
-    backgroundColor: '#d8dfe7',
+  innerNeomorph: {
+    shadowRadius: 5,
+    borderRadius: hp('13'),
+    backgroundColor: AppColors.smokeWhite,
     // backgroundColor: "#d8dfe7",
-    width: 100,
-    height: 100,
+    width: hp('13'),
+    height: hp('13'),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -94,6 +94,8 @@ const ProfileScreenStyleSheet = StyleSheet.create({
     backgroundColor: 'white',
     height: hp('25%'),
     justifyContent: 'space-around',
+    borderTopRightRadius:wp('4'),
+    borderTopLeftRadius:wp('4'),
   },
   dividerContainer: (darkThemeActivator) => ({
     borderBottomColor: darkThemeActivator ? AppColors.lightwhite : AppColors.lightBlack,

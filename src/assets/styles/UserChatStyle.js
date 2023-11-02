@@ -8,51 +8,62 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const UserChatStyle = StyleSheet.create({
-  contianer: {
+  contianer: (bgColor) => ({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: AppColors.white,
-  },
-  container2: {
+    backgroundColor: bgColor,
+  }),
+  container2: (bgColor) => ({
     flex: 1,
-    padding: 4,
-    backgroundColor: AppColors.white,
-  },
+    padding: wp('2'),
+    backgroundColor: bgColor,
+  }),
   messagesContainer: {
     flexGrow: 1,
-    justifyContent: 'flex-start',
+    // justifyContent: 'flex-start',
   },
-  userMessageContainer: user => ({
-    alignSelf: user ? 'flex-end' : 'flex-start',
-    backgroundColor: user ? AppColors.tab : AppColors.Lilac,
-    // backgroundColor: '#DCF8C6',
-    borderRadius: 8,
-    padding: 8,
-    marginBottom: 8,
-    maxWidth: wp('70%'),
-    marginRight: wp('1'),
-    elevation: 4,
+  userMessageContainer: (user) => ({
     flexDirection: 'column',
+    backgroundColor: user ? AppColors.tab : AppColors.Lilac,
+    marginHorizontal: wp('2'),
+    alignSelf: user ? 'flex-end' : 'flex-start',
+    paddingHorizontal: wp('2'),
+    paddingVertical:hp('0.7'),
+    borderRadius: wp('2'),
+    maxWidth: wp('80'),
+    elevation: 4,
   }),
   timeAndMood: {
+
     flexDirection: 'row',
     alignSelf: 'flex-end',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     maxWidth: wp('70%'),
   },
   timeStyle: {
-    fontSize: 10,
+    fontSize: hp('1.1'),
     marginLeft: 10,
     textAlign: 'right',
     alignSelf: 'flex-end',
+    color: 'grey',
+    fontFamily: FontStyle.regularFont,
+
   },
   msgAndMoodText: user => ({
     color: 'black',
-    fontSize: 10,
+    fontSize: hp('1.1'),
     alignSelf: user ? 'flex-end' : 'flex-end',
     textAlign: 'left',
+    fontFamily: FontStyle.regularFont
+
   }),
+  textStyle: {
+    color: 'black',
+    fontSize: hp('1.7'),
+    textAlign: 'left',
+    fontFamily: FontStyle.regularFont
+  },
 
   inputContainer: {
     flexDirection: 'row',
@@ -68,6 +79,8 @@ const UserChatStyle = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#F2F2F2',
     borderRadius: 8,
+    fontFamily: FontStyle.regularFont
+
   },
   sendButton: {
     marginLeft: 8,

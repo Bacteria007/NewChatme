@@ -9,51 +9,19 @@ import AppContext from '../../context/AppContext';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Icons } from '../../assets/Icons';
 import AppColors from '../../assets/colors/Appcolors';
+import { Image } from 'react-native';
+import FontStyle from '../../assets/styles/FontStyle';
+import UserChatStyle from '../../assets/styles/UserChatStyle';
+import { TouchableRipple } from 'react-native-paper';
+import { ThemeContext } from '../../context/ThemeContext';
 
-const GroupMsgItem = ({ msgData }) => {
-  const { curentUser, currentUser } = useContext(AppContext);
-  // const currentId = JSON.parse(curentUser._j);
+const GroupMsgItem = ({ msgData, msgId, setChangeHeader, changeHeader, setMsgId }) => {
+  const { currentUser, baseUrl } = useContext(AppContext);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
-  // reply
-  const swipeableRef = useRef(null);
-  const [swipeOpen, setSwipeOpen] = useState(false);
+  const { darkThemeActivator, theme } = useContext(ThemeContext);
+  const rippleColor = 'rgba(0,0,0,0.1)'
+  const rippleColor2 = AppColors.tab
 
-  const closeSwipeable = () => {
-    if (swipeableRef.current) {
-      swipeableRef.current.close();
-    }
-  };
-
-  const handleSwipeableOpen = () => {
-    closeSwipeable();
-    setSwipeOpen(true);
-  };
-
-  const handleSwipeableClose = () => {
-    setSwipeOpen(false);
-  };
-
-  const renderLeftActions = (progress, dragX, item) => {
-    if (swipeOpen) {
-      return null;
-    }
-
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          closeSwipeable();
-          // Handle reply action
-        }}
-        style={{ justifyContent: 'center', alignItems: 'center', width: wp('40') }}
-      >
-        <Icons.Entypo name='reply' color="black" size={24} />
-      </TouchableOpacity>
-    );
-  };
-
-  useEffect(() => {
-    // console.log("swipopen",swipeOpen)
-  }, [swipeOpen, closeSwipeable, handleSwipeableClose, handleSwipeableOpen])
   // Checking  User
   const isCurrentUserFunc = async () => {
     const senderid = await msgData.sender_id;
@@ -70,49 +38,51 @@ const GroupMsgItem = ({ msgData }) => {
 
 
   return (
-    <Swipeable
-      ref={swipeableRef}
-      onSwipeableOpen={handleSwipeableOpen}
-      onSwipeableClose={handleSwipeableClose}
-      onEnded={closeSwipeable}
-      onCancelled={closeSwipeable}
-      renderLeftActions={renderLeftActions}
-      // renderRightActions={renderLeftActions}
-      shouldCancelWhenOutside={true}
-      dragOffsetFromRightEdge={0.5}
-    >
-      <View style={{ width: wp('100') }}>
-        <View style={styles.wholeMsgBox(isCurrentUser)}>
+    <View style={{ width: wp('100'), backgroundColor: ((changeHeader === true) && (msgId === msgData._id)) ? (darkThemeActivator ? theme.rippleColor : rippleColor2) : 'transparent', marginBottom: hp('1') }}>
+      <TouchableRipple
+        rippleColor={darkThemeActivator ? theme.rippleColor : rippleColor2}
+        onPress={() => {
+          setChangeHeader(false);
+          setMsgId(null);
+        }}
+        onLongPress={() => {
+          console.log("*******")
+          console.log(msgData)
+          console.log("*******")
+          setChangeHeader(true);
+          setMsgId(msgData._id);
+        }
+        }
+        disabled={msgData.sender_id !== currentUser.userId}
+      >
+        <View style={UserChatStyle.userMessageContainer(isCurrentUser)}>
           <Text style={{ color: AppColors.primary }}>
             {!isCurrentUser ? msgData.sender_name : 'You'}
           </Text>
-          <View style={{flexDirection:'row'}}>
-          <Text style={[{ color: AppColors.coolgray, fontSize: 15, textAlign: 'left' }]}>
-            {msgData.text}
-          </Text>
-          <Text style={{ fontSize: 10, marginLeft:10,textAlign:'right',alignSelf:'flex-end' }}>
-            {moment(msgData.createdAt).format('hh:mm a ')}
-          </Text>
+          <View style={{ flexDirection: 'column' }}>
+            {msgData.msg_type === "text" ? (
+              <Text style={UserChatStyle.textStyle}>
+                {msgData.text}
+              </Text>
+            ) : (
+              <Image source={{ uri: `${baseUrl}${msgData.image}` }} style={{ height: hp('30'), width: wp('40') }} resizeMode='cover' />
+            )}
+            <View style={UserChatStyle.timeAndMood}>
+              {msgData.msg_type == "text" &&
+                <Text style={UserChatStyle.msgAndMoodText(msgData.sender_id === currentUser.userId)}>
+                  {!(msgData.sender_id === currentUser.userId) ? "mood: " + msgData.mood : null}
+                </Text>
+              }
+              <Text style={UserChatStyle.timeStyle}>
+                {moment(msgData.createdAt).format('hh:mm a ')}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
-    </Swipeable>
+      </TouchableRipple>
+    </View>
+
   );
 };
 
 export default GroupMsgItem;
-
-const styles = StyleSheet.create({
-  wholeMsgBox: (user) => ({
-    flexDirection: 'column',
-    backgroundColor: user ? AppColors.tab : AppColors.Lilac,
-    margin: 5,
-    marginHorizontal: 13,
-    alignSelf: user ? 'flex-end' : 'flex-start',
-    padding: 7,
-    borderRadius: 6,
-    maxWidth: wp('80'),
-    // maxHeight:hp('90'),
-    elevation: 4,
-  }),
-});

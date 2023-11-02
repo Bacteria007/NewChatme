@@ -8,79 +8,42 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const UserChatInputStyle = StyleSheet.create({
-  main_input_and_mic:(mb)=>( {
+  main_input_and_mic: bgColor => ({
     flexDirection: 'row',
     width: wp('100%'),
     justifyContent: 'space-evenly',
-    alignItems: 'flex-end',
-    alignSelf:'flex-end',
-    backgroundColor: AppColors.white,
-    paddingBottom: mb,
+    backgroundColor: bgColor,
   }),
-  main_input_and_mic: {
-    flexDirection: 'row',
-    width: wp('100%'),
-    justifyContent: 'space-evenly',
-    // alignItems: 'flex-end',
-    // alignSelf:'flex-end',
-    backgroundColor: AppColors.white,
-    // height:hp(''),
-    // marginTop:8
-    
-  },
   input_and_all_icons: {
     flexDirection: 'row',
     width: wp('83%'),
     justifyContent: 'space-between',
-    // alignItems: 'flex-end',
+    alignItems: 'center',
     borderRadius: wp('8%'),
     borderColor: AppColors.Lilac,
     borderWidth: 1,
     backgroundColor: AppColors.white,
     marginBottom: hp('1%'),
-    paddingHorizontal:hp('1%'),
+    paddingHorizontal: hp('2%'),
+    
+  }, 
+  input:{
+    width: wp('90'),
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    maxHeight:hp('6%'),
   },
-  
-  input:(height)=>({
-    width: wp('58%'),
-    height:height,
-    alignItems: 'center',
-    // paddingLeft: wp('3%'),
-    alignSelf:'center',
-    // backgroundColor: 'red',
-    }),
-  // input:{
-  //   width: wp('58%'),
-  //   height:hp('5%'),
-  //   alignItems: 'center',
-  //   paddingLeft: wp('3%'),
-  //   alignSelf:'center'
-  //   // backgroundColor: 'red',
-  // },
-
-  scroll_inputText:{flex:1,alignSelf:'center'},
-  // camera_and_papercliper: (width)=>({
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-around',
-  //   width: width,
-  //   alignItems: 'center',
-  //   paddingVertical: hp('1.5%'),
-
-  // }),
-  camera_and_papercliper:{flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: wp('18%'),
-    alignItems: 'center',
-    paddingVertical: hp('1.5%'),},
+  scroll_inputText: { flex: 1, alignSelf: 'center',   
+},
   microphoneContainerView: {
-    height: hp('6%'),
-    width: hp('6%'),
+    height: hp('6.4%'),
+    width: hp('6.4%'),
     backgroundColor: AppColors.Lilac,
     borderRadius: hp('6%'),
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: hp('1'),
-  }
+  },
 });
 
 export default UserChatInputStyle;

@@ -10,49 +10,46 @@ const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
-
-  const baseUrl='http://192.168.43.145:8888';
+  const apiKey = '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';
+  const baseUrl = 'http://192.168.43.145:8888';
 
   const [userName, setUserName] = useState('');
   const [storedUser, setStoredUser] = useState('');
   const [language, setLanguage] = useState('English');
   const [isUserLoggedin, setIsUserLoggedin] = useState(false);
-  const [darkThemeActivator, setDarkThemeActivator] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [selectedImageUri, setSelectedImageUri] = useState('');
   const [token, setToken] = useState(AsyncStorage.getItem('token'))
+  const [isNewMsg, setIsNewMsg] = useState(false);
+  const [unreadMessageCount, setUnreadMessageCount] = useState(0);
+  const [chatWithNewMsg, setChatWithNewMsg] = useState({ chatId: null, unreadMessagesCount: 0 });
 
-  const updateToken=(e)=>{
+  const updateIsNewMsg = (val) => {
+    setIsNewMsg(val)
+  }
+  const updateToken = (e) => {
     setToken(e)
   }
-
-  
-  const getToken=async()=>{
-    console.log("token context",await AsyncStorage.getItem('token'))
+  const getToken = async () => {
+    console.log("token context", await AsyncStorage.getItem('token'))
     setToken(await AsyncStorage.getItem('token'))
   }
   const updateCurrentUser = obj => {
     setCurrentUser(obj);
-  };  
-  const changeTheme = () => {
-    setDarkThemeActivator(!darkThemeActivator)
-  }
-
+  };
   const storeImageUri = val => {
     setSelectedImageUri(val);
   };
   const storeUserName = val => {
     setUserName(val);
   };
-
   const storeLanguage = val => {
     setLanguage(val);
   };
-
-  const storeLoggedinStatus=val=>{
+  const storeLoggedinStatus = val => {
     setIsUserLoggedin(val)
   }
- useEffect(() => {
+  useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       // Check if the app is in the foreground
       if (AppState.currentState === 'active') {
@@ -65,13 +62,10 @@ export const AppProvider = ({ children }) => {
         });
       }
     });
-
     return unsubscribe;
   });
-
-
   // ********************************************     USE EFFECT FOR LANGUAGE RETRIVE FROM ASYNC STORAGE   ***************
-  useEffect(async() => {
+  useEffect(async () => {
     // Retrieve the selected language from AsyncStorage
     await AsyncStorage.getItem('selectedLanguage')
       .then(selectedLanguage => {
@@ -94,19 +88,25 @@ export const AppProvider = ({ children }) => {
         baseUrl,
         userName,
         storedUser,
+        currentUser,
         isUserLoggedin,
         selectedImageUri,
+        language,
+        token,
+        apiKey,
+        isNewMsg,
+        chatWithNewMsg,
+        unreadMessageCount,
+        setUnreadMessageCount,
+        updateIsNewMsg,
         storeUserName,
         storeLanguage,
-        language,token,
-        darkThemeActivator,
-        currentUser,
-        changeTheme,
         updateCurrentUser,
         getToken,
         updateToken,
         storeLoggedinStatus,
         storeImageUri,
+        setChatWithNewMsg,
       }}>
       {children}
     </AppContext.Provider>

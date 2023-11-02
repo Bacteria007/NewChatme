@@ -6,42 +6,43 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import { ThemeContext } from '../../../context/ThemeContext';
+import { Checkbox, TouchableRipple } from 'react-native-paper';
+import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 import AppColors from '../../../assets/colors/Appcolors';
-import ZegoUIKitPrebuiltCallService, {
-  ZegoSendCallInvitationButton,
-  ONE_ON_ONE_VIDEO_CALL_CONFIG,
-} from '@zegocloud/zego-uikit-prebuilt-call-rn';
-import * as ZIM from 'zego-zim-react-native';
-import * as ZPNs from 'zego-zpns-react-native';
+import FontStyle from '../../../assets/styles/FontStyle';
+import ReactNativeModal from 'react-native-modal';
 
-const ChangedChatHeader = ({ DeleteFunction,setChangeHeader, ID, navigation }) => {
- 
+const ChangedChatHeader = ({ DeleteFunction, setChangeHeader }) => {
+  const { theme } = useContext(ThemeContext);
+
+
   return (
-    <View style={[UserChatHeaderStyle.changedHeaderContainerView]}>
-      <View style={UserChatHeaderStyle.changedHeaderInnerView}>
-        <TouchableOpacity
-          onPress={() => {
-            setChangeHeader(false);
-          }}>
-          <Icons.FontAwesome5
-            name="arrow-left"
-            size={wp('5.5%')}
-            color={AppColors.black}
-            style={{ marginTop: hp('2.7%') }}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            DeleteFunction(ID);
-          }}>
-          <Icons.FontAwesome5
-            name="trash"
-            size={wp('5.5%')}
-            color={AppColors.black}
-            style={{ marginTop: hp('2.7%') }}
-          />
-        </TouchableOpacity>
-      </View>
+    <View style={UserChatHeaderStyle.changedHeaderContainerView(theme.backgroundColor)}>
+      <TouchableRipple
+        borderless
+        style={UserChatHeaderStyle.headerTouchableBtn}
+        onPress={() => {
+          setChangeHeader(false);
+        }}>
+        <Icons.Ionicons
+          name="arrow-back"
+          size={wp('6.5%')}
+          color={theme.profileNameColor}
+        />
+      </TouchableRipple>
+      <TouchableRipple
+        onPress={() => {
+          DeleteFunction();
+        }}
+        borderless
+        style={UserChatHeaderStyle.headerTouchableBtn}>
+        <Icons.FontAwesome5
+          name="trash"
+          size={wp('5%')}
+          color={theme.profileNameColor}
+        />
+      </TouchableRipple>
     </View>
   );
 };

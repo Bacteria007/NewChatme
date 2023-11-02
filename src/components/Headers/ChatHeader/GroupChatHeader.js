@@ -1,13 +1,10 @@
 import {
   View,
   Text,
-  TouchableOpacity,
   Image,
-  TouchableWithoutFeedback,
   FlatList,
-  StyleSheet,
 } from 'react-native';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import UserChatHeaderStyle from '../../../assets/styles/UserChatHeaderStyle';
 import { Icons } from '../../../assets/Icons';
 import {
@@ -15,27 +12,32 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import AppColors from '../../../assets/colors/Appcolors';
-import ZegoUIKitPrebuiltCallService, {
-  ZegoSendCallInvitationButton,
-  ONE_ON_ONE_VIDEO_CALL_CONFIG,
-} from '@zegocloud/zego-uikit-prebuilt-call-rn';
 import AppContext from '../../../context/AppContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserChatStatusBar } from '../../statusbars/Primary_StatusBar';
-import { Button, Divider, Menu, PaperProvider, shadow } from 'react-native-paper';
+import { Menu, Divider, IconButton, TouchableRipple } from 'react-native-paper';
 import ReactNativeModal from 'react-native-modal';
-import FontStyle from '../../../assets/styles/FontStyle';
 import { ThemeContext } from '../../../context/ThemeContext';
 import GroupHeaderStyle from '../../../assets/styles/GroupScreenStyle/GroupHeaderStyle';
+import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 
-const GroupChatHeader = ({ item, navigation }) => {
+const GroupChatHeader = ({ item, navigation, callClearGroupChat }) => {
   const { baseUrl, currentUser } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const groupMembers = item.members
   const adminId = item.group_admin
   const [visible, setVisible] = React.useState(false);
-  const showModal = () => setVisible(true);
+  const showModal = () => { closeMenu(); setVisible(true); }
   const hideModal = () => setVisible(false);
+  const [menuVisible, setMenuVisible] = React.useState(false);
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
+  const [clearChatModal, setClearChatModal] = React.useState(false);
+  const showClearChatModal = () => {
+    setClearChatModal(true);
+  };
+  const hideClearChatModal = () => setClearChatModal(false);
+  const clearChat = async () => {
+    callClearGroupChat();
+  };
   // sort
   const sortedGroupMembers = groupMembers.slice(); // Create a copy of the original array
   const adminIndex = sortedGroupMembers.findIndex(item => item._id === adminId);
@@ -44,110 +46,150 @@ const GroupChatHeader = ({ item, navigation }) => {
     const adminData = sortedGroupMembers.splice(adminIndex, 1)[0];
     sortedGroupMembers.unshift(adminData);
   }
-  // console.log("io", item)
-
   return (
-    <View style={[UserChatHeaderStyle.containerView]}>
+    <View style={[UserChatHeaderStyle.containerView(theme.backgroundColor)]}>
       <View style={[UserChatHeaderStyle.headerView]}>
         <View style={[UserChatHeaderStyle.leftview]}>
-          <TouchableOpacity
+          <TouchableRipple
             onPress={() => {
               navigation.goBack();
-            }}>
+            }} borderless
+            style={UserChatHeaderStyle.headerTouchableBtn}
+            rippleColor={theme.rippleColor}
+          >
             <Icons.Ionicons
               name="arrow-back"
               size={wp('6.5%')}
-              color={AppColors.black}
-              style={{ marginTop: hp('2.7%') }}
+              color={theme.profileNameColor}
             />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={[UserChatHeaderStyle.leftInnerView]}>
-              {/* <View style={[UserChatHeaderStyle.dpContainerView]}>
-                {item.profileImage ?
-                  <Image
-                    source={{ uri: `${baseUrl}${item.profileImage}` }}
-                    style={[UserChatHeaderStyle.dpImageStyle]}
-                  /> :
-                  <Image
-                    source={require('../../../assets/imges/default/group.png')}
-                    style={[UserChatHeaderStyle.dpImageStyle]}
-                  />
-                }
-              </View> */}
-              <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
-                <Text style={[UserChatHeaderStyle.profileNameTextStyle]}>
-                  {item.group_name}
-                </Text>
 
+          </TouchableRipple>
+
+          <View style={[UserChatHeaderStyle.leftInnerView]}>
+            <View style={HomeNeoCards.dpVew}>
+              <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
+                <Icons.Ionicons name={'people'} size={wp('6')} color={theme.groupDpIconColor} />
               </View>
             </View>
-          </TouchableOpacity>
+            <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
+              <Text style={[UserChatHeaderStyle.profileNameTextStyle(theme.profileNameColor)]}>
+                {item.group_name}
+              </Text>
+            </View>
+          </View>
+
         </View>
         <View style={[UserChatHeaderStyle.rightView]}>
-          <TouchableOpacity onPress={showModal}>
-            {/* <Text style={GroupHeaderStyle.adminText}>Members</Text> */}
-            <Icons.MaterialIcons
-              name="people"
-              size={wp('7%')}
-              color={AppColors.black}
-            />
-          </TouchableOpacity>
-          <ReactNativeModal
-            visible={visible}
-            onDismiss={hideModal}
-            onBackButtonPress={hideModal}
-            onBackdropPress={hideModal}
-            style={GroupHeaderStyle.modalStyle}>
-            <View style={GroupHeaderStyle.modalMainView(theme.backgroundColor)}>
-              <View style={GroupHeaderStyle.modalItem}>
+          <Menu
+            visible={menuVisible}
+            contentStyle={UserChatHeaderStyle.menuStyle}
+            onDismiss={closeMenu}
+            onBackButtonPress={closeMenu}
+            anchorPosition='bottom'
+            anchor={
+              <IconButton
+                icon={'dots-vertical'}
+                size={wp('7%')}
+                iconColor={theme.profileNameColor}
+                onPress={openMenu}
+              />}
+          >
+            <Menu.Item titleStyle={UserChatHeaderStyle.menuTitleStyle}
+              // leadingIcon={'delete'}
+              onPress={() => { showClearChatModal() }} title="Clear Chat" />
+            <Divider />
+            <Menu.Item titleStyle={UserChatHeaderStyle.menuTitleStyle}
 
-                <FlatList
-                  indicatorStyle="black"
-                  data={sortedGroupMembers}
-                  renderItem={({ item }) => {
-                    return <View style={{ padding: 4 }}>
-                      <View style={GroupHeaderStyle.modalItemsContainer}>
-                        {/* <View style={[UserChatHeaderStyle.dpContainerView]}>         */}
-                        {item.profileImage ?
-                          <Image
-                            source={{ uri: `${baseUrl}${item.profileImage}` }}
-                            style={[UserChatHeaderStyle.dpImageStyle]}
-                          /> :
-                          <Image
-                            source={require('../../../assets/imges/default/userProfileDark.jpg')}
-                            style={[UserChatHeaderStyle.dpImageStyle]}
-                          />
-                        }
-                        {/* name and phoneNo view */}
-                        <View style={GroupHeaderStyle.nameAndPhone}>
-                          <View style={GroupHeaderStyle.nameView}>
-                            <Text
-                              style={GroupHeaderStyle.nameStyle(currentUser.name === item.name || item._id == adminId, item._id == adminId)}>
-                              {currentUser.name === item.name ? "You" : item.name}
-                            </Text>
-                            {item._id == adminId && (
-                              <View style={GroupHeaderStyle.adminBtn}>
-                                <Text style={GroupHeaderStyle.adminText}>Admin</Text>
-                              </View>
-                              // <Icons.MaterialCommunityIcons name='shield-crown' color={AppColors.primary} size={17} />
-                            )}
-                          </View>
-                          <Text style={GroupHeaderStyle.phoneText}>
-                            {item.phoneNo}
-                          </Text>
-                        </View>
-                      </View>
-                      <Divider style={{ margin: 8 }} />
-                    </View>
-                  }}
-                />
-              </View>
-            </View>
-          </ReactNativeModal>
+              // leadingIcon={'account-group'} 
+              onPress={() => { showModal(); }} title="Show members" />
+          </Menu>
         </View>
-
       </View>
+      <ReactNativeModal
+        isVisible={visible}
+        backdropOpacity={0.1}
+        onDismiss={hideModal}
+        onBackButtonPress={hideModal}
+        onBackdropPress={hideModal}
+        style={GroupHeaderStyle.modalStyle}>
+        <View style={GroupHeaderStyle.modalMainView(AppColors.white)}>
+          <View style={GroupHeaderStyle.modalItem}>
+            {/* <Text style={[UserChatHeaderStyle.memberText]}>Memebers</Text> */}
+            <FlatList
+            showsVerticalScrollIndicator={true}        
+            // https://reactnavigation.org/docs/nesting-navigators/#navigating-to-a-screen-in-a-nested-navigator
+            data={sortedGroupMembers}
+              renderItem={({ item }) => {
+                return <View style={{ padding: 4}}>
+                  <View style={GroupHeaderStyle.modalItemsContainer}>
+                    {item.profileImage ?
+                      <Image
+                        source={{ uri: `${baseUrl}${item.profileImage}` }}
+                        style={[UserChatHeaderStyle.dpImageStyle]}
+                      /> :
+                      <Image
+                        source={require('../../../assets/imges/default/userProfileDark.jpg')}
+                        style={[UserChatHeaderStyle.dpImageStyle]}
+                      />
+                    }
+                    {/* name and phoneNo view */}
+                    <View style={GroupHeaderStyle.nameAndPhone}>
+                      <View style={GroupHeaderStyle.nameView}>
+                        <Text
+                          style={GroupHeaderStyle.nameStyle}>
+                          {currentUser.name === item.name ? "You" : item.name}
+                        </Text>
+                        {item._id == adminId && (
+                          <View style={GroupHeaderStyle.adminBtn}>
+                            <Text style={GroupHeaderStyle.adminText}>Admin</Text>
+                          </View>
+                        )}
+                      </View>
+                      <Text style={GroupHeaderStyle.phoneText}>
+                        {item.phoneNo}
+                      </Text>
+                    </View>
+                  </View>
+                  <Divider style={{ margin: 8 }} />
+                </View>
+              }}
+            />
+          </View>
+        </View>
+      </ReactNativeModal>
+      {/* clear chatModal */}
+      <ReactNativeModal
+        backdropOpacity={0.2}
+        isVisible={clearChatModal}
+        onDismiss={hideClearChatModal}
+        style={{ justifyContent: 'center', alignItems: 'center' }}
+      
+      >
+        <View
+          style={UserChatHeaderStyle.modalMainContainer}>
+
+          <Text style={UserChatHeaderStyle.modalTitleText}>
+            Do you want to delete all messages ?
+          </Text>
+          <View style={UserChatHeaderStyle.modalBtnView}>
+            <TouchableRipple borderless
+              style={UserChatHeaderStyle.modalBtn(AppColors.lightGrey)}
+              onPress={() => { hideClearChatModal(); closeMenu() }}
+            >
+              <Text
+                style={UserChatHeaderStyle.modalBtnText}>
+                Cancel
+              </Text>
+            </TouchableRipple>
+            <TouchableRipple borderless onPress={() => { clearChat().then(() => { hideClearChatModal(); closeMenu() }) }}
+              style={UserChatHeaderStyle.modalBtn(AppColors.Lilac)}>
+              <Text style={UserChatHeaderStyle.modalBtnText}>
+                Ok
+              </Text>
+            </TouchableRipple>
+          </View>
+        </View>
+      </ReactNativeModal>
     </View>
   );
 };

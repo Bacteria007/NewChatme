@@ -34,7 +34,7 @@ const FakeSplash = ({navigation}) => {
                 if(response.data.matched){
                   updateCurrentUser({userId: Id, phoneNumber: phoneNo, profileImage: profileImage, name:name})
                   updateToken(storedToken)
-                  navigation.replace('DrawerScreens');
+                  navigation.replace('DrawerStack');
 
                 }else{
                   console.log('Auto-login failed:', error);

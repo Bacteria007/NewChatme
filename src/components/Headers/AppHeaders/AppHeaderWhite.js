@@ -127,7 +127,7 @@ const AppHeaderWhite = ({ navigation, headerTitle, searchQuery, handleSearchOnCh
             )}
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('ChatBot');
+                navigation.navigate("InnerScreens",{screen:"ChatBot"});
               }}>
               {darkThemeActivator ? <BotIconWhite /> : <BotIconBlack />}
             </TouchableOpacity>

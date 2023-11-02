@@ -1,33 +1,59 @@
-import {PermissionsAndroid 
-  } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
+import {
+  check,
+  PERMISSIONS,
+  request,
+} from 'react-native-permissions';
 
- export const requestCameraAndAudioPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      // PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS)
-      ]);
-      if (
-        granted['android.permission.RECORD_AUDIO'] ===
-          PermissionsAndroid.RESULTS.GRANTED &&
-        granted['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED
-      ) {
-        console.log('You can use the cameras & mic');
-      } else {
-        console.log('Permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+// it yh nichy wala dono permissions akhati ley rha baui agr ik b na li tu yh dosry  ko b access nai dey ga 
 
-  export const requestNotificationPermission = async () => {
-    const result = await request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
-    return result;
-  };
-  
-  export const checkNotificationPermission = async () => {
-    const result = await check(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
-    return result;
-  };
+export const requestCameraAndGalleryPermission = async () => {
+  const grantedCamera = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+  const grantedStorage = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+  if (
+    grantedCamera === PermissionsAndroid.RESULTS.GRANTED &&
+    grantedStorage === PermissionsAndroid.RESULTS.GRANTED
+  ) {
+    console.log('Camera and storage permission granted');
+    return true;
+  } else {
+    console.log('Camera and storage permission denied');
+    return false;
+  }
+}
+
+export const requestCameraPermission = async () => {
+  const grantedCamera = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+  if (
+    grantedCamera === PermissionsAndroid.RESULTS.GRANTED
+  ) {
+    console.log('Camera permission granted');
+    return true;
+  } else {
+    console.log('Camera permission denied');
+    return false;
+  }
+}
+export const requestGalleryPermission = async () => {
+  const grantedStorage = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+  if (
+    grantedStorage === PermissionsAndroid.RESULTS.GRANTED
+  ) {
+    console.log('storage permission granted');
+    return true;
+  } else {
+    console.log('storage permission denied');
+    return false;
+  }
+}
+
+
+export const requestNotificationPermission = async () => {
+  const result = await request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
+  return result;
+};
+
+export const checkNotificationPermission = async () => {
+  const result = await check(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
+  return result;
+};

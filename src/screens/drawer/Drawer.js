@@ -105,7 +105,7 @@ const DrawerScreens = () => {
             marginLeft: -20,
           },
           drawerActiveBackgroundColor: activeBgColor,
-          drawerItemStyle: { height: hp('5.5'), width: wp('38'), justifyContent: 'center' },
+          drawerItemStyle: { width: wp('38'), justifyContent: 'center' },
           sceneContainerStyle: {
             backgroundColor: drawerBackgroungColor,
           },

@@ -102,9 +102,10 @@ const TabScreens = () => {
                                 <Icons.Ionicons size={iconSize} name={focused ? 'call-sharp' : 'call-outline'} color={iconColor}
                                 />
                             );
-                        } else if (route.name === 'Contacts') {
+                        } else if (route.name === 'Discover') {
                             return (
-                                <Icons.MaterialCommunityIcons size={iconSize} name={focused ? 'contacts' : 'contacts-outline'} color={iconColor} />
+                                <Icons.Ionicons size={iconSize} name={'search'} color={iconColor} />
+
                             );
                         } else if (route.name === 'Reels') {
                             return focused ? (
@@ -128,7 +129,7 @@ const TabScreens = () => {
                 <Tab.Screen name="Groups" component={Groups} />
                 <Tab.Screen name="Calls" component={Calls} />
                 <Tab.Screen name="Reels" component={Reels} />
-                <Tab.Screen name="Contacts" component={AllUsers} />
+                <Tab.Screen name="Discover" component={AllUsers} />
             </Tab.Navigator>
         </Animated.View>
     );

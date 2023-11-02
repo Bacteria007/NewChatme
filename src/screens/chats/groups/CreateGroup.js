@@ -7,7 +7,6 @@ import { ThemeContext } from '../../../context/ThemeContext';
 import { Icons } from '../../../assets/Icons';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import axios from 'axios';
-import CommonApis from '../../../components/HelperFunctions/GlobalApiz/Apis';
 import AppColors from '../../../assets/colors/Appcolors';
 import { Surface } from 'react-native-paper';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
@@ -25,7 +24,6 @@ const CreateGroup = ({ navigation }) => {
   const [allUsers, setAllUsers] = useState([]);
   const [groupName, setgroupName] = useState('');
   const [selectedMembers, setSelectedMembers] = useState([]);
-  const commonApis = CommonApis();
   const [selectedMembersCount, setSelectedMembersCount] = useState(0);
   const [isCreating, setIsCreating] = useState(false)
 
@@ -97,8 +95,13 @@ const CreateGroup = ({ navigation }) => {
     if (selectedMembers.length >= 2) {
       if(name!=''){
       setIsCreating(true)
-    const admin_data = await commonApis.UserDetails();
-    console.log('admin data=========', admin_data);
+    const admin_data = {
+      "_id":currentUser.userId,
+      "name":currentUser.name,
+      "phoneNo":currentUser.phoneNumber,
+      "profileImage":currentUser.profileImage
+    };
+    // console.log('admin data=========', admin_data);
     selectedMembers.push(admin_data);
     console.log('selectedMembers', selectedMembers);
     const formData = new FormData();

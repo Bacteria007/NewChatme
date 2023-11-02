@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image, TouchableOpacity, ToastAndroid } from 'react-native'
+import { View, Text, FlatList, Image, TouchableOpacity, ToastAndroid, StyleSheet } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
@@ -8,6 +8,7 @@ import AppContext from '../../../context/AppContext'
 import FontStyle from '../../../assets/styles/FontStyle'
 import Containers from '../../../assets/styles/Containers'
 import LottieView from 'lottie-react-native'
+import { useWorkletCallback } from 'react-native-reanimated'
 
 const BlockContacts = ({ navigation }) => {
 
@@ -51,7 +52,7 @@ const BlockContacts = ({ navigation }) => {
         // item.isBlocked = false
         ToastAndroid.showWithGravity('unblocked successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER);
         removeBlockedContact(item)
-        // navigation.replace('DrawerScreens')
+        // navigation.replace("DrawerStack")
       } else {
         console.log('Error un blocking contact:', response.status);
         ToastAndroid.showWithGravity('cannot unblocked', ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -74,9 +75,9 @@ const BlockContacts = ({ navigation }) => {
   // HOOKS
   useEffect(() => { fetchBlockContactList() }, [])
   return (
-    <View style={{ backgroundColor: AppColors.white, flex: 1 }}>
+    <View style={BlockedScreenStyle.container}>
       <InnerScreensHeader navigation={navigation} screenName='Blocked contacts' />
-      <View style={{ padding: wp('3%'), justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+      <View style={BlockedScreenStyle.itemListView}>
         {blockedContactList.length != 0 ?
           <FlatList
             data={blockedContactList}
@@ -96,15 +97,15 @@ const BlockContacts = ({ navigation }) => {
                     coverScreen={true}
                     animationIn="zoomIn"
                     animationOut={'zoomOut'}>
-                    <View style={{ backgroundColor: AppColors.white, height: hp('7%'), paddingHorizontal: wp('3%'), justifyContent: 'center' }}>
+                    <View style={BlockedScreenStyle.modalView}>
                       <TouchableOpacity onPress={() => { unblockContact(item) }}>
-                        <Text style={{ fontSize: wp('5%'), color: AppColors.black }}>Unblock {item.contactData.name}</Text>
+                        <Text style={BlockedScreenStyle.unBlockBtn}>Unblock {item.contactData.name}</Text>
                       </TouchableOpacity>
                     </View>
                   </Modal>
-                  <View style={{ flexDirection: 'row', width: wp('100%'), alignItems: 'center', padding: wp('2%') }}>
-                    <Image source={{ uri: `${baseUrl}${item.contactData.profileImage}` }} style={{ height: hp('6%'), width: wp('12%'), borderRadius: 25 }} />
-                    <Text style={{ fontSize: wp('6%'), color: AppColors.black, paddingLeft: wp('3%') }}>{item.contactData.name}</Text>
+                  <View style={BlockedScreenStyle.dpAndNameContainer}>
+                    <Image source={{ uri: `${baseUrl}${item.contactData.profileImage}` }} style={BlockedScreenStyle.imageStyle} />
+                    <Text style={BlockedScreenStyle.nameStyle}>{item.contactData.name}</Text>
                   </View>
                 </TouchableOpacity>
               )
@@ -112,13 +113,7 @@ const BlockContacts = ({ navigation }) => {
           />
           :
           <View>
-            {/* <LottieView source={require('../../../assets/animations/Lottieanimations/l12.json')} autoPlay style={{
-              height: hp('20'),
-              width: wp('60'),
-              // justifyContent: 'center',
-              // alignItems: 'center',
-            }} /> */}
-            <Text style={{ color: AppColors.primary, fontSize: 20, textAlign: 'center', fontFamily: FontStyle.mediumFont,letterSpacing:1 }}>No Blocked Contacts.</Text>
+            <Text style={BlockedScreenStyle.noContactText}>No Blocked Contacts.</Text>
           </View>
         }
       </View>
@@ -127,3 +122,39 @@ const BlockContacts = ({ navigation }) => {
 }
 
 export default BlockContacts
+
+const BlockedScreenStyle = StyleSheet.create({
+  container: { backgroundColor: AppColors.white, flex: 1 },
+  noContactText: {
+    color: AppColors.gray,
+    fontSize: wp('4'),
+    textAlign: 'center',
+    fontFamily: FontStyle.regularFont,
+    letterSpacing: 1,
+  },
+  itemListView: {
+    padding: wp('3%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  unBlockBtn: { fontSize: wp('5%'), color: AppColors.black },
+  modalView: {
+    backgroundColor: AppColors.white,
+    height: hp('7%'),
+    paddingHorizontal: wp('3%'),
+    justifyContent: 'center',
+  },
+  dpAndNameContainer: {
+    flexDirection: 'row',
+    width: wp('100%'),
+    alignItems: 'center',
+    padding: wp('2%'),
+  },
+  imageStyle: { height: hp('6%'), width: wp('12%'), borderRadius: 25 },
+  nameStyle: {
+    fontSize: wp('6%'),
+    color: AppColors.black,
+    paddingLeft: wp('3%'),
+  },
+});

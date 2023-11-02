@@ -14,7 +14,7 @@ import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/Prof
 
 const SelectInfo = ({ iconName2, props }) => {
   const modalfontsize = wp('4.6%');
-  const iconSize = wp('5.5%');
+  const iconSize = 17;
   const selectedTextColor = 'black';
   const titleTextColor = 'grey';
 
@@ -111,7 +111,8 @@ const SelectInfo = ({ iconName2, props }) => {
                 onChangeText={text => {
                   setUserinput(text);
                 }}
-                selectTextOnFocus={true}
+                selectTextOnFocus={true} 
+                autoFocus={true}
                 style={[ProfileScreenStyleSheet.TextInputStyle]}
                 placeholderTextColor={titleTextColor}
               />
