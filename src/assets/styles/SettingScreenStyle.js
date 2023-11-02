@@ -1,20 +1,21 @@
 import { StyleSheet } from 'react-native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const SettingScreenStyle = StyleSheet.create({
-  container: (bgColor)=>({
+  container: bgColor => ({
     flex: 1,
     backgroundColor: bgColor,
     height: hp('100'),
     width: wp('100'),
-    // justifyContent: 'center', 
+    // justifyContent: 'center',
     alignItems: 'center',
-   
-
   }),
-  sectionsStyle: (bgColor)=>({
+  sectionsStyle: bgColor => ({
     width: wp('100'),
     borderRadius: 17,
     justifyContent: 'center',
@@ -38,6 +39,7 @@ const SettingScreenStyle = StyleSheet.create({
     color: color,
     marginLeft: 10,
   }),
+
   sectionHeadText: {
     fontSize: wp('4%'),
     // fontFamily: FontStyle.regularFont,
@@ -47,20 +49,49 @@ const SettingScreenStyle = StyleSheet.create({
     paddingHorizontal: 15, // Add horizontal padding here
   },
   modalView: {
-    backgroundColor: "#fff",
-    height: hp('25'),
-    width: wp('100'),
+    height: hp('25%'),
+    width: wp('100%'),
+    flexDirection: 'column',
+    backgroundColor: AppColors.white,
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-    alignSelf: 'center',
+    justifyContent:'center',
+    borderRadius: 20,
+    elevation: 5,
+  },
+  radioBtnsView: {
+    width: wp('100%'),
+    flexDirection: 'column',
+    backgroundColor: AppColors.white,
+    alignItems: 'center',
+    paddingVertical: 20,
+    justifyContent:'space-between'
+
   },
   themeModal: {
-    backgroundColor: "rgba(0,0,0,0.4)",
-    margin: 0,
     justifyContent: 'center',
-    height: hp('30'), alignSelf: 'center'
+    alignSelf: 'center',
   },
-  themeModalText: { color: AppColors.primary, fontFamily: FontStyle.regularFont, fontSize: 17 }
+  themeModalText: {
+    color: AppColors.black,
+    fontFamily: FontStyle.regularFont,
+    // fontSize: hp('3'),
+    // marginTop:hp('10')
+  },
+  btnAndTextView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: hp('3'),
+    color: AppColors.primary,
+    textAlign: 'left',
+  },
+  modalTitleView: {
+    width: wp('100'),
+    // backgroundColor: 'red',
+paddingHorizontal:wp('4')
+  },
 });
 
 export default SettingScreenStyle;

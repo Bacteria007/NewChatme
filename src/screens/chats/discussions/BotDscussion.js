@@ -12,7 +12,7 @@ const BotDiscussion = ({ navigation }) => {
     return (
         <TouchableOpacity
             onPress={() => {
-                navigation.navigate('ChatBot');
+                navigation.navigate("InnerScreens",{screen:"ChatBot"});
             }}>
         <Neomorph
             darkShadowColor={AppColors.primary} // <- set this

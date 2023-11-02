@@ -6,25 +6,22 @@ import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCar
 import AppContext from '../../../context/AppContext';
 import RenderComponent from '../../../components/FlatlistComponents/RenderComponent';
 import BotDiscussion from './BotDscussion';
-import GlobalFunction from '../../../components/HelperFunctions/GlobalApiz/GlobalFunc';
-import AppColors from '../../../assets/colors/Appcolors';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
-import FontStyle from '../../../assets/styles/FontStyle';
 import Containers from '../../../assets/styles/Containers';
-import LottieView from 'lottie-react-native';
-import MyActivityStyleSheet from '../../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
-
-const Discussions = ({ navigation }) => {
+import Initialize_Socket from "../../../helpers/Socket/Socket";
+const Discussions = (props) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
   const { baseUrl, getToken, token, currentUser } = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
-  const globalFunctions = GlobalFunction()
   const [contactList, setContactList] = useState([]);
   const [userNotFound, setUserNotFound] = useState(false);
 
+  useEffect(() => {
+    Initialize_Socket(currentUser.name)
+  }, [])
   const fetchContactList = useCallback(async () => {
 
     try {
@@ -87,7 +84,7 @@ const Discussions = ({ navigation }) => {
     console.log('fetchContactList>>>>>>')
     getToken()
     fetchContactList();
-    navigation.addListener('focus', () => {
+    props.navigation.addListener('focus', () => {
       fetchContactList();
     });
   }, [fetchContactList]);
@@ -96,9 +93,9 @@ const Discussions = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
         <Primary_StatusBar />
-        <AppHeader navigation={navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+        <AppHeader navigation={props.navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
         <View style={Containers.centercontent}>
-          <BotDiscussion navigation={navigation} />
+          <BotDiscussion navigation={props.navigation} />
         </View>
         {searchText !== '' && searchedChat.length === 0 && userNotFound === true ? (
           <View style={Containers.centerContainer}>
@@ -112,23 +109,23 @@ const Discussions = ({ navigation }) => {
                 showsVerticalScrollIndicator={false}
                 data={searchedChat != '' ? searchedChat : contactList}
                 renderItem={({ item }) => {
-                  return <RenderComponent
-                    name={item.contactData.name}
-                    dp={item.contactData.profileImage}
-                    callingScreen={"Discussions"}
-                    discussions_item={item}
-                    contactsSetList={(cl) => {    // Ye ContactList ka setter beja hai
-                      setContactList(cl)
-                    }}
-                    contact={contactList}    // Ye ContactList ka getter beja hai
-                    navigation={navigation}
-                  />
+                  return (
+                    <RenderComponent
+                      name={item.contactData.name}
+                      dp={item.contactData.profileImage}
+                      callingScreen={"Discussions"}
+                      discussions_item={item}
+                      contactsSetList={(cl) => {    // Ye ContactList ka setter beja hai
+                        setContactList(cl)
+                      }}
+                      contact={contactList}    // Ye ContactList ka getter beja hai
+                      navigation={props.navigation}
+                    />
+                  )
                 }}
-                ListFooterComponent={globalFunctions.renderFooter(flatListRef, contactList)}
               />
               :
               <View style={Containers.centerContainer}>
-                <LottieView source={require('../../../assets/animations/Lottieanimations/l8.json')} autoPlay style={MyActivityStyleSheet.noUploadsLottieStyle} />
                 <Text style={HomeNeoCards.noSearchResultText}>Add friends.</Text>
               </View>
           )}

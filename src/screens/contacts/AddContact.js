@@ -22,7 +22,6 @@ import AppContext from '../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
 import RenderComponent from '../../components/FlatlistComponents/RenderComponent';
-import GlobalFunction from '../../components/HelperFunctions/GlobalApiz/GlobalFunc';
 
 const AddContact = ({ navigation }) => {
   //            **************                    USE STATES      *****************
@@ -31,7 +30,6 @@ const AddContact = ({ navigation }) => {
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
-  const gloabalFunction = GlobalFunction();
   const [contactList, setContactList] = useState([]);
 
   const fetchContactList = async () => {
@@ -135,10 +133,7 @@ const AddContact = ({ navigation }) => {
           />
         )}
         // keyExtractor={(item) => { item.id.toString() }}
-        ListFooterComponent={gloabalFunction.renderFooter(
-          flatListRef,
-          contactList,
-        )}
+        
       />
     </View>
   );

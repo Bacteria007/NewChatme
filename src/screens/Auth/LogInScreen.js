@@ -23,9 +23,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import AppContext from '../../context/AppContext';
 import FontStyle from '../../assets/styles/FontStyle';
-import { initializeZego } from '../../components/HelperFunctions/ZegoCloudFunction/ZegoInitFunction';
+import { initializeZego } from '../../helpers/ZegoCloudFunction/ZegoInitFunction';
 import { ThemeContext } from '../../context/ThemeContext';
-import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
+import UseScreenFocus from '../../helpers/AutoRefreshScreen/UseScreenFocus';
 import messaging from '@react-native-firebase/messaging';
 
 const LogInScreen = ({ navigation }) => {
@@ -118,7 +118,7 @@ const LogInScreen = ({ navigation }) => {
           // getStoredUserDetails()
           // console.log("async login", storedUser)
           initializeZego(res._id, res.name);
-          navigation.replace('DrawerScreens');
+          navigation.replace("DrawerStack");
         }
         else {
 
@@ -204,7 +204,7 @@ const LogInScreen = ({ navigation }) => {
           <View style={{ width: wp('85') }}>
             <TouchableOpacity
               onPress={() => {
-                navigation.replace('ForgetPassword');
+                navigation.replace("SettingStack",{screen:"ForgetPassword"});
               }}>
               <Text style={[LogInStyleSheet.forgotpasswordText]}>
                 Forgot Password?
@@ -243,7 +243,7 @@ const LogInScreen = ({ navigation }) => {
               } else {
                 console.log('clicked');
                 userLogin({ navigation });
-                // navigation.replace('DrawerScreens');
+                // navigation.replace("DrawerStack");
               }
 
 
@@ -256,7 +256,7 @@ const LogInScreen = ({ navigation }) => {
           <View style={LogInStyleSheet.signupLineContainer}>
             <Text style={{ fontFamily: FontStyle.mediumFont }}>Don't have an account?{' '}</Text>
             <TouchableOpacity onPress={() => {
-              navigation.replace('SignUpScreen')
+              navigation.replace("AuthStack",{screen:"SignUpScreen"})
             }}>
               <Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Signup</Text></TouchableOpacity>
           </View>

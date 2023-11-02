@@ -125,7 +125,7 @@ const AllRequest = ({ navigation }) => {
                         <View style={HomeNeoCards.nameAndMsgContainer}>
                             <Text
                                 style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                                {item.senderId.name.length > 10 ? item.senderId.name.substring(0, 10) + '...' : item.senderId.name}
+                                {item.senderId.name ? (item.senderId.name.length > 10 ? item.senderId.name.substring(0, 10) + '...' : item.senderId.name) : 'no name'}
                             </Text>
                         </View>
                     </View>
@@ -159,8 +159,12 @@ const AllRequest = ({ navigation }) => {
             <View>
                 <Primary_StatusBar />
                 <InnerScreensHeader screenName={"All Request"} navigation={navigation} />
-                {/* <Text style={{ marginTop: 20, fontSize: 20, color: AppColors.primary, textAlign: 'center' }}>All Requests</Text> */}
-                <FlatList data={waitingRequests} renderItem={({ item }) => renderRequests(item)} style={{ marginTop: 20 }} />
+                {waitingRequests.length != 0 ?
+                    <FlatList data={waitingRequests} renderItem={({ item }) => renderRequests(item)} style={{ marginTop: 20 }} />
+                    : <View style={Containers.centerContainer}>
+                        <Text style={HomeNeoCards.noSearchResultText}>You have no requests.</Text>
+                    </View>
+                }
             </View>
         </View>
     )

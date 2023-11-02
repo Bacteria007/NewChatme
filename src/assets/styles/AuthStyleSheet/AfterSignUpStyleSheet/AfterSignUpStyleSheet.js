@@ -12,6 +12,11 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     backgroundColor: bgcolor,
     height: hp('100'), width: wp('100')
   }),
+  nextBtnConatiner:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: hp('18'),
+  },
   TopView: {
     height: hp('8'),
     width: wp('100'),
@@ -34,8 +39,8 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     alignItems: 'flex-end',
   },
   TouchableButtonStyle: {
-    width: wp('85'),
-    borderRadius: wp('2'),
+    width: wp('45'),
+    borderRadius: wp('10'),
     height: hp('5.5'),
     // width:wp('85'),
     borderColor: AppColors.primary,
@@ -46,7 +51,7 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: hp('3'),
-    verticalAlign: 'bottom'
+    verticalAlign: 'bottom',
   },
   TouchableTextStyle: {
     fontSize: wp('5'),
@@ -78,7 +83,8 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     backgroundColor: darkThemeActivator ? 'white' : 'black' ,
     justifyContent: 'center',
     alignItems: 'center',
-  }),
+    }),
+
   ImageBackTouchable: {
     backgroundColor: 'yellow',
     height: hp('20%'),
@@ -93,6 +99,8 @@ const AfterSignUpStyleSheet = StyleSheet.create({
   },
   displyNameText: {
     color: AppColors.black,
+    fontFamily:FontStyle.regularFont,
+    fontSize:wp('3')
   },
   floatingInputView: { height: hp('7'), width: wp('90'), marginTop: hp('2') },
   floatingInputContainer: {
@@ -113,9 +121,9 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     marginVertical: hp('-1'),
   },
   Text2: {
-    fontSize: wp('5'),
+    fontSize: wp('3.3'),
     fontFamily: FontStyle.regularFont,
-    color: AppColors.primary,
+    color: AppColors.gray,
     marginTop: hp('4'),
     marginBottom: hp('1'),
   },
@@ -125,6 +133,7 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: wp('3.75'),
   },
+  
   TextInputContainer: {
     borderBottomWidth: hp('0.1'),
     paddingHorizontal: wp('2'),
@@ -132,7 +141,54 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     width: wp('86'),
     alignSelf: 'center',
     height: hp('5.8'),
+    fontFamily:FontStyle.regularFont,
+    fontSize:wp('3')
   },
+  // ////////////////// MODAL STYLE \\\\\\\\\\\\\\\\\
+  modalText: {
+    fontSize: hp('1.8'),
+    color: AppColors.black,
+    fontFamily: FontStyle.regularFont,
+    textAlign: 'center',
+    marginTop: 14
+  },
+  modalStyle: {
+    // backgroundColor: "rgba(255,255,255,0.1)",
+    // backgroundColor: "rgba(0,0,0,0.2)",
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    margin: 0,
+  },
+  modalMainView: {
+    flexDirection: 'row',
+    backgroundColor: AppColors.white,
+    borderTopRightRadius: wp('8'),
+    borderTopLeftRadius: wp('8'),
+    height: hp('23'),
+    width: wp('100'),
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    paddingHorizontal:wp('5')
+    // elevation: 4,
+  },
+  modalIconAndTextView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalIconContainer: {
+    height: hp('7'),
+    width: hp('7'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: AppColors.Lilac,
+    borderRadius: hp('2'),
+    // elevation:2
+  },
+  lineStyle: {
+    height: hp('12'),
+    width: wp('0.1'),
+    backgroundColor: AppColors.gray
+  }
 });
 
 export default AfterSignUpStyleSheet;

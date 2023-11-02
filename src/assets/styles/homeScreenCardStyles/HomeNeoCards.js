@@ -81,7 +81,8 @@ const HomeNeoCards = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: 'cyan',
-    paddingBottom: 5,
+    // paddingBottom: 5,
+    
   },
   iconView: bgColor => ({
     // marginLeft: 10,
@@ -106,13 +107,13 @@ const HomeNeoCards = StyleSheet.create({
  
   profileName: textColor => ({
     fontFamily: FontStyle.regularFont,
-    fontSize: wp('3.8'),
+    fontSize: wp('4'),
     color: textColor,
     letterSpacing: 0.3,
   }),
   lastMsg: textColor => ({
     fontFamily: FontStyle.regularFont,
-    fontSize: wp('2.4'),
+    fontSize: wp('3'),
     color: textColor,
   }),
   lastMsgTime: darkThemeActivator => ({
@@ -141,7 +142,7 @@ const HomeNeoCards = StyleSheet.create({
     padding: 5,
   },
   senderName: {
-    fontSize: wp('2.5'),
+    fontSize: wp('2.7'),
     color: AppColors.primary,
     fontFamily: FontStyle.mediumFont,
   },
@@ -207,7 +208,7 @@ const HomeNeoCards = StyleSheet.create({
     color: AppColors.gray,
     fontSize: hp('1.7'),
     textAlign: 'center',
-    fontFamily: FontStyle.mediumFont
+    fontFamily: FontStyle.regularFont
   }
 });
 

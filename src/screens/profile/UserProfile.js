@@ -13,11 +13,14 @@ import {
 } from 'react-native-responsive-screen';
 import AppColors from '../../assets/colors/Appcolors';
 import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
-import { Avatar,  TouchableRipple } from 'react-native-paper';
+import { Avatar, TouchableRipple } from 'react-native-paper';
 import { ThemeContext } from '../../context/ThemeContext';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { requestCameraAndAudioPermission } from '../../components/Permission/Permission';
+import {
+  requestCameraAndGalleryPermissions,
+  requestGalleryPermission,
+} from '../../components/Permission/Permission';
 import AppContext from '../../context/AppContext';
 import AfterSignUpStyleSheet from '../../assets/styles/AuthStyleSheet/AfterSignUpStyleSheet/AfterSignUpStyleSheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -31,12 +34,19 @@ import { FlatList } from 'react-native';
 import GenerateVideoHtml from '../reels/ReelsHtmlVideo';
 import WebView from 'react-native-webview';
 import { Icons } from '../../assets/Icons';
+import SelectInfo from './SelectInfo';
 
 const UserProfile = props => {
-  const { 
-     token, baseUrl, 
-     storeUserName, currentUser, updateCurrentUser, 
-     userName, selectedImageUri, storeImageUri } = useContext(AppContext);
+  const {
+    token,
+    baseUrl,
+    storeUserName,
+    currentUser,
+    updateCurrentUser,
+    userName,
+    selectedImageUri,
+    storeImageUri,
+  } = useContext(AppContext);
   const { theme, darkThemeActivator } = useContext(ThemeContext);
   const arrow_icon = 'pencil';
   const iconSize = wp('9%');
@@ -44,7 +54,7 @@ const UserProfile = props => {
   const arrowSize = 17;
   const textColor = theme.profileNameColor;
   const infoColor = theme.lastMsgColor;
-  const rippleColor="rgba(0,0,0,0.25)"
+  const rippleColor = 'rgba(0,0,0,0.25)';
   const [allUploads, setAllUploads] = useState([]);
 
   const [profileModal, setProfileModal] = useState(false);
@@ -59,24 +69,24 @@ const UserProfile = props => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-      }
+      },
     })
       .then(response => response.json())
       .then(data => {
         //console.log("##### all reels response ####", data.UploadedVideos)
-        if (data.message == "Please provide a valid token.") {
-          Alert.alert("Provide a valid token.")
+        if (data.message == 'Please provide a valid token.') {
+          Alert.alert('Provide a valid token.');
         } else if (data.message == 'Please provide a token.') {
-          Alert.alert('Token required')
+          Alert.alert('Token required');
         } else {
           const videosWithSources = data.UploadedVideos.map(video => ({
             _id: video._id,
             uri: { uri: video.video },
             desc: video.name,
-            user: video.userId
+            user: video.userId,
           }));
           const myuploads = videosWithSources.filter(
-            user => user.user._id === currentUser.userId, 
+            user => user.user._id === currentUser.userId,
           );
           console.log('Myuploads --------^^^^^^^^^^^^^^^^^^^^  ', myuploads);
           setAllUploads(myuploads);
@@ -96,7 +106,7 @@ const UserProfile = props => {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-      }
+      },
     })
       .then(response => {
         if (!response.ok) {
@@ -109,23 +119,66 @@ const UserProfile = props => {
         storeImageUri(data);
       })
       .catch(error => console.log('res error', error));
-  }
+  };
+  const openGallery = async () => {
+    launchImageLibrary({
+      maxWidth: 800,
+      maxHeight: 800,
+    }).then(async Response => {
+      const formdata = new FormData();
+      formdata.append('_id', currentUser.userId);
+      formdata.append('name', 'profileImage');
+      formdata.append('profileImage', {
+        uri: Response.assets[0].uri,
+        type: Response.assets[0].type,
+        name: Response.assets[0].fileName,
+      });
+      fetch(`${baseUrl}/uploadProfile`, {
+        method: 'POST',
+        body: formdata,
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          storeImageUri(data.newImage.profileImage);
+          const updateimgOfCurrentUser = {
+            ...currentUser,
+            profileImage: data.newImage.profileImage,
+          };
+          updateCurrentUser(updateimgOfCurrentUser);
+          AsyncStorage.getItem('profileImage').then(userData => {
+            if (userData) {
+              // const existingData = JSON.parse(userData);
+              // const updatedData = {
+              //   // ...existingData,
+              //   profileImage: data.newImage.profileImage,
+              // };
+              // console.log('async updatedion chli', updatedData);
+              AsyncStorage.setItem('profileImage', data.newImage.profileImage);
+            }
+          });
+        })
+        .catch(error => console.log('res error', error));
+    });
+  };
   useEffect(() => {
-
-    fetchProfile()
-    props.navigation.addListener("focus", () => {
-      fetchProfile()
-    })
+    fetchProfile();
+    props.navigation.addListener('focus', () => {
+      fetchProfile();
+    });
   }, []);
   useEffect(() => {
-    console.log("al>>", allUploads)
+    console.log('al>>', allUploads);
     fetchUploadedVideos();
-    props.navigation.addListener("focus", () => {
-      fetchUploadedVideos()
-    })
-  }, [])
+    props.navigation.addListener('focus', () => {
+      fetchUploadedVideos();
+    });
+  }, []);
   return (
-
     <DrawerScreenswrapper>
       <View style={[ProfileScreenStyleSheet.container(theme.backgroundColor)]}>
         <InnerScreensHeader
@@ -133,124 +186,102 @@ const UserProfile = props => {
           navigation={props.navigation}
         />
         {/* main view for profile img */}
-        <View style={[ProfileScreenStyleSheet.innerContainer(theme.backgroundColor)]}>
+        <ScrollView>
+          <View
+            style={[
+              ProfileScreenStyleSheet.innerContainer(theme.backgroundColor),
+            ]}>
+            <ImageBackground
+              source={{ uri: `${baseUrl}${selectedImageUri}` }}
+              //  source={require('../../assets/imges/default/6.jpg')}
 
-          <ImageBackground
-            source={{ uri: `${baseUrl}${selectedImageUri}` }}
-            //  source={require('../../assets/imges/default/6.jpg')}
-
-            imageStyle={[ProfileScreenStyleSheet.bgImageStyle]}
-          />
-        </View>
-        <View
-          style={[
-            AfterSignUpStyleSheet.ImageContainer,
-            { height: hp('35%'), marginTop: hp('-17') },
-          ]}>
-          <View>
-            <View style={{ position: 'relative' }}>
-              {selectedImageUri == '' ? (
-                <Neomorph inner style={[ProfileScreenStyleSheet.NeoMorphStyle]}>
-                  <Neomorph style={[ProfileScreenStyleSheet.NeoMorphStyle2]}>
-                    <Icons.MaterialIcons
-                      name="person"
-                      size={60}
-                      color={AppColors.black} // Change this color to match your design
-                    />
+              imageStyle={[ProfileScreenStyleSheet.bgImageStyle]}
+            />
+          </View>
+          <View
+            style={[
+              AfterSignUpStyleSheet.ImageContainer,
+              { height: hp('35%'), marginTop: hp('-17') },
+            ]}>
+            <View>
+              <View style={{ position: 'relative' }}>
+                {selectedImageUri == '' ? (
+                  <Neomorph
+                    inner
+                    style={[ProfileScreenStyleSheet.outerNeomorph]}>
+                    <Neomorph style={[ProfileScreenStyleSheet.innerNeomorph]}>
+                      <Icons.MaterialIcons
+                        name="person"
+                        size={60}
+                        color={AppColors.black} // Change this color to match your design
+                      />
+                    </Neomorph>
                   </Neomorph>
-                </Neomorph>
-              ) : (
-                <TouchableRipple
-                  rippleColor={"rgba(0,0,0,1)"}
-                  borderless
-                  style={[ProfileScreenStyleSheet.img]}
-                  onPress={() => { showProfileModal(); console.log(`${baseUrl}${selectedImageUri}`) }}
-                >
-                  <Image
-                    source={{ uri: `${baseUrl}${selectedImageUri}` }}
+                ) : (
+                  <TouchableRipple
+                    rippleColor={'rgba(0,0,0,1)'}
+                    borderless
                     style={[ProfileScreenStyleSheet.img]}
+                    onPress={() => {
+                      showProfileModal();
+                      console.log(`${baseUrl}${selectedImageUri}`);
+                    }}>
+                    <Image
+                      source={{ uri: `${baseUrl}${selectedImageUri}` }}
+                      style={[ProfileScreenStyleSheet.img]}
+                    />
+                  </TouchableRipple>
+                )}
+              </View>
+              {/* Icon ka view */}
+              <View
+                style={[
+                  AfterSignUpStyleSheet.CameraIconView(darkThemeActivator),
+                  { position: 'absolute', right: 0, bottom: 0 },
+                ]}>
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  onPress={() => {
+                    const granted = requestGalleryPermission();
+                    if (granted == true) {
+                      openGallery().then(() => {
+                        console.log('in if opengallery in userprofile');
+                      });
+                    } else {
+                      requestGalleryPermission().then(async res => {
+                        if (res == true) {
+                          await openGallery().then(() => {
+                            console.log('in else opengallery in userprofile');
+                          });
+                        }
+                      });
+                    }
+                  }}>
+                  <Icons.MaterialCommunityIcons
+                    name={arrow_icon}
+                    size={darkThemeActivator ? 17 : 15}
+                    color={
+                      darkThemeActivator ? AppColors.primary : AppColors.white
+                    }
                   />
-                </TouchableRipple>
-              )}
+                </TouchableOpacity>
+              </View>
             </View>
-            {/* Icon ka view */}
+            <View style={[ProfileScreenStyleSheet.TextView]}>
+              <Text
+                style={[ProfileScreenStyleSheet.text(theme.profileNameColor)]}>
+                {userName}
+              </Text>
+              {/* <SelectInfo iconName2="pencil" /> */}
+            </View>
+          </View>
+          {/* <Text style={[ProfileScreenStyleSheet.text(theme.profileNameColor), { textAlign: 'center', fontSize: hp('2') }]}>Manage you account info</Text> */}
+          <TouchableOpacity disabled={true}>
             <View
               style={[
-                AfterSignUpStyleSheet.CameraIconView(darkThemeActivator),
-                { position: 'absolute', right: 0, bottom: 0 },
+                ProfileScreenStyleSheet.itemStyle,
+                { alignItems: 'center' },
               ]}>
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() => {
-                  requestCameraAndAudioPermission();
-                  launchImageLibrary({
-                    maxWidth: 800,
-                    maxHeight: 800,
-                  }).then(async Response => {
-                    const formdata = new FormData();
-                    formdata.append('_id', currentUser.userId);
-                    formdata.append('name', 'profileImage');
-                    formdata.append('profileImage', {
-                      uri: Response.assets[0].uri,
-                      type: Response.assets[0].type,
-                      name: Response.assets[0].fileName,
-                    });
-                    fetch(`${baseUrl}/uploadProfile`, {
-                      method: 'POST',
-                      body: formdata,
-                    })
-                      .then(response => {
-                        if (!response.ok) {
-                          throw new Error(
-                            `HTTP error! Status: ${response.status}`,
-                          );
-                        }
-                        return response.json();
-                      })
-                      .then(data => {
-
-                        storeImageUri(data.newImage.profileImage);
-                        const updateimgOfCurrentUser = { ...currentUser, profileImage: data.newImage.profileImage, }
-                        updateCurrentUser(updateimgOfCurrentUser)
-                        AsyncStorage.getItem('profileImage').then(userData => {
-                          if (userData) {
-                            // const existingData = JSON.parse(userData);
-                            // const updatedData = {
-                            //   // ...existingData,
-                            //   profileImage: data.newImage.profileImage,
-                            // };
-                            // console.log('async updatedion chli', updatedData);
-                            AsyncStorage.setItem(
-                              'profileImage',
-                              data.newImage.profileImage,
-
-                            );
-                          }
-                        });
-                      })
-                      .catch(error => console.log('res error', error));
-                  });
-                }}>
-                <Icons.MaterialCommunityIcons
-                  name={arrow_icon}
-                  size={darkThemeActivator ? 17 : 15}
-                  color={darkThemeActivator ? AppColors.primary : AppColors.white}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={[ProfileScreenStyleSheet.TextView]}>
-            <Text style={[ProfileScreenStyleSheet.text(theme.profileNameColor)]}>{userName}</Text>
-            {/* <SelectInfo iconName2="pencil" /> */}
-          </View>
-        </View>
-        {/* <Text style={[ProfileScreenStyleSheet.text(theme.profileNameColor), { textAlign: 'center', fontSize: hp('2') }]}>Manage you account info</Text> */}
-        <ScrollView>
-          <TouchableOpacity
-            onPress={() => {
-              props.navigation.navigate('changePassword');
-            }}>
-            <View style={[ProfileScreenStyleSheet.itemStyle, { alignItems: 'center' }]}>
               <Avatar.Icon
                 size={iconSize}
                 icon="text-account"
@@ -261,20 +292,24 @@ const UserProfile = props => {
                 <Text style={ProfileScreenStyleSheet.itemName(textColor)}>
                   Change Name
                 </Text>
-                <Text style={[ProfileScreenStyleSheet.itemName(infoColor)]}> {currentUser.name} </Text>
+                <Text style={[ProfileScreenStyleSheet.itemName(infoColor)]}>
+                  {' '}
+                  {currentUser.name}{' '}
+                </Text>
               </View>
-              <Icons.MaterialCommunityIcons
+              {/* <Icons.MaterialCommunityIcons
                 name={arrow_icon}
                 size={arrowSize}
                 color={arrowColor}
-              />
+              /> */}
+              <SelectInfo iconName2="pencil" />
             </View>
             {/* <View style={{backgroundColor:'cyan'}}>
               <Text style={[ProfileScreenStyleSheet.itemName(infoColor)]}> {currentUser.name} </Text>
             </View> */}
             <CustomDivider />
           </TouchableOpacity>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <View style={ProfileScreenStyleSheet.itemStyle}>
               <Avatar.Icon
                 size={iconSize}
@@ -297,12 +332,12 @@ const UserProfile = props => {
               />
             </View>
             <CustomDivider />
-
-
-          </TouchableOpacity>
+          </TouchableOpacity>  */}
           <TouchableOpacity
             onPress={() => {
-              props.navigation.navigate('changeNumberInfo');
+              props.navigation.navigate('SettingStack', {
+                screen: 'changeNumberInfo',
+              });
             }}>
             <View style={ProfileScreenStyleSheet.itemStyle}>
               <Avatar.Icon
@@ -326,12 +361,10 @@ const UserProfile = props => {
               />
             </View>
             <CustomDivider />
-
-
           </TouchableOpacity>
           {/* <TouchableOpacity
           onPress={() => {
-            props.navigation.navigate('blocked');
+            props.navigation.navigate("SettingStack",{screen:'blocked'});
           }}>
           <View style={ProfileScreenStyleSheet.itemStyle}>
             <Avatar.Icon
@@ -358,9 +391,15 @@ const UserProfile = props => {
         </TouchableOpacity> */}
           <TouchableOpacity
             onPress={() => {
-              props.navigation.navigate('deleteAccount');
+              props.navigation.navigate('SettingStack', {
+                screen: 'deleteAccount',
+              });
             }}>
-            <View style={[ProfileScreenStyleSheet.itemStyle, { alignItems: 'center' }]}>
+            <View
+              style={[
+                ProfileScreenStyleSheet.itemStyle,
+                { alignItems: 'center' },
+              ]}>
               <Avatar.Icon
                 size={iconSize}
                 icon="delete"
@@ -380,24 +419,50 @@ const UserProfile = props => {
             </View>
           </TouchableOpacity>
           <CustomDivider />
-          <View style={[ProfileScreenStyleSheet.itemStyle, { alignItems: 'center' }]}>
+          <View
+            style={[
+              ProfileScreenStyleSheet.itemStyle,
+              { alignItems: 'center' },
+            ]}>
             <View style={{ flex: 1, marginLeft: wp('3') }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={ProfileScreenStyleSheet.uploadsText(theme.profileNameColor)}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={ProfileScreenStyleSheet.uploadsText(
+                    theme.profileNameColor,
+                  )}>
                   Uploads
                 </Text>
-                {allUploads.length >2 && (
-                  <TouchableOpacity 
-                  rippleColor={rippleColor} 
-                  borderless style={{ borderRadius: 10 }} onPress={() => { props.navigation.navigate('activity') }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                      <Text style={ProfileScreenStyleSheet.itemName(arrowColor)}>View All</Text>
+                {allUploads.length > 2 && (
+                  <TouchableOpacity
+                    rippleColor={rippleColor}
+                    borderless
+                    style={{ borderRadius: 10 }}
+                    onPress={() => {
+                      props.navigation.navigate('SettingStack', {
+                        screen: 'activity',
+                      });
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text
+                        style={ProfileScreenStyleSheet.itemName(arrowColor)}>
+                        View All
+                      </Text>
                       <Text>
                         <Icons.Entypo
-                          name={"chevron-right"}
+                          name={'chevron-right'}
                           size={15}
                           color={arrowColor}
-                          style={{alignSelf:'center',marginBottom:2}}
+                          style={{ alignSelf: 'center', marginBottom: 2 }}
                         />
                       </Text>
                     </View>
@@ -407,7 +472,7 @@ const UserProfile = props => {
               <View style={{ flexDirection: 'row' }}>
                 <ScrollView horizontal>
                   <View>
-                    {allUploads.length != 0 ?
+                    {allUploads.length != 0 ? (
                       <FlatList
                         horizontal
                         data={allUploads.slice(0, 3)}
@@ -415,19 +480,28 @@ const UserProfile = props => {
                         showsVerticalScrollIndicator={false}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => {
-                          const HtmlVideo = GenerateVideoHtml(baseUrl, item, false, true);
+                          const HtmlVideo = GenerateVideoHtml(
+                            baseUrl,
+                            item,
+                            false,
+                            true,
+                          );
                           return (
                             <View
                               style={{ borderRadius: 10 }}
-                            // onPress={() => {
-                            //   setCurrentVideo(item);
-                            //   setCurrentIndex(index);
-                            //   showModal();
-                            //   setReelid(item._id)
-                            //   //console.log("reel id", item._id)
-                            // }}
+                              // onPress={() => {
+                              //   setCurrentVideo(item);
+                              //   setCurrentIndex(index);
+                              //   showModal();
+                              //   setReelid(item._id)
+                              //   //console.log("reel id", item._id)
+                              // }}
                             >
-                              <View style={[MyActivityStyleSheet.reelsView, { borderRadius: 10 }]}>
+                              <View
+                                style={[
+                                  MyActivityStyleSheet.reelsView,
+                                  { borderRadius: 10 },
+                                ]}>
                                 <WebView
                                   originWhitelist={['*']}
                                   source={{ html: `${HtmlVideo}` }}
@@ -436,62 +510,97 @@ const UserProfile = props => {
                                   showsHorizontalScrollIndicator={false}
                                   setDisplayZoomControls={false}
                                   setBuiltInZoomControls={false}
-                                  style={[MyActivityStyleSheet.reelStyle, { borderRadius: 10 }]}
-                                  containerStyle={{ borderRadius: 10, marginHorizontal: wp('1'), elevation: 4 }}
+                                  style={[
+                                    MyActivityStyleSheet.reelStyle,
+                                    { borderRadius: 10 },
+                                  ]}
+                                  containerStyle={{
+                                    borderRadius: 10,
+                                    marginHorizontal: wp('1'),
+                                    elevation: 4,
+                                  }}
                                 />
-
                               </View>
                             </View>
-                          )
+                          );
                         }}
                       />
-                      : <Text style={ProfileScreenStyleSheet.noFriendsText(theme.lastMsgColor)}>You have not uploaded anything.</Text>
-                    }
+                    ) : (
+                      <Text
+                        style={ProfileScreenStyleSheet.noFriendsText(
+                          theme.lastMsgColor,
+                        )}>
+                        {' '}
+                        no uploads.
+                      </Text>
+                    )}
                   </View>
                   {allUploads.length > 2 && (
-                  <TouchableRipple rippleColor={rippleColor} borderless style={{ borderRadius: 10 }} 
-                  onPress={() => { props.navigation.navigate('activity') }}>
-                    <View style={{ backgroundColor: darkThemeActivator ? AppColors.gray : AppColors.lightBlack, width: wp('32.5'), height: wp('32'), justifyContent: 'center', alignItems: 'center', borderRadius: 10, }}>
+                    <TouchableRipple
+                      rippleColor={rippleColor}
+                      borderless
+                      style={{ borderRadius: 10 }}
+                      onPress={() => {
+                        props.navigation.navigate('SettingStack', {
+                          screen: 'activity',
+                        });
+                      }}>
+                      <View
+                        style={{
+                          backgroundColor: darkThemeActivator
+                            ? AppColors.gray
+                            : AppColors.lightBlack,
+                          width: wp('32.5'),
+                          height: wp('32'),
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderRadius: 10,
+                        }}>
                         <Icons.Entypo
-                          name={"chevron-right"}
+                          name={'chevron-right'}
                           size={30}
                           color={arrowColor}
                         />
-                    </View>
-                  </TouchableRipple>
-                      )}
+                      </View>
+                    </TouchableRipple>
+                  )}
                 </ScrollView>
               </View>
             </View>
           </View>
+          <View style={{ height: hp('10') }}></View>
         </ScrollView>
-        <View style={{ height: hp('10') }}></View>
       </View>
       <ReactNativeModal
         visible={profileModal}
         coverScreen={true}
         style={HomeNeoCards.modalContainer}
-        animationIn='slideInUp'
-        animationOut='slideInDown'
+        animationIn="slideInUp"
+        animationOut="slideInDown"
         onDismiss={hideProfileModal}
         onBackdropPress={hideProfileModal}
-        onBackButtonPress={hideProfileModal}
-      >
+        onBackButtonPress={hideProfileModal}>
         <View style={HomeNeoCards.modalView}>
           {selectedImageUri == null ? (
             <View style={HomeNeoCards.dpVew}>
-              <Image source={require('../../assets/imges/default/userProfileDark.jpg')} style={{
-                height: hp('45%'),
-                width: hp('45%'),
-                resizeMode: 'cover',
-              }} />
+              <Image
+                source={require('../../assets/imges/default/userProfileDark.jpg')}
+                style={{
+                  height: hp('45%'),
+                  width: hp('45%'),
+                  resizeMode: 'cover',
+                }}
+              />
             </View>
           ) : (
-            <Image source={{ uri: `${baseUrl}${selectedImageUri}` }} style={{
-              height: hp('40%'),
-              width: hp('40%'),
-              resizeMode: 'cover',
-            }} />
+            <Image
+              source={{ uri: `${baseUrl}${selectedImageUri}` }}
+              style={{
+                height: hp('40%'),
+                width: hp('40%'),
+                resizeMode: 'cover',
+              }}
+            />
           )}
         </View>
       </ReactNativeModal>
@@ -524,7 +633,7 @@ export default UserProfile;
 // import { ThemeContext } from '../../context/ThemeContext';
 // import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 // import { launchImageLibrary } from 'react-native-image-picker';
-// import { requestCameraAndAudioPermission } from '../../components/Permission/Permission';
+// import { requestCameraAndGalleryPermissions } from '../../components/Permission/Permission';
 // import AppContext from '../../context/AppContext';
 // import AfterSignUpStyleSheet from '../../assets/styles/AuthStyleSheet/AfterSignUpStyleSheet/AfterSignUpStyleSheet';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -541,7 +650,7 @@ export default UserProfile;
 //   const arrowSize = 17;
 //   const textColor = theme.profileNameColor;
 //   useEffect(() => {
-   
+
 //     let userid = currentUser.userId;
 //     let userName = currentUser.name;
 //     storeUserName(userName);
@@ -566,7 +675,7 @@ export default UserProfile;
 //   }, []);
 
 //   return (
-    
+
 //     <DrawerScreenswrapper>
 //       <View style={[ProfileScreenStyleSheet.container(theme.backgroundColor)]}>
 //         {/* <Primary_StatusBar /> */}
@@ -616,7 +725,7 @@ export default UserProfile;
 //               <TouchableOpacity
 //                 activeOpacity={0.9}
 //                 onPress={() => {
-//                   requestCameraAndAudioPermission();
+//                   requestCameraAndGalleryPermissions();
 //                   launchImageLibrary({
 //                     maxWidth: 800,
 //                     maxHeight: 800,
@@ -642,7 +751,7 @@ export default UserProfile;
 //                         return response.json();
 //                       })
 //                       .then(data => {
-                       
+
 //                         storeImageUri(data.newImage.profileImage);
 //                         const updateimgOfCurrentUser ={...currentUser,profileImage: data.newImage.profileImage,}
 //                         updateCurrentUser(updateimgOfCurrentUser)
@@ -657,7 +766,7 @@ export default UserProfile;
 //                             AsyncStorage.setItem(
 //                               'profileImage',
 //                             data.newImage.profileImage,
-                            
+
 //                             );
 //                           }
 //                         });
@@ -681,7 +790,7 @@ export default UserProfile;
 
 //         <TouchableOpacity
 //           onPress={() => {
-//             props.navigation.navigate('changePassword');
+//             props.navigation.navigate("SettingStack",{screen:'changePassword'});
 //           }}>
 //           <View style={ProfileScreenStyleSheet.itemStyle}>
 //             <Avatar.Icon
@@ -705,7 +814,7 @@ export default UserProfile;
 //         </TouchableOpacity>
 //         <TouchableOpacity
 //           onPress={() => {
-//             props.navigation.navigate('changeNumberInfo');
+//             props.navigation.navigate("SettingStack",{screen:'changeNumberInfo'});
 //           }}>
 //           <View style={ProfileScreenStyleSheet.itemStyle}>
 //             <Avatar.Icon
@@ -729,7 +838,7 @@ export default UserProfile;
 //         </TouchableOpacity>
 //         <TouchableOpacity
 //           onPress={() => {
-//             props.navigation.navigate('blocked');
+//             props.navigation.navigate("SettingStack",{screen:'blocked'});
 //           }}>
 //           <View style={ProfileScreenStyleSheet.itemStyle}>
 //             <Avatar.Icon
@@ -754,7 +863,7 @@ export default UserProfile;
 
 //         <TouchableOpacity
 //           onPress={() => {
-//             props.navigation.navigate('activity');
+//             props.navigation.navigate("SettingStack",{screen:'activity'});
 //           }}>
 //           <View style={ProfileScreenStyleSheet.itemStyle}>
 //             <Avatar.Icon
@@ -778,7 +887,7 @@ export default UserProfile;
 //         </TouchableOpacity>
 //         <TouchableOpacity
 //           onPress={() => {
-//             props.navigation.navigate('deleteAccount');
+//             props.navigation.navigate("SettingStack",{screen:'deleteAccount'});
 //           }}>
 //           <View style={ProfileScreenStyleSheet.itemStyle}>
 //             <Avatar.Icon

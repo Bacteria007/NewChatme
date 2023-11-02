@@ -1,26 +1,22 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import React, { useContext, useState } from 'react';
 import DrawerScreenswrapper from '../drawer/DrawerScreenswrapper';
-import AppColors from '../../assets/colors/Appcolors';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AppContext from '../../context/AppContext';
 import InnerScreensHeader from '../../components/Headers/InnerHeaders/InnerScreensHeader';
-import { Avatar, Card, Divider } from 'react-native-paper';
+import { Avatar, Card, Divider, RadioButton } from 'react-native-paper';
 import { ThemeContext } from '../../context/ThemeContext';
 import { Icons } from '../../assets/Icons';
 import ReactNativeModal from 'react-native-modal';
 import Containers from '../../assets/styles/Containers';
 import SettingScreenStyle from '../../assets/styles/SettingScreenStyle';
-import { Neomorph } from 'react-native-neomorph-shadows-fixes';
-import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
 import CustomDivider from '../../components/CustomDivider';
 
 const Settings = ({ navigation }) => {
-    const { theme, darkThemeActivator } = useContext(ThemeContext);
+    const { theme, darkThemeActivator, setDarkTheme, setLightTheme, toggleTheme } = useContext(ThemeContext);
     const [visible, setVisible] = useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
-    const toggleModal = () => setVisible(!visible);
     const { language } = useContext(AppContext);
     const arrow_icon = 'chevron-right';
     const iconSize = wp('9%');
@@ -28,6 +24,7 @@ const Settings = ({ navigation }) => {
     const arrowColor = theme.profileNameColor;
     const arrowSize = 17;
     const textColor = theme.profileNameColor;
+    const [value, setValue] = React.useState('first');
 
 
     return (
@@ -39,7 +36,7 @@ const Settings = ({ navigation }) => {
                 <Card style={SettingScreenStyle.sectionsStyle(theme.backgroundColor)}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('changePassword');
+                            navigation.navigate('SettingStack', { screen: 'changePassword' });
                         }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
@@ -65,7 +62,7 @@ const Settings = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('changeNumberInfo');
+                            navigation.navigate("SettingStack",{screen:'changeNumberInfo'});
                         }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
@@ -91,7 +88,7 @@ const Settings = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('blocked');
+                            navigation.navigate("SettingStack",{screen:'blocked'});
                         }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
@@ -115,7 +112,7 @@ const Settings = ({ navigation }) => {
                 <Card style={SettingScreenStyle.sectionsStyle(theme.backgroundColor)}>
                     <TouchableOpacity
                         onPress={() => {
-                            toggleModal();
+                            showModal()
                         }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
@@ -141,7 +138,7 @@ const Settings = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('activity');
+                            navigation.navigate("SettingStack",{screen:'activity'});
                         }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
@@ -167,7 +164,7 @@ const Settings = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('deleteAccount');
+                            navigation.navigate("SettingStack",{screen:'deleteAccount'});
                         }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
@@ -191,7 +188,7 @@ const Settings = ({ navigation }) => {
                 <Card style={SettingScreenStyle.sectionsStyle(theme.backgroundColor)}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('appLanguage');
+                            navigation.navigate("SettingStack",{screen:'appLanguage'});
                         }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
@@ -218,7 +215,7 @@ const Settings = ({ navigation }) => {
                             </View>
                         }
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { navigation.navigate('notification') }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate("SettingStack",{screen:'notification'}) }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
                                 size={iconSize}
@@ -243,7 +240,7 @@ const Settings = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('Requests');
+                            navigation.navigate("SettingStack",{screen:'Requests'});
                         }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
@@ -268,20 +265,45 @@ const Settings = ({ navigation }) => {
             </View>
             <View style={Containers.centercontent}>
                 <ReactNativeModal
-                    visible={visible}
+                    isVisible={visible}
                     onBackButtonPress={hideModal}
                     onDismiss={hideModal}
-                    animationIn="slideInUp"
-                    animationOut="slideOutDown"
+                    animationIn="fadeInDown"
+                    onBackdropPress={hideModal}
                     style={SettingScreenStyle.themeModal}
                 >
                     <View style={SettingScreenStyle.modalView}>
-                        <TouchableOpacity>
-                            <Text style={SettingScreenStyle.themeModalText}>Dark Theme</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Text style={SettingScreenStyle.themeModalText}>Light Theme</Text>
-                        </TouchableOpacity>
+                        <View style={SettingScreenStyle.modalTitleView}>
+                            <Text style={SettingScreenStyle.modalTitle}>Choose Theme</Text>
+                        </View>
+                        <View style={SettingScreenStyle.radioBtnsView}>
+                            {/* <RadioButton.Group onValueChange={newValue => setValue(newValue)} value={value}> */}
+                            <TouchableOpacity onPress={() => {
+                                setLightTheme();
+                                hideModal();
+                            }}>
+                                <View style={SettingScreenStyle.btnAndTextView}>
+                                    <RadioButton value="first" status={darkThemeActivator ? 'unchecked' : 'checked'} onPress={() => {
+                                        setLightTheme();
+                                        hideModal();
+                                    }} />
+                                    <Text style={SettingScreenStyle.themeModalText}>Light Theme</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                                setDarkTheme();
+                                hideModal();
+                            }}>
+                                <View style={SettingScreenStyle.btnAndTextView}>
+                                    <RadioButton value="second" status={!darkThemeActivator ? 'unchecked' : 'checked'} onPress={() => {
+                                        setDarkTheme();
+                                        hideModal();
+                                    }} />
+                                    <Text style={SettingScreenStyle.themeModalText}>Dark Theme</Text>
+                                </View>
+                            </TouchableOpacity>
+                            {/* </RadioButton.Group> */}
+                        </View>
                     </View>
                 </ReactNativeModal>
             </View>
@@ -290,3 +312,21 @@ const Settings = ({ navigation }) => {
 };
 
 export default Settings;
+
+{/* <TouchableOpacity onPress={() => {
+                            setDarkTheme();
+                            hideModal();
+                        }}>
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingVertical: 20 }}>
+                                <Text style={SettingScreenStyle.itemName(theme.profileNameColor)}>Dark Theme</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            setLightTheme();
+                            hideModal();
+                        }}>
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingVertical: 20 }}>
+                            </View>
+                        </TouchableOpacity> */}
+{/* <Image source={require('../../assets/imges/theme/darkTheme.jpg')} style={{ height: hp('45'), width: wp('45') }} resizeMode='cover'/> */ }
+{/* <Image source={require('../../assets/imges/theme/lightTheme.jpg')} style={{ height: hp('45'), width: wp('45') }} resizeMode='cover'/> */ }

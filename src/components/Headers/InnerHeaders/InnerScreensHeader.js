@@ -28,7 +28,7 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
           onPress={() => {
             navigation.goBack();
           }}
-          rippleColor="rgba(0, 0, 0, 0.3)"
+          rippleColor={theme.rippleColor}
           borderless
           style={DrawerHeaderStyle.backBtn}
           >
@@ -46,3 +46,31 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
   );
 };
 export default InnerScreensHeader;
+
+export const AfterSignUpScreenHeader = ({ navigation, screenName }) => {
+  const { theme } = useContext(ThemeContext)
+
+  return (
+    <View style={[DrawerHeaderStyle.containerView]}>
+      <View style={DrawerHeaderStyle.headerView(theme.backgroundColor)}>
+      
+        <TouchableRipple
+          onPress={() => {
+            navigation.goBack();
+          }}
+          rippleColor={theme.rippleColor}
+          borderless
+          style={[DrawerHeaderStyle.backBtn,{alignItems:'center'}]}
+          >
+          <Icons.Ionicons
+            name="arrow-back"
+            size={wp('7%')}
+            color={theme.headerIconsColor}
+          />
+        </TouchableRipple>
+        <Text style={[DrawerHeaderStyle.afterSignupScreenNameStyle, { color: theme.headerIconsColor }]}>{screenName}</Text>
+      </View>
+    </View>
+
+  );
+};

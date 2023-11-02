@@ -18,8 +18,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { Text } from 'react-native';
 import FontStyle from '../../../assets/styles/FontStyle';
 import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroups';
-import UseScreenFocus from '../../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
-import GlobalFunction from '../../../components/HelperFunctions/GlobalApiz/GlobalFunc';
+import UseScreenFocus from '../../../helpers/AutoRefreshScreen/UseScreenFocus';
 import Containers from '../../../assets/styles/Containers';
 import LottieView from 'lottie-react-native';
 
@@ -32,7 +31,6 @@ const AllGroups = ({ navigation }) => {
   const [searchedGroups, setSearchedGroups] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [allGroups, setAllGroups] = useState([])
-  const gloabalFunctions = GlobalFunction()
 
   const [groupNotFound, setGroupNotFound] = useState(false)
 
@@ -83,7 +81,7 @@ const AllGroups = ({ navigation }) => {
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
       <Primary_StatusBar />
       <AppHeader navigation={navigation} headerTitle={'Groups'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
-      <TouchableOpacity onPress={() => {navigation.navigate("CreateGroup")}} >
+      <TouchableOpacity onPress={() => {navigation.navigate("InnerScreens",{screen:"CreateGroup"})}} >
         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
           <Neomorph
             darkShadowColor={AppColors.primary}
@@ -115,15 +113,9 @@ const AllGroups = ({ navigation }) => {
             data={searchedGroups != '' ? searchedGroups : allGroups}
             renderItem={({ item }) => <RenderComponent name={item.group_name} dp={null} callingScreen={"Groups"} groups_item={item} navigation={navigation} noti={(val) => handleNotification(val)} />}
             ref={flatListRef}
-            ListFooterComponent={gloabalFunctions.renderFooter(flatListRef, allGroups)} />
+/>
           : <View style={Containers.centerContainer}>
-            <LottieView source={require('../../../assets/animations/Lottieanimations/l11.json')} autoPlay style={{
-              height: wp('50'),
-              width: wp('50'),
-              justifyContent: 'center',
-              alignItems: 'center',
-            }} />
-            <Text style={HomeNeoCards.noSearchResultText}>No groups yet.</Text>
+            <Text style={HomeNeoCards.noSearchResultText}>No groups were found.</Text>
           </View>
       )}
     </View>

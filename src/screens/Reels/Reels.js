@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {  ActivityIndicator,  TouchableOpacity,  View,  Dimensions, StatusBar,} from 'react-native';
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import AppColors from '../../assets/colors/Appcolors';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import ReelHeader from '../../components/Headers/ReelHeader/ReelHeader';
@@ -10,11 +10,10 @@ import Share from 'react-native-share';
 import { Text } from 'react-native-paper';
 import WebView from 'react-native-webview';
 import GenerateVideoHtml from './ReelsHtmlVideo';
-import LottieView from 'lottie-react-native';
 
 const Reals = props => {
   //   **********************************           VARIABLES               ****************************
-  const { baseUrl ,token} = useContext(AppContext);
+  const { baseUrl, token } = useContext(AppContext);
 
   //   **********************************          USE STATE               ****************************
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -44,7 +43,7 @@ const Reals = props => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-    },
+      },
     })
       .then(response => response.json())
       .then(async data => {
@@ -53,15 +52,15 @@ const Reals = props => {
         // }else if(data.message=='Please provide a token.'){
         //   Alert.alert('Token required')
         // }else{
-          const videosWithSources = data.UploadedVideos.map(video => ({
-            uri: { uri: video.video }, // Convert the path to a source object
-            desc: video.name,
-            reelUploader:video.userId
-          }));
-          
-          // console.log("fetch reel response",videosWithSources)
+        const videosWithSources = data.UploadedVideos.map(video => ({
+          uri: { uri: video.video }, // Convert the path to a source object
+          desc: video.name,
+          reelUploader: video.userId
+        }));
+
+        // console.log("fetch reel response",videosWithSources)
         setUploadedReels(videosWithSources);
-      // }
+        // }
       })
       .catch(error => console.log(error));
   };
@@ -79,7 +78,7 @@ const Reals = props => {
     UploadedReels();
     props.navigation.addListener('focus', () => {
       UploadedReels();
-  });
+    });
   }, []);
 
   useEffect(() => {
@@ -131,7 +130,7 @@ const Reals = props => {
                     />
                   )}
                 </TouchableOpacity>
-                <ReelFooter onPressShare={() => shareVideo()} item={item.reelUploader}/>
+                <ReelFooter onPressShare={() => shareVideo()} item={item.reelUploader} />
               </View>
             );
           }}
@@ -139,9 +138,8 @@ const Reals = props => {
         />
         :
         <View style={ReelscreenStyle.lottieView}>
-          <LottieView source={require('../../assets/animations/Lottieanimations/video.json')} autoPlay style={ReelscreenStyle.lottieStyle} />
           <Text style={ReelscreenStyle.lottieText}>
-            Upload a reel.
+            no reels yet.
           </Text>
         </View>
       }

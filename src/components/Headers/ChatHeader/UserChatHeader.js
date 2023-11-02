@@ -20,26 +20,30 @@ import ZegoUIKitPrebuiltCallService, {
 import AppContext from '../../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserChatStatusBar } from '../../statusbars/Primary_StatusBar';
-import { Button, Divider, Menu, PaperProvider, shadow } from 'react-native-paper';
+import { Button, Menu, Divider, IconButton, TouchableRipple } from 'react-native-paper';
 import ReactNativeModal from 'react-native-modal';
 import { ThemeContext } from '../../../context/ThemeContext';
+import FontStyle from '../../../assets/styles/FontStyle';
 
-const UserChatHeader = ({ item, navigation }) => {
+const UserChatHeader = ({ item, navigation, clearFunc }) => {
   const [callTime, setCallTime] = useState(0);
-  const { baseUrl,currentUser } = useContext(AppContext);
-  const { theme } = useContext(ThemeContext);
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const [visible, setVisible] = React.useState(false);
-
+  const { baseUrl, currentUser } = useContext(AppContext);
+  const { theme, darkThemeActivator } = useContext(ThemeContext);
+  const [visible, setVisible] = useState(false);
   const showModal = () => setVisible(true);
-
   const hideModal = () => setVisible(false);
-  const toggleModal = () => {
-    setIsModalVisible(!isModalVisible);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
+
+  const [clearChatModal, setClearChatModal] = useState(false);
+  const showClearChatModal = () => {
+    setClearChatModal(true);
   };
-  console.log("io", item)
+  const hideClearChatModal = () => setClearChatModal(false);
+  const clearChat = async () => {
+    clearFunc();
+  };
   const formatDuration = seconds => {
     const hours = Math.floor(seconds / 3600);
     const remainingMinutes = Math.floor((seconds % 3600) / 60);
@@ -53,9 +57,9 @@ const UserChatHeader = ({ item, navigation }) => {
       return `${remainingSeconds} sec`;
     }
   };
-  //        #############################################################################
+  // #############################################################################
   const addCallDetailInBackend = async call => {
-   
+
 
     // CAll Date
     const datestamp = new Date().toLocaleDateString([], {
@@ -90,102 +94,158 @@ const UserChatHeader = ({ item, navigation }) => {
       console.error('Error adding callDetails:', error);
     }
   };
-
-  //        #############################################################################
+  // #############################################################################
   return (
-    <View style={[UserChatHeaderStyle.containerView]}>
+    <View style={[UserChatHeaderStyle.containerView(theme.chatScreenColor)]}>
       <View style={[UserChatHeaderStyle.headerView]}>
         <View style={[UserChatHeaderStyle.leftview]}>
-          <TouchableOpacity
+          <TouchableRipple
+            borderless
             onPress={() => {
               navigation.goBack();
-            }}>
+            }}
+            style={UserChatHeaderStyle.headerTouchableBtn}
+          >
             <Icons.Ionicons
               name="arrow-back"
               size={wp('6.5%')}
-              color={AppColors.black}
-              style={{ marginTop: hp('2.7%') }}
+              color={theme.profileNameColor}
             />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={[UserChatHeaderStyle.leftInnerView]}>
-              <View style={[UserChatHeaderStyle.dpContainerView]}>
-                {item.profileImage ?
-                  <Image
-                    source={{ uri: `${baseUrl}${item.profileImage}` }}
-                    style={[UserChatHeaderStyle.dpImageStyle]}
-                  /> :
-                  <Image
-                    source={require('../../../assets/imges/default/userProfileDark.jpg')}
-                    style={[UserChatHeaderStyle.dpImageStyle]}
-                  />
-                }
-              </View>
-              <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
-                <Text style={[UserChatHeaderStyle.profileNameTextStyle]}>
-                  {item.name}
-                </Text>
-                {/* <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
+          </TouchableRipple>
+          <View style={[UserChatHeaderStyle.leftInnerView]}>
+            <View style={[UserChatHeaderStyle.dpContainerView]}>
+              {item.profileImage ?
+                <Image
+                  source={{ uri: `${baseUrl}${item.profileImage}` }}
+                  style={[UserChatHeaderStyle.dpImageStyle]}
+                /> :
+                <Image
+                  source={require('../../../assets/imges/default/userProfileDark.jpg')}
+                  style={[UserChatHeaderStyle.dpImageStyle]}
+                />
+              }
+            </View>
+            <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
+              <Text style={[UserChatHeaderStyle.profileNameTextStyle(theme.profileNameColor)]}>
+                {item.name}
+              </Text>
+              {/* <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
                   Online
                 </Text> */}
-              </View>
             </View>
-          </TouchableOpacity>
+          </View>
         </View>
-        <View style={[UserChatHeaderStyle.rightView]}>
-          <TouchableOpacity onPress={showModal}>
-            <Icons.Feather
-              name="more-vertical"
-              size={wp('7%')}
-              color={AppColors.black}
+        <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+          <TouchableRipple borderless onPress={showModal}
+            style={UserChatHeaderStyle.headerTouchableBtn}
+          >
+            <Icons.Ionicons
+              name="call"
+              size={wp('5%')}
+              color={theme.profileNameColor}
             />
-          </TouchableOpacity>
-          <ReactNativeModal
-            visible={visible}
-            onDismiss={hideModal}
-            onBackButtonPress={hideModal}
-            onBackdropPress={hideModal}
-            coverScreen={true}
-            style={{ margin: 0, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.1)' }}>
-            <View style={{ justifyContent: 'flex-start', alignItems: 'center', backgroundColor: theme.backgroundColor, padding: hp('3'), borderTopLeftRadius: 30, borderTopRightRadius: 30, elevation: 4 }}>
-              <View style={{ paddingHorizontal: 30, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
-                <Text style={[UserChatHeaderStyle.profileNameTextStyle, { marginHorizontal: 10 }]}>Audio call</Text>
-                <ZegoSendCallInvitationButton
-                  onPressed={() => {
-                    hideModal();
-                    addCallDetailInBackend('audio');
-                  }}
-                  invitees={[
-                    {
-                      userID: item._id,
-                      userName: item.name,
-                    },
-                  ]}
-                  isVideoCall={false}
-                  resourceID={'incoming123'}
-                />
-              </View>
-              <View style={{ paddingHorizontal: 30, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={[UserChatHeaderStyle.profileNameTextStyle, { marginHorizontal: 10 }]}>Video call</Text>
-                <ZegoSendCallInvitationButton
-                  onPressed={() => {
-                    hideModal();
-                    addCallDetailInBackend('video');
-                  }}
-                  invitees={[
-                    {
-                      userID: item._id,
-                      userName: item.name,
-                    },
-                  ]}
-                  isVideoCall={true}
-                  resourceID={'incoming123'}
-                />
-              </View>
-            </View>
-          </ReactNativeModal>
+          </TouchableRipple>
+          <View style={[UserChatHeaderStyle.rightView]}>
+            <Menu
+              visible={menuVisible}
+              contentStyle={UserChatHeaderStyle.menuStyle}
+              onDismiss={closeMenu}
+              onBackButtonPress={closeMenu}
+              anchorPosition='bottom'
+              anchor={
+                <IconButton
+                  icon={'dots-vertical'}
+                  size={wp('7%')}
+                  iconColor={theme.profileNameColor}
+                  onPress={openMenu}
+                />}
+            >
+              <Menu.Item
+                titleStyle={UserChatHeaderStyle.menuTitleStyle}
+                onPress={() => { showClearChatModal(); closeMenu() }} title="Clear Chat" />
+              {/* <Divider /> */}
+            </Menu>
+          </View>
         </View>
 
+        <ReactNativeModal
+          isVisible={visible}
+          backdropOpacity={0.2}
+          onDismiss={hideModal}
+          onBackButtonPress={hideModal}
+          onBackdropPress={hideModal}
+          coverScreen={true}
+          style={{ margin: 0, justifyContent: 'flex-end', }}>
+          <View style={{ justifyContent: 'flex-start', alignItems: 'center', backgroundColor: AppColors.white, padding: hp('3'), borderTopLeftRadius: 30, borderTopRightRadius: 30, elevation: 4 }}>
+            <View style={{ paddingHorizontal: 30, flexDirection: 'row', backgroundColor: AppColors.white, justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+              <Text style={[UserChatHeaderStyle.profileNameTextStyle(AppColors.black), { marginHorizontal: 10 }]}>Audio call</Text>
+              <ZegoSendCallInvitationButton
+                onPressed={() => {
+                  hideModal();
+                  addCallDetailInBackend('audio');
+                }}
+                invitees={[
+                  {
+                    userID: item._id,
+                    userName: item.name,
+                  },
+                ]}
+                isVideoCall={false}
+                resourceID={'incoming123'}
+              />
+            </View>
+            <View style={{ paddingHorizontal: 30, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={[UserChatHeaderStyle.profileNameTextStyle(AppColors.black), { marginHorizontal: 10 }]}>Video call</Text>
+              <ZegoSendCallInvitationButton
+                onPressed={() => {
+                  hideModal();
+                  addCallDetailInBackend('video');
+                }}
+                invitees={[
+                  {
+                    userID: item._id,
+                    userName: item.name,
+                  },
+                ]}
+                isVideoCall={true}
+                resourceID={'incoming123'}
+              />
+            </View>
+          </View>
+        </ReactNativeModal>
+
+        {/* clear chatModal */}
+        <ReactNativeModal
+          backdropOpacity={0.2}
+          isVisible={clearChatModal}
+          onDismiss={hideClearChatModal}
+          style={{ justifyContent: 'center', alignItems: 'center' }}
+        >
+          <View
+            style={UserChatHeaderStyle.modalMainContainer}>
+
+            <Text style={UserChatHeaderStyle.modalTitleText}>
+              Do you want to delete all messages ?
+            </Text>
+            <View style={UserChatHeaderStyle.modalBtnView}>
+              <TouchableRipple borderless
+                style={UserChatHeaderStyle.modalBtn(AppColors.lightGrey)}
+                onPress={() => { hideClearChatModal() }}
+              >
+                <Text
+                  style={UserChatHeaderStyle.modalBtnText}>
+                  Cancel
+                </Text>
+              </TouchableRipple>
+              <TouchableRipple borderless onPress={() => { clearChat().then(() => { hideClearChatModal(); setMenuVisible(false) }) }}
+                style={UserChatHeaderStyle.modalBtn(AppColors.Lilac)}>
+                <Text style={UserChatHeaderStyle.modalBtnText}>
+                  Ok
+                </Text>
+              </TouchableRipple>
+            </View>
+          </View>
+        </ReactNativeModal>
       </View>
     </View>
   );

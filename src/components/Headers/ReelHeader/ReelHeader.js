@@ -90,7 +90,7 @@ const ReelHeader = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity 
           onPress={() => {
-            navigation.navigate('activity');
+            navigation.navigate("SettingStack",{screen:"activity"});
           }}>
           <Icons.Feather name="activity" size={wp('8.2%')} color={iconcolor} />
         </TouchableOpacity>

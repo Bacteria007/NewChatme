@@ -35,7 +35,7 @@ const GroupStyles = StyleSheet.create({
       },
       newGroupNameStyle: darkThemeActivator => ({
         fontFamily: FontStyle.regularFont,
-        fontSize: wp('3.9'),
+        fontSize: wp('4'),
         color: darkThemeActivator ? "white" : AppColors.primary,
         marginLeft: 10,
         letterSpacing: 1,

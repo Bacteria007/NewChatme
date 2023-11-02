@@ -26,7 +26,7 @@ import { Card } from 'react-native-paper';
 import AppContext from '../../context/AppContext';
 import moment from 'moment';
 import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
-import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
+import UseScreenFocus from '../../helpers/AutoRefreshScreen/UseScreenFocus';
 import ChangedChatHeader from '../../components/Headers/ChatHeader/ChangedChatHeader';
 import Containers from '../../assets/styles/Containers';
 

@@ -7,6 +7,7 @@ import {
   Keyboard,
   ActivityIndicator,
   Dimensions,
+  Alert,
 } from 'react-native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Icons } from '../../assets/Icons';
@@ -17,11 +18,12 @@ import {
 } from 'react-native-responsive-screen';
 import AppColors from '../../assets/colors/Appcolors';
 import UserChatStyle from '../../assets/styles/UserChatStyle';
-import { requestCameraAndAudioPermission } from '../Permission/Permission';
 import { launchImageLibrary } from 'react-native-image-picker';
 import DocumentPicker from 'react-native-document-picker';
 import AppContext from '../../context/AppContext';
 import axios from 'axios';
+import { ThemeContext } from '../../context/ThemeContext';
+import { requestCameraAndGalleryPermission } from '../Permission/Permission';
 
 
 const UserChatInput = ({
@@ -32,24 +34,25 @@ const UserChatInput = ({
   currentMessage,
   setCurrentMessage,
   chatId,
-  messageget
+  messageget,
+  inputRef,
+  callScrollToBottomFunc,
 }) => {
-  const { baseUrl, currentUser } = useContext(AppContext);
-  const apiKey = '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';
+  const { baseUrl, currentUser, token, apiKey } = useContext(AppContext);
+  const { theme } = useContext(ThemeContext);
   const iconsColor = AppColors.coolgray
   const iconsColor2 = AppColors.black
   const screenDimensions = Dimensions.get('window');
   const [isSending, setIsSending] = useState(false);
   const [selectedImage, setSelectedImage] = useState([])
-  const [height, setHeight] = useState(hp('2%')); // Initialize height with a default value
-  const [marginBottom, setMarginBottom] = useState(hp('0.1%'))
   const [isScrollEnabled, setIsScrollEnabled] = useState(false);
   const [inputHeight, setInputHeight] = useState(0);
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
 
   const handleContentSizeChange = (contentHeight) => {
     setInputHeight(Math.min(contentHeight, 6 * 18)); // Assuming each line has an average height of 18
     setIsScrollEnabled(contentHeight / 18 > 6); // Assuming each line has an average height of 18
-  };  // onContentSizeChange={(e) => handleContentSizeChange(e.nativeEvent.contentSize.width, e.nativeEvent.contentSize.height)}
+  };
   const sendMessage = async () => {
     setIsSending(true);
     await axios
@@ -75,13 +78,14 @@ const UserChatInput = ({
             name: receiver.name,
             senderId: currentUser.userId,
             receiverId: receiver._id,
-            chatId:chatId,
+            chatId: chatId,
             mood: moodOfUser,
           };
           await socket.emit('send_message', messageData);
           setMessageList(list => [...list, messageData]);
+          callScrollToBottomFunc();
           setCurrentMessage('');
-          messageget()
+          messageget();
           setIsSending(false);
         }
         setIsSending(false);
@@ -93,127 +97,89 @@ const UserChatInput = ({
           name: receiver.name,
           senderId: currentUser.userId,
           receiverId: receiver._id,
-          chatId:chatId,
+          chatId: chatId,
           mood: 'normal',
         };
 
         await socket.emit('send_message', messageData);
         setMessageList(list => [...list, messageData]);
+        callScrollToBottomFunc()
         setCurrentMessage('');
         messageget()
         setIsSending(false);
       });
   };
-  const sendImageMessage = () => {
-    launchImageLibrary({
-      maxWidth: 800,
-      maxHeight: 800,
-      selectionLimit: 4
-    }).then(async Response => {
-      if (Response.didCancel) {
-        console.log("user cancelled image")
-      } else if (Response.error) {
-        console.log("ImgPicker error", Response.error)
-      } else {
-        console.log(Response.assets);
-        Response.assets.map((item) => {
-          setSelectedImage(oldSelected => [...oldSelected, item.uri, item.type, item.fileName])
-        })
-      }
-
-      // const formdata = new FormData();
-      // if (currentMessage !== '') {
-      //   formdata.append('content', currentMessage.trim());
-      // } else {
-      //   formdata.append('content', 'ChatMe_Image');
-      // }
-      // formdata.append('name', item.name);
-      // formdata.append('senderId', item.userId);
-      // formdata.append('recieverId', item.recieverId);
-
-      // formdata.append('ChatMe_Image', {
-      //   uri: Response.assets[0].uri,
-      //   type: Response.assets[0].type,
-      //   name: Response.assets[0].fileName,
-      // });
-      // fetch(`${baseUrl}/sendImageMsg`, {
-      //   method: 'POST',
-      //   body: formdata,
-      // })
-      //   .then(response => {
-      //     if (!response.ok) {
-      //       throw new Error(`HTTP error image! Status: ${response.status}`);
-      //     }
-      //     return response.json();
-      //   })
-      //   .then(data => {
-      //     console.log('send img res', data);
-      //     setImagMessage(data.newImage);
-      //   })
-      //   .catch(error => console.log('res error image', error));
-    });
-
-  }
-  const selectDoc = async () => {
+  const sendImageMessage = async () => {
     try {
-      const doc = await DocumentPicker.pick({
-        // type: [DocumentPicker.types.pdf],
-        //  allowMultiSelection: true
-      });
-      // const doc = await DocumentPicker.pickSingle()
-      // const doc = await DocumentPicker.pickMultiple({
-      //   type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
-      // })
-     
-      const formData = new FormData();
-      if (currentMessage !== '') {
-        formData.append('content', currentMessage.trim());
-      } else {
-        formData.append('content', 'document');
-      }
-      formData.append('name', item.name);
-      formData.append('senderId', currentUser.userId);
-      formData.append('chatId', chatId);
+      console.log('before launching image library');
+      const Response = await launchImageLibrary({
+        maxWidth: 1080,
+        maxHeight: 1080,
+        selectionLimit: 4,
 
-      doc.forEach(item => {
-        formData.append('document', {
-          uri: item.uri,
-          type: item.type,
-          name: item.name,
+      });
+      console.log('After launching image library', Response);
+      if (Response.didCancel) {
+        console.log("user cancelled image");
+      } else if (Response.error) {
+        console.log("ImgPicker error", Response.error);
+      } else {
+        console.log("jis pr map lgaya************", typeof Response.assets);
+        Response.assets.map((item) => {
+          setCurrentMessage(oldSelected => [...oldSelected, item.uri, item.type, item.fileName]);
         });
-      });
-      // formData.append('document', JSON.stringify({
-      //   name: item.name,
-      //   type: item.type,
-      //   uri: item.uri,
-      // }));
+      }
+      const formdata = new FormData();
+      console.log("KKKKKKKKKK", typeof currentMessage)
+      // if (currentMessage !== '') {
+      // console.log("HHHHH", currentMessage)
+      // formdata.append('content', currentMessage.trim());
+      // } else {
+      //   console.log("JJJJJJJJJJJJJJ", currentMessage)
+      formdata.append('content', 'ChatMe_Image');
+      // }
+      formdata.append('name', currentUser.name);
+      formdata.append('senderId', currentUser.userId);
+      formdata.append('recieverId', receiver._id);
+      formdata.append('chatId', chatId);
 
-      const response = await fetch(`${baseUrl}/sendDocMsg2`, {
+      if (Response && Response.assets && Response.assets.length > 0) {
+        formdata.append('ChatMe_Image', {
+          uri: Response.assets[0].uri,
+          type: Response.assets[0].type,
+          name: Response.assets[0].fileName,
+        });
+      } else {
+        console.log('library k response ka error')
+      }
+
+      const response = await fetch(`${baseUrl}/sendImageMsg`, {
         method: 'POST',
-        body: formData,
-        //  headers: {
-        //   'Content-Type': 'application/json',
-        // },
+        headers: {
+          // Authorization: `Bearer ${token}`,
+          // 'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formdata,
       });
 
-      if (response.ok) {
-        setDocument(response.result)
+      if (!response.ok) {
+        console.log("+>", response)
+        setCurrentMessage('');
+        throw new Error(`HTTP error image! Status: ${response.status}`);
+
       } else {
-        console.log('Document upload failed');
+        const data = await response.json();
+        console.log('send img res', data.newImage);
+        setMessageList(list => [...list, data.newImage]);
+        await setSelectedImage(data.newImage);
+        callScrollToBottomFunc()
+        setCurrentMessage('');
       }
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        console.log('User cancelled the upload', err);
-      } else {
-        console.log(err);
-      }
+    } catch (error) {
+      console.error(`catch sending img msg error: ${error.message}`);
     }
-  }
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
-  //  const handleContentSizeChange = ( contentHeight) => {
-  //   // Adjust the number (6) according to your requirement
-  //   setIsScrollEnabled(contentHeight / 18 > 6); // Assuming each line has an average height of 18
-  // };
+  };
 
   const handleFocus = () => {
     if (!keyboardOpen) {
@@ -240,19 +206,14 @@ const UserChatInput = ({
     };
   }, []);
 
-
   return (
-    <View style={[UserChatInputStyle.main_input_and_mic, { paddingBottom: keyboardOpen ? screenDimensions.width * 0.06 : screenDimensions.width * 0 }]}>
+    <View style={[UserChatInputStyle.main_input_and_mic(theme.chatScreenColor), { paddingBottom: keyboardOpen ? screenDimensions.width * 0.06 : screenDimensions.width * 0 }]}>
       <View style={UserChatInputStyle.input_and_all_icons}>
         <ScrollView style={UserChatInputStyle.scroll_inputText}>
           <TextInput
-            // style={UserChatInputStyle.input(height)}
-            style={[
-              { width: wp('58%'), alignSelf: 'center', alignItems: 'center' },
-              { height: inputHeight, maxHeight: 6 * 18 },
-            ]}
+            style={UserChatInputStyle.input}
             placeholder="Message"
-            value={currentMessage}
+            value={typeof currentMessage === 'string' ? currentMessage : currentMessage[0]}
             onChangeText={(txt) => { setCurrentMessage(txt) }}
             keyboardType='twitter'
             multiline={true}
@@ -265,30 +226,31 @@ const UserChatInput = ({
             }
             underlineColorAndroid={'transparent'}
             scrollEnabled={isScrollEnabled}
-            // onFocus={()=>{setMarginBottom(screenDimensions.width * 0.05)}}
-            // onBlur={()=>setMarginBottom(screenDimensions.width * 0.02)}
             onFocus={handleFocus}
             onBlur={handleBlur}
+            ref={inputRef}
           />
         </ScrollView>
-        <View style={UserChatInputStyle.camera_and_papercliper}>
-          <TouchableOpacity onPress={() => {
-            selectDoc()
+        <TouchableOpacity
+          onPress={() => {
+            const permission = requestCameraAndGalleryPermission();
+            requestCameraAndGalleryPermission()
+              .then((granted) => {
+                console.log("perm------", granted)
+                if (granted) {
+                  sendImageMessage()
+                } else {
+                  console.log("permision denied")
+                }
+              }).catch((error) => {
+                console.log(`permison ni chali: ${error}`);
+                requestCameraAndGalleryPermission()
+              })
           }}>
-            <Icons.FontAwesome name="paperclip" size={wp('6.5%')} color={iconsColor} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              const permission = requestCameraAndAudioPermission();
-              if (permission) {
-                sendImageMessage()
-              } else
-                requestCameraAndAudioPermission()
-            }}>
-            <Icons.FontAwesome name="camera" size={wp('5.5%')} color={iconsColor} />
-          </TouchableOpacity>
+          <Icons.FontAwesome name="camera" size={wp('5.5%')} color={iconsColor} />
+        </TouchableOpacity>
 
-        </View>
+        {/* </View> */}
       </View>
       {currentMessage == '' ? (
         <TouchableOpacity>
@@ -303,8 +265,10 @@ const UserChatInput = ({
       ) : (
         <TouchableOpacity
           onPress={() => {
-            if (currentMessage.trim() != null) {
+            if (typeof currentMessage === 'string' && currentMessage.trim() !== '') {
               sendMessage();
+            } else if (typeof currentMessage === 'object') {
+              sendImageMessage();
             }
           }}>
           <View
@@ -313,7 +277,7 @@ const UserChatInput = ({
             {isSending ? (
               <ActivityIndicator size="small" color={iconsColor2} /> // Show loading animation
             ) : (
-              
+
               <Icons.Ionicons name='send-sharp' size={wp('5.7%')} color={iconsColor2} />
             )}
           </View>
@@ -325,3 +289,59 @@ const UserChatInput = ({
 };
 
 export default UserChatInput;
+
+// const selectDoc = async () => {
+//   try {
+//     const doc = await DocumentPicker.pick({
+//       // type: [DocumentPicker.types.pdf],
+//       //  allowMultiSelection: true
+//     });
+//     // const doc = await DocumentPicker.pickSingle()
+//     // const doc = await DocumentPicker.pickMultiple({
+//     //   type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
+//     // })
+
+//     const formData = new FormData();
+//     if (currentMessage !== '') {
+//       formData.append('content', currentMessage.trim());
+//     } else {
+//       formData.append('content', 'document');
+//     }
+//     formData.append('name', item.name);
+//     formData.append('senderId', currentUser.userId);
+//     formData.append('chatId', chatId);
+
+//     doc.forEach(item => {
+//       formData.append('document', {
+//         uri: item.uri,
+//         type: item.type,
+//         name: item.name,
+//       });
+//     });
+//     // formData.append('document', JSON.stringify({
+//     //   name: item.name,
+//     //   type: item.type,
+//     //   uri: item.uri,
+//     // }));
+
+//     const response = await fetch(`${baseUrl}/sendDocMsg2`, {
+//       method: 'POST',
+//       body: formData,
+//       //  headers: {
+//       //   'Content-Type': 'application/json',
+//       // },
+//     });
+
+//     if (response.ok) {
+//       setDocument(response.result)
+//     } else {
+//       console.log('Document upload failed');
+//     }
+//   } catch (err) {
+//     if (DocumentPicker.isCancel(err)) {
+//       console.log('User cancelled the upload', err);
+//     } else {
+//       console.log(err);
+//     }
+//   }
+// }

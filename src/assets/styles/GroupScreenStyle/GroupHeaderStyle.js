@@ -10,7 +10,7 @@ const GroupHeaderStyle = StyleSheet.create({
   modalStyle: {
     margin: 0,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    // backgroundColor: 'rgba(0,0,0,0.2)',
   },
   modalMainView: bgColor => ({
     justifyContent: 'flex-start',
@@ -22,8 +22,8 @@ const GroupHeaderStyle = StyleSheet.create({
     elevation: 4,
   }),
   modalItem: {
-    flexDirection: 'row',
-    height: hp('30')
+    flexDirection: 'column',
+    height: hp('35')
   },
   modalItemsContainer: {
     flexDirection: 'row',
@@ -38,11 +38,11 @@ const GroupHeaderStyle = StyleSheet.create({
     justifyContent: 'space-between',
     width: wp('70'),
   },
-  nameStyle: (adminOrUser, admin) => ({
-    color: adminOrUser ? AppColors.primary : 'black',
-    fontFamily: admin ? FontStyle.mediumFont : FontStyle.regularFont,
+  nameStyle:{
+    color:  'black',
+    fontFamily: FontStyle.regularFont,
     marginHorizontal: wp('1'),
-  }),
+  },
   adminBtn: {
     backgroundColor: AppColors.tab,
     justifyContent: 'center',

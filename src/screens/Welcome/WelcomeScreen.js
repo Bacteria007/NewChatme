@@ -29,8 +29,6 @@ const WelcomeScreen = ({ navigation }) => {
       <Primary_StatusBar/>
 
       {/* *****************           HEADER OF WELCOME SCREEN   ************** */}
-      <View style={[WelcomeScreenStyles.TopView]}></View>
-
       {/* *****************           WELCOME SCREEN IMAGE       *************** */}
 
       <View>

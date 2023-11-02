@@ -8,58 +8,55 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const UserChatHeaderStyle = StyleSheet.create({
-  containerView: {
-    backgroundColor: AppColors.white,
-    height: hp('8%'),
+  containerView: bgColor => ({
+    backgroundColor: bgColor,
+    height: hp('7%'),
+    justifyContent: 'center',
     // width:wp('100'),
     // borderBottomWidth:1,
     // borderBottomColor:'grey'
-  },
-  changedHeaderContainerView: {
-    backgroundColor: AppColors.white,
-    height: hp('8%'),
-    width:wp('100'),
-    // borderBottomWidth:1,
-    // borderBottomColor:'grey'
-    elevation: 4,
-  },
-  changedHeaderInnerView:{
+  }),
+  changedHeaderContainerView: bgColor => ({
+    backgroundColor: bgColor,
+    height: hp('7%'),
+    width: wp('100'),
     flexDirection: 'row',
     paddingHorizontal: wp('5%'),
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
+    // backgroundColor:'red',
+    alignItems: 'center',
+    elevation: 4,
+  }),
   headerView: {
     flexDirection: 'row',
-    paddingHorizontal: wp('3%'),
     justifyContent: 'space-between',
   },
   leftview: {
     flexDirection: 'row',
-    width: wp('42%'),
-    height: hp('8%'),
+    width: 'auto',
     justifyContent: 'space-between',
-  },
-  rightView: {
-    flexDirection: 'row',
-    // width:"auto",
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    // backgroundColor:'red'
+    paddingHorizontal: wp('2'),
+    alignContent:'center',
+    // backgroundColor: 'red',
   },
   leftInnerView: {
     flexDirection: 'row',
-    paddingTop: hp('1%'),
-    height: hp('8%'),
-    width: wp('60%'),
+    width: 'auto',
+    alignItems:'center',
+    paddingHorizontal:wp('1'),
+    justifyContent:'space-between',
+    // backgroundColor:'green',
+  },
+  rightView: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   dpContainerView: {
     height: hp('5%'),
     width: hp('5%'),
     backgroundColor: AppColors.black,
     borderRadius: 100,
-    marginTop: hp('0.6%'),
-    marginLeft: 10,
   },
   dpImageStyle: {
     height: hp('5%'),
@@ -67,20 +64,79 @@ const UserChatHeaderStyle = StyleSheet.create({
     borderRadius: 100,
   },
   profileNameContainerStyle: {
-    marginLeft: wp('2%'),
     justifyContent: 'center',
     alignItems: 'center',
   },
-  profileNameTextStyle: {
-    fontSize: wp('6%'),
-    color: AppColors.black,
-    marginBottom: 9,
+  profileNameTextStyle: clr => ({
+    fontSize: wp('5%'),
+    color: clr,
+    textAlign:'center',
+    marginLeft:wp('3'),
+    fontFamily:FontStyle.regularFont
+  }),
+  memberText:{
+    fontSize: wp('3.5%'),
+    color: AppColors.gray,
+    textAlign:'left',
+    marginLeft:wp('2'),
+    fontFamily:FontStyle.regularFont
   },
   profileStatusStyle: {
     color: AppColors.black,
     fontSize: wp('3'),
-    //  backgroundColor:'red'
   },
+
+  headerTouchableBtn: {
+    borderRadius: hp('5'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: hp('5'),
+    width: hp('5'),
+    alignSelf:'center',
+  },
+  modalMainContainer: {
+    height: hp('20'),
+    width: wp('85'),
+    backgroundColor: AppColors.white,
+    borderRadius: wp('4'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center', 
+  },
+  modalTitleText:{
+    fontSize: hp('1.7'),
+    color: AppColors.black,
+    fontFamily: FontStyle.lightFont,
+    textAlign: 'center',
+  },
+  modalBtnView:{
+    flexDirection: 'row',
+    width: wp('50'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop:hp('3'),
+  },
+  modalBtn:(btnClr)=>({
+    borderRadius: hp('2'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: hp('4'),
+    width: hp('10'),
+    alignSelf:'center',
+    backgroundColor:btnClr,
+    marginHorizontal:wp('2')
+
+  }),
+  modalBtnText:{
+    fontSize: hp('1.5'),
+    color: AppColors.black,
+    fontFamily: FontStyle.regularFont,
+    textAlign: 'center',
+  },
+ menuStyle:{ backgroundColor: AppColors.white, borderRadius: 15 },
+ menuTitleStyle:{ fontFamily: FontStyle.regularFont, fontSize: wp('4') },
+
+ 
 });
 
 export default UserChatHeaderStyle;

@@ -8,13 +8,14 @@ import {
   Keyboard,
   Alert,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import ForgetScreenStyle from '../../assets/styles/AuthStyleSheet/ForgetScreen/ForgetScreenStyle';
-import {Primary_StatusBar} from '../../components/statusbars/Primary_StatusBar';
+import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
 import TranslationFile from '../../assets/translation/TranslationFile';
 import { Icons } from '../../assets/Icons';
 import { Snackbar } from 'react-native-paper';
@@ -23,27 +24,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CountryPicker from 'react-native-country-picker-modal';
 import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/LogInStyleSheet';
 import { PhoneNumberUtil } from 'google-libphonenumber';
-import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import { ThemeContext } from '../../context/ThemeContext';
-import AppColors from '../../assets/colors/Appcolors';
 
 
 const ForgetPasswordScreen = ({ navigation }) => {
-  const { language, baseUrl,updateCurrentUser, getToken,storedUser, getStoredUserDetails, selectedImageUri, storeImageUri } = useContext(AppContext);
+  const { language, baseUrl, updateCurrentUser, getToken } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const [ques1, setQues1] = useState('');
   const [ques2, setQues2] = useState('');
   const [phoneNo, setPhoneNo] = useState('')
   const [newPassword, setNewPasword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [toggleState, setToggleState] = useState(1);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [toggleState, setToggleState] = useState(1);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [selectedCountry, setSelectedCountry] = useState(null);
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-  const [visible, setVisible] = useState(false);
 
   // Regular expression to check for special characters
   const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
@@ -51,7 +51,8 @@ const ForgetPasswordScreen = ({ navigation }) => {
   const showSnackbar = message => {
     setSnackbarMessage(message);
     setVisible(true);
-  };
+    // ToastAndroid.showWithGravity(`${message}`,ToastAndroid.SHORT,ToastAndroid.BOTTOM)
+  }
   const isValidPhoneNumber = () => {
     try {
       const parsedPhoneNumber = phoneNumberUtil.parseAndKeepRawInput(
@@ -88,11 +89,21 @@ const ForgetPasswordScreen = ({ navigation }) => {
       .then((response) => response.json())
       .then(data => {
         console.log('res aya after matching', data)
-        if (data.matched === true) {
-          setToggleState(0);
-        } else {
-          Alert.alert("Please enter the right answers")
+        if (phoneNo == '') {
+          Alert.alert("Please enter phone number")
         }
+        // else if (isValidPhoneNumber()) {
+        else {
+          if (data.matched === true) {
+            setToggleState(0);
+          } else {
+            Alert.alert("Please enter the right answers")
+          }
+
+        }
+        // } else {
+        //   Alert.alert("Invalid Phone Number")
+        // }
       })
       .catch(error => console.log("res error", error));
 
@@ -102,7 +113,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
     formdata.append('phoneNo', phoneNo);
     formdata.append('password', newPassword);
     try {
-      fetch(`${baseUrl}/resetPassword`, {
+      await fetch(`${baseUrl}/resetPassword`, {
         method: 'POST',
         body: formdata,
         headers: {
@@ -113,45 +124,45 @@ const ForgetPasswordScreen = ({ navigation }) => {
         .then(data => {
           console.log('res aya after changing', data)
           if (data.login === true) {
-            let res = data.updated
-            AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(true))
-            AsyncStorage.setItem('token', data.token);
-            AsyncStorage.setItem('profileImage',data.newImage.profileImage)
-        AsyncStorage.setItem('name',data.updated.name)
-        AsyncStorage.setItem('Id',response.data.newUser._id)
-        AsyncStorage.setItem('phoneNo',response.data.newUser.phoneNo)
-            // AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name }))
-            updateCurrentUser({userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name})
+            let newUser = data.updated
+            let token = data.token
+            console.log('newUser ======== ', newUser)
+            AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(true))
+            AsyncStorage.setItem('token', token);
+            AsyncStorage.setItem('profileImage', newUser.profileImage)
+            AsyncStorage.setItem('name', newUser.name)
+            AsyncStorage.setItem('Id', newUser._id)
+            AsyncStorage.setItem('phoneNo', newUser.phoneNo)
+            // AsyncStorage.setItem('user', JSON.stringify({ userId: newUser._id, phoneNumber: newUser.phoneNo, profileImage: newUser.profileImage, name: newUser.name }))
+            updateCurrentUser({ userId: newUser._id, phoneNumber: newUser.phoneNo, profileImage: newUser.profileImage, name: newUser.name })
             getToken()
-            navigation.replace('DrawerScreens');
+            navigation.replace("DrawerStack");
           } else {
             Alert.alert("There was an issue in logging in,try again")
           }
         })
         .catch(error => console.log("res error", error));
-
-      // const data = await response.json();
-      // console.log('res after updating', data);
-      // if (data.message === "This user name is not available.") {
-      //   setErrorMessage(true)
-      //   setAlreadyExist(data.message)
-      // }
-      // else {
-      //   // AsyncStorage.getItem("user").then((userData) => {
-      //   //   if (userData) {
-      //   //     const existingData = JSON.parse(userData);
-      //   //     const updatedData = { ...existingData, name: data.updated.name };
-      //   //     console.log("update async", updatedData)
-      //   //     AsyncStorage.setItem("user", JSON.stringify(updatedData));
-      //   //   }
-      //     updateCurrentUser({userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name})
-      //     navigation.navigate('DrawerScreens');
-      //   // });
-      // }
     } catch (error) {
       console.error('Error updating profile:', error);
     }
   };
+  const validateInputFields = () => {
+    if (newPassword == '' && confirmPassword == '') {
+      showSnackbar(TranslationFile[language].Plz_enter_the_required_field);
+      // return
+    } else if (newPassword.length < 8) {
+      showSnackbar(TranslationFile[language].Password_contain_atLeast_8_character);
+    } else if (!specialCharRegex.test(newPassword)) {
+      showSnackbar(TranslationFile[language].Password_must_contain_at_least_one_special_character);
+    } else if (newPassword !== confirmPassword) {
+      showSnackbar(TranslationFile[language].Passwords_do_not_match)
+    } else {
+      console.log('✅✅✅✅✅✅✅')
+      console.log('thk hy pass', newPassword)
+      console.log('✅✅✅✅✅✅✅')
+      handleResetPassword()
+    }
+  }
   useEffect(() => {
     setSelectedCountry({ cca2: 'PK', callingCode: '92' });
     setCountryCode('92');
@@ -293,7 +304,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
               <TextInput
                 value={confirmPassword}
                 style={ForgetScreenStyle.passwordInput}
-                secureTextEntry={passwordVisible}
+                secureTextEntry={confirmPasswordVisible}
                 onChangeText={value => {
                   setConfirmPassword(value);
                 }}
@@ -301,61 +312,18 @@ const ForgetPasswordScreen = ({ navigation }) => {
 
               <TouchableOpacity
                 onPress={() => {
-                  setPasswordVisible(!passwordVisible);
+                  setConfirmPasswordVisible(!confirmPasswordVisible);
                 }}>
                 <Icons.Feather
-                  name={passwordVisible === true ? 'eye' : 'eye-off'}
+                  name={confirmPasswordVisible === true ? 'eye' : 'eye-off'}
                   style={ForgetScreenStyle.passwordIcon}
                 />
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <TouchableOpacity
-                onPress={() => {
-                  if (newPassword == '' && confirmPassword == '') {
-                    showSnackbar(
-                      TranslationFile[language].Plz_enter_the_required_field,
-                    );
-                    return;
-                  } else if (newPassword.length < 8) {
-                    if (newPassword === '') {
-                      showSnackbar(
-                        TranslationFile[language].Password_must_not_be_empty,
-                      );
-                      return;
-                    } else {
-                      showSnackbar(
-                        TranslationFile[language]
-                          .Password_contain_atLeast_8_character,
-                      );
-
-                      if (!specialCharRegex.test(newPassword)) {
-                        showSnackbar(
-                          TranslationFile[language]
-                            .Password_must_contain_at_least_one_special_character,
-                        );
-                        return;
-                      }
-
-                      return;
-                    }
-                  } else if (confirmPassword == '') {
-                    showSnackbar(
-                      TranslationFile[language].Plz_enter_the_required_field,
-                    );
-                    return;
-                  } else {
-                    if (newPassword !== confirmPassword) {
-                      showSnackbar(
-                        TranslationFile[language].Passwords_do_not_match,
-                      );
-                      return;
-                    } else {
-                      handleResetPassword()
-                    }
-                  }
-                }}
-                style={ForgetScreenStyle.TouchableButtonStyle}>
+                onPress={() => { validateInputFields() }}
+                style={ForgetScreenStyle.TouchableButtonStyle} >
                 <Text style={ForgetScreenStyle.TouchableTextStyle}>
                   {TranslationFile[language].Next}
                 </Text>
@@ -377,7 +345,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
         }}>
         <Text style={[ForgetScreenStyle.text]}>{snackbarMessage}</Text>
       </Snackbar>
-    </View>
+    </View >
   );
 };
 export default ForgetPasswordScreen;
