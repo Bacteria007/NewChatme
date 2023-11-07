@@ -27,158 +27,24 @@ import { requestCameraAndGalleryPermission } from '../Permission/Permission';
 
 
 const UserChatInput = ({
-  receiver,
-  socket,
-  setMessageList,
-  setDocument,
   currentMessage,
   setCurrentMessage,
-  chatId,
-  messageget,
   inputRef,
-  callScrollToBottomFunc,
+  callSendMessageFunc,
+  callSendImageMessageFunc,
+  isSending
 }) => {
-  const { baseUrl, currentUser, token, apiKey } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const iconsColor = AppColors.coolgray
   const iconsColor2 = AppColors.black
   const screenDimensions = Dimensions.get('window');
-  const [isSending, setIsSending] = useState(false);
-  const [selectedImage, setSelectedImage] = useState([])
   const [isScrollEnabled, setIsScrollEnabled] = useState(false);
   const [inputHeight, setInputHeight] = useState(0);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
 
   const handleContentSizeChange = (contentHeight) => {
-    setInputHeight(Math.min(contentHeight, 6 * 18)); // Assuming each line has an average height of 18
-    setIsScrollEnabled(contentHeight / 18 > 6); // Assuming each line has an average height of 18
-  };
-  const sendMessage = async () => {
-    setIsSending(true);
-    await axios
-      .post(
-        'https://api.openai.com/v1/engines/text-davinci-003/completions',
-        {
-          prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
-          max_tokens: 1024,
-          temperature: 0.5,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-          },
-        },
-      )
-      .then(async response => {
-        const moodOfUser = response.data.choices[0].text.trim();
-
-        if (moodOfUser != '') {
-          const messageData = {
-            content: currentMessage.trim(),
-            name: receiver.name,
-            senderId: currentUser.userId,
-            receiverId: receiver._id,
-            chatId: chatId,
-            mood: moodOfUser,
-          };
-          await socket.emit('send_message', messageData);
-          setMessageList(list => [...list, messageData]);
-          callScrollToBottomFunc();
-          setCurrentMessage('');
-          messageget();
-          setIsSending(false);
-        }
-        setIsSending(false);
-      })
-      .catch(async error => {
-        console.error('Error detecting mood:', error);
-        const messageData = {
-          content: currentMessage.trim(),
-          name: receiver.name,
-          senderId: currentUser.userId,
-          receiverId: receiver._id,
-          chatId: chatId,
-          mood: 'normal',
-        };
-
-        await socket.emit('send_message', messageData);
-        setMessageList(list => [...list, messageData]);
-        callScrollToBottomFunc()
-        setCurrentMessage('');
-        messageget()
-        setIsSending(false);
-      });
-  };
-  const sendImageMessage = async () => {
-    try {
-      console.log('before launching image library');
-      const Response = await launchImageLibrary({
-        maxWidth: 1080,
-        maxHeight: 1080,
-        selectionLimit: 4,
-
-      });
-      console.log('After launching image library', Response);
-      if (Response.didCancel) {
-        console.log("user cancelled image");
-      } else if (Response.error) {
-        console.log("ImgPicker error", Response.error);
-      } else {
-        console.log("jis pr map lgaya************", typeof Response.assets);
-        Response.assets.map((item) => {
-          setCurrentMessage(oldSelected => [...oldSelected, item.uri, item.type, item.fileName]);
-        });
-      }
-      const formdata = new FormData();
-      console.log("KKKKKKKKKK", typeof currentMessage)
-      // if (currentMessage !== '') {
-      // console.log("HHHHH", currentMessage)
-      // formdata.append('content', currentMessage.trim());
-      // } else {
-      //   console.log("JJJJJJJJJJJJJJ", currentMessage)
-      formdata.append('content', 'ChatMe_Image');
-      // }
-      formdata.append('name', currentUser.name);
-      formdata.append('senderId', currentUser.userId);
-      formdata.append('recieverId', receiver._id);
-      formdata.append('chatId', chatId);
-
-      if (Response && Response.assets && Response.assets.length > 0) {
-        formdata.append('ChatMe_Image', {
-          uri: Response.assets[0].uri,
-          type: Response.assets[0].type,
-          name: Response.assets[0].fileName,
-        });
-      } else {
-        console.log('library k response ka error')
-      }
-
-      const response = await fetch(`${baseUrl}/sendImageMsg`, {
-        method: 'POST',
-        headers: {
-          // Authorization: `Bearer ${token}`,
-          // 'Content-Type': 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formdata,
-      });
-
-      if (!response.ok) {
-        console.log("+>", response)
-        setCurrentMessage('');
-        throw new Error(`HTTP error image! Status: ${response.status}`);
-
-      } else {
-        const data = await response.json();
-        console.log('send img res', data.newImage);
-        setMessageList(list => [...list, data.newImage]);
-        await setSelectedImage(data.newImage);
-        callScrollToBottomFunc()
-        setCurrentMessage('');
-      }
-    } catch (error) {
-      console.error(`catch sending img msg error: ${error.message}`);
-    }
+    setInputHeight(Math.min(contentHeight, 6 * 18)); 
+    setIsScrollEnabled(contentHeight / 18 > 6); 
   };
 
   const handleFocus = () => {
@@ -209,16 +75,16 @@ const UserChatInput = ({
   return (
     <View style={[UserChatInputStyle.main_input_and_mic(theme.chatScreenColor), { paddingBottom: keyboardOpen ? screenDimensions.width * 0.06 : screenDimensions.width * 0 }]}>
       <View style={UserChatInputStyle.input_and_all_icons}>
-        <ScrollView style={UserChatInputStyle.scroll_inputText}>
+        <ScrollView style={UserChatInputStyle.scroll_inputText} scrollEnabled showsVerticalScrollIndicator>
           <TextInput
-            style={UserChatInputStyle.input}
+            style={[UserChatInputStyle.input,{maxHeight:inputHeight}]}
             placeholder="Message"
-            value={typeof currentMessage === 'string' ? currentMessage : currentMessage[0]}
+            value={currentMessage}
             onChangeText={(txt) => { setCurrentMessage(txt) }}
             keyboardType='twitter'
             multiline={true}
+            
             placeholderTextColor={AppColors.gray}
-            // onContentSizeChange={onContentSizeChange}
             onContentSizeChange={(e) =>
               handleContentSizeChange(
                 e.nativeEvent.contentSize.height
@@ -231,25 +97,11 @@ const UserChatInput = ({
             ref={inputRef}
           />
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => {
-            const permission = requestCameraAndGalleryPermission();
-            requestCameraAndGalleryPermission()
-              .then((granted) => {
-                console.log("perm------", granted)
-                if (granted) {
-                  sendImageMessage()
-                } else {
-                  console.log("permision denied")
-                }
-              }).catch((error) => {
-                console.log(`permison ni chali: ${error}`);
-                requestCameraAndGalleryPermission()
-              })
-          }}>
+        {currentMessage == '' && <TouchableOpacity
+          onPress={() => { callSendImageMessageFunc() }}>
           <Icons.FontAwesome name="camera" size={wp('5.5%')} color={iconsColor} />
         </TouchableOpacity>
-
+        }
         {/* </View> */}
       </View>
       {currentMessage == '' ? (
@@ -264,13 +116,7 @@ const UserChatInput = ({
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
-          onPress={() => {
-            if (typeof currentMessage === 'string' && currentMessage.trim() !== '') {
-              sendMessage();
-            } else if (typeof currentMessage === 'object') {
-              sendImageMessage();
-            }
-          }}>
+          onPress={() => { callSendMessageFunc() }}>
           <View
             style={[UserChatInputStyle.microphoneContainerView]}
           >

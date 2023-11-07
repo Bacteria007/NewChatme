@@ -21,11 +21,16 @@ import {
 } from 'react-native-responsive-screen';
 import FontStyle from '../../assets/styles/FontStyle';
 import { ActivityIndicator } from 'react-native';
+import FooterComponent from '../../components/FlatlistComponents/FooterComponent';
+import ReelscreenStyle from '../../assets/styles/ReelStyleSheet/ReelscreenStyle';
+import { capitalizeFirstLetter } from '../../helpers/UiHelpers/CapitalizeFirstLetter';
+import { CreateNameSubString } from '../../helpers/UiHelpers/CreateSubString';
 
 const AllUsers = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
   const { baseUrl, currentUser, token } = useContext(AppContext);
   const [isSending, setIsSending] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [requestSent, setRequestSent] = useState(false);
   const [people, setPeople] = useState([]);
   const [badgeCount, setBadgeCount] = useState(0);
@@ -35,6 +40,7 @@ const AllUsers = ({ navigation }) => {
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [seacrhedPeople, setSeacrhedPeople] = useState('');
   const [someoneNotFound, setSomeoneNotFound] = useState(false); // FUNCTIONS-----------------------------
+
   const handleSearch = text => {
     setSearchText(text);
     if (text === '') {
@@ -125,11 +131,14 @@ const AllUsers = ({ navigation }) => {
         await fetchPendingRequest();
         await fetchWaitingRequest();
         setPeople(data);
+        setIsLoading(false);
       } else {
         console.log('error fetching people');
+        setIsLoading(false)
       }
     } catch (error) {
       console.log('error fetching people', error);
+      setIsLoading(false)
     }
   };
   const sendRequest = async contact => {
@@ -206,7 +215,7 @@ const AllUsers = ({ navigation }) => {
 
   // Hooks---------------------------------
   useEffect(() => {
-    fetchPeople();
+    fetchPeople().then(() => setIsLoading(false))
     console.log('people', people);
     navigation.addListener('focus', () => {
       fetchPeople();
@@ -263,15 +272,15 @@ const AllUsers = ({ navigation }) => {
             {/* profile name view */}
             <View style={styles.nameView}>
               <Text style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                {item.name}
+                {capitalizeFirstLetter(CreateNameSubString(item.name))}
               </Text>
             </View>
           </View>
 
           {waitingRequests.length > 0 &&
-          waitingRequests.some(
-            waitingRequest => waitingRequest.senderId._id == item._id,
-          ) ? (
+            waitingRequests.some(
+              waitingRequest => waitingRequest.senderId._id == item._id,
+            ) ? (
             <Text style={styles.reqText}>Requested...</Text>
           ) : allPendingRequests.length > 0 &&
             allPendingRequests.some(
@@ -292,6 +301,7 @@ const AllUsers = ({ navigation }) => {
               }}>
               <Neomorph
                 swapShadows
+                darkShadowColor='black'
                 style={HomeNeoCards.addUserinGroup(AppColors.primary)}>
                 {clickedItem === item && isSending ? (
                   <ActivityIndicator size="small" color={'white'} />
@@ -314,10 +324,10 @@ const AllUsers = ({ navigation }) => {
           searchQuery={searchText}
           handleSearchOnChange={handleSearch}
         />
-
+        {isLoading && <View style={ReelscreenStyle.LoaderView}><ActivityIndicator size="small" color={'black'} /></View>}
         {searchText !== '' &&
-        seacrhedPeople.length === 0 &&
-        someoneNotFound === true ? (
+          seacrhedPeople.length === 0 &&
+          someoneNotFound === true ? (
           <View style={Containers.centerContainer}>
             <Text style={HomeNeoCards.noSearchResultText}>
               No user this name.
@@ -327,13 +337,15 @@ const AllUsers = ({ navigation }) => {
           <FlatList
             data={seacrhedPeople == '' ? people : seacrhedPeople}
             renderItem={({ item }) => renderPeople(item)}
+            ListFooterComponent={FooterComponent}
+
           />
         ) : (
-          <View style={Containers.centerContainer}>
+          !isLoading && (<View style={Containers.centerContainer}>
             <Text style={HomeNeoCards.noSearchResultText}>
               No people were found.
             </Text>
-          </View>
+          </View>)
         )}
       </View>
     </View>

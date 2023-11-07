@@ -26,6 +26,8 @@ import Settings from '../settings/Settings';
 import TabScreens from './TabScreens';
 import axios from 'axios';
 import RNExitApp from 'react-native-exit-app';
+import { Neomorph } from 'react-native-neomorph-shadows-fixes';
+import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/ProfileScreenStyleSheet';
 
 
 const Drawer = createDrawerNavigator();
@@ -119,7 +121,16 @@ const DrawerScreens = () => {
                 <Animated.View
                   style={[Containers.centerContainer, { height: hp('25%') }]}>
                   <View style={styles.imageView}>
-                    <Image source={{ uri: `${baseUrl}${currentUser?.profileImage} ` }} style={styles.imageStyle} />
+                  {currentUser.profileImage!=null ? <Image source={{ uri: `${baseUrl}${currentUser?.profileImage} ` }} style={styles.imageStyle} />
+                   :
+                    <View style={[ProfileScreenStyleSheet.innerNeomorph]}>
+                      <Icons.MaterialIcons
+                        name="person"
+                        size={60}
+                        color={AppColors.black} 
+                      />
+                  </View>
+                   }
                   </View>
                   <Text style={styles.userNameText}>
                     {currentUser?.name}

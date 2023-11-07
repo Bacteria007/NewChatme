@@ -18,6 +18,7 @@ const AppSubHeaderStyle = StyleSheet.create({
     height: hp('6%'),
     width: wp('92'),
     borderRadius: 25,
+    alignSelf:'center'
   },
   searchText: {
     color: AppColors.coolgray 

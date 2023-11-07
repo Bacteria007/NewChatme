@@ -18,8 +18,11 @@ import ReactNativeModal from 'react-native-modal';
 import { ThemeContext } from '../../../context/ThemeContext';
 import GroupHeaderStyle from '../../../assets/styles/GroupScreenStyle/GroupHeaderStyle';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
+import { ChatHeaderNameSubString, CreateNameSubString, CreateSubString } from '../../../helpers/UiHelpers/CreateSubString';
+import AutoScrollingName from '../../../helpers/UiHelpers/AutoScrollingName';
 
 const GroupChatHeader = ({ item, navigation, callClearGroupChat }) => {
+
   const { baseUrl, currentUser } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const groupMembers = item.members
@@ -66,16 +69,24 @@ const GroupChatHeader = ({ item, navigation, callClearGroupChat }) => {
           </TouchableRipple>
 
           <View style={[UserChatHeaderStyle.leftInnerView]}>
-            <View style={HomeNeoCards.dpVew}>
-              <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
-                <Icons.Ionicons name={'people'} size={wp('6')} color={theme.groupDpIconColor} />
+            {item.group_dp ?
+              <Image source={{ uri: `${baseUrl}/${item.group_dp}` }} style={UserChatHeaderStyle.dpImageStyle} />
+              :
+              <View style={HomeNeoCards.dpVew}>
+                <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
+                  <Icons.Ionicons name={'people'} size={wp('6')} color={theme.groupDpIconColor} />
+                </View>
               </View>
-            </View>
-            <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
-              <Text style={[UserChatHeaderStyle.profileNameTextStyle(theme.profileNameColor)]}>
-                {item.group_name}
-              </Text>
-            </View>
+            }
+            {item.group_name ? 
+
+              <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
+                <Text style={[UserChatHeaderStyle.profileNameTextStyle(theme.profileNameColor)]}>
+                 {ChatHeaderNameSubString(item.group_name)}
+                </Text>
+              </View>
+              :null
+            }
           </View>
 
         </View>
@@ -116,11 +127,11 @@ const GroupChatHeader = ({ item, navigation, callClearGroupChat }) => {
           <View style={GroupHeaderStyle.modalItem}>
             {/* <Text style={[UserChatHeaderStyle.memberText]}>Memebers</Text> */}
             <FlatList
-            showsVerticalScrollIndicator={true}        
-            // https://reactnavigation.org/docs/nesting-navigators/#navigating-to-a-screen-in-a-nested-navigator
-            data={sortedGroupMembers}
+              showsVerticalScrollIndicator={true}
+              // https://reactnavigation.org/docs/nesting-navigators/#navigating-to-a-screen-in-a-nested-navigator
+              data={sortedGroupMembers}
               renderItem={({ item }) => {
-                return <View style={{ padding: 4}}>
+                return <View style={{ padding: 4 }}>
                   <View style={GroupHeaderStyle.modalItemsContainer}>
                     {item.profileImage ?
                       <Image
@@ -163,7 +174,7 @@ const GroupChatHeader = ({ item, navigation, callClearGroupChat }) => {
         isVisible={clearChatModal}
         onDismiss={hideClearChatModal}
         style={{ justifyContent: 'center', alignItems: 'center' }}
-      
+
       >
         <View
           style={UserChatHeaderStyle.modalMainContainer}>
