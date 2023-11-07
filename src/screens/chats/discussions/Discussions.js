@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
-import { FlatList, View, SafeAreaView, Text, StyleSheet } from 'react-native';
+import { FlatList, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 import { ThemeContext } from '../../../context/ThemeContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
@@ -9,6 +9,11 @@ import BotDiscussion from './BotDscussion';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import Containers from '../../../assets/styles/Containers';
 import Initialize_Socket from "../../../helpers/Socket/Socket";
+import FooterComponent from '../../../components/FlatlistComponents/FooterComponent';
+import { ActivityIndicator } from 'react-native-paper';
+import PrimaryBtn from '../../../components/Buttons/PrimaryBtn';
+import AddFriendBtn from '../../../components/Buttons/AddFriendsBtn';
+
 const Discussions = (props) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
@@ -18,10 +23,8 @@ const Discussions = (props) => {
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const [contactList, setContactList] = useState([]);
   const [userNotFound, setUserNotFound] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    Initialize_Socket(currentUser.name)
-  }, [])
   const fetchContactList = useCallback(async () => {
 
     try {
@@ -55,9 +58,11 @@ const Discussions = (props) => {
           return true; // Include other messages in the filtered list
         });
         setContactList(filterContact);
+        setIsLoading(false)
 
       }).catch((error) => {
         console.error('Error fetching contact list:', error);
+        setIsLoading(false)
       })
 
 
@@ -83,7 +88,7 @@ const Discussions = (props) => {
   useEffect(() => {
     console.log('fetchContactList>>>>>>')
     getToken()
-    fetchContactList();
+    fetchContactList().then(() => { setIsLoading(false) })
     props.navigation.addListener('focus', () => {
       fetchContactList();
     });
@@ -94,9 +99,8 @@ const Discussions = (props) => {
       <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
         <Primary_StatusBar />
         <AppHeader navigation={props.navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
-        <View style={Containers.centercontent}>
-          <BotDiscussion navigation={props.navigation} />
-        </View>
+        {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>}
+
         {searchText !== '' && searchedChat.length === 0 && userNotFound === true ? (
           <View style={Containers.centerContainer}>
             <Text style={HomeNeoCards.noSearchResultText}>No user with this name.</Text>
@@ -123,11 +127,18 @@ const Discussions = (props) => {
                     />
                   )
                 }}
+                ListHeaderComponent={<BotDiscussion navigation={props.navigation} />}
+                ListHeaderComponentStyle={HomeNeoCards.flatlistHeaderComponent}
+                ListFooterComponent={FooterComponent}
+
               />
               :
-              <View style={Containers.centerContainer}>
-                <Text style={HomeNeoCards.noSearchResultText}>Add friends.</Text>
-              </View>
+              !isLoading && (
+                  <View style={Containers.centerContainer}>
+                    <Text style={HomeNeoCards.noSearchResultText}>You have no friends.</Text>                 
+                  <AddFriendBtn btnTitle={'Add Friends'} onPress={()=>{props.navigation.navigate("DrawerStack",{screen:"Home",params:{screen:"Discover"}})}}/>  
+                </View>
+              )
           )}
       </View>
     </SafeAreaView>

@@ -1,0 +1,156 @@
+import React, { useContext, useState } from 'react'
+import { View, Text, Image, TouchableOpacity, TextInput, FlatList, SafeAreaView, StatusBar } from 'react-native'
+import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader'
+import CreateGroupScreenStyle from '../../../assets/styles/GroupScreenStyle/CreateGroupScreenStyle'
+import { Icons } from '../../../assets/Icons'
+import { launchImageLibrary } from 'react-native-image-picker'
+import AppContext from '../../../context/AppContext'
+import { ThemeContext } from '../../../context/ThemeContext'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import AppColors from '../../../assets/colors/Appcolors'
+import { FAB } from 'react-native-paper'
+import { capitalizeFirstLetter } from '../../../helpers/UiHelpers/CapitalizeFirstLetter'
+import { SelectImage } from '../../../helpers/launchCameraHelper/SelectImage'
+
+const NewGroup = (props) => {
+    const { baseUrl, currentUser, token } = useContext(AppContext);
+    const { theme, darkThemeActivator } = useContext(ThemeContext);
+    const { selectedMembers, deselectMember, } = props.route.params
+    const [groupName, setgroupName] = useState('');
+    const [isCreating, setIsCreating] = useState(false);
+    const [groupDisplayPic, setGroupDisplayPic] = useState('');
+    const handleSelectImage = () => {
+        SelectImage(setGroupDisplayPic);
+    };
+
+    const createNewGroup = async name => {
+        if (selectedMembers.length >= 2) {
+            if (name != '') {
+                setIsCreating(true)
+                const formData = new FormData();
+                formData.append('group_name', name);
+                formData.append('group_admin', currentUser.userId);
+                formData.append('members', JSON.stringify(selectedMembers));
+                if (groupDisplayPic != '') {
+                    formData.append("ProfileImage", groupDisplayPic);
+                }
+                await fetch(`${baseUrl}/creategroup`, {
+                    method: 'post',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    body: formData
+                })
+                    .then(async res => {
+                        if (res.data.message == "Please provide a valid token.") {
+                            Alert.alert("Provide a valid token.")
+                        } else if (res.data.message == 'Please provide a token.') {
+                            Alert.alert('Token required')
+                        } else {
+                            setIsCreating(false)
+                            setgroupName("")
+                        }
+                    })
+                    .catch(error => {
+                        console.log('error in creatng group', error);
+                    });
+            } else {
+
+                Alert.alert('please enter subject of group');
+            }
+        } else {
+            Alert.alert('pleaes add at least 3 member');
+        }
+    };
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <StatusBar backgroundColor={AppColors.Lavender} barStyle={'dark-content'} />
+            <InnerScreensHeader screenName={"NewGroup"} navigation={props.navigation} />
+            <View style={CreateGroupScreenStyle.container(AppColors.Lavender)}>
+                <View style={CreateGroupScreenStyle.avatarAndNameContainer}>
+                    <View style={CreateGroupScreenStyle.circleAroundGroupDp(AppColors.lightBlack2)}>
+                        <View style={CreateGroupScreenStyle.groupDp(AppColors.lightBlack2)}>
+                            {groupDisplayPic == '' ?
+                                <Icons.Ionicons name='people' size={hp('4.5')} color={AppColors.white} />
+                                :
+                                <Image source={{ uri: `${groupDisplayPic.uri}` }} style={CreateGroupScreenStyle.groupDpImage} />
+                            }
+                        </View>
+                        <TouchableOpacity onPress={handleSelectImage} style={[
+                            CreateGroupScreenStyle.editIconBtn,
+                            { position: 'absolute', right: 0, bottom: 0 },
+                        ]}>
+                            <Icons.MaterialIcons name="edit" size={12} color="white" />
+                        </TouchableOpacity>
+                    </View>
+
+                    <TextInput
+                        value={groupName}
+                        placeholder="Group Name"
+                        cursorColor={"rgba(0,0,0,0.4)"}
+                        placeholderTextColor={AppColors.black}
+                        style={CreateGroupScreenStyle.enterNameTextinput}
+                        textAlign='center'
+                        autoFocus={false}
+                        onChangeText={e => { setgroupName(e) }}
+
+                    />
+                    <Text style={CreateGroupScreenStyle.msgText}>Provide a group subject and optional group icon</Text>
+                </View>
+                <View style={CreateGroupScreenStyle.participantsSectionContainer}>
+                    <View style={CreateGroupScreenStyle.participantsTextContainer}>
+                        <Text style={CreateGroupScreenStyle.participantsText}>Participants: </Text>
+                        <View style={CreateGroupScreenStyle.participantsNumberContainer}>
+                            <Text style={CreateGroupScreenStyle.participantsNumber}>{selectedMembers.length - 1}</Text>
+                        </View>
+
+                    </View>
+                    <FlatList
+                        data={selectedMembers.filter(item => item._id !== currentUser.userId)}
+                        numColumns={4}
+                        keyExtractor={item => item._id}
+                        // contentContainerStyle={{backgroundColor:'red',paddingHorizontal:wp('5')}}
+                        renderItem={({ item }) => {
+                            return (
+                                <View key={item._id} style={[CreateGroupScreenStyle.nameAndDpOfSelected]}>
+                                    <View style={{ position: 'relative' }}>
+                                        <View style={CreateGroupScreenStyle.circleAroundMemberDp}>
+                                            {!item.profileImage ?
+                                                <View style={CreateGroupScreenStyle.memberDp}>
+                                                    <Icons.MaterialIcons name={'person'} size={29} color={theme.profileNameColor} />
+                                                </View>
+                                                : <Image style={CreateGroupScreenStyle.memberDp} source={{ uri: `${baseUrl}${item.profileImage}` }} />
+                                            }
+                                        </View>
+                                        <TouchableOpacity onPress={() => {
+                                            deselectMember(item);
+                                            props.navigation.goBack();
+                                        }} style={CreateGroupScreenStyle.deSelectIconBtn}>
+                                            <Icons.AntDesign name="close" size={10} color="white" />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <Text style={CreateGroupScreenStyle.memberName}>
+                                        {item.name ? (item.name.length > 7 ? capitalizeFirstLetter(item.name.substring(0, 7)) + '..' : capitalizeFirstLetter(item.name)) : 'no user name'}
+                                    </Text>
+                                </View>
+                            )
+                        }}
+
+                    />
+
+                    <FAB
+                        loading={isCreating}
+                        icon="check"
+                        style={CreateGroupScreenStyle.fab}
+                        onPress={() => createNewGroup(groupName)}
+                        color={AppColors.white}
+                    />
+                </View>
+            </View>
+
+        </SafeAreaView>
+    )
+}
+
+export default NewGroup

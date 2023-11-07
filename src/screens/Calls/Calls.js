@@ -29,6 +29,8 @@ import AppHeader from '../../components/Headers/AppHeaders/AppHeader';
 import UseScreenFocus from '../../helpers/AutoRefreshScreen/UseScreenFocus';
 import ChangedChatHeader from '../../components/Headers/ChatHeader/ChangedChatHeader';
 import Containers from '../../assets/styles/Containers';
+import LottieView from 'lottie-react-native';
+import MyActivityStyleSheet from '../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
 
 const Calls = ({ navigation }) => {
   const { baseUrl, token, currentUser } = useContext(AppContext);
@@ -41,7 +43,7 @@ const Calls = ({ navigation }) => {
   const [changeHeader, setChangeHeader] = useState(false);
   const [callId, setCallId] = useState('');
   const [callNotFound, setCallNotFound] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true)
 
 
   //       ***************************                 VARIABLES         **************************************
@@ -53,9 +55,9 @@ const Calls = ({ navigation }) => {
 
   //       ***************************             USE EFFECT HOOK         **************************************
   useEffect(() => {
-    fetchCallList();
+    fetchCallList() 
     navigation.addListener('focus', () => {
-      fetchCallList();
+      fetchCallList() 
     });
   }, []);
 
@@ -92,16 +94,18 @@ const Calls = ({ navigation }) => {
 
               return true; // Include other messages in the filtered list
             });
-
             setAllCallList(filterCallList); // Set the callList received from the response
-
+            setIsLoading(false)
           }
         })
         .catch(error => {
           console.error('Error fetching call list:', error);
+          setIsLoading(false)
+
         });
     } catch (error) {
       console.error('Error fetching call list:', error);
+      setIsLoading(false)
     }
   };
 
@@ -282,11 +286,9 @@ const Calls = ({ navigation }) => {
               data={searchedCalls == '' ? reversedData : searchedCalls}
               renderItem={renderItem}
             // keyExtractor={(item) => { item.callerId.toString() }}
-            // onScroll={(e) => { scrollY.setValue(e.nativeEvent.contentOffset.y) }}
             />
             :
             <View style={Containers.centerContainer}>
-              {/* <LottieView source={require('../../../assets/animations/Lottieanimations/l8.json')} autoPlay style={MyActivityStyleSheet.noUploadsLottieStyle} /> */}
               <Text style={HomeNeoCards.noSearchResultText}>No calls yet.</Text>
             </View>
         )}

@@ -1,4 +1,4 @@
-import { useContext, useEffect, } from 'react';
+import { useCallback, useContext, useEffect, useState, } from 'react';
 import { StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Reels from '../reels/Reels';
@@ -15,6 +15,7 @@ import { Icons } from '../../assets/Icons';
 import AppColors from '../../assets/colors/Appcolors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp, } from 'react-native-responsive-screen';
 import AllUsers from '../requests/AllUsers';
+import { useFocusEffect, useNavigation, useRoute, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,17 +30,32 @@ const TabScreens = () => {
     const tabFontBold = FontStyle.boldFont;
     const tabFontSemiBold = FontStyle.semiBoldFont;
     const drawerStatus = useDrawerStatus();
+    const [currentRoute, setCurrentRoute] = useState('')
+    const route = useRoute()
+    let routeName;
+    useFocusEffect(() => {
+        routeName = getFocusedRouteNameFromRoute(route)
+        console.log('tab screen: ', routeName);
+        setCurrentRoute(routeName)
+    })
+
+
     useEffect(() => {
         if (drawerStatus == 'open') {
             console.log("drawer is opened")
             StatusBar.setBarStyle('dark-content');
             StatusBar.setBackgroundColor(AppColors.Mauve);
         } else if (drawerStatus == 'closed') {
-            console.log("drawer is closed")
-            StatusBar.setBarStyle(theme.statusBarText);
-            StatusBar.setBackgroundColor(theme.backgroundColor);
+            // console.log("drawer is closed")
+            if (currentRoute !== "Reels") {
+                StatusBar.setBarStyle(theme.statusBarText);
+                StatusBar.setBackgroundColor(theme.backgroundColor);
+            } else {
+                StatusBar.setBarStyle('light-content');
+                StatusBar.setBackgroundColor(AppColors.black);
+            }
         }
-    }, [drawerStatus]);
+    }, [drawerStatus, currentRoute]);
     const progress = useDrawerProgress();
     // console.log('progress', progress);
     const animatedStyle = useAnimatedStyle(() => ({
@@ -68,7 +84,7 @@ const TabScreens = () => {
 
         <Animated.View style={[animatedStyle, { flex: 1 }]}>
             <Tab.Navigator
-                initialRouteName="Chats"
+                initialRouteName="Reels"
                 screenOptions={({ route }) => ({
                     headerShown: false,
                     tabBarIndicatorStyle: { backgroundColor: 'transparent' },
@@ -104,7 +120,7 @@ const TabScreens = () => {
                             );
                         } else if (route.name === 'Discover') {
                             return (
-                                <Icons.Ionicons size={iconSize} name={'search'} color={iconColor} />
+                                <Icons.Ionicons size={21} name={'search-sharp'} color={iconColor} />
 
                             );
                         } else if (route.name === 'Reels') {
@@ -122,7 +138,7 @@ const TabScreens = () => {
                                 />
                             );
                         }
-                       
+
                     },
                 })}>
                 <Tab.Screen name="Chats" component={Discussions} />

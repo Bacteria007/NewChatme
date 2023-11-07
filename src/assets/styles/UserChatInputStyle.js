@@ -31,7 +31,7 @@ const UserChatInputStyle = StyleSheet.create({
     width: wp('90'),
     alignItems: 'center',
     alignSelf: 'flex-start',
-    maxHeight:hp('6%'),
+    // maxHeight:hp('6%'),
   },
   scroll_inputText: { flex: 1, alignSelf: 'center',   
 },
@@ -43,6 +43,8 @@ const UserChatInputStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: hp('1'),
+    alignSelf:'flex-end',
+    flexDirection:'column'
   },
 });
 

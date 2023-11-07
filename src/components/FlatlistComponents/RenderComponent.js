@@ -1,38 +1,23 @@
 import { useContext, useEffect, useState } from 'react';
 import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { ThemeContext } from '../../context/ThemeContext';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  Alert,
-  ToastAndroid,
-} from 'react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp, } from 'react-native-responsive-screen';
+import { TouchableOpacity, View, Text, Image, StyleSheet, Alert, ToastAndroid, } from 'react-native';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import { Icons } from '../../assets/Icons';
 import AppColors from '../../assets/colors/Appcolors';
 import ReactNativeModal from 'react-native-modal';
 import AppContext from '../../context/AppContext';
 import moment from 'moment';
-const RenderComponent = ({
-  name,
-  dp,
-  callingScreen,
-  discussions_item,
-  groups_item,
-  navigation,
-}) => {
+import { CreateLastMsgSubString, CreateNameSubString } from '../../helpers/UiHelpers/CreateSubString';
+const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_item, navigation, }) => {
   const { theme, darkThemeActivator } = useContext(ThemeContext);
   const { baseUrl, currentUser, token, chatWithNewMsg, isNewMsg, setChatWithNewMsg } = useContext(AppContext);
   const [profileModal, setProfileModal] = useState(false);
   const [userLastMsg, setUserLastMsg] = useState(null);
   const [groupLastMsg, setGroupLastMsg] = useState(null);
+  const chatid = discussions_item ? discussions_item._id : null;
+
   const maxLength = 43;
   const nameMaxLength = 23;
   const showProfileModal = () => {
@@ -220,55 +205,66 @@ const RenderComponent = ({
   //   );
   // };
   const getUserLastMessage = async () => {
+
     // console.log('req.query', discussions_item);
-    const chatid = discussions_item._id
-    const res = await fetch(
-      `${baseUrl}/userLatestMessage?chatId=${chatid}&userId=${currentUser.userId}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    const data = await res.json();
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    console.log(data.latestMsg)
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    if (data.message == 'Please provide a valid token.') {
-      Alert.alert('Provide a valid token.');
-    } else if (data.message == 'Please provide a token.') {
-      Alert.alert('Token required');
-    } else {
-      setUserLastMsg(data.latestMsg)
+    if (!discussions_item || !discussions_item._id) {
+      console.log('👤returning from getUserLastMessage')
+      return; // Exit early if discussions_item is undefined or doesn't have an _id property
     }
-  };
-  const getGroupLastMessage = async () => {
-    // console.log('i(((((())))))))))m', groups_item._id);
-    const res = await fetch(
-      `${baseUrl}/groupLatestMessage?groupId=${groups_item._id}&userId=${currentUser.userId}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+    else {
+      const res = await fetch(
+        `${baseUrl}/userLatestMessage?chatId=${chatid}&userId=${currentUser.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    );
-    const data = await res.json();
-    console.log('i(((((())))))))))m', data);
-    if (data != null) {
+      );
+      const data = await res.json();
+      console.log("🕊️🕊️🕊️🕊️🕊️🕊️🕊️🕊️")
+      console.log(data.latestMsg)
+      console.log("🕊️🕊️🕊️🕊️🕊️🕊️🕊️🕊️")
       if (data.message == 'Please provide a valid token.') {
         Alert.alert('Provide a valid token.');
       } else if (data.message == 'Please provide a token.') {
         Alert.alert('Token required');
       } else {
-        setGroupLastMsg(data);
+        setUserLastMsg(data.latestMsg)
       }
-    } else {
-      console.log('++++++++++++ grp msg is empty');
-      setGroupLastMsg(null);
+    }
+  };
+  const getGroupLastMessage = async () => {
+    if (!groups_item || !groups_item._id) {
+      console.log('👥👥returning from getGroupLastMessage')
+      return;
+    }
+    else {
+      const res = await fetch(
+        `${baseUrl}/groupLatestMessage?groupId=${groups_item._id}&userId=${currentUser.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const data = await res.json();
+      // console.log('i(((((())))))))))m', data);
+      if (data != null) {
+        if (data.message == 'Please provide a valid token.') {
+          Alert.alert('Provide a valid token.');
+        } else if (data.message == 'Please provide a token.') {
+          Alert.alert('Token required');
+        } else {
+          setGroupLastMsg(data);
+        }
+      } else {
+        // console.log('++++++++++++ grp msg is empty');
+        setGroupLastMsg(null);
+      }
     }
   };
   useEffect(() => {
@@ -296,13 +292,16 @@ const RenderComponent = ({
           //     ToastAndroid.CENTER,
           //   );
           // }
-          navigation.navigate("InnerScreens", { screen: 'UserChat', params: { contact: discussions_item } });
-          if (discussions_item._id == chatWithNewMsg.chatId) {
-            setChatWithNewMsg({ chatId: null, unreadMessagesCount: 0 })
-          }
+          navigation.navigate('InnerScreens', {
+            screen: 'UserChat',
+            params: { contact: discussions_item },
+          });
         } else if (callingScreen === 'Groups') {
-          console.log('Comming form Groups');
-          navigation.navigate("InnerScreens", { screen: 'GroupChat', params: { item: groups_item } });
+          // console.log('Comming form Groups');
+          navigation.navigate('InnerScreens', {
+            screen: 'GroupChat',
+            params: { item: groups_item },
+          });
         }
       }}
     // onLongPress={() => {
@@ -315,7 +314,7 @@ const RenderComponent = ({
       <View style={HomeNeoCards.flatlistItemContainer}>
         <Neomorph
           darkShadowColor={AppColors.primary} // <- set this
-          lightShadowColor={AppColors.primary} // <- this
+          lightShadowColor={AppColors.white} // <- this
           swapShadows
           style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}>
           <TouchableOpacity
@@ -326,8 +325,7 @@ const RenderComponent = ({
             {dp == null ? (
               <View style={HomeNeoCards.dpVew}>
                 <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
-                  {callingScreen === 'Discussions' ||
-                    callingScreen === 'Contacts' ? (
+                  {callingScreen === 'Discussions' ? (
                     <Icons.MaterialIcons
                       name={'person'}
                       size={29}
@@ -344,7 +342,7 @@ const RenderComponent = ({
               </View>
             ) : (
               <Image
-                source={{ uri: `${baseUrl}${dp}` }}
+                source={{ uri: `${baseUrl}/${dp}` }}
                 style={HomeNeoCards.dpImage}
               />
             )}
@@ -354,10 +352,7 @@ const RenderComponent = ({
           <View style={HomeNeoCards.nameAndMsgContainer}>
             <View style={HomeNeoCards.nameAndTimeContainer}>
               <Text style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                {name &&
-                  (name.length > nameMaxLength
-                    ? name.substring(0, nameMaxLength) + '...'
-                    : name)}
+                {name && CreateNameSubString(name)}
               </Text>
               <Text style={HomeNeoCards.lastMsgTime(darkThemeActivator)}>
                 {callingScreen !== 'Groups'
@@ -376,9 +371,7 @@ const RenderComponent = ({
                 {callingScreen !== 'Groups'
                   ? [
                     userLastMsg !== null &&
-                    (userLastMsg.content.length > maxLength ? (
-                      userLastMsg.content.substring(0, maxLength) + '...'
-                    ) : userLastMsg.content == 'ChatMe_Image' ? (
+                    (userLastMsg.content == 'ChatMe_Image' ? (
                       <View
                         style={{
                           flexDirection: 'row',
@@ -390,71 +383,61 @@ const RenderComponent = ({
                           size={wp('3.7')}
                           color={AppColors.gray}
                         />
+
                         <Text
                           style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
                           {' '}
                           image
                         </Text>
                       </View>
-                    ) : (
-                      userLastMsg.content
-                    )),
+                    ) : CreateLastMsgSubString(userLastMsg.content)
+                    )
                   ]
                   : [
                     groupLastMsg !== null &&
                     (groupLastMsg.msg_type == 'text' ? (
-                      groupLastMsg.text.length > maxLength ? (
-                        <Text>
-                          <Text
-                            numberOfLines={1}
-                            style={HomeNeoCards.senderName}>
-                            {groupLastMsg.sender_name == currentUser.name
-                              ? 'You'
-                              : groupLastMsg.sender_name}
-                            {': '}
-                          </Text>
-                          {groupLastMsg.text.substring(0, maxLength) +
-                            '...'}
+                      <Text numberOfLines={1} style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
+                        <Text
+                          numberOfLines={1}
+                          style={HomeNeoCards.senderName}>
+                          {groupLastMsg.sender_id == currentUser.userId ?
+                            'You:  ' : (groupLastMsg.sender_name + ':  ')}
+
                         </Text>
-                      ) : (
-                        <Text>
-                          <Text
-                            numberOfLines={1}
-                            style={HomeNeoCards.senderName}>
-                            {groupLastMsg.sender_name == currentUser.name
-                              ? 'You'
-                              : groupLastMsg.sender_name}
-                            {': '}
-                          </Text>
-                          {groupLastMsg.text}
-                        </Text>
-                      )
-                    ) : (
+                        {CreateLastMsgSubString(groupLastMsg.text)}
+
+                      </Text>
+                    ) :
                       <View
                         style={{
                           flexDirection: 'row',
                           alignItems: 'center',
                           justifyContent: 'center',
                         }}>
-                        <Icons.FontAwesome
-                          name="image"
-                          size={wp('3.7')}
-                          color={AppColors.gray}
-                        />
-                        <Text
-                          style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
-                          {' '}
-                          image
+                        <Text style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
+                          <Text
+                            numberOfLines={1}
+                            style={HomeNeoCards.senderName}>
+                            {groupLastMsg.sender_id == currentUser.userId
+                              ? 'You:  ' : (groupLastMsg.sender_name + ':  ')}
+
+                          </Text>
+                          <Icons.FontAwesome
+                            name="image"
+                            size={wp('3.7')}
+                            color={AppColors.gray}
+                          />
+
+                          <Text
+                            style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
+                            {' '}
+                            image
+                          </Text>
                         </Text>
                       </View>
-                    )),
+                    ),
                   ]}
               </Text>
-              {callingScreen == "Discussion" && (receivedMessages) &&
-                <View style={{ backgroundColor: "red", borderRadius: 10, paddingHorizontal: 5 }}>
-                  <Text style={{ color: 'white' }}>{0}</Text>
-                </View>
-              }
             </View>
           </View>
         </Neomorph>
@@ -472,9 +455,7 @@ const RenderComponent = ({
           <View style={HomeNeoCards.dpHeader}>
             <Text style={HomeNeoCards.profileName(AppColors.black)}>
               {name
-                ? name.length > nameMaxLength
-                  ? name.substring(0, nameMaxLength) + '...'
-                  : name
+                ? CreateNameSubString(name)
                 : null}
             </Text>
           </View>
@@ -486,17 +467,23 @@ const RenderComponent = ({
                   style={HomeNeoCards.dpInModal}
                 />
               ) : (
-                // <Image
-                //   source={require('../../assets/imges/default/group.png')}
-                //   style={HomeNeoCards.dpInModal}
-                // />
-                <Icons.MaterialIcons name={'people'} size={250} color={theme.profileNameColor} />
+                <View
+                  style={[
+                    HomeNeoCards.modalView,
+                    { height: hp('30'), width: wp('70') },
+                  ]}>
+                  <Icons.Ionicons
+                    name={'people'}
+                    size={150}
+                    color={theme.profileNameColor}
+                  />
+                </View>
               )}
             </View>
           ) : (
             <View>
               <Image
-                source={{ uri: `${baseUrl}${dp}` }}
+                source={{ uri: `${baseUrl}/${dp}` }}
                 style={HomeNeoCards.dpInModal}
               />
             </View>

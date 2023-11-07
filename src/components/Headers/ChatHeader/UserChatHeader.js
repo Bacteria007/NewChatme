@@ -24,6 +24,7 @@ import { Button, Menu, Divider, IconButton, TouchableRipple } from 'react-native
 import ReactNativeModal from 'react-native-modal';
 import { ThemeContext } from '../../../context/ThemeContext';
 import FontStyle from '../../../assets/styles/FontStyle';
+import { ChatHeaderNameSubString, CreateNameSubString, CreateSubString } from '../../../helpers/UiHelpers/CreateSubString';
 
 const UserChatHeader = ({ item, navigation, clearFunc }) => {
   const [callTime, setCallTime] = useState(0);
@@ -127,7 +128,7 @@ const UserChatHeader = ({ item, navigation, clearFunc }) => {
             </View>
             <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
               <Text style={[UserChatHeaderStyle.profileNameTextStyle(theme.profileNameColor)]}>
-                {item.name}
+                {item.name ? ChatHeaderNameSubString(item.name) : null}
               </Text>
               {/* <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
                   Online

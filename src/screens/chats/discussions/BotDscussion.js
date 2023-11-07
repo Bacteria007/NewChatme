@@ -5,7 +5,7 @@ import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCar
 import { ThemeContext } from '../../../context/ThemeContext';
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
-import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroups';
+import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroupsStyle';
 
 const BotDiscussion = ({ navigation }) => {
     const { theme, darkThemeActivator } = useContext(ThemeContext)
@@ -27,12 +27,10 @@ const BotDiscussion = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-            <View style={[HomeNeoCards.nameAndMsgContainer, { paddingHorizontal: 10 }]}>
                 <Text
                     style={GroupStyles.newGroupNameStyle(darkThemeActivator)}>
                     Your Virtual Friend
                 </Text>
-            </View>
         </Neomorph>
                         </TouchableOpacity>
     )

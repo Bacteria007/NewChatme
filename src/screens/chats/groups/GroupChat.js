@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, FlatList, TouchableOpacity, Platform, Dimensions, Image, } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, FlatList, TouchableOpacity, Platform, Dimensions, Image, ActivityIndicator, } from 'react-native';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp, } from 'react-native-responsive-screen';
 import AppContext from '../../../context/AppContext';
@@ -18,6 +18,9 @@ import { PaperProvider, TouchableRipple } from 'react-native-paper';
 import axios from 'axios';
 import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
 import {socket} from "../../../helpers/Socket/Socket";
+import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
+import { SelectImage } from '../../../helpers/launchCameraHelper/SelectImage';
+import Containers from '../../../assets/styles/Containers';
 
 const GroupChat = props => {
 
@@ -38,6 +41,7 @@ const GroupChat = props => {
   const [msgId, setMsgId] = useState(null);
   const [lastAction, setLastAction] = useState(null);
   const [isSending, setIsSending] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
   const [visible, setVisible] = useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -98,7 +102,9 @@ const GroupChat = props => {
         setIsSending(false);
       });
   };
-
+  const handleSelectImage =async () => {
+    SelectImage(setSelecetdImageMsg);
+  };
   const sendImageMessage = async () => {
 
     console.log('imageMsgData ^^^^^^^^^^^^^^^^', selecetdImageMsg);
@@ -120,21 +126,18 @@ const GroupChat = props => {
       const data = await result.json();
       const newImageMsg = await data.newImage
       setMsgList([...msgList, newImageMsg])
-      console.log("((((((((((((((+>")
-      console.log(msgList)
-      console.log("((((((((((((((+>")
+      // console.log("((((((((((((((+>")
+      // console.log(msgList)
+      // console.log("((((((((((((((+>")
       hideModal();
       scrollToBottom();
     } else {
-      console.log("((((((((((((((+>", result)
+      // console.log("((((((((((((((+>", result)
       throw new Error(`HTTP error image! Status: ${result.status}`);
     }
   };
   const DeleteGroupMessage = async msgId => {
     setLastAction('delete');
-    console.log("GGGGGGGGG")
-    console.log(msgId)
-    console.log("GGGGGGGGG")
     const formData = new FormData();
     formData.append('msgId', msgId);
     formData.append('groupId', groupId);
@@ -189,9 +192,7 @@ const GroupChat = props => {
         Alert.alert('Token required');
       } else {
         const updatedMessageList = data.clearedArray;
-        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
-        console.log(updatedMessageList);
-        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+       
         if (data.success) {
           setMsgList(data.clearedArray);
         } else {
@@ -220,9 +221,6 @@ const GroupChat = props => {
       console.log('msg notification gya tmhary receiver ko');
     }
     setMsgList([...msgList, msgData]);
-    console.log("%%%%%%%%%%%")
-    console.log(msgData)
-    console.log("%%%%%%%%%")
     scrollToBottom();
   };
   const receivePreviousMessagesFromDb = async () => {
@@ -241,33 +239,16 @@ const GroupChat = props => {
           Alert.alert('Token required');
         } else {
           setMsgList(msgs);
+          setIsLoading(false)
           scrollToBottom();
         }
       })
       .catch(err => {
         console.log(err);
       });
-  };
-  const selectImage = () => {
-    const options = {
-      maxWidth: 1080,
-      maxHeight: 1080,
-    };
-    launchImageLibrary(options, Response => {
-      if (Response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (Response.error) {
-        console.log('ImagePicker Error: ', Response.error);
-      } else {
-        const imageMessage = { uri: Response.assets[0].uri, name: Response.assets[0].fileName, type: Response.assets[0].type };
-        setSelecetdImageMsg(imageMessage);
-      }
-    }).then(() => {
-      showModal();
-    });
-  };
+  };  
   const scrollToBottom = () => {
-    console.log('scrollToBottom called----------');
+    console.log('scrollToBottom in grps called----------');
     if (flatListRef.current && msgList.length > 0) {
       flatListRef.current.scrollToEnd({ animated: true });
     }
@@ -276,21 +257,17 @@ const GroupChat = props => {
   useEffect(() => {
     scrollToBottom();
   }, []);
-  // get currently sent message
   useEffect(() => {
     socket.on('getCurrentMsg', handleGetCurrentMsg);
-    // socket.on('getCurrentImageMsg', handleGetCurrentMsg);
-    // Clean up the event listener when component unmounts
     return () => {
       socket.off('getCurrentMsg', handleGetCurrentMsg);
-      // socket.off('getCurrentImageMsg', handleGetCurrentMsg);
     };
   }, [handleGetCurrentMsg]);
 
   useEffect(() => {
-    receivePreviousMessagesFromDb();
+    receivePreviousMessagesFromDb().then(()=>{setIsLoading(false)})
     props.navigation.addListener('focus', () => {
-      receivePreviousMessagesFromDb();
+      receivePreviousMessagesFromDb().then(()=>{setIsLoading(false)})
     });
   }, []);
   const joinGroupChat = async () => {
@@ -325,6 +302,7 @@ const GroupChat = props => {
             <GroupChatHeader navigation={props.navigation} item={item} callClearGroupChat={() => { clearGroupChat() }} />
           )}
           <View style={{ flex: 1 }}>
+          {/* {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>} */}
             {msgList.length != 0 ? (
               <FlatList
                 data={msgList.length != 0 ? msgList : []}
@@ -350,9 +328,9 @@ const GroupChat = props => {
               // extraData={msgList.length != 0 ? msgList : []}
               // enableOnAndroid={false}
               />
-            ) : (
+            ) : !isLoading&&(
               <View style={GroupChatStyle.startConvBtn}>
-                <Text style={GroupChatStyle.startConvText}>
+                <Text style={HomeNeoCards.noSearchResultText}>
                   Start Conversation
                 </Text>
               </View>
@@ -369,7 +347,9 @@ const GroupChat = props => {
               sendMessage();
             }}
             sendGroupImageMessage={() => {
-              selectImage();
+              handleSelectImage().then(() => {
+                showModal();
+              })
             }}
             isSending={isSending}
           />

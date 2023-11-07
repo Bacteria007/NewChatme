@@ -8,5 +8,9 @@ export const Primary_StatusBar = () => {
   const { theme } = useContext(ThemeContext)
     return <StatusBar barStyle={theme.statusBarText} backgroundColor={theme.backgroundColor} animated={true} />
 }
+export const NewGroupScreen_StatusBar = () => {
+  const { theme } = useContext(ThemeContext)
+    return <StatusBar barStyle={theme.statusBarText} backgroundColor={AppColors.Lavender} animated={true} />
+}
 
  

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet, Animated } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import UserChatStyle from '../../assets/styles/UserChatStyle';
@@ -11,35 +11,60 @@ import {
 import { TouchableRipple } from 'react-native-paper';
 import AppColors from '../../assets/colors/Appcolors';
 import { ThemeContext } from '../../context/ThemeContext';
+import ReactNativeModal from 'react-native-modal';
+import GroupChatStyle from '../../assets/styles/GroupScreenStyle/GroupChatStyle';
+import { Icons } from '../../assets/Icons';
+import { ZoomImage } from '../../helpers/UiHelpers/ZoomImage';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
-const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, imagMessage, changeHeader, msgId }) => {
-  const { language, baseUrl, currentUser, selectedImageUri, storeImageUri } = useContext(AppContext);
+const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, navigation }) => {
+  const { baseUrl, currentUser } = useContext(AppContext);
   const { darkThemeActivator, theme } = useContext(ThemeContext);
-  console.log("msgItem user", msgItem)
+  const [visible, setVisible] = useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
   const rippleColor = 'rgba(0,0,0,0.1)'
   const rippleColor2 = AppColors.tab
 
+
+ 
+  const handleOnPress = () => {
+
+    if (msgItem.image) {
+      if (visible) {
+        hideModal()
+      } else if (!visible && changeHeader) {
+        setChangeHeader(false);
+        setMsgId(null);
+      } else {
+        showModal()
+      }
+    }
+    else {
+      setChangeHeader(false);
+      setMsgId(null);
+    }
+  }
+  const handleLongPress = () => {
+
+    setChangeHeader(true);
+    setMsgId(msgItem._id);
+
+  }
   return (
     <View style={{ backgroundColor: ((changeHeader == true) && (msgId == msgItem._id)) ? (darkThemeActivator ? theme.rippleColor : rippleColor2) : 'transparent', marginBottom: hp('1') }}>
       <TouchableRipple
         rippleColor={darkThemeActivator ? theme.rippleColor : rippleColor2}
-        onPress={() => {
-          setChangeHeader(false);
-          setMsgId(null);
-
-        }}
-        onLongPress={() => {
-          setChangeHeader(true);
-          setMsgId(msgItem._id);
-        }}
+        onPress={() => { handleOnPress() }}
+        onLongPress={() => { handleLongPress() }}
       >
         <View style={UserChatStyle.userMessageContainer(msgItem.senderId === currentUser.userId)}>
           {msgItem.content != 'ChatMe_Image' ?
             <Text
               style={UserChatStyle.textStyle}>
               {msgItem.content}
-            </Text> : <Image source={{ uri: `${baseUrl}${msgItem.image}` }} style={{ height: hp('30%'), width: wp('50%') }} />}
+            </Text> : <Image source={{ uri: `${baseUrl}${msgItem.image}` }} resizeMode='cover' style={{ height: hp('30%'), width: wp('50%') }} />}
 
           <View style={UserChatStyle.timeAndMood}>
             <Text
@@ -52,6 +77,31 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
           </View>
         </View>
       </TouchableRipple>
+      <ReactNativeModal
+        isVisible={visible}
+        onDismiss={hideModal}
+        onBackButtonPress={hideModal}
+        onBackdropPress={hideModal}
+        coverScreen={true}
+        animationIn={'fadeIn'}
+        animationOut={'fadeOut'}
+        onSwipeStart={hideModal}
+        style={UserChatStyle.modalStyle}>
+        <GestureHandlerRootView>
+          <View style={UserChatStyle.modalMainView}>
+            <View style={UserChatStyle.iamgeHeader}>
+              <TouchableOpacity onPress={hideModal}>
+                <Icons.Ionicons
+                  name="arrow-back"
+                  size={wp('6.5%')}
+                  color={AppColors.lightwhite}
+                />
+              </TouchableOpacity>
+            </View>
+            <ZoomImage source={{ uri: msgItem.image ? `${baseUrl}${msgItem.image}` : null }}/>
+          </View>
+        </GestureHandlerRootView>
+      </ReactNativeModal>
     </View>
   );
 };

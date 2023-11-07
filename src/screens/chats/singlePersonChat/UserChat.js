@@ -4,6 +4,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  ScrollView, Image, ActivityIndicator
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -17,12 +18,18 @@ import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedCha
 import RenderChats from '../../../components/RenderAllChats/RenderChats';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import { ThemeContext } from '../../../context/ThemeContext';
-import {socket} from "../../../helpers/Socket/Socket";
-import { PaperProvider } from 'react-native-paper';
+import { socket } from "../../../helpers/Socket/Socket";
+import { PaperProvider, TouchableRipple } from 'react-native-paper';
+import { SelectImage } from '../../../helpers/launchCameraHelper/SelectImage';
+import ReactNativeModal from 'react-native-modal';
+import GroupChatStyle from '../../../assets/styles/GroupScreenStyle/GroupChatStyle';
+import { Icons } from '../../../assets/Icons';
+import axios from 'axios';
+
 const UserChat = (props) => {
 
   // GLOBAL STATES
-  const { baseUrl, currentUser, token, chatWithNewMsg, setChatWithNewMsg } = useContext(AppContext);
+  const { baseUrl, currentUser, token, apiKey } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
 
   // VARIABLES
@@ -34,17 +41,19 @@ const UserChat = (props) => {
   const [msgId, setMsgId] = useState(null);
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
+  const [isSending, setIsSending] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
   const [lastAction, setLastAction] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
 
   // PARAMS
   const { contact } = props.route.params;
   const receiver = contact.contactData;
 
   // FUNCTIONS
-  const [onlineUsers, setOnlineUsers] = useState([]);
-  const showOnlineUsers = async (users) => {
-    await setOnlineUsers(users);
-  }
+
   const scrollToBottom = () => {
     // console.log('---------------------');
     console.log('scrollToBottom singleuserchat called');
@@ -124,12 +133,8 @@ const UserChat = (props) => {
     }
   };
   const handleGetCurrentMsg = msgData => {
-    // console.log("######################")
-    // console.log(msgData)
-    // console.log("######################")
-    if (msgData.senderId !== currentUser.userId) {
       setMessageList([...messageList, msgData])
-    }
+      scrollToBottom()
   };
   const messagesFromDb = async () => {
     const res = await fetch(`${baseUrl}/messages?chatId=${contact._id}&userId=${currentUser.userId}`, {
@@ -150,6 +155,7 @@ const UserChat = (props) => {
         return !message.deletedBy.includes(currentMessage.userId);
       });
       setMessageList(filterMsgs);
+      setIsLoading(false)
     }
   };
   const joinPrivateChat = async () => {
@@ -166,6 +172,92 @@ const UserChat = (props) => {
     //   socket.disconnect();
     // };
   };
+  const handleSelectImage = async () => {
+    SelectImage(setImagMessage)
+  };
+  const sendImageMessage = async () => {
+    console.log("{{{{{{}}}}}}", imagMessage)
+    const formdata = new FormData();
+    console.log("KKKKKKKKKK", typeof imagMessage)
+    formdata.append('content', 'ChatMe_Image');
+    formdata.append('senderId', currentUser.userId);
+    formdata.append('recieverId', receiver._id);
+    formdata.append('chatId', contact._id);
+    formdata.append('ChatMe_Image', imagMessage);
+
+    const response = await fetch(`${baseUrl}/sendImageMsg`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formdata,
+    });
+
+    if (!response.ok) {
+      console.log("+>", response)
+      hideModal()
+      throw new Error(`HTTP error image! Status: ${response.status}`);
+    } else {
+      const data = await response.json();
+      console.log('send img res', data.newImage);
+      scrollToBottom()
+      hideModal()
+    }
+
+    // console.error(`catch sending img msg error: ${error.message}`);
+
+  };
+  const sendMessage = async () => {
+    setIsSending(true);
+    await axios
+      .post(
+        'https://api.openai.com/v1/engines/text-davinci-003/completions',
+        {
+          prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
+          max_tokens: 1024,
+          temperature: 0.5,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+          },
+        },
+      )
+      .then(async response => {
+        const moodOfUser = response.data.choices[0].text.trim();
+        if (moodOfUser != '') {
+          const messageData = {
+            content: currentMessage.trim(),
+            senderId: currentUser.userId,
+            receiverId: receiver._id,
+            chatId: contact._id,
+            mood: moodOfUser,
+          };
+          await socket.emit('send_message', messageData);
+          setIsSending(false);
+          scrollToBottom();
+          setCurrentMessage('');
+        } else {
+          setIsSending(false);
+        }
+      })
+      .catch(async error => {
+        console.error('Error detecting mood:', error);
+        const messageData = {
+          content: currentMessage.trim(),
+          senderId: currentUser.userId,
+          receiverId: receiver._id,
+          chatId: contact._id,
+          mood: 'normal',
+        };
+
+        await socket.emit('send_message', messageData);
+        setIsSending(false);
+        setCurrentMessage('');
+        scrollToBottom()
+      });
+  };
   // HOOKS
   useEffect(() => {
     socket.on(`receive_message`, handleGetCurrentMsg);
@@ -176,7 +268,7 @@ const UserChat = (props) => {
     };
   }, [handleGetCurrentMsg]);
   useEffect(() => {
-    messagesFromDb();
+    messagesFromDb()
   }, []);
   useEffect(() => {
     joinPrivateChat();
@@ -187,80 +279,123 @@ const UserChat = (props) => {
 
   return (
     <PaperProvider>
-    <View styles={UserChatStyle.contianer(theme.chatScreenColor)}>
-      <Primary_StatusBar />
-      <View style={{ height: hp('100%'), width: wp('100%') }}>
-        {changeHeader != true ? (
-          <UserChatHeader item={receiver} navigation={props.navigation} clearFunc={() => { clearChat() }}/>
-        ) : (
-          <ChangedChatHeader
-            // msgId={msgId}
-            navigation={props.navigation}
-            setChangeHeader={setChangeHeader}
-            DeleteFunction={() => {
-              DeleteMessage(msgId);
-            }}
-            
-          />
-        )}
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={{ flex: 1 }}
-          contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={[UserChatStyle.container2(theme.chatScreenColor)]}>
-            <FlatList
-              data={messageList}
-              renderItem={({ item }) => (
-                <RenderChats
-                  msgItem={item}
-                  receiver={receiver}
-                  setChangeHeader={setChangeHeader}
-                  setMsgId={setMsgId}
-                  document={document}
-                  changeHeader={changeHeader}
-                  msgId={msgId}
-                />
-              )}
-              keyExtractor={(item, index) => index.toString()}
-              onContentSizeChange={() => {
-                if (lastAction !== 'delete') {
-                  scrollToBottom();
-                }
-                setLastAction(null);
+      <View styles={UserChatStyle.contianer(theme.chatScreenColor)}>
+        <Primary_StatusBar />
+        <View style={{ height: hp('100%'), width: wp('100%') }}>
+          {changeHeader != true ? (
+            <UserChatHeader item={receiver} navigation={props.navigation} clearFunc={() => { clearChat() }} />
+          ) : (
+            <ChangedChatHeader
+              // msgId={msgId}
+              navigation={props.navigation}
+              setChangeHeader={setChangeHeader}
+              DeleteFunction={() => {
+                DeleteMessage(msgId);
               }}
-              contentContainerStyle={[UserChatStyle.messagesContainer]}
-              ref={flatListRef}
-            // keyboardShouldPersistTaps="handled"
-            // enableOnAndroid={false}
-            // extraData={messageList}
+
             />
-          </View>
-          <UserChatInput
-            inputRef={inputRef}
-            callScrollToBottomFunc={() => {
-              scrollToBottom();
-            }}
-            receiver={receiver}
-            chatId={contact._id}
-            socket={socket}
-            setMessageList={ml => {
-              setMessageList(ml);
-            }}
-            setImagMessage={setImagMessage}
-            imagMessage={imagMessage}
-            setDocument={doc => {
-              setDocument(doc);
-            }}
-            currentMessage={currentMessage}
-            setCurrentMessage={cm => {
-              setCurrentMessage(cm);
-            }}
-            messageget={messagesFromDb}
-          />
-        </KeyboardAvoidingView>
+          )}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flexGrow: 1 }}>
+            <View style={[UserChatStyle.container2(theme.chatScreenColor)]}>
+            {/* {isLoading && <View style={UserChatStyle.contianer(theme.chatScreenColor)}><ActivityIndicator size="small" color={'black'} /></View>} */}
+              <FlatList
+                data={messageList}
+                renderItem={({ item }) => (
+                  <RenderChats
+                  navigation={props.navigation}
+                    msgItem={item}
+                    receiver={receiver}
+                    setChangeHeader={setChangeHeader}
+                    setMsgId={setMsgId}
+                    document={document}
+                    changeHeader={changeHeader}
+                    msgId={msgId}
+                  />
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                onContentSizeChange={() => {
+                  if (lastAction !== 'delete') {
+                    scrollToBottom();
+                  }
+                  setLastAction(null);
+                }}
+                contentContainerStyle={[UserChatStyle.messagesContainer]}
+                ref={flatListRef}
+              />
+            </View>
+            <UserChatInput
+              inputRef={inputRef}
+              callScrollToBottomFunc={() => { scrollToBottom() }}
+              callSendMessageFunc={() => { sendMessage() }}
+              callSendImageMessageFunc={() => { handleSelectImage().then(() => { showModal() }) }}
+              isSending={isSending}
+              currentMessage={currentMessage}
+              setCurrentMessage={(msg) => setCurrentMessage(msg)}
+            />
+          </KeyboardAvoidingView>
+        </View>
       </View>
-    </View>
+      <ReactNativeModal
+        isVisible={visible}
+        onDismiss={hideModal}
+        onBackButtonPress={hideModal}
+        onBackdropPress={hideModal}
+        coverScreen={true}
+      style={GroupChatStyle.modalStyle}
+      >
+        <View style={GroupChatStyle.modalMainView}>
+          <ScrollView
+            contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
+          // maximumZoomScale={2} 
+          >
+            <ScrollView
+              contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
+              horizontal={true}
+            >
+              <Image
+                source={{ uri: imagMessage ? imagMessage.uri : null }}
+                style={GroupChatStyle.image}
+              />
+            </ScrollView>
+          </ScrollView>
+          <View style={GroupChatStyle.iamgeHeader}>
+            <TouchableRipple
+              rippleColor={theme.rippleColor}
+              borderless
+              onPress={() => {
+                hideModal();
+              }}
+              style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <View style={GroupChatStyle.microphoneContainerView}>
+                <Icons.Ionicons
+                  name="close"
+                  size={wp('5.7%')}
+                  color={'black'}
+                />
+              </View>
+            </TouchableRipple>
+            <TouchableRipple
+              rippleColor={theme.rippleColor}
+              borderless
+              onPress={() => {
+                sendImageMessage();
+              }}>
+              <View style={GroupChatStyle.microphoneContainerView}>
+                <Icons.Octicons
+                  name="check"
+                  size={wp('5.7%')}
+                  color={'black'}
+                />
+              </View>
+            </TouchableRipple>
+          </View>
+        </View>
+      </ReactNativeModal>
     </PaperProvider>
+
   );
 };
 

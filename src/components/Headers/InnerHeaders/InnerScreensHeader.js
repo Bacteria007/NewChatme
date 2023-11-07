@@ -12,9 +12,10 @@ import {
 } from 'react-native-responsive-screen';
 import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 import { Icons } from '../../../assets/Icons';
-import {Primary_StatusBar} from '../../statusbars/Primary_StatusBar';
+import { Primary_StatusBar } from '../../statusbars/Primary_StatusBar';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { Appbar, Surface, TouchableRipple } from 'react-native-paper';
+import AppColors from '../../../assets/colors/Appcolors';
 
 
 const InnerScreensHeader = ({ navigation, screenName }) => {
@@ -22,16 +23,22 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
 
   return (
     <View style={[DrawerHeaderStyle.containerView]}>
-      <View style={DrawerHeaderStyle.headerView(theme.backgroundColor)}>
-      <Primary_StatusBar />
+      <View style={DrawerHeaderStyle.headerView(screenName !=="NewGroup"?theme.backgroundColor:AppColors.Lavender)}>
+        <Primary_StatusBar />
         <TouchableRipple
           onPress={() => {
-            navigation.goBack();
+            if (screenName === "NewGroup") {
+              navigation.replace("InnerScreens",{screen:"CreateGroup"})
+              console.log("nav new group",screenName)
+            }
+            else {
+              navigation.goBack();
+            }
           }}
           rippleColor={theme.rippleColor}
           borderless
           style={DrawerHeaderStyle.backBtn}
-          >
+        >
           <Icons.Ionicons
             name="arrow-back"
             size={wp('7%')}
@@ -39,7 +46,7 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
             style={{ marginLeft: wp('2%') }}
           />
         </TouchableRipple>
-        <Text style={[DrawerHeaderStyle.screenNameStyle, { color: theme.headerIconsColor }]}>{screenName}</Text>
+        <Text style={[DrawerHeaderStyle.screenNameStyle, { color: theme.headerIconsColor }]}>{screenName=="NewGroup"?"New Group":screenName}</Text>
       </View>
     </View>
 
@@ -53,15 +60,15 @@ export const AfterSignUpScreenHeader = ({ navigation, screenName }) => {
   return (
     <View style={[DrawerHeaderStyle.containerView]}>
       <View style={DrawerHeaderStyle.headerView(theme.backgroundColor)}>
-      
+
         <TouchableRipple
           onPress={() => {
             navigation.goBack();
           }}
           rippleColor={theme.rippleColor}
           borderless
-          style={[DrawerHeaderStyle.backBtn,{alignItems:'center'}]}
-          >
+          style={[DrawerHeaderStyle.backBtn, { alignItems: 'center' }]}
+        >
           <Icons.Ionicons
             name="arrow-back"
             size={wp('7%')}
