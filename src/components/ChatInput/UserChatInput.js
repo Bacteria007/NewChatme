@@ -9,7 +9,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Icons } from '../../assets/Icons';
 import UserChatInputStyle from '../../assets/styles/UserChatInputStyle';
 import {
@@ -191,6 +191,39 @@ const UserChatInput = ({
       setKeyboardOpen(false);
     }
   };
+//   const isUserBlocked = async () => {
+//     const formdata = new FormData();
+
+//     formdata.append('senderId', currentUser.userId);
+//     formdata.append('recieverId', receiver._id);
+//     formdata.append('chatId', chatId);
+
+//     try {
+//       console.log("try block req")
+//       const response = await fetch(`${baseUrl}/checkBlockUser`, {
+//         method: 'POST',
+//         headers: {         
+//             // 'Content-Type': 'application/json',
+//           'Content-Type': 'multipart/form-data',
+//          },
+//         body: formdata,
+//       });
+
+//       const data = await response.json(); // Parse the response body as JSON
+//       console.log('block res', data);
+//     } catch (error) {
+//       console.error('Error in block res:', error);
+//     }
+//   };
+
+//   useEffect(()=>{
+//     return()=>{
+// console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{")
+//       isUserBlocked()
+// console.log("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}")
+
+//     }
+//   },[handleFocus])
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () => {
       setKeyboardOpen(true);

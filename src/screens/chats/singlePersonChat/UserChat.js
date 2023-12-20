@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
-  View,
+  View,Text,
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  ToastAndroid,
 } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -35,6 +36,8 @@ const UserChat = (props) => {
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
   const [lastAction, setLastAction] = useState(null);
+  const [isBlocked, setIsBlocked] = useState(false)
+  const [iInitBlock, setIinitBlock] = useState(false)
 
   // PARAMS
   const { contact } = props.route.params;
@@ -123,6 +126,81 @@ const UserChat = (props) => {
       console.error('Error deleting message:', error);
     }
   };
+  const userBlocked = async () => {
+    const formData = new FormData();
+    formData.append('senderId', currentUser.userId);
+    formData.append('chatId', contact._id);
+    formData.append('receiverId', receiver._id);
+
+    try {
+      const response = await fetch(`${baseUrl}/blockUser`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      if (data.message == 'Please provide a valid token.') {
+        Alert.alert('Provide a valid token.');
+      } else if (data.message == 'Please provide a token.') {
+        Alert.alert('Token required');
+      } else {
+        if (data.success) {
+          console.log("user blocked")
+          setIsBlocked(true)
+          setIinitBlock(true)
+        } else {
+          console.log("user not blocked")
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting message:', error);
+  };
+
+};
+const userUnBlocked = async () => {
+  const formData = new FormData();
+  formData.append('senderId', currentUser.userId);
+  formData.append('chatId', contact._id);
+  formData.append('receiverId', receiver._id);
+
+  try {
+    const response = await fetch(`${baseUrl}/unBlockUser`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+    // console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHH")
+    // console.log(data.clearedArray)
+    // console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHH")
+    if (data.message == 'Please provide a valid token.') {
+      Alert.alert('Provide a valid token.');
+    } else if (data.message == 'Please provide a token.') {
+      Alert.alert('Token required');
+    } 
+    // else {
+      if (data.msg=='user unBlocked successfuly') {
+        console.log("user unblocked")
+        setIinitBlock(false)
+        setIsBlocked(false)
+      } else {
+        console.log("user not unblocked")
+        setIinitBlock(true)
+
+      }
+    // }
+  } catch (error) {
+    console.error('Error in unblocking:', error);
+};
+
+};
+
   const handleGetCurrentMsg = msgData => {
     // console.log("######################")
     // console.log(msgData)
@@ -166,7 +244,48 @@ const UserChat = (props) => {
     //   socket.disconnect();
     // };
   };
+  const isUserBlocked = async () => {
+    const formdata = new FormData();
+
+    formdata.append('senderId', currentUser.userId);
+    formdata.append('receiverId', receiver._id);
+    formdata.append('chatId', contact._id);
+
+    try {
+      console.log("try block req")
+      const response = await fetch(`${baseUrl}/checkBlockUser`, {
+        method: 'POST',
+        headers: {         
+          'Content-Type': 'multipart/form-data',
+         },
+        body: formdata,
+      });
+
+      const data = await response.json(); // Parse the response body as JSON
+      console.log('block res', data);
+      if(data.msg=="Your friend blocked you."){
+        ToastAndroid.showWithGravity('Your friend blocked you.', ToastAndroid.SHORT, ToastAndroid.BOTTOM,);
+        setIsBlocked(true)
+        setIinitBlock(false)
+      }else if(data.msg=="You blocked this user."){
+        ToastAndroid.showWithGravity('You blocked this user.', ToastAndroid.SHORT, ToastAndroid.BOTTOM,);
+        setIsBlocked(true)
+        setIinitBlock(true)
+      }else if(data.msg=="Both users have blocked each other."){
+        ToastAndroid.showWithGravity('Both have blocked each other.', ToastAndroid.SHORT, ToastAndroid.BOTTOM,);
+        setIsBlocked(true)
+        setIinitBlock(true)
+      }
+    } catch (error) {
+      console.error('Error in block res:', error);
+    }
+  };
+
+
   // HOOKS
+  useEffect(()=>{
+      isUserBlocked()
+  },[scrollToBottom])
   useEffect(() => {
     socket.on(`receive_message`, handleGetCurrentMsg);
     socket.on(`receive_image_message`, handleGetCurrentMsg);
@@ -191,7 +310,7 @@ const UserChat = (props) => {
       <Primary_StatusBar />
       <View style={{ height: hp('100%'), width: wp('100%') }}>
         {changeHeader != true ? (
-          <UserChatHeader item={receiver} navigation={props.navigation} clearFunc={() => { clearChat() }}/>
+          <UserChatHeader item={receiver} navigation={props.navigation} iInitBlock={iInitBlock} clearFunc={() => { clearChat() }} blockFunc={()=>{userBlocked()}} unBlockFunc={()=>{userUnBlocked()}} isBlocked={isBlocked}/>
         ) : (
           <ChangedChatHeader
             // msgId={msgId}
@@ -235,6 +354,7 @@ const UserChat = (props) => {
             // extraData={messageList}
             />
           </View>
+          {!isBlocked&&
           <UserChatInput
             inputRef={inputRef}
             callScrollToBottomFunc={() => {
@@ -256,7 +376,7 @@ const UserChat = (props) => {
               setCurrentMessage(cm);
             }}
             messageget={messagesFromDb}
-          />
+          />}
         </KeyboardAvoidingView>
       </View>
     </View>

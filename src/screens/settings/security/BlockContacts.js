@@ -14,7 +14,7 @@ const BlockContacts = ({ navigation }) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { baseUrl, currentUser, token } = useContext(AppContext);
-
+  const [selectedContact, setSelectedContact] = useState(null);
   const [blockedContactList, setBlockedContactList] = useState([]);
 
   const fetchBlockContactList = async () => {
@@ -37,24 +37,32 @@ const BlockContacts = ({ navigation }) => {
   }
   const unblockContact = async (item) => {
     console.log("unblock item ==>>", item)
+    const formData = new FormData();
+    formData.append('senderId', currentUser.userId);
+    formData.append('chatId', item.chatId);
+    formData.append('receiverId', item.blockedId);
+  
     try {
-      const response = await fetch(`${baseUrl}/unblockContact?userId=${currentUser.userId}&friendId=${item.contactData._id}`, {
-        method: 'GET',
+      const response = await fetch(`${baseUrl}/unBlockUser`, {
+        method: 'POST',
+        body: formData,
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
-      })
-      if (response.ok) {
-        const data = await response.json();
-        console.log("contact unblocked successfully", data);
-        // item.isFriend = true
-        // item.isBlocked = false
+      });
+      const data = await response.json();
+      if (data.message == 'Please provide a valid token.') {
+        Alert.alert('Provide a valid token.');
+      } else if (data.message == 'Please provide a token.') {
+        Alert.alert('Token required');
+      } 
+      if (data.msg=='user unBlocked successfuly') {
+        console.log("user unblocked")
         ToastAndroid.showWithGravity('unblocked successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER);
         removeBlockedContact(item)
-        // navigation.replace("DrawerStack")
+        setIsModalVisible(false)
       } else {
-        console.log('Error un blocking contact:', response.status);
+        console.log("user not unblocked")
         ToastAndroid.showWithGravity('cannot unblocked', ToastAndroid.SHORT, ToastAndroid.CENTER);
       }
     } catch (error) {
@@ -62,7 +70,7 @@ const BlockContacts = ({ navigation }) => {
     }
 
   }
-  const removeBlockedContact = (contactToRemove) => {
+    const removeBlockedContact = (contactToRemove) => {
     setBlockedContactList((prevList) =>
       prevList.filter((contact) => contact.contactData._id !== contactToRemove.contactData._id)
     );
@@ -84,12 +92,14 @@ const BlockContacts = ({ navigation }) => {
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity onPress={() => {
+                  setSelectedContact(item);
                   toggleModal()
                 }}
                 >
-                  <Modal isVisible={isModalVisible}
+                  <Modal isVisible={isModalVisible&& selectedContact === item}
                     onBackdropPress={() => {
                       setIsModalVisible(false);
+                      setSelectedContact(null)
                     }}
                     style={{}}
                     backdropColor={AppColors.black}

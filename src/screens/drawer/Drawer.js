@@ -12,7 +12,7 @@ import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator, useDraw
 import TermsAndConditions from '../TermsAndConditions';
 // import TabScreens from './TabScreens';
 import UserProfile from '../profile/UserProfile';
-import AboutUs from '../about/AboutUs';
+import AboutUs from '../About/AboutUs';
 import AppColors from '../../assets/colors/Appcolors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../context/ThemeContext';

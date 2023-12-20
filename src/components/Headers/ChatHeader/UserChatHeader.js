@@ -25,7 +25,7 @@ import ReactNativeModal from 'react-native-modal';
 import { ThemeContext } from '../../../context/ThemeContext';
 import FontStyle from '../../../assets/styles/FontStyle';
 
-const UserChatHeader = ({ item, navigation, clearFunc }) => {
+const UserChatHeader = ({ item, navigation, clearFunc,blockFunc,unBlockFunc,isBlocked,iInitBlock }) => {
   const [callTime, setCallTime] = useState(0);
   const { baseUrl, currentUser } = useContext(AppContext);
   const { theme, darkThemeActivator } = useContext(ThemeContext);
@@ -35,7 +35,8 @@ const UserChatHeader = ({ item, navigation, clearFunc }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
-
+const [blockModal, setBlockModal] = useState(false)
+const [unBlockModal, setUnBlockModal] = useState(false)
   const [clearChatModal, setClearChatModal] = useState(false);
   const showClearChatModal = () => {
     setClearChatModal(true);
@@ -56,6 +57,20 @@ const UserChatHeader = ({ item, navigation, clearFunc }) => {
     } else {
       return `${remainingSeconds} sec`;
     }
+  };
+  const showBlockModal=()=>{
+    setBlockModal(true)
+  }
+  const hideBlockModal = () => setBlockModal(false);
+  const userBlocked = async () => {
+    blockFunc()
+  };
+  const showUnBlockModal=()=>{
+    setUnBlockModal(true)
+  }
+  const hideUnBlockModal = () => setUnBlockModal(false);
+  const userUnBlocked = async () => {
+    unBlockFunc()
   };
   // #############################################################################
   const addCallDetailInBackend = async call => {
@@ -154,7 +169,7 @@ const UserChatHeader = ({ item, navigation, clearFunc }) => {
               anchorPosition='bottom'
               anchor={
                 <IconButton
-                  icon={'dots-vertical'}
+                  icon={'dots-horizontal'}
                   size={wp('7%')}
                   iconColor={theme.profileNameColor}
                   onPress={openMenu}
@@ -164,6 +179,15 @@ const UserChatHeader = ({ item, navigation, clearFunc }) => {
                 titleStyle={UserChatHeaderStyle.menuTitleStyle}
                 onPress={() => { showClearChatModal(); closeMenu() }} title="Clear Chat" />
               {/* <Divider /> */}
+              {console.log("is blocked",isBlocked)}
+              {console.log("i init blocking",iInitBlock)}
+
+                {isBlocked==true&&iInitBlock==true?<Menu.Item
+                titleStyle={UserChatHeaderStyle.menuTitleStyle}
+                onPress={() => { showUnBlockModal(); closeMenu() }} title="UnBlock" />:<Menu.Item
+                titleStyle={UserChatHeaderStyle.menuTitleStyle}
+                onPress={() => { showBlockModal(); closeMenu() }} title="Block" />}
+
             </Menu>
           </View>
         </View>
@@ -218,7 +242,7 @@ const UserChatHeader = ({ item, navigation, clearFunc }) => {
         <ReactNativeModal
           backdropOpacity={0.2}
           isVisible={clearChatModal}
-          onDismiss={hideClearChatModal}
+                onDismiss={hideClearChatModal}
           style={{ justifyContent: 'center', alignItems: 'center' }}
         >
           <View
@@ -246,6 +270,71 @@ const UserChatHeader = ({ item, navigation, clearFunc }) => {
             </View>
           </View>
         </ReactNativeModal>
+        {/* block contact */}
+        <ReactNativeModal
+          backdropOpacity={0.2}
+          isVisible={blockModal}
+          onDismiss={hideBlockModal}
+          style={{ justifyContent: 'center', alignItems: 'center' }}
+        >
+          <View
+            style={UserChatHeaderStyle.modalMainContainer}>
+
+            <Text style={UserChatHeaderStyle.modalTitleText}>
+              Do you want to block this contact?
+            </Text>
+            <View style={UserChatHeaderStyle.modalBtnView}>
+              <TouchableRipple borderless
+                style={UserChatHeaderStyle.modalBtn(AppColors.lightGrey)}
+                onPress={() => { hideBlockModal() }}
+              >
+                <Text
+                  style={UserChatHeaderStyle.modalBtnText}>
+                  Cancel
+                </Text>
+              </TouchableRipple>
+              <TouchableRipple borderless onPress={() => { userBlocked().then(() => { hideBlockModal(); setMenuVisible(false) }) }}
+                style={UserChatHeaderStyle.modalBtn(AppColors.Lilac)}>
+                <Text style={UserChatHeaderStyle.modalBtnText}>
+                  Ok
+                </Text>
+              </TouchableRipple>
+            </View>
+          </View>
+        </ReactNativeModal>
+        {/* unBlock contact */}
+        <ReactNativeModal
+          backdropOpacity={0.2}
+          isVisible={unBlockModal}
+          onDismiss={hideUnBlockModal}
+          style={{ justifyContent: 'center', alignItems: 'center' }}
+        >
+          <View
+            style={UserChatHeaderStyle.modalMainContainer}>
+
+            <Text style={UserChatHeaderStyle.modalTitleText}>
+              Do you want to UnBlock this contact?
+            </Text>
+            <View style={UserChatHeaderStyle.modalBtnView}>
+              <TouchableRipple borderless
+                style={UserChatHeaderStyle.modalBtn(AppColors.lightGrey)}
+                onPress={() => { hideUnBlockModal() }}
+              >
+                <Text
+                  style={UserChatHeaderStyle.modalBtnText}>
+                  Cancel
+                </Text>
+              </TouchableRipple>
+              <TouchableRipple borderless onPress={() => { userUnBlocked().then(() => { hideUnBlockModal(); setMenuVisible(false) }) }}
+                style={UserChatHeaderStyle.modalBtn(AppColors.Lilac)}>
+                <Text style={UserChatHeaderStyle.modalBtnText}>
+                  Ok
+                </Text>
+              </TouchableRipple>
+            </View>
+          </View>
+        </ReactNativeModal>
+
       </View>
     </View>
   );

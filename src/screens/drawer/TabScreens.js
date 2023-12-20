@@ -1,8 +1,8 @@
 import { useContext, useEffect, } from 'react';
 import { StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Reels from '../reels/Reels';
-import Calls from '../calls/Calls';
+import Reels from '../Reels/Reels';
+import Calls from '../Calls/Calls';
 import Groups from '../chats/groups/AllGroups';
 import Discussions from '../chats/discussions/Discussions';
 import StreamOutlineWhite from '../../assets/imges/footerIcons/streamOutlineBlack.svg';
