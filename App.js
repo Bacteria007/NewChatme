@@ -48,7 +48,11 @@ const AuthStack = () => (
   </Stack.Navigator>
 )
 const SettingsStack = () => (
-  <Stack.Navigator options={{ headerShown: false }}>
+  <Stack.Navigator options={{ headerShown: false }}
+    screenOptions={{
+      animation: 'slide_from_right',
+      gestureEnabled: true,
+    }}>
     <Stack.Screen name="activity" component={MyActivity} options={{ headerShown: false }} />
     <Stack.Screen name="appLanguage" component={LanguageChangeScreen} options={{ headerShown: false }} />
     <Stack.Screen name="blocked" component={BlockContacts} options={{ headerShown: false }} />
@@ -76,7 +80,11 @@ const InnerScreens = () => {
       StatusBar.setBackgroundColor(AppColors.Lavender);
     }
   }, [currentRoute]);
-  return <Stack.Navigator options={{ headerShown: false }}>
+  return <Stack.Navigator options={{ headerShown: false }}
+    screenOptions={{
+      animation: 'simple_push'
+    }}
+  >
     <Stack.Screen name="ChatBot" component={ChatBot} options={{ headerShown: false }} />
     <Stack.Screen name="UserChat" component={UserChat} options={{ headerShown: false }} />
     <Stack.Screen name="GroupChat" component={GroupChat} options={{ headerShown: false }} />
@@ -93,7 +101,7 @@ const App = () => {
 
         <NavigationContainer>
           <ZegoCallInvitationDialog />
-          <Stack.Navigator options={{ headerShown: false }} initialRouteName='AuthStack'>
+          <Stack.Navigator options={{ headerShown: false }} initialRouteName='AuthStack' >
             <Stack.Screen name="AuthStack" component={AuthStack} options={{ headerShown: false }} />
             <Stack.Screen name="DrawerStack" component={DrawerScreens} options={{ headerShown: false }} />
             <Stack.Screen name="SettingStack" component={SettingsStack} options={{ headerShown: false }} />

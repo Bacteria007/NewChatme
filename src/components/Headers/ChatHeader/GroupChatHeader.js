@@ -72,11 +72,9 @@ const GroupChatHeader = ({ item, navigation, callClearGroupChat }) => {
             {item.group_dp ?
               <Image source={{ uri: `${baseUrl}/${item.group_dp}` }} style={UserChatHeaderStyle.dpImageStyle} />
               :
-              <View style={HomeNeoCards.dpVew}>
-                <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
+                <View style={GroupHeaderStyle.dpCircle(theme.dpCircleColor)}>
                   <Icons.Ionicons name={'people'} size={wp('6')} color={theme.groupDpIconColor} />
                 </View>
-              </View>
             }
             {item.group_name ? 
 

@@ -83,6 +83,7 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     backgroundColor: darkThemeActivator ? 'white' : 'black' ,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth:1.3,borderColor:'white',
     }),
 
   ImageBackTouchable: {

@@ -13,9 +13,9 @@ export function ChatHeaderNameSubString(str) {
     }
   }
 export function CreateLastMsgSubString(str) {
-    if (str.length <= 22) {
+    if (str.length <= 40) {
       return str;
     } else {
-      return str.substring(0, 22) + '...';
+      return str.substring(0, 40) + '...';
     }
   }

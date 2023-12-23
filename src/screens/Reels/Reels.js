@@ -36,7 +36,8 @@ const Reals = props => {
         url: videoUri, // Video URL
       };
 
-      await Share.open(options);
+      const shareResult = await Share.open(options);
+      console.log('s', shareResult)
     } catch (error) {
       console.log('Error sharing video:', error);
     }
@@ -100,69 +101,70 @@ const Reals = props => {
   }, [currentIndex, videoRef.current]);
   return (
     <GestureHandlerRootView>
-    <View style={[ReelscreenStyle.containerStyle]}>
-      {/* HEADER COMPONENT OF REEL */}
-      {/* <StatusBar backgroundColor={"black"} barStyle={'light-content'}/> */}
-      <ReelHeader navigation={props.navigation} />
-      {isLoadingData && (
-        <View style={ReelscreenStyle.LoaderView}>
-          <ActivityIndicator
-            size="large"
-            color={AppColors.white}
-            style={ReelscreenStyle.LoaderStyle}
-          />
-        </View>
-      )}
-      {uploadedReels.length != 0 ?
-        <SwiperFlatList
-          vertical={true}
-          data={uploadedReels}
-          onChangeIndex={changeIndex}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => {
-            const HtmlVideo = GenerateVideoHtml(baseUrl, item, true, false)
-            return (
-              <View style={[ReelscreenStyle.flatlistContainerView]}>
-                <TouchableOpacity
-                  style={[ReelscreenStyle.TouchableOpacityStyle]}
-                  activeOpacity={1}
-                  onPress={toggleVideoPlayback}
-                >
-                  {isLoading ? (
-                    <View style={ReelscreenStyle.LoaderView}>
-                      <ActivityIndicator
-                        size="large"
-                        color={AppColors.white}
-                        style={ReelscreenStyle.LoaderStyle}
+      <View style={[ReelscreenStyle.containerStyle]}>
+        {/* HEADER COMPONENT OF REEL */}
+        {/* <StatusBar backgroundColor={"black"} barStyle={'light-content'}/> */}
+        <ReelHeader navigation={props.navigation} />
+        {isLoadingData && (
+          <View style={ReelscreenStyle.LoaderView}>
+            <ActivityIndicator
+              size="large"
+              color={AppColors.white}
+              style={ReelscreenStyle.LoaderStyle}
+            />
+          </View>
+        )}
+        {uploadedReels.length != 0 ?
+          <SwiperFlatList
+            vertical={true}
+            data={uploadedReels}
+            onChangeIndex={changeIndex}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => {
+              const HtmlVideo = GenerateVideoHtml(baseUrl, item, true, false)
+              return (
+                <View style={[ReelscreenStyle.flatlistContainerView]}>
+                  <TouchableOpacity
+                    style={[ReelscreenStyle.TouchableOpacityStyle]}
+                    activeOpacity={1}
+                    onPress={toggleVideoPlayback}
+                  >
+                    {isLoading ? (
+                      <View style={ReelscreenStyle.LoaderView}>
+                        <ActivityIndicator
+                          size="large"
+                          color={AppColors.white}
+                          style={ReelscreenStyle.LoaderStyle}
+                        />
+                      </View>
+                    ) : (
+                      <WebView
+                        originWhitelist={['*']}
+                        source={{
+                          html: `${HtmlVideo}`
+                        }}
+                        style={[ReelscreenStyle.backgroundVideo]}
+
                       />
-                    </View>
-                  ) : (
-                    <WebView
-                      originWhitelist={['*']}
-                      source={{
-                        html: `${HtmlVideo}`
-                      }}
-                      style={[ReelscreenStyle.backgroundVideo]}
-                    />
-                    // <ZoomVideo source={item}/>
-                  )}
+                      // <ZoomVideo source={item}/>
+                    )}
 
-                </TouchableOpacity>
-                <ReelFooter onPressShare={() => shareVideo()} item={item.reelUploader} />
-              </View>
-            );
-          }}
+                  </TouchableOpacity>
+                  <ReelFooter onPressShare={() => shareVideo()} item={item.reelUploader} />
+                </View>
+              );
+            }}
 
-        />
-        :
-        !isLoadingData && (<View style={ReelscreenStyle.lottieView}>
-          <Text style={ReelscreenStyle.lottieText}>
-            no reels yet.
-          </Text>
-        </View>
-        )
-      }
-    </View>
+          />
+          :
+          !isLoadingData && (<View style={ReelscreenStyle.lottieView}>
+            <Text style={ReelscreenStyle.lottieText}>
+              no reels yet.
+            </Text>
+          </View>
+          )
+        }
+      </View>
     </GestureHandlerRootView>
   );
 };

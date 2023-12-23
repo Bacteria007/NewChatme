@@ -20,10 +20,11 @@ const GroupHeaderStyle = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     elevation: 4,
+    maxHeight: hp('33')
+
   }),
   modalItem: {
     flexDirection: 'column',
-    height: hp('35')
   },
   modalItemsContainer: {
     flexDirection: 'row',
@@ -60,6 +61,23 @@ const GroupHeaderStyle = StyleSheet.create({
     color: 'gray',
     fontSize: 18
   },
+  dpView:{
+    
+      height: hp('5%'),
+      width: hp('5%'),
+      borderRadius: hp('5%'),
+
+  },
+  dpCircle: bgColor => ({
+    // marginLeft: 10,
+    height: hp('5%'),
+    width: hp('5%'),
+    borderRadius: hp('5%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: bgColor,
+
+  }),
 });
 
 export default GroupHeaderStyle;

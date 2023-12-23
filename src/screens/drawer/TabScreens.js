@@ -84,7 +84,7 @@ const TabScreens = () => {
 
         <Animated.View style={[animatedStyle, { flex: 1 }]}>
             <Tab.Navigator
-                initialRouteName="Reels"
+                initialRouteName="Groups"
                 screenOptions={({ route }) => ({
                     headerShown: false,
                     tabBarIndicatorStyle: { backgroundColor: 'transparent' },

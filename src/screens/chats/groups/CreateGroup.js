@@ -112,8 +112,6 @@ const CreateGroup = ({ navigation }) => {
 
   const renderItem = ({ item, index }) => {
     const isLastItem = index === (allUsers.length - 1);
-    // darkShadowColor={AppColors.primary}// <- this
-    // swapShadows
     console.log("fgfhgk", isLastItem)
     return (
       <TouchableOpacity onPress={() => { toggleSelection(item) }}>

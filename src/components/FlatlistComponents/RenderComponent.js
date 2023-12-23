@@ -10,22 +10,16 @@ import ReactNativeModal from 'react-native-modal';
 import AppContext from '../../context/AppContext';
 import moment from 'moment';
 import { CreateLastMsgSubString, CreateNameSubString } from '../../helpers/UiHelpers/CreateSubString';
-const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_item, navigation, }) => {
-  const { theme, darkThemeActivator } = useContext(ThemeContext);
-  const { baseUrl, currentUser, token, chatWithNewMsg, isNewMsg, setChatWithNewMsg } = useContext(AppContext);
-  const [profileModal, setProfileModal] = useState(false);
-  const [userLastMsg, setUserLastMsg] = useState(null);
-  const [groupLastMsg, setGroupLastMsg] = useState(null);
-  const chatid = discussions_item ? discussions_item._id : null;
+import FontStyle from '../../assets/styles/FontStyle';
 
-  const maxLength = 43;
-  const nameMaxLength = 23;
-  const showProfileModal = () => {
-    setProfileModal(true);
-  };
-  const hideProfileModal = () => {
-    setProfileModal(false);
-  };
+const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_item, navigation, messageList, setMessageList }) => {
+  const { theme, darkThemeActivator } = useContext(ThemeContext);
+  const { baseUrl, currentUser, token, } = useContext(AppContext);
+  const [profileModal, setProfileModal] = useState(false);
+
+  const showProfileModal = () => setProfileModal(true)
+  const hideProfileModal = () => setProfileModal(false)
+
   // Time format
   const formatMessageDate = createdAt => {
     const messageDate = moment(createdAt);
@@ -40,267 +34,64 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
       return messageDate.format('DD/MM/YYYY');
     }
   };
-  // const blockContact = async item => {
-  //   // console.log("discussion ma ", currentUser.userId)
-  //   // console.log("discussion ma ", item)
-
-  //   try {
-  //     const response = await fetch(
-  //       `${baseUrl}/blockContact?userId=${currentUser.userId}&friendId=${item.contactData._id}`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           'Content-Type': 'application/json',
-  //         },
-  //       },
-  //     );
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       console.log('blocked contact from db', data);
-  //       // item.isFriend = false
-  //       ToastAndroid.showWithGravity(
-  //         'blocked successfully.',
-  //         ToastAndroid.SHORT,
-  //         ToastAndroid.CENTER,
-  //       );
-  //     } else {
-  //       console.log('Error blocking contact:', response.status);
-  //       ToastAndroid.showWithGravity(
-  //         'Cannot blocked',
-  //         ToastAndroid.SHORT,
-  //         ToastAndroid.CENTER,
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error('Error blocking contact: ', error);
-  //   }
-  // };
-  // const deleteContact = async item => {
-  //   // console.log("discussion ma ", currentUser.userId)
-  //   // console.log("discussion ma ", item)
-
-  //   try {
-  //     const response = await fetch(
-  //       `${baseUrl}/deleteContact?userId=${currentUser.userId}&_id=${item._id}`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           'Content-Type': 'application/json',
-  //         },
-  //       },
-  //     );
-  //     if (response.ok) {
-  //       const data = await response.json();
-
-  //       const updatedContactList = contact.filter(contact => {
-  //         if (contact._id === item._id) {
-  //           // Agar msgList k msg ki Id or msgId equal hoo to screen pr na display krwao
-  //           return false; // Remove the deleted message
-  //         }
-  //         return true; // Keep other messages
-  //       });
-  //       contactsSetList(updatedContactList);
-
-  //       // item.isFriend = false
-  //       ToastAndroid.showWithGravity(
-  //         'deleted successfully.',
-  //         ToastAndroid.SHORT,
-  //         ToastAndroid.CENTER,
-  //       );
-  //     } else {
-  //       console.log('Error in deleting contact:', response.status);
-  //       ToastAndroid.showWithGravity(
-  //         'Cannot blocked',
-  //         ToastAndroid.SHORT,
-  //         ToastAndroid.CENTER,
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error('Error in deleting contact: ', error);
-  //   }
-  // };
-  // const unblockContact = async item => {
-  //   // console.log("discussion ma ", currentUser.userId)
-  //   // console.log("discussion ma ", item)
-
-  //   try {
-  //     const response = await fetch(
-  //       `${baseUrl}/unblockContact?userId=${currentUser.userId}&friendId=${item.contactData._id}`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           'Content-Type': 'application/json',
-  //         },
-  //       },
-  //     );
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       // console.log("contact unblocked successfully", data);
-  //       // item.isFriend = true
-  //       ToastAndroid.showWithGravity(
-  //         ' unblocked successfully.',
-  //         ToastAndroid.SHORT,
-  //         ToastAndroid.CENTER,
-  //       );
-  //     } else {
-  //       console.log('Error un blocking contact:', response.status);
-  //       ToastAndroid.showWithGravity(
-  //         'cannot unblocked',
-  //         ToastAndroid.SHORT,
-  //         ToastAndroid.CENTER,
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error('Error blocking contact: ', error);
-  //   }
-  // };
-  // const handleLongPress = item => {
-  //   // console.log("iiiiii", item)
-
-  //   Alert.alert(
-  //     `${item.isFriend ? 'Block User' : 'Unblock User'}`,
-  //     `${item.contactData.name}`,
-  //     [
-  //       item.isFriend
-  //         ? {
-  //             text: 'Block',
-  //             onPress: () => {
-  //               blockContact(item);
-  //             },
-  //           }
-  //         : {
-  //             text: 'UnBlock',
-  //             onPress: () => {
-  //               unblockContact(item);
-  //             },
-  //           },
-  //     ],
-  //     { cancelable: true },
-  //   );
-  // };
-  // const handleLongPressforDelete = item => {
-  //   // console.log("iiiiii", item)
-  //   Alert.alert(
-  //     `${item.isFriend ? 'Delete User' : 'Unblock User'}`,
-  //     item.isFriend ? 'Del this user?' : 'Unblock this user?',
-  //     [
-  //       item.isFriend
-  //         ? {
-  //             text: 'Delete',
-  //             onPress: () => {
-  //               deleteContact(item);
-  //             },
-  //           }
-  //         : {
-  //             text: 'Unblock',
-  //             onPress: () => {
-  //               unblockContact(item);
-  //             },
-  //           },
-  //     ],
-  //     { cancelable: true },
-  //   );
-  // };
-  const getUserLastMessage = async () => {
-
-    // console.log('req.query', discussions_item);
-    if (!discussions_item || !discussions_item._id) {
-      console.log('👤returning from getUserLastMessage')
-      return; // Exit early if discussions_item is undefined or doesn't have an _id property
-    }
-    else {
-      const res = await fetch(
-        `${baseUrl}/userLatestMessage?chatId=${chatid}&userId=${currentUser.userId}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
+  const updateUserMessagesIsRead = async (chatId) => {
+    try {
+      const response = await fetch(`${baseUrl}/updateUserMessagesIsRead?chatId=${chatId}&userId=${currentUser.userId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-      );
-      const data = await res.json();
-      console.log("🕊️🕊️🕊️🕊️🕊️🕊️🕊️🕊️")
-      console.log(data.latestMsg)
-      console.log("🕊️🕊️🕊️🕊️🕊️🕊️🕊️🕊️")
-      if (data.message == 'Please provide a valid token.') {
-        Alert.alert('Provide a valid token.');
-      } else if (data.message == 'Please provide a token.') {
-        Alert.alert('Token required');
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log('Messages updated in the backend.');
       } else {
-        setUserLastMsg(data.latestMsg)
+        console.error('Failed to update messages in the backend.');
       }
+    } catch (error) {
+      console.error('Error updating messages in the backend:', error);
     }
   };
-  const getGroupLastMessage = async () => {
-    if (!groups_item || !groups_item._id) {
-      console.log('👥👥returning from getGroupLastMessage')
-      return;
-    }
-    else {
-      const res = await fetch(
-        `${baseUrl}/groupLatestMessage?groupId=${groups_item._id}&userId=${currentUser.userId}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
+  const updateGroupMessagesIsRead = async (groupId) => {
+    try {
+      const response = await fetch(`${baseUrl}/updateGroupMessagesIsRead?groupId=${groupId}&userId=${currentUser.userId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-      );
-      const data = await res.json();
-      // console.log('i(((((())))))))))m', data);
-      if (data != null) {
-        if (data.message == 'Please provide a valid token.') {
-          Alert.alert('Provide a valid token.');
-        } else if (data.message == 'Please provide a token.') {
-          Alert.alert('Token required');
-        } else {
-          setGroupLastMsg(data);
-        }
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log('Messages updated in the backend.');
       } else {
-        // console.log('++++++++++++ grp msg is empty');
-        setGroupLastMsg(null);
+        console.error('Failed to update messages in the backend.');
       }
+    } catch (error) {
+      console.error('Error updating messages in the backend:', error);
     }
   };
-  useEffect(() => {
-    getUserLastMessage();
-    navigation.addListener('focus', () => {
-      getUserLastMessage();
-    });
-  }, []);
-  useEffect(() => {
-    getGroupLastMessage();
-    navigation.addListener('focus', () => {
-      getGroupLastMessage();
-    });
-  }, []);
+
   return (
     <TouchableOpacity
       onPress={() => {
         if (callingScreen === 'Discussions') {
-          // if (discussions_item.isFriend) {
-          // console.log("Comming form Discussions", discussions_item)
-          // } else {
-          //   ToastAndroid.showWithGravity(
-          //     `${name} is blocked.`,
-          //     ToastAndroid.SHORT,
-          //     ToastAndroid.CENTER,
-          //   );
-          // }
+          updateUserMessagesIsRead(discussions_item._id)
+          console.log('gdgd', messageList)
           navigation.navigate('InnerScreens', {
             screen: 'UserChat',
-            params: { contact: discussions_item },
+            params: { contact: discussions_item, allMsgs: discussions_item.allMessages ? discussions_item.allMessages : null },
           });
         } else if (callingScreen === 'Groups') {
-          // console.log('Comming form Groups');
+          updateGroupMessagesIsRead(groups_item._id)
           navigation.navigate('InnerScreens', {
             screen: 'GroupChat',
-            params: { item: groups_item },
+            params: { item: groups_item, allGroupMsgs: groups_item.allMessages ? groups_item.allMessages : null, },
           });
         }
       }}
@@ -356,8 +147,8 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
               </Text>
               <Text style={HomeNeoCards.lastMsgTime(darkThemeActivator)}>
                 {callingScreen !== 'Groups'
-                  ? userLastMsg && formatMessageDate(userLastMsg.createdAt)
-                  : groupLastMsg && formatMessageDate(groupLastMsg.createdAt)}
+                  ? discussions_item.latestMessage && formatMessageDate(discussions_item.latestMessage.createdAt)
+                  : groups_item.latestMessage && formatMessageDate(groups_item.latestMessage.createdAt)}
               </Text>
             </View>
             <View
@@ -370,8 +161,8 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                 style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
                 {callingScreen !== 'Groups'
                   ? [
-                    userLastMsg !== null &&
-                    (userLastMsg.content == 'ChatMe_Image' ? (
+                    discussions_item.latestMessage &&
+                    (discussions_item.latestMessage.content == 'ChatMe_Image' ? (
                       <View
                         style={{
                           flexDirection: 'row',
@@ -390,21 +181,21 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                           image
                         </Text>
                       </View>
-                    ) : CreateLastMsgSubString(userLastMsg.content)
+                    ) : CreateLastMsgSubString(discussions_item.latestMessage.content)
                     )
                   ]
                   : [
-                    groupLastMsg !== null &&
-                    (groupLastMsg.msg_type == 'text' ? (
+                    groups_item.latestMessage !== null &&
+                    (groups_item.latestMessage.msg_type == 'text' ? (
                       <Text numberOfLines={1} style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
                         <Text
                           numberOfLines={1}
                           style={HomeNeoCards.senderName}>
-                          {groupLastMsg.sender_id == currentUser.userId ?
-                            'You:  ' : (groupLastMsg.sender_name + ':  ')}
+                          {groups_item.latestMessage.sender_id == currentUser.userId ?
+                            'You:  ' : (groups_item.latestMessage.sender_name + ':  ')}
 
                         </Text>
-                        {CreateLastMsgSubString(groupLastMsg.text)}
+                        {CreateLastMsgSubString(groups_item.latestMessage.text)}
 
                       </Text>
                     ) :
@@ -418,8 +209,8 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                           <Text
                             numberOfLines={1}
                             style={HomeNeoCards.senderName}>
-                            {groupLastMsg.sender_id == currentUser.userId
-                              ? 'You:  ' : (groupLastMsg.sender_name + ':  ')}
+                            {groups_item.latestMessage.sender_id == currentUser.userId
+                              ? 'You:  ' : (groups_item.latestMessage.sender_name + ':  ')}
 
                           </Text>
                           <Icons.FontAwesome
@@ -438,6 +229,22 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                     ),
                   ]}
               </Text>
+              {(callingScreen == "Discussions" && (discussions_item.unReadMeassagesCount !== 0) &&
+                (<View style={{ height: hp(2.5), width: hp(2.5), backgroundColor: AppColors.Mauve, borderRadius: hp(2.5), justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{ color: 'white', fontSize: hp('1.2'), fontFamily: FontStyle.regularFont, textAlign: 'center' }}>
+                    {discussions_item.unReadMeassagesCount}
+                  </Text>
+                </View>
+                )
+              )}
+              {(callingScreen == "Groups" && (groups_item.unReadMeassagesCount !== 0) &&
+                <View style={{ height: hp(2.5), width: hp(2.5), backgroundColor: AppColors.Mauve, borderRadius: hp(2.5), justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{ color: 'white', fontSize: hp('1.2'), fontFamily: FontStyle.regularFont, textAlign: 'center' }}>
+                    {groups_item.unReadMeassagesCount}
+                  </Text>
+                </View>
+
+              )}
             </View>
           </View>
         </Neomorph>
