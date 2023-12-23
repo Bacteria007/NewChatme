@@ -32,6 +32,8 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
   const rippleColor = 'rgba(0,0,0,0.1)'
   const rippleColor2 = AppColors.tab
 
+ 
+
   return (
     <View style={{ backgroundColor: ((changeHeader == true) && (msgId == msgItem._id)) ? (darkThemeActivator ? theme.rippleColor : rippleColor2) : 'transparent', marginBottom: hp('1') }}>
       <TouchableRipple
@@ -88,7 +90,7 @@ const RenderChats = ({ msgItem, receiver, setChangeHeader, setMsgId, document, i
             size={wp('8%')}
           />
             </TouchableOpacity>
-              <Image source={{ uri: `${baseUrl}${msgItem.image}` }} style={{ height: hp('32%'), width: wp('100%') }} />
+              <Image source={{ uri: `${baseUrl}${msgItem.image}` }} style={{ height: undefined,aspectRatio: 1, width: wp('100%') }} resizeMode="cover" />
         </View>
       </ReactNativeModal>
 
