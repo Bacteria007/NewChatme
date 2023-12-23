@@ -23,6 +23,7 @@ const AllRequest = ({ navigation }) => {
     const [waitingRequests, setWaitingRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [profileModals, setProfileModals] = useState([]);
+    
     console.log(profileModals)
     const showProfileModal = (index) => {
         console.log('👋', index)
@@ -65,7 +66,7 @@ const AllRequest = ({ navigation }) => {
     const acceptRequest = async (contact) => {
         console.log("contact in accept-----------", contact)
         try {
-            const response = await fetch(`${baseUrl}/acceptRequest?senderId=${currentUser.userId}&receiverId=${contact.senderId._id}&requestId=${contact._id}`, {
+            const response = await fetch(`${baseUrl}/acceptRequest?requesterId=${currentUser.userId}&responderId=${contact.requesterId._id}&requestId=${contact._id}`, {
                 method: 'post',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -89,7 +90,7 @@ const AllRequest = ({ navigation }) => {
 
         // console.log("contact in reject", contact)
         try {
-            const response = await fetch(`${baseUrl}/rejectRequest?senderId=${currentUser.userId}&receiverId=${contact.senderId._id}&requestId=${contact._id}`, {
+            const response = await fetch(`${baseUrl}/rejectRequest?requesterId=${currentUser.userId}&responderId=${contact.requesterId._id}&requestId=${contact._id}`, {
                 method: 'get',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -121,11 +122,11 @@ const AllRequest = ({ navigation }) => {
             fetchWaitingRequest();
         });
         // console.log('Ⓜ️',profileModals)
-    }, []);
+    }, [fetchWaitingRequest]);
 
     // Render requests
     const renderRequests = (item, index) => {
-        // console.log("hhhh", typeof item.senderId.profileImage)
+        // console.log("hhhh", typeof item.requesterId.profileImage)
 
         return (
 
@@ -137,7 +138,7 @@ const AllRequest = ({ navigation }) => {
                     style={[HomeNeoCards.neomorphStyle(theme.homeCardColor), { justifyContent: 'space-between' }]}
                 >
                     <View style={{ flexDirection: 'row', flex: 1 }}>
-                        {item.senderId.profileImage == '' ? (
+                        {item.requesterId.profileImage == '' ? (
                             <View style={[HomeNeoCards.dpVew]}>
                                 <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
 
@@ -147,18 +148,18 @@ const AllRequest = ({ navigation }) => {
                             </View>
                         ) : (
                             <TouchableOpacity onPress={() => { showProfileModal(index) }}>
-                                <Image source={{ uri: `${baseUrl}${item.senderId.profileImage}` }} style={HomeNeoCards.dpImage} />
+                                <Image source={{ uri: `${baseUrl}${item.requesterId.profileImage}` }} style={HomeNeoCards.dpImage} />
                             </TouchableOpacity>
                         )}
                         {/* profile name view */}
                         <View style={HomeNeoCards.nameAndMsgContainer}>
                             <Text
                                 style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                                {item.senderId.name ? capitalizeFirstLetter(CreateNameSubString(item.senderId.name)) : null}
+                                {item.requesterId.name ? capitalizeFirstLetter(CreateNameSubString(item.requesterId.name)) : null}
                             </Text>
                             <Text
                                 style={HomeNeoCards.lastMsg(theme.profileNameColor)}>
-                                {item.senderId.phoneNo ? capitalizeFirstLetter(CreateNameSubString(item.senderId.phoneNo)) : null}
+                                {item.requesterId.phoneNo ? capitalizeFirstLetter(CreateNameSubString(item.requesterId.phoneNo)) : null}
                             </Text>
                         </View>
                     </View>
@@ -195,16 +196,16 @@ const AllRequest = ({ navigation }) => {
                     <View style={HomeNeoCards.modalView}>
                         <View style={HomeNeoCards.dpHeader}>
                             <Text style={HomeNeoCards.profileName(AppColors.black)}>
-                                {item.senderId.name
-                                    ? CreateNameSubString(item.senderId.name)
+                                {item.requesterId.name
+                                    ? CreateNameSubString(item.requesterId.name)
                                     : null}
                             </Text>
                         </View>
 
                         <View>
-                            {item.senderId.profileImage !== '' ?
+                            {item.requesterId.profileImage !== '' ?
                                 <Image
-                                    source={{ uri: `${baseUrl}${item.senderId.profileImage}` }}
+                                    source={{ uri: `${baseUrl}${item.requesterId.profileImage}` }}
                                     style={HomeNeoCards.dpInModal}
                                 />
                                 : null}

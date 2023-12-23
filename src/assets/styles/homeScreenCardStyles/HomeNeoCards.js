@@ -13,7 +13,6 @@ const HomeNeoCards = StyleSheet.create({
     height: hp('100%'),
     backgroundColor: bgColor,
     alignItems: 'center',
-    justifyContent: 'center'
   }),
   contentcontainer: {
     justifyContent: 'center',
@@ -65,6 +64,15 @@ const HomeNeoCards = StyleSheet.create({
     width: hp('6%'),
     borderRadius: hp('6%'),
   },
+  badgeView: (isVisible)=>({
+    height: isVisible? hp('7%'):0,
+    width:isVisible? hp('7%'):0,
+    borderRadius: hp('7%'),
+    justifyContent:'center',
+    alignItems:'center',
+    borderWidth:isVisible?1:0,
+    borderColor:AppColors.primary,
+  }),
   dpIcon: {
     height: hp('5%'),
     width: hp('5%'),

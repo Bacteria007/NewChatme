@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Keyboard,
+  Button,BackHandler
 } from 'react-native';
 import AfterSignUpStyleSheet from '../../assets/styles/AuthStyleSheet/AfterSignUpStyleSheet/AfterSignUpStyleSheet';
 import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
@@ -42,6 +43,8 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
   const [ques2, setQues2] = useState('');
   const [alreadyExist, setAlreadyExist] = useState('');
   const [errorMessage, setErrorMessage] = useState(false);
+  const [profile, setprofile] = useState('');
+  const [certificate, setCertificate] = useState('');
   const [visible, setVisible] = useState(false)
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -89,14 +92,10 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
   const setImageInBackend = async (img) => {
     const formdata = new FormData();
     formdata.append('_id', currentUser.userId);
-    formdata.append('name', 'profileImage');
     formdata.append('profileImage', img);
     fetch(`${baseUrl}/uploadProfile`, {
       method: 'POST',
-      body: formdata,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      body: formdata
     })
       .then(response => {
         if (!response.ok) {
@@ -128,11 +127,14 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
       })
       .catch(error => console.log('res error', error));
   }
+
   const handleProfileUpdate = async () => {
     console.log('aftersignup', currentUser);
     const formdata = new FormData();
     formdata.append('_id', currentUser.userId);
     formdata.append('name', name);
+    formdata.append('profile', profile);
+    formdata.append('certificate', certificate);
     // Convert security questions array to JSON and append as a string
     const securityQuestions = [
       { question: 'What is your favourite fruit?', answer: ques1 },
@@ -205,7 +207,17 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
   useEffect(() => {
     fetchProfileImage()
   }, [selectedImageUri]);
-
+  const handleBackPress = () => {
+    BackHandler.exitApp();
+    return true;
+  };
+  // HOOKS
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
   return (
     <SafeAreaView
       style={AfterSignUpStyleSheet.container(theme.backgroundColor)}>
@@ -323,6 +335,14 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
           <View style={AfterSignUpStyleSheet.nextBtnConatiner}>
             <PrimaryBtn btnTitle={TranslationFile[language].Next} onPress={handleNextBtn} />
           </View>
+          {/* <TouchableOpacity onPress={() => { SelectImage(setprofile) }}>
+            {profile&&<Image source={{uri:profile.uri}} style={{height:hp(20),width:wp(20)}}/>}
+            <Text style={{ fontSize: 15, color: 'red' }}>select profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { SelectImage(setCertificate) }}>
+          {certificate&&<Image source={{uri:certificate.uri}} style={{height:hp(20),width:wp(20)}}/>}
+            <Text style={{ fontSize: 15, color: 'red' }}>select certificate</Text>
+          </TouchableOpacity> */}
         </ScrollView>
       </KeyboardAvoidingView>
       <ReactNativeModal

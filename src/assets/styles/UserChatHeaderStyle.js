@@ -61,7 +61,7 @@ const UserChatHeaderStyle = StyleSheet.create({
   dpImageStyle: {
     height: hp('5%'),
     width: hp('5%'),
-    borderRadius: 100,
+    borderRadius: hp('5%'),
   },
   profileNameContainerStyle: {
     justifyContent: 'flex-start',

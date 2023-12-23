@@ -145,7 +145,7 @@ const AllUsers = ({ navigation }) => {
     setIsSending(true);
     try {
       const response = await fetch(
-        `${baseUrl}/sendRequest?senderId=${currentUser.userId}&receiverId=${contact._id}`,
+        `${baseUrl}/sendRequest?requesterId=${currentUser.userId}&responderId=${contact._id}`,
         {
           method: 'post',
           headers: {
@@ -172,7 +172,7 @@ const AllUsers = ({ navigation }) => {
         // Update people array to mark the user as requested
         // setPeople(prevPeople => {
         //     return prevPeople.map(user => {
-        //         if (user._id === res.senderId._id) {
+        //         if (user._id === res.requesterId._id) {
         //             return { ...user, requested: true };
         //         }
         //         return user;
@@ -192,7 +192,7 @@ const AllUsers = ({ navigation }) => {
   const cancelRequest = async contact => {
     console.log("''''''''''======''''''''''", contact);
     const result = await fetch(
-      `${baseUrl}/cancelRequest?senderId=${currentUser.userId}&receiverId=${contact._id}`,
+      `${baseUrl}/cancelRequest?requesterId=${currentUser.userId}&responderId=${contact._id}`,
       {
         method: 'get',
         headers: {
@@ -277,14 +277,15 @@ const AllUsers = ({ navigation }) => {
             </View>
           </View>
 
-          {waitingRequests.length > 0 &&
+          {/* {waitingRequests.length > 0 &&
             waitingRequests.some(
-              waitingRequest => waitingRequest.senderId._id == item._id,
+              waitingRequest => waitingRequest.requesterId._id == item._id,
             ) ? (
             <Text style={styles.reqText}>Requested...</Text>
-          ) : allPendingRequests.length > 0 &&
+          ) : */}
+          { allPendingRequests.length > 0 &&
             allPendingRequests.some(
-              pendingRequest => pendingRequest.receiverId._id == item._id,
+              pendingRequest => pendingRequest.responderId._id == item._id,
             ) ? (
             <TouchableOpacity onPress={() => cancelRequest(item)}>
               <Neomorph

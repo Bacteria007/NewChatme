@@ -1,21 +1,13 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
+import { View } from 'react-native';
 import UserChatHeaderStyle from '../../../assets/styles/UserChatHeaderStyle';
 import { Icons } from '../../../assets/Icons';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ThemeContext } from '../../../context/ThemeContext';
-import { Checkbox, TouchableRipple } from 'react-native-paper';
-import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
-import AppColors from '../../../assets/colors/Appcolors';
-import FontStyle from '../../../assets/styles/FontStyle';
-import ReactNativeModal from 'react-native-modal';
+import { TouchableRipple } from 'react-native-paper';
 
 const ChangedChatHeader = ({ DeleteFunction, setChangeHeader }) => {
   const { theme } = useContext(ThemeContext);
-
 
   return (
     <View style={UserChatHeaderStyle.changedHeaderContainerView(theme.backgroundColor)}>

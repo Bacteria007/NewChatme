@@ -17,8 +17,8 @@ const ReelHeader = ({navigation}) => {
   const { baseUrl,token,currentUser } = useContext(AppContext);
   let options = {
     mediaType: 'video',
-    maxWidth: 300,
-    maxHeight: 550,
+    maxWidth: 1080,
+    maxHeight: 1080,
     quality: 1,
   };
   const iconcolor = AppColors.white;

@@ -24,11 +24,11 @@ const Discussions = (props) => {
   const [contactList, setContactList] = useState([]);
   const [userNotFound, setUserNotFound] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  
   const fetchContactList = useCallback(async () => {
 
     try {
-      await fetch(`${baseUrl}/userContacts?userId=${currentUser.userId}`, {
+      await fetch(`${baseUrl}/userContactsWithMessages?userId=${currentUser.userId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -36,11 +36,12 @@ const Discussions = (props) => {
         },
       }).then(async (response) => {
         const data = await response.json();
-        // if(data.message=="Please provide a valid token."){
-        //   Alert.alert("Provide a valid token.")
-        // }else if(data.message=='Please provide a token.'){
-        //   Alert.alert('Token required')
-        // }else{
+        // console.log('cccccccccccccccc',data)
+        if(data.message=="Please provide a valid token."){
+          Alert.alert("Provide a valid token.")
+        }else if(data.message=='Please provide a token.'){
+          Alert.alert('Token required')
+        }else{
         const filterContact = data.filter(contact => {
           // Check if senderID and currentUser.id are equal and deletedBySender is true
           if (
@@ -54,11 +55,12 @@ const Discussions = (props) => {
           ) {
             return false; // Don't include this message in the filtered list
           }
-
+        
           return true; // Include other messages in the filtered list
         });
         setContactList(filterContact);
         setIsLoading(false)
+      }
 
       }).catch((error) => {
         console.error('Error fetching contact list:', error);
@@ -71,6 +73,8 @@ const Discussions = (props) => {
     }
 
   }, [baseUrl, currentUser.userId, token]);
+
+
   const handleSearch = text => {
     setSearchText(text);
     if (text === '') {
@@ -100,7 +104,7 @@ const Discussions = (props) => {
         <Primary_StatusBar />
         <AppHeader navigation={props.navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
         {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>}
-
+        <BotDiscussion navigation={props.navigation} />
         {searchText !== '' && searchedChat.length === 0 && userNotFound === true ? (
           <View style={Containers.centerContainer}>
             <Text style={HomeNeoCards.noSearchResultText}>No user with this name.</Text>
@@ -115,28 +119,26 @@ const Discussions = (props) => {
                 renderItem={({ item }) => {
                   return (
                     <RenderComponent
-                      name={item.contactData.name}
-                      dp={item.contactData.profileImage}
+                      name={item.contactData?item.contactData.name:null}
+                      dp={item.contactData?item.contactData.profileImage:null}
                       callingScreen={"Discussions"}
                       discussions_item={item}
-                      contactsSetList={(cl) => {    // Ye ContactList ka setter beja hai
-                        setContactList(cl)
-                      }}
                       contact={contactList}    // Ye ContactList ka getter beja hai
                       navigation={props.navigation}
+
                     />
                   )
                 }}
-                ListHeaderComponent={<BotDiscussion navigation={props.navigation} />}
-                ListHeaderComponentStyle={HomeNeoCards.flatlistHeaderComponent}
+                // ListHeaderComponent={<BotDiscussion navigation={props.navigation} />}
+                // ListHeaderComponentStyle={HomeNeoCards.flatlistHeaderComponent}
                 ListFooterComponent={FooterComponent}
 
               />
               :
               !isLoading && (
-                  <View style={Containers.centerContainer}>
-                    <Text style={HomeNeoCards.noSearchResultText}>You have no friends.</Text>                 
-                  <AddFriendBtn btnTitle={'Add Friends'} onPress={()=>{props.navigation.navigate("DrawerStack",{screen:"Home",params:{screen:"Discover"}})}}/>  
+                <View style={Containers.centerContainer}>
+                  {/* <Text style={HomeNeoCards.noSearchResultText}>You have no friends.</Text> */}
+                  <AddFriendBtn btnTitle={'Add Friends'} onPress={() => { props.navigation.navigate("DrawerStack", { screen: "Home", params: { screen: "Discover" } }) }} />
                 </View>
               )
           )}

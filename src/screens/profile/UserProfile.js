@@ -282,7 +282,7 @@ const UserProfile = props => {
               />
               <View style={{ flex: 1 }}>
                 <Text style={ProfileScreenStyleSheet.itemName(textColor)}>
-                  Change Name
+                  Name
                 </Text>
                 <Text style={[ProfileScreenStyleSheet.itemName(infoColor)]}>
                   {' '}
@@ -308,7 +308,7 @@ const UserProfile = props => {
               />
               <View style={{ flex: 1 }}>
                 <Text style={ProfileScreenStyleSheet.itemName(textColor)}>
-                  Change Number
+                  Phone number
                 </Text>
                 <Text style={ProfileScreenStyleSheet.itemName(infoColor)}>
                   +92 {currentUser.phoneNumber}

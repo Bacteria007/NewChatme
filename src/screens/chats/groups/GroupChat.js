@@ -17,7 +17,7 @@ import { ScrollView } from 'react-native';
 import { PaperProvider, TouchableRipple } from 'react-native-paper';
 import axios from 'axios';
 import ChangedChatHeader from '../../../components/Headers/ChatHeader/ChangedChatHeader';
-import {socket} from "../../../helpers/Socket/Socket";
+import { socket } from "../../../helpers/Socket/Socket";
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { SelectImage } from '../../../helpers/launchCameraHelper/SelectImage';
 import Containers from '../../../assets/styles/Containers';
@@ -25,12 +25,12 @@ import Containers from '../../../assets/styles/Containers';
 const GroupChat = props => {
 
   // VARIABLES
-  const { item } = props.route.params;
+  const { item, allGroupMsgs } = props.route.params;
   const { baseUrl, currentUser, token, apiKey } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   let userId = currentUser.userId;
-  console.log('userId====', userId);
-  console.log('currentUser===', currentUser);
+  // console.log('userId====', userId);
+  // console.log('currentUser===', currentUser);
   const groupId = item._id;
   const [newMsg, setNewMsg] = useState('');
   const [selecetdImageMsg, setSelecetdImageMsg] = useState('');
@@ -75,7 +75,7 @@ const GroupChat = props => {
             msg_type: 'text',
             mood: moodOfUser,
           };
-          console.log('msg ^^^^^^^^^^^^^^^^', msgData);
+          // console.log('msg ^^^^^^^^^^^^^^^^', msgData);
           await socket.emit('send_group_message', msgData);
           setIsSending(false);
           scrollToBottom();
@@ -95,19 +95,19 @@ const GroupChat = props => {
           msg_type: 'text',
           mood: 'normal',
         };
-        console.log('msg ^^^^^^^^^^^^^^^^', msgData);
+        // console.log('msg ^^^^^^^^^^^^^^^^', msgData);
         await socket.emit('send_group_message', msgData);
         setNewMsg('');
         scrollToBottom();
         setIsSending(false);
       });
   };
-  const handleSelectImage =async () => {
+  const handleSelectImage = async () => {
     SelectImage(setSelecetdImageMsg);
   };
   const sendImageMessage = async () => {
 
-    console.log('imageMsgData ^^^^^^^^^^^^^^^^', selecetdImageMsg);
+    // console.log('imageMsgData ^^^^^^^^^^^^^^^^', selecetdImageMsg);
     const formData = new FormData()
     formData.append("text", "ChatMe_Iamge")
     formData.append("sender_id", currentUser.userId)
@@ -126,13 +126,13 @@ const GroupChat = props => {
       const data = await result.json();
       const newImageMsg = await data.newImage
       setMsgList([...msgList, newImageMsg])
-      // console.log("((((((((((((((+>")
-      // console.log(msgList)
-      // console.log("((((((((((((((+>")
+      // // console.log("((((((((((((((+>")
+      // // console.log(msgList)
+      // // console.log("((((((((((((((+>")
       hideModal();
       scrollToBottom();
     } else {
-      // console.log("((((((((((((((+>", result)
+      // // console.log("((((((((((((((+>", result)
       throw new Error(`HTTP error image! Status: ${result.status}`);
     }
   };
@@ -159,9 +159,9 @@ const GroupChat = props => {
         Alert.alert('Token required');
       } else {
         const updatedMessageList = data.messages;
-        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
-        console.log(updatedMessageList);
-        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+        // console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+        // console.log(updatedMessageList);
+        // console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
         setMsgList(updatedMessageList);
         setChangeHeader(false);
       }
@@ -192,11 +192,11 @@ const GroupChat = props => {
         Alert.alert('Token required');
       } else {
         const updatedMessageList = data.clearedArray;
-       
+
         if (data.success) {
           setMsgList(data.clearedArray);
         } else {
-          console.log("chat is not cleared")
+          // console.log("chat is not cleared")
         }
       }
     } catch (error) {
@@ -217,38 +217,16 @@ const GroupChat = props => {
   const handleGetCurrentMsg = msgData => {
     if (msgData.sender_id != userId) {
       handleNotification(msgData);
+      
     } else {
-      console.log('msg notification gya tmhary receiver ko');
+      // console.log('msg notification gya tmhary receiver ko');
     }
+    console.log('gdata: ',msgData);
     setMsgList([...msgList, msgData]);
     scrollToBottom();
   };
-  const receivePreviousMessagesFromDb = async () => {
-    await fetch(`${baseUrl}/message_history/?groupId=${groupId}&userId=${currentUser.userId}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(async res => {
-        const msgs = await res.json();
-        if (msgs.message == 'Please provide a valid token.') {
-          Alert.alert('Provide a valid token.');
-        } else if (msgs.message == 'Please provide a token.') {
-          Alert.alert('Token required');
-        } else {
-          setMsgList(msgs);
-          setIsLoading(false)
-          scrollToBottom();
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };  
   const scrollToBottom = () => {
-    console.log('scrollToBottom in grps called----------');
+    // console.log('scrollToBottom in grps called----------');
     if (flatListRef.current && msgList.length > 0) {
       flatListRef.current.scrollToEnd({ animated: true });
     }
@@ -265,13 +243,10 @@ const GroupChat = props => {
   }, [handleGetCurrentMsg]);
 
   useEffect(() => {
-    receivePreviousMessagesFromDb().then(()=>{setIsLoading(false)})
-    props.navigation.addListener('focus', () => {
-      receivePreviousMessagesFromDb().then(()=>{setIsLoading(false)})
-    });
+    setMsgList(allGroupMsgs)
   }, []);
   const joinGroupChat = async () => {
-    const data = { user_name: currentUser.name, group_name: item.group_name,groupId:groupId }
+    const data = { user_name: currentUser.name, group_name: item.group_name, groupId: groupId }
     socket.emit('join_group_chat', data);
     // Clean up when component unmounts
     // return () => {
@@ -302,7 +277,7 @@ const GroupChat = props => {
             <GroupChatHeader navigation={props.navigation} item={item} callClearGroupChat={() => { clearGroupChat() }} />
           )}
           <View style={{ flex: 1 }}>
-          {/* {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>} */}
+            {/* {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>} */}
             {msgList.length != 0 ? (
               <FlatList
                 data={msgList.length != 0 ? msgList : []}
@@ -328,7 +303,7 @@ const GroupChat = props => {
               // extraData={msgList.length != 0 ? msgList : []}
               // enableOnAndroid={false}
               />
-            ) : !isLoading&&(
+            ) : !isLoading && (
               <View style={GroupChatStyle.startConvBtn}>
                 <Text style={HomeNeoCards.noSearchResultText}>
                   Start Conversation

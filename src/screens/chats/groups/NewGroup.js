@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { View, Text, Image, TouchableOpacity, TextInput, FlatList, SafeAreaView, StatusBar } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TextInput, FlatList, SafeAreaView, StatusBar, Alert } from 'react-native'
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader'
 import CreateGroupScreenStyle from '../../../assets/styles/GroupScreenStyle/CreateGroupScreenStyle'
 import { Icons } from '../../../assets/Icons'
@@ -19,6 +19,7 @@ const NewGroup = (props) => {
     const [groupName, setgroupName] = useState('');
     const [isCreating, setIsCreating] = useState(false);
     const [groupDisplayPic, setGroupDisplayPic] = useState('');
+
     const handleSelectImage = () => {
         SelectImage(setGroupDisplayPic);
     };
@@ -42,14 +43,17 @@ const NewGroup = (props) => {
                     },
                     body: formData
                 })
-                    .then(async res => {
+                    .then(async response => {
+                        const res = await response.json()
                         if (res.data.message == "Please provide a valid token.") {
                             Alert.alert("Provide a valid token.")
                         } else if (res.data.message == 'Please provide a token.') {
                             Alert.alert('Token required')
                         } else {
+                            console.log('res=====>>>>', res.data)
                             setIsCreating(false)
                             setgroupName("")
+                            props.navigation.replace('InnerScreens', { screen: 'GroupChat', params: { item: res.data,allGroupMsgs:[] } })
                         }
                     })
                     .catch(error => {

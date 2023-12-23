@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
@@ -42,7 +42,7 @@ const AllGroups = ({ navigation }) => {
       setSearchedGroups(filteredGroups)
     }
   };
-  const fetchAllGroups = async () => {
+  const fetchAllGroups =  useCallback(async () => {
     // console.log(")))))",currentUser.userId)
     try {
       const result = await fetch(`${baseUrl}/viewGroups/?userId=${currentUser.userId}`, {
@@ -56,7 +56,7 @@ const AllGroups = ({ navigation }) => {
         const groups = await result.json()
         setAllGroups(groups)
         setIsLoading(false)
-        // console.log('all groups', allGroups)
+        console.log('all groups', groups)
         console.log('all groups length', allGroups.length)
       } else {
         console.log("no groups")
@@ -66,19 +66,19 @@ const AllGroups = ({ navigation }) => {
       setIsLoading(false)
       console.log("error fetching groups")
     }
-  }
+  }, [baseUrl, currentUser.userId, token]);
+
   useEffect(() => {
-    fetchAllGroups() 
+    fetchAllGroups(); 
     navigation.addListener('focus', () => {
       fetchAllGroups() 
     });
-  }, [])
+  }, [fetchAllGroups])
   return (
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
       <Primary_StatusBar />
       <AppHeader navigation={navigation} headerTitle={'Groups'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>}
-
       {searchText !== '' && searchedGroups.length === 0 && groupNotFound === true ? (
         <View style={Containers.centerContainer}>
           <Text style={HomeNeoCards.noSearchResultText}>No group with this name.</Text>

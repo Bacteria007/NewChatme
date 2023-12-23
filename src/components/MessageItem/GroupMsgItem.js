@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, StatusBar } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -110,20 +110,21 @@ const GroupMsgItem = ({ msgData, msgId, setChangeHeader, changeHeader, setMsgId 
         animationOut={'fadeOut'}
         backdropOpacity={0.3}
         style={UserChatStyle.modalStyle}>
-          <GestureHandlerRootView>
-        <View style={UserChatStyle.modalMainView}>
-          <View style={UserChatStyle.iamgeHeader}>
-          <TouchableOpacity  onPress={() => { hideModal()}} >
-              <Icons.Ionicons
-                name="arrow-back"
-                size={wp('6.5%')}
-                color={AppColors.lightwhite}
-              />
-            </TouchableOpacity>
 
+        <GestureHandlerRootView>
+          <View style={UserChatStyle.modalMainView}>
+            <View style={UserChatStyle.iamgeHeader}>
+              <TouchableOpacity onPress={() => { hideModal() }} >
+                <Icons.Ionicons
+                  name="arrow-back"
+                  size={wp('6.5%')}
+                  color={AppColors.white}
+                />
+              </TouchableOpacity>
+              <Text style={{ fontSize: wp('5.5'), color: AppColors.white, textAlign: 'center', fontFamily: FontStyle.regularFont, marginLeft: wp('3') }}>{msgData.sender_id == currentUser.userId ? "You" : msgData.sender_name}</Text>
+            </View>
+            <ZoomImage source={{ uri: msgData.image ? `${baseUrl}${msgData.image}` : null }} />
           </View>
-          <ZoomImage source={{ uri: msgData.image ? `${baseUrl}${msgData.image}` : null }}/>
-        </View>
         </GestureHandlerRootView>
       </ReactNativeModal>
     </View>

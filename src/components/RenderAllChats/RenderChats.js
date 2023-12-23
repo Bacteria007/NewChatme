@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet, Animated, StatusBar } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import UserChatStyle from '../../assets/styles/UserChatStyle';
@@ -16,9 +16,11 @@ import GroupChatStyle from '../../assets/styles/GroupScreenStyle/GroupChatStyle'
 import { Icons } from '../../assets/Icons';
 import { ZoomImage } from '../../helpers/UiHelpers/ZoomImage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
+import FontStyle from '../../assets/styles/FontStyle';
 
 
-const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, navigation }) => {
+const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, receiver }) => {
   const { baseUrl, currentUser } = useContext(AppContext);
   const { darkThemeActivator, theme } = useContext(ThemeContext);
   const [visible, setVisible] = useState(false);
@@ -28,9 +30,9 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
   const rippleColor2 = AppColors.tab
 
 
- 
-  const handleOnPress = () => {
 
+  const handleOnPress = () => {
+    console.log(',,,,', receiver)
     if (msgItem.image) {
       if (visible) {
         hideModal()
@@ -88,17 +90,19 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
         onSwipeStart={hideModal}
         style={UserChatStyle.modalStyle}>
         <GestureHandlerRootView>
+          {/* <StatusBar backgroundColor={"black"} barStyle={'light-content'}/> */}
           <View style={UserChatStyle.modalMainView}>
             <View style={UserChatStyle.iamgeHeader}>
-              <TouchableOpacity onPress={hideModal}>
-                <Icons.Ionicons
-                  name="arrow-back"
-                  size={wp('6.5%')}
-                  color={AppColors.lightwhite}
-                />
-              </TouchableOpacity>
+                <TouchableOpacity onPress={hideModal}>
+                  <Icons.Ionicons
+                    name="arrow-back"
+                    size={wp('6.5%')}
+                    color={AppColors.white}
+                  />
+                </TouchableOpacity>
+                <Text style={{ fontSize: wp('5.5'), color: AppColors.white, textAlign: 'center',fontFamily:FontStyle.regularFont,marginLeft:wp('3') }}>{msgItem.senderId == currentUser.userId ? "You" : receiver.name}</Text>
             </View>
-            <ZoomImage source={{ uri: msgItem.image ? `${baseUrl}${msgItem.image}` : null }}/>
+            <ZoomImage source={{ uri: msgItem.image ? `${baseUrl}${msgItem.image}` : null }} />
           </View>
         </GestureHandlerRootView>
       </ReactNativeModal>

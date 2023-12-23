@@ -2564,6 +2564,16 @@
   "resolved" "https://registry.npmjs.org/acorn/-/acorn-8.9.0.tgz"
   "version" "8.9.0"
 
+"agora-react-native-rtm@^1.5.1":
+  "integrity" "sha512-docAyX6O5J0eX8RCRAjtn7wUcks/Fq1v3S0w40fR9zf9k3mm+GLCP5kYiCy16p4h2o6v9JUaDQgUsTP/wv/s4g=="
+  "resolved" "https://registry.npmjs.org/agora-react-native-rtm/-/agora-react-native-rtm-1.5.1.tgz"
+  "version" "1.5.1"
+
+"agora-rn-uikit@^5.0.1":
+  "integrity" "sha512-S/HVSb9rMdScfH9V2yc5h29mfFGvgREwsZ0S2xGuFkc1lih32/ICE7X9p451AWuYBs9jBO1oaexVl1byxEy3BA=="
+  "resolved" "https://registry.npmjs.org/agora-rn-uikit/-/agora-rn-uikit-5.0.1.tgz"
+  "version" "5.0.1"
+
 "ajv@^6.10.0", "ajv@^6.12.4":
   "integrity" "sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g=="
   "resolved" "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz"
@@ -8239,10 +8249,10 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   "version" "18.2.0"
 
-"react-native-agora@^4.2.1":
-  "integrity" "sha512-GkGd7mguex8OUGeKDzuaFOKf313FiPjtncW/Gyk4VNp2faoYcylJHoJrOXp/XafpLzwjFbSY5Mgm3bxbxfUN9Q=="
-  "resolved" "https://registry.npmjs.org/react-native-agora/-/react-native-agora-4.2.1.tgz"
-  "version" "4.2.1"
+"react-native-agora@^4.1.0", "react-native-agora@^4.2.5":
+  "integrity" "sha512-6etSrEYp3Q871c/KHUSaoUHTS34cQc09g+AsyaCwUSVJQt7ryhab6fhsUzAAynBMrqK0590mTllsEm8Fu0LjoQ=="
+  "resolved" "https://registry.npmjs.org/react-native-agora/-/react-native-agora-4.2.5.tgz"
+  "version" "4.2.5"
   dependencies:
     "buffer" "^6.0.3"
     "eventemitter3" "^5.0.1"
@@ -8614,7 +8624,7 @@
   "resolved" "https://registry.npmjs.org/react-native-wind/-/react-native-wind-1.2.0.tgz"
   "version" "1.2.0"
 
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", "react-native@>=0.33", "react-native@>=0.35", "react-native@>=0.40.0", "react-native@>=0.42.0", "react-native@>=0.46", "react-native@>=0.48.4", "react-native@>=0.58.4", "react-native@>=0.59.0", "react-native@>=0.60", "react-native@>=0.63.3", "react-native@>=0.65.0", "react-native@>=0.70.0", "react-native@>=0.8.0", "react-native@0.71.10":
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", "react-native@>=0.33", "react-native@>=0.35", "react-native@>=0.40.0", "react-native@>=0.42.0", "react-native@>=0.46", "react-native@>=0.48.4", "react-native@>=0.58.4", "react-native@>=0.59.0", "react-native@>=0.60", "react-native@>=0.62.2", "react-native@>=0.63.3", "react-native@>=0.65.0", "react-native@>=0.70.0", "react-native@>=0.8.0", "react-native@0.71.10":
   "integrity" "sha512-O+sWH9ln7euxhHdooVL8is2FiVc7CfAp2zsKgIRhbq/8lGbJr5ZyT6QkCQK0M8Sx1zNe9puebr+BE8uBFsartg=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.71.10.tgz"
   "version" "0.71.10"
