@@ -1,15 +1,10 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
-import SignUpScreen from './src/screens/auth/SignUpScreen';
-import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
-import React from 'react';
 import SignUpScreen from './src/screens/Auth/SignUpScreen';
 import WelcomeScreen from './src/screens/Welcome/WelcomeScreen';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
-import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
-import { NavigationContainer, getFocusedRouteNameFromRoute, useFocusEffect, useRoute } from '@react-navigation/native';
 import AfterSignUpProfileScreen from './src/screens/Auth/AfterSignUpProfileScreen';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, getFocusedRouteNameFromRoute, useFocusEffect, useRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChangeNumber from './src/screens/settings/security/ChangeNumber';
 import ChangeNumberInfo from './src/screens/settings/security/ChangeNumberInfo';
