@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, Image, Text, TouchableOpacity, View, StyleSheet, ToastAndroid } from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View, StyleSheet, ToastAndroid, ActivityIndicator } from 'react-native';
 import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
 import { ThemeContext } from '../../context/ThemeContext';
@@ -11,11 +11,32 @@ import AppColors from '../../assets/colors/Appcolors';
 import { Icons } from '../../assets/Icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontStyle from '../../assets/styles/FontStyle';
+import FooterComponent from '../../components/FlatlistComponents/FooterComponent';
+import ReelscreenStyle from '../../assets/styles/ReelStyleSheet/ReelscreenStyle';
+import { capitalizeFirstLetter } from '../../helpers/UiHelpers/CapitalizeFirstLetter';
+import { CreateNameSubString } from '../../helpers/UiHelpers/CreateSubString';
+import ReactNativeModal from 'react-native-modal';
 
 const AllRequest = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
     const { baseUrl, currentUser, token } = useContext(AppContext);
     const [waitingRequests, setWaitingRequests] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [profileModals, setProfileModals] = useState([]);
+    console.log(profileModals)
+    const showProfileModal = (index) => {
+        console.log('👋', index)
+        const updatedProfileModals = [...profileModals];
+        updatedProfileModals[index] = true;
+        setProfileModals(updatedProfileModals);
+    };
+
+    const hideProfileModal = (index) => {
+        const updatedProfileModals = [...profileModals];
+        updatedProfileModals[index] = false;
+        setProfileModals(updatedProfileModals);
+    };
+
     // FUNCTIONS----------------------------
     const fetchWaitingRequest = async () => {
         await fetch(`${baseUrl}/waitingRequests?userId=${currentUser.userId}`, {
@@ -34,9 +55,11 @@ const AllRequest = ({ navigation }) => {
                 //     Alert.alert('Token required')
                 // } else
                 setWaitingRequests(allFetchedRequests)
+                setIsLoading(false)
             })
             .catch((err) => {
                 console.log('error fetching req.........', err)
+                setIsLoading(false)
             })
     }
     const acceptRequest = async (contact) => {
@@ -90,15 +113,19 @@ const AllRequest = ({ navigation }) => {
             console.log('Error rejecting request', error);
         }
     }
+
     // HOOKS---------------------------------
     useEffect(() => {
         fetchWaitingRequest();
         navigation.addListener('focus', () => {
             fetchWaitingRequest();
         });
-    }, [])
+        // console.log('Ⓜ️',profileModals)
+    }, []);
+
     // Render requests
-    const renderRequests = (item) => {
+    const renderRequests = (item, index) => {
+        // console.log("hhhh", typeof item.senderId.profileImage)
 
         return (
 
@@ -110,7 +137,7 @@ const AllRequest = ({ navigation }) => {
                     style={[HomeNeoCards.neomorphStyle(theme.homeCardColor), { justifyContent: 'space-between' }]}
                 >
                     <View style={{ flexDirection: 'row', flex: 1 }}>
-                        {!item.senderId.profileImage ? (
+                        {item.senderId.profileImage == '' ? (
                             <View style={[HomeNeoCards.dpVew]}>
                                 <View style={HomeNeoCards.iconView(theme.dpCircleColor)}>
 
@@ -119,13 +146,19 @@ const AllRequest = ({ navigation }) => {
                                 </View>
                             </View>
                         ) : (
-                            <Image source={{ uri: `${baseUrl}${item.senderId.profileImage}` }} style={HomeNeoCards.dpImage} />
+                            <TouchableOpacity onPress={() => { showProfileModal(index) }}>
+                                <Image source={{ uri: `${baseUrl}${item.senderId.profileImage}` }} style={HomeNeoCards.dpImage} />
+                            </TouchableOpacity>
                         )}
                         {/* profile name view */}
                         <View style={HomeNeoCards.nameAndMsgContainer}>
                             <Text
                                 style={HomeNeoCards.profileName(theme.profileNameColor)}>
-                                {item.senderId.name ? (item.senderId.name.length > 10 ? item.senderId.name.substring(0, 10) + '...' : item.senderId.name) : 'no name'}
+                                {item.senderId.name ? capitalizeFirstLetter(CreateNameSubString(item.senderId.name)) : null}
+                            </Text>
+                            <Text
+                                style={HomeNeoCards.lastMsg(theme.profileNameColor)}>
+                                {item.senderId.phoneNo ? capitalizeFirstLetter(CreateNameSubString(item.senderId.phoneNo)) : null}
                             </Text>
                         </View>
                     </View>
@@ -151,6 +184,34 @@ const AllRequest = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </Neomorph>
+                <ReactNativeModal
+                    visible={profileModals.length==0?setProfileModals(new Array(waitingRequests.length).fill(false)): profileModals[index]}
+                    style={HomeNeoCards.modalContainer}
+                    animationIn="fadeIn"
+                    animationOut="fadeOut"
+                    onDismiss={() => hideProfileModal(index)}
+                    onBackdropPress={() => hideProfileModal(index)}
+                    onBackButtonPress={() => hideProfileModal(index)}>
+                    <View style={HomeNeoCards.modalView}>
+                        <View style={HomeNeoCards.dpHeader}>
+                            <Text style={HomeNeoCards.profileName(AppColors.black)}>
+                                {item.senderId.name
+                                    ? CreateNameSubString(item.senderId.name)
+                                    : null}
+                            </Text>
+                        </View>
+
+                        <View>
+                            {item.senderId.profileImage !== '' ?
+                                <Image
+                                    source={{ uri: `${baseUrl}${item.senderId.profileImage}` }}
+                                    style={HomeNeoCards.dpInModal}
+                                />
+                                : null}
+                        </View>
+
+                    </View>
+                </ReactNativeModal>
             </View>
         );
     }
@@ -159,13 +220,21 @@ const AllRequest = ({ navigation }) => {
             <View>
                 <Primary_StatusBar />
                 <InnerScreensHeader screenName={"All Request"} navigation={navigation} />
+                {isLoading && <View style={ReelscreenStyle.LoaderView}><ActivityIndicator size="small" color={'black'} /></View>}
                 {waitingRequests.length != 0 ?
-                    <FlatList data={waitingRequests} renderItem={({ item }) => renderRequests(item)} style={{ marginTop: 20 }} />
-                    : <View style={Containers.centerContainer}>
-                        <Text style={HomeNeoCards.noSearchResultText}>You have no requests.</Text>
-                    </View>
+                    <FlatList data={waitingRequests} renderItem={({ item, index }) => renderRequests(item, index)} style={{ marginTop: 20 }}
+                        ListFooterComponent={FooterComponent}
+                    />
+
+                    :
+                    !isLoading && (
+                        <View style={Containers.centerContainer}>
+                            <Text style={HomeNeoCards.noSearchResultText}>You have no requests.</Text>
+                        </View>
+                    )
                 }
             </View>
+
         </View>
     )
 }

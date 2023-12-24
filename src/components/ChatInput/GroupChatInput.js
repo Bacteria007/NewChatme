@@ -18,7 +18,7 @@ import { ThemeContext } from '../../context/ThemeContext';
 
 const GroupChatInput = ({ sendMessageFunc, inputVal, setter, sendGroupImageMessage, inputRef, scrollToBottomFunc, isSending }) => {
     const { theme } = useContext(ThemeContext)
-    const [height, setHeight] = useState(hp('5%')); // Initialize height with a default value
+    const [inputHeight, setInputHeight] = useState(hp('5%')); // Initialize height with a default value
     const iconsColor = AppColors.coolgray
     const iconsColor2 = AppColors.black
     const maxInputHeight = hp('17');
@@ -26,7 +26,7 @@ const GroupChatInput = ({ sendMessageFunc, inputVal, setter, sendGroupImageMessa
 
     const onContentSizeChange = (event) => {
         const newHeight = Math.min(event.nativeEvent.contentSize.height, maxInputHeight);
-        setHeight(newHeight);
+        setInputHeight(newHeight);
     };
     return (
         <View style={UserChatInputStyle.main_input_and_mic(theme.backgroundColor)}>
@@ -34,7 +34,7 @@ const GroupChatInput = ({ sendMessageFunc, inputVal, setter, sendGroupImageMessa
                 <ScrollView style={UserChatInputStyle.scroll_inputText}>
 
                     <TextInput
-                        style={UserChatInputStyle.input}
+                        style={[UserChatInputStyle.input,{maxHeight:inputHeight}]}
                         placeholder="Message"
                         value={inputVal}
                         onChangeText={e => { setter(e) }}

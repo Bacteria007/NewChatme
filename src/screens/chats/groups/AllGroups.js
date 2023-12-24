@@ -1,37 +1,28 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-  FlatList,
-  View, Alert, TouchableOpacity, Image, StyleSheet
-} from 'react-native';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
-import { Icons } from "../../../assets/Icons";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../../context/ThemeContext';
 import AppContext from '../../../context/AppContext';
-import FAB from 'react-native-fab';
 import RenderComponent from '../../../components/FlatlistComponents/RenderComponent';
 import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
-import { Neomorph } from 'react-native-neomorph-shadows-fixes';
-import AppColors from '../../../assets/colors/Appcolors';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Text } from 'react-native';
-import FontStyle from '../../../assets/styles/FontStyle';
-import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroups';
 import UseScreenFocus from '../../../helpers/AutoRefreshScreen/UseScreenFocus';
 import Containers from '../../../assets/styles/Containers';
-import LottieView from 'lottie-react-native';
+import GroupListHeaderComponent from '../../../components/FlatlistComponents/GroupListHeader';
+import FooterComponent from '../../../components/FlatlistComponents/FooterComponent';
+import AddFriendBtn from '../../../components/Buttons/AddFriendsBtn';
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
-  const { baseUrl, currentUser,token } = useContext(AppContext)
+  const { baseUrl, currentUser, token } = useContext(AppContext)
   const { theme, darkThemeActivator } = useContext(ThemeContext)
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedGroups, setSearchedGroups] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [allGroups, setAllGroups] = useState([])
-
+  const [isLoading, setIsLoading] = useState(true)
   const [groupNotFound, setGroupNotFound] = useState(false)
 
   // FUNCTIONS
@@ -54,53 +45,40 @@ const AllGroups = ({ navigation }) => {
   const fetchAllGroups = async () => {
     // console.log(")))))",currentUser.userId)
     try {
-      const result = await fetch(`${baseUrl}/viewGroups/?userId=${currentUser.userId}`, { 
-        method: 'GET', 
-        headers: { 
+      const result = await fetch(`${baseUrl}/viewGroups/?userId=${currentUser.userId}`, {
+        method: 'GET',
+        headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
-         } 
+        }
       });
       if (result.ok) {
         const groups = await result.json()
         setAllGroups(groups)
+        setIsLoading(false)
         // console.log('all groups', allGroups)
         console.log('all groups length', allGroups.length)
       } else {
         console.log("no groups")
+        setIsLoading(false)
       }
     } catch (error) {
+      setIsLoading(false)
       console.log("error fetching groups")
     }
   }
-  UseScreenFocus(fetchAllGroups)
   useEffect(() => {
-    fetchAllGroups()
+    fetchAllGroups() 
+    navigation.addListener('focus', () => {
+      fetchAllGroups() 
+    });
   }, [])
   return (
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
       <Primary_StatusBar />
       <AppHeader navigation={navigation} headerTitle={'Groups'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
-      <TouchableOpacity onPress={() => {navigation.navigate("InnerScreens",{screen:"CreateGroup"})}} >
-        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-          <Neomorph
-            darkShadowColor={AppColors.primary}
-            lightShadowColor={AppColors.primary}
-            swapShadows
-            style={HomeNeoCards.neomorphStyle(theme.homeCardColor)}
-          >
-            <View style={GroupStyles.plusButnContainer}>
-              <View style={GroupStyles.button(theme.dpCircleColor)}>
-                <Icons.Ionicons name={'people'} size={25} color={theme.groupDpIconColor} />
-              </View>
-              <TouchableOpacity style={GroupStyles.plusButton}>
-                <Icons.MaterialCommunityIcons name="plus" size={wp('3.8%')} color="white" />
-              </TouchableOpacity>
-            </View>
-            <Text style={GroupStyles.newGroupNameStyle(darkThemeActivator)}>New Group</Text>
-          </Neomorph>
-        </View>
-      </TouchableOpacity>
+      {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>}
+
       {searchText !== '' && searchedGroups.length === 0 && groupNotFound === true ? (
         <View style={Containers.centerContainer}>
           <Text style={HomeNeoCards.noSearchResultText}>No group with this name.</Text>
@@ -111,12 +89,18 @@ const AllGroups = ({ navigation }) => {
             style={{ marginTop: 10 }}
             showsVerticalScrollIndicator={false}
             data={searchedGroups != '' ? searchedGroups : allGroups}
-            renderItem={({ item }) => <RenderComponent name={item.group_name} dp={null} callingScreen={"Groups"} groups_item={item} navigation={navigation} noti={(val) => handleNotification(val)} />}
+            renderItem={({ item }) => <RenderComponent name={item.group_name} dp={item.group_dp} callingScreen={"Groups"} groups_item={item} navigation={navigation} noti={(val) => handleNotification(val)} />}
             ref={flatListRef}
-/>
-          : <View style={Containers.centerContainer}>
-            <Text style={HomeNeoCards.noSearchResultText}>No groups were found.</Text>
+            ListHeaderComponent={<GroupListHeaderComponent navigation={navigation} />}
+            ListHeaderComponentStyle={HomeNeoCards.flatlistHeaderComponent}
+            ListFooterComponent={FooterComponent}
+          />
+          : !isLoading && (
+          <View style={Containers.centerContainer}>
+            <Text style={HomeNeoCards.noSearchResultText}>You have no groups.</Text>
+            <AddFriendBtn btnTitle={"Create New"}  onPress={()=>{navigation.navigate("InnerScreens",{screen:"CreateGroup"})}}/>
           </View>
+          )
       )}
     </View>
 

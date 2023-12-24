@@ -30,10 +30,11 @@ import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import ReactNativeModal from 'react-native-modal';
 import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/ProfileScreenStyleSheet';
 import PrimaryBtn from '../../components/Buttons/PrimaryBtn';
+import { SelectImage } from '../../helpers/launchCameraHelper/SelectImage';
 
 const AfterSignUpProfileScreen = ({ navigation }) => {
 
-  const { language, baseUrl, currentUser, updateCurrentUser, selectedImageUri, storeImageUri, token, storeUserName} = useContext(AppContext);
+  const { language, baseUrl, currentUser, updateCurrentUser, selectedImageUri, storeImageUri, token, storeUserName } = useContext(AppContext);
   const { theme, darkThemeActivator } = useContext(ThemeContext);
 
   const [name, setName] = useState('');
@@ -45,9 +46,9 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const iconSize = hp('3');
-  const important_note="These are security questions so give answers that you can easily remeber and others don't know about them."
-  
-  const handleNextBtn=() => {
+  const important_note = "These are security questions so give answers that you can easily remeber and others don't know about them."
+
+  const handleNextBtn = () => {
     Keyboard.dismiss();
     if (ques1 == '' && ques2 == '') {
       alert('Plz enter the required field');
@@ -60,107 +61,72 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
       maxWidth: 1080,
       maxHeight: 1080,
     }).then(async Response => {
-      console.log('async parsed context vali', currentUser);
-      console.log(
-        'async parsed context vali id',
-        currentUser.userId,
-      );
-      console.log(Response.assets[0]);
-      const formdata = new FormData();
-      formdata.append('_id', currentUser.userId);
-      formdata.append('name', 'profileImage');
-      formdata.append('profileImage', {
-        uri: Response.assets[0].uri,
-        type: Response.assets[0].type,
-        name: Response.assets[0].fileName,
-      });
-      fetch(`${baseUrl}/uploadProfile`, {
-        method: 'POST',
-        body: formdata,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(
-              `HTTP error! Status: ${response.status}`,
-            );
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('res aya');
-          storeImageUri(data.newImage.profileImage);
-          updateCurrentUser(existingData => ({
-            ...existingData,
-            profileImage: data.newImage.profileImage,
-          }));
-          AsyncStorage.setItem(
-            'profileImage',
-            data.newImage.profileImage,
-          );
-          // AsyncStorage.getItem("user").then((userData) => {
-          //   if (userData) {
-          //     const existingData = JSON.parse(userData);
-          //     const updatedData = { ...existingData, profileImage: data.newImage.profileImage };
-          //     console.log("async updatedion chli", updatedData)
-          //     AsyncStorage.setItem("user", JSON.stringify(updatedData));
-          //   }
-          // });
-        })
-        .catch(error => console.log('res error', error));
+      if (Response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (Response.error) {
+        console.log('ImagePicker Error: ', Response.error);
+      } else {
+        const imageMessage = { uri: Response.assets[0].uri, name: Response.assets[0].fileName, type: Response.assets[0].type };
+        setImageInBackend(imageMessage)
+      }
     })
-
   }
   const chooseFromGallery = async () => {
     launchImageLibrary({
       maxWidth: 1080,
       maxHeight: 1080,
     }).then(async Response => {
-      console.log('async parsed context vali', currentUser);
-      console.log(
-        'async parsed context vali id',
-        currentUser.userId,
-      );
-      console.log(Response.assets[0]);
-      const formdata = new FormData();
-      formdata.append('_id', currentUser.userId);
-      formdata.append('name', 'profileImage');
-      formdata.append('profileImage', {
-        uri: Response.assets[0].uri,
-        type: Response.assets[0].type,
-        name: Response.assets[0].fileName,
-      });
-      fetch(`${baseUrl}/uploadProfile`, {
-        method: 'POST',
-        body: formdata,
-        headers: {
-          Authorization: `Bearer ${token}`, // Make sure to prepend "Bearer"
-        },
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(
-              `HTTP error! Status: ${response.status}`,
-            );
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('res aya');
-          storeImageUri(data.newImage.profileImage);
-          updateCurrentUser(existingData => ({
-            ...existingData,
-            profileImage: data.newImage.profileImage,
-          }));
-          AsyncStorage.setItem(
-            'profileImage',
-            data.newImage.profileImage,
-          );
-        })
-        .catch(error => console.log('res error', error));
+      if (Response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (Response.error) {
+        console.log('ImagePicker Error: ', Response.error);
+      } else {
+        const imageMessage = { uri: Response.assets[0].uri, name: Response.assets[0].fileName, type: Response.assets[0].type };
+        setImageInBackend(imageMessage)
+      }
     })
+  }
+  const setImageInBackend = async (img) => {
+    const formdata = new FormData();
+    formdata.append('_id', currentUser.userId);
+    formdata.append('name', 'profileImage');
+    formdata.append('profileImage', img);
+    fetch(`${baseUrl}/uploadProfile`, {
+      method: 'POST',
+      body: formdata,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(
+            `HTTP error! Status: ${response.status}`,
+          );
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('res aya');
+        storeImageUri(data.newImage.profileImage);
+        updateCurrentUser(existingData => ({
+          ...existingData,
+          profileImage: data.newImage.profileImage,
+        }));
+        AsyncStorage.setItem(
+          'profileImage',
+          data.newImage.profileImage,
+        );
+        // AsyncStorage.getItem("user").then((userData) => {
+        //   if (userData) {
+        //     const existingData = JSON.parse(userData);
+        //     const updatedData = { ...existingData, profileImage: data.newImage.profileImage };
+        //     console.log("async updatedion chli", updatedData)
+        //     AsyncStorage.setItem("user", JSON.stringify(updatedData));
+        //   }
+        // });
+      })
+      .catch(error => console.log('res error', error));
   }
   const handleProfileUpdate = async () => {
     console.log('aftersignup', currentUser);
@@ -208,7 +174,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
       console.error('Error updating profile:', error);
     }
   };
-  useEffect(() => {
+  const fetchProfileImage = async () => {
     console.log('after signup console', currentUser);
     let userid = currentUser.userId;
     console.log("token useeffect", `Bearer ${token}`)
@@ -235,6 +201,9 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
         }
       })
       .catch(error => console.log('res error', error));
+  }
+  useEffect(() => {
+    fetchProfileImage()
   }, [selectedImageUri]);
 
   return (
@@ -275,8 +244,8 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
                   <Image
                     source={{ uri: `${baseUrl}${selectedImageUri}` }}
                     style={{
-                      height: hp('18%'),
-                      width: hp('18%'),
+                      height: hp('15%'),
+                      width: hp('15%'),
                       borderRadius: wp('100'),
                       backgroundColor: AppColors.periWinkle,
                     }}
@@ -288,14 +257,13 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
                 activeOpacity={0.9}
                 onPress={() => {
                   showModal()
-                }}>
-                <View
-                  style={[
-                    AfterSignUpStyleSheet.CameraIconView(darkThemeActivator),
-                    { position: 'absolute', right: 0, bottom: 0 },
-                  ]}>
-                  <Icons.MaterialIcons name="edit" size={15} color="white" />
-                </View>
+                }}
+                style={[
+                  AfterSignUpStyleSheet.CameraIconView(darkThemeActivator),
+                  { position: 'absolute', right: 0, bottom: 0 },
+                ]}
+              >
+                <Icons.MaterialIcons name="edit" size={15} color="white" />
               </TouchableOpacity>
             </View>
           </View>
@@ -353,7 +321,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
             />
           </View>
           <View style={AfterSignUpStyleSheet.nextBtnConatiner}>
-            <PrimaryBtn btnTitle={TranslationFile[language].Next} onPress={handleNextBtn}/>
+            <PrimaryBtn btnTitle={TranslationFile[language].Next} onPress={handleNextBtn} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -369,9 +337,6 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
         <View style={AfterSignUpStyleSheet.modalMainView}>
           <TouchableOpacity
             onPress={async () => {
-              console.log("iiiiiiiiiiiiiiiiiii")
-              console.log("camera")
-              console.log("iiiiiiiiiiiiiiiiiii")
               const permision = await requestCameraPermission();
               if (permision === true) {
                 openCamera().then(() => {

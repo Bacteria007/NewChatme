@@ -27,6 +27,7 @@ const ReelscreenStyle = StyleSheet.create({
     width: width,
     height: height,
     flex: 1,
+    
   },
   LoaderStyle: {
     height: hp('4'),

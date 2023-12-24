@@ -8,13 +8,13 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const UserChatStyle = StyleSheet.create({
-  contianer: (bgColor) => ({
+  contianer: bgColor => ({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: bgColor,
   }),
-  container2: (bgColor) => ({
+  container2: bgColor => ({
     flex: 1,
     padding: wp('2'),
     backgroundColor: bgColor,
@@ -23,19 +23,18 @@ const UserChatStyle = StyleSheet.create({
     flexGrow: 1,
     // justifyContent: 'flex-start',
   },
-  userMessageContainer: (user) => ({
+  userMessageContainer: user => ({
     flexDirection: 'column',
     backgroundColor: user ? AppColors.tab : AppColors.Lilac,
-    marginHorizontal: wp('2'),
+    marginHorizontal: wp('3'),
     alignSelf: user ? 'flex-end' : 'flex-start',
     paddingHorizontal: wp('2'),
-    paddingVertical:hp('0.7'),
+    paddingVertical: hp('0.7'),
     borderRadius: wp('2'),
     maxWidth: wp('80'),
     elevation: 4,
   }),
   timeAndMood: {
-
     flexDirection: 'row',
     alignSelf: 'flex-end',
     justifyContent: 'space-between',
@@ -48,21 +47,19 @@ const UserChatStyle = StyleSheet.create({
     alignSelf: 'flex-end',
     color: 'grey',
     fontFamily: FontStyle.regularFont,
-
   },
   msgAndMoodText: user => ({
     color: 'black',
     fontSize: hp('1.1'),
     alignSelf: user ? 'flex-end' : 'flex-end',
     textAlign: 'left',
-    fontFamily: FontStyle.regularFont
-
+    fontFamily: FontStyle.regularFont,
   }),
   textStyle: {
     color: 'black',
     fontSize: hp('1.7'),
     textAlign: 'left',
-    fontFamily: FontStyle.regularFont
+    fontFamily: FontStyle.regularFont,
   },
 
   inputContainer: {
@@ -79,8 +76,7 @@ const UserChatStyle = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#F2F2F2',
     borderRadius: 8,
-    fontFamily: FontStyle.regularFont
-
+    fontFamily: FontStyle.regularFont,
   },
   sendButton: {
     marginLeft: 8,
@@ -170,6 +166,33 @@ const UserChatStyle = StyleSheet.create({
     borderRadius: 100,
     paddingVertical: hp('1.9%'),
     paddingHorizontal: wp('4.6%'),
+  },
+  modalStyle: { margin: 0, justifyContent: 'center' },
+  modalMainView: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+  iamgeHeader: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    height: hp('7'),
+    backgroundColor: AppColors.lightBlack,
+    paddingHorizontal:wp('6'),
+    zIndex:1
+  },
+  backBtn: {
+    height: hp('6%'),
+    width: hp('6%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor:'red'
   },
 });
 

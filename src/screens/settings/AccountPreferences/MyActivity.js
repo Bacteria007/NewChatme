@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
-import { View, FlatList, TouchableOpacity, Alert, Text, ScrollView, SafeAreaView } from 'react-native'
+import { View, FlatList, TouchableOpacity, Alert, Text, ScrollView, SafeAreaView,ActivityIndicator  } from 'react-native'
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
 import AppContext from '../../../context/AppContext';
 import LottieView from 'lottie-react-native';
-import { IconButton, TouchableRipple } from 'react-native-paper';
+import { ActivityIndicator as ActivityIndicatorPaper, IconButton, TouchableRipple } from 'react-native-paper';
 import axios from 'react-native-axios';
 import WebView from 'react-native-webview';
 import AppColors from '../../../assets/colors/Appcolors';
@@ -13,6 +13,7 @@ import GenerateVideoHtml from '../../Reels/ReelsHtmlVideo';
 import MyActivityStyleSheet from '../../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 
 const MyActivity = ({ navigation }) => {
   const { baseUrl, currentUser, token } = useContext(AppContext);
@@ -116,24 +117,15 @@ const MyActivity = ({ navigation }) => {
         <InnerScreensHeader navigation={navigation} screenName="My uploads" />
         <View style={MyActivityStyleSheet.reelsContainer}>
           {isLoading ? (
-            <View style={MyActivityStyleSheet.lottieContainer}>
-              <LottieView style={MyActivityStyleSheet.loadingLottieStyle} autoPlay loop
-                source={require('../../../assets/animations/Lottieanimations/loading2.json')}
-              />
-              <Text style={MyActivityStyleSheet.loadingLottieText}>
-                Loading! Please Wait
-              </Text>
+            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+            <ActivityIndicator size={20} color={AppColors.black} style={{alignSelf:'center'}}/>
             </View>
           ) : (
             <View style={Containers.centercontent}>
               {allUploads.length === 0 ? (
                 <View style={MyActivityStyleSheet.lottieContainer}>
-                  <LottieView autoPlay loop style={MyActivityStyleSheet.noUploadsLottieStyle}
-                    source={require('../../../assets/animations/Lottieanimations/l12.json')} />
-                  <Text style={MyActivityStyleSheet.noUploadsText(theme.profileNameColor)}>
-                    You don't have any uploads.
-                  </Text>
-                </View>
+                  <Text style={HomeNeoCards.noSearchResultText}>You have no uploads.</Text>
+                  </View>
               ) : (
                 <FlatList
                   data={allUploads}

@@ -1,8 +1,13 @@
 import 'react-native-gesture-handler';
+import React, { useEffect, useState } from 'react';
+import SignUpScreen from './src/screens/auth/SignUpScreen';
+import WelcomeScreen from './src/screens/welcome/WelcomeScreen';
 import React from 'react';
 import SignUpScreen from './src/screens/Auth/SignUpScreen';
 import WelcomeScreen from './src/screens/Welcome/WelcomeScreen';
 import UserChat from './src/screens/chats/singlePersonChat/UserChat';
+import AfterSignUpProfileScreen from './src/screens/auth/AfterSignUpProfileScreen';
+import { NavigationContainer, getFocusedRouteNameFromRoute, useFocusEffect, useRoute } from '@react-navigation/native';
 import AfterSignUpProfileScreen from './src/screens/Auth/AfterSignUpProfileScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -24,12 +29,14 @@ import CreateGroup from './src/screens/chats/groups/CreateGroup';
 import GroupChat from './src/screens/chats/groups/GroupChat';
 import AllRequest from './src/screens/requests/AllRequests';
 import FakeSplash from './src/screens/fakeSplash/FakeSplash';
-import { LogBox } from 'react-native';
+import { LogBox, StatusBar } from 'react-native';
 import DrawerScreens from './src/screens/drawer/Drawer';
 // LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 import { enableScreens } from "react-native-screens";
 import { Primary_StatusBar } from './src/components/statusbars/Primary_StatusBar';
+import NewGroup from './src/screens/chats/groups/NewGroup';
+import AppColors from './src/assets/colors/Appcolors';
 enableScreens()
 
 
@@ -59,21 +66,36 @@ const SettingsStack = () => (
     <Stack.Screen name="Requests" component={AllRequest} options={{ headerShown: false }} />
   </Stack.Navigator>
 )
-const InnerScreens = () => (
-  <Stack.Navigator options={{ headerShown: false }}>
+const InnerScreens = () => {
+  const [currentRoute, setCurrentRoute] = useState('')
+  const route = useRoute()
+  useFocusEffect(() => {
+    const routeName = getFocusedRouteNameFromRoute(route)
+    // console.log('✅✅✅✅✅', routeName);
+    setCurrentRoute(routeName)
+  });
+  useEffect(() => {
+
+    if (currentRoute === "NewGroup") {
+      StatusBar.setBarStyle('dark-content');
+      StatusBar.setBackgroundColor(AppColors.Lavender);
+    }
+  }, [currentRoute]);
+  return <Stack.Navigator options={{ headerShown: false }}>
     <Stack.Screen name="ChatBot" component={ChatBot} options={{ headerShown: false }} />
     <Stack.Screen name="UserChat" component={UserChat} options={{ headerShown: false }} />
     <Stack.Screen name="GroupChat" component={GroupChat} options={{ headerShown: false }} />
     <Stack.Screen name="CreateGroup" component={CreateGroup} options={{ headerShown: false }} />
+    <Stack.Screen name="NewGroup" component={NewGroup} options={{ headerShown: false }} />
   </Stack.Navigator>
-)
+}
 
 const App = () => {
 
   return (
     <AppProvider>
       <SafeAreaProvider style={{ flex: 1 }}>
-        <Primary_StatusBar/>
+
         <NavigationContainer>
           <ZegoCallInvitationDialog />
           <Stack.Navigator options={{ headerShown: false }} initialRouteName='AuthStack'>

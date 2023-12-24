@@ -10,6 +10,8 @@ import Share from 'react-native-share';
 import { Text } from 'react-native-paper';
 import WebView from 'react-native-webview';
 import GenerateVideoHtml from './ReelsHtmlVideo';
+import { ZoomVideo } from '../../helpers/UiHelpers/ZoomVideo';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Reals = props => {
   //   **********************************           VARIABLES               ****************************
@@ -20,6 +22,8 @@ const Reals = props => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [uploadedReels, setUploadedReels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
   //   **********************************          USE REF               ****************************
   const videoRef = useRef(null);
   //   **********************************          FUNCTIONS               ****************************
@@ -60,9 +64,11 @@ const Reals = props => {
 
         // console.log("fetch reel response",videosWithSources)
         setUploadedReels(videosWithSources);
+        setIsLoadingData(false)
         // }
       })
       .catch(error => console.log(error));
+    setIsLoadingData(false)
   };
   // ------------------------
   const toggleVideoPlayback = () => {
@@ -75,9 +81,9 @@ const Reals = props => {
   //   **********************************          USE EFFECTS               ****************************
 
   useEffect(() => {
-    UploadedReels();
+    UploadedReels().then(() => { setIsLoadingData(false) })
     props.navigation.addListener('focus', () => {
-      UploadedReels();
+      UploadedReels().then(() => { setIsLoadingData(false) })
     });
   }, []);
 
@@ -93,10 +99,20 @@ const Reals = props => {
     }
   }, [currentIndex, videoRef.current]);
   return (
+    <GestureHandlerRootView>
     <View style={[ReelscreenStyle.containerStyle]}>
       {/* HEADER COMPONENT OF REEL */}
       {/* <StatusBar backgroundColor={"black"} barStyle={'light-content'}/> */}
       <ReelHeader navigation={props.navigation} />
+      {isLoadingData && (
+        <View style={ReelscreenStyle.LoaderView}>
+          <ActivityIndicator
+            size="large"
+            color={AppColors.white}
+            style={ReelscreenStyle.LoaderStyle}
+          />
+        </View>
+      )}
       {uploadedReels.length != 0 ?
         <SwiperFlatList
           vertical={true}
@@ -128,7 +144,9 @@ const Reals = props => {
                       }}
                       style={[ReelscreenStyle.backgroundVideo]}
                     />
+                    // <ZoomVideo source={item}/>
                   )}
+
                 </TouchableOpacity>
                 <ReelFooter onPressShare={() => shareVideo()} item={item.reelUploader} />
               </View>
@@ -137,13 +155,15 @@ const Reals = props => {
 
         />
         :
-        <View style={ReelscreenStyle.lottieView}>
+        !isLoadingData && (<View style={ReelscreenStyle.lottieView}>
           <Text style={ReelscreenStyle.lottieText}>
             no reels yet.
           </Text>
         </View>
+        )
       }
     </View>
+    </GestureHandlerRootView>
   );
 };
 

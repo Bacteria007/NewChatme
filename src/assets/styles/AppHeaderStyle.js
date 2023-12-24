@@ -53,13 +53,13 @@ const AppHeaderStyle = StyleSheet.create({
     padding: 6
   },
   botBgStyle: {
-    height: hp('4.5%'),
-    width: hp('4.5%'),
+    height: hp('6%'),
+    width: hp('6%'),
     backgroundColor: AppColors.coolgray,
     borderRadius: hp('4.5'),
     justifyContent: 'center', alignItems: 'center'
   },
-  botImgStyle: { height: hp('4.5%'), width: hp('4.5%') },
+  botImgStyle: { height: hp('5.5%'), width: hp('5.5%') },
   rippleBtn:{ height: hp('5'), width: hp('5'), borderRadius: hp('5'), justifyContent: 'center', alignItems: 'center' }
   
 });

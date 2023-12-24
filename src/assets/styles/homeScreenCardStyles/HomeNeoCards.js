@@ -13,7 +13,7 @@ const HomeNeoCards = StyleSheet.create({
     height: hp('100%'),
     backgroundColor: bgColor,
     alignItems: 'center',
-    justifyContent:'center'
+    justifyContent: 'center'
   }),
   contentcontainer: {
     justifyContent: 'center',
@@ -26,7 +26,7 @@ const HomeNeoCards = StyleSheet.create({
     zIndex: 100,
   },
   flatlistItemContainer: {
-    marginBottom: 11,
+    marginBottom: 12,
     marginTop: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -34,42 +34,35 @@ const HomeNeoCards = StyleSheet.create({
     // top: 115,
     // backgroundColor:'red'
   },
+  flatlistHeaderComponent: {
+    alignSelf: 'center',
+    marginBottom: 12,
+  },
   neomorphStyle: cardColor => ({
-    shadowRadius: 1.5,
+    shadowRadius: 2,
     borderRadius: wp('1.5'),
     flexDirection: 'row',
     alignItems: 'center',
     height: hp('10%'),
-    width: wp('93%'),
+    width: wp('96%'),
     backgroundColor: cardColor,
     paddingHorizontal: 14,
     flex: 1,
   }),
-  neomorphBlockedStyle: cardColor => ({
-    shadowRadius: 1.5,
-    borderRadius: wp('1.5'),
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: hp('10%'),
-    width: wp('93%'),
-    backgroundColor: AppColors.Plum,
-    paddingHorizontal: 14,
-    flex: 1,
-  }),
+
   addUserinGroup: bgColor => ({
     shadowRadius: 1,
     borderRadius: wp('1.5'),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: `${bgColor}`,
+    backgroundColor: bgColor,
     height: hp('4%'),
-    width: wp('14s%'),
-    // padding:wp('2%')
+    width: wp('14%'),
   }),
   dpImage: {
-    height: hp('5%'),
-    width: hp('5%'),
+    height: hp('6%'),
+    width: hp('6%'),
     borderRadius: hp('6%'),
   },
   dpIcon: {
@@ -82,13 +75,13 @@ const HomeNeoCards = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor: 'cyan',
     // paddingBottom: 5,
-    
+
   },
   iconView: bgColor => ({
     // marginLeft: 10,
-    height: hp('5%'),
-    width: hp('5%'),
-    borderRadius: hp('2.5%'),
+    height: hp('6%'),
+    width: hp('6%'),
+    borderRadius: hp('6%'),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: bgColor,
@@ -102,9 +95,9 @@ const HomeNeoCards = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: 'red',
-    
+
   },
- 
+
   profileName: textColor => ({
     fontFamily: FontStyle.regularFont,
     fontSize: wp('4'),
@@ -113,17 +106,17 @@ const HomeNeoCards = StyleSheet.create({
   }),
   lastMsg: textColor => ({
     fontFamily: FontStyle.regularFont,
-    fontSize: wp('3'),
+    fontSize: wp('2.7'),
     color: textColor,
   }),
   lastMsgTime: darkThemeActivator => ({
     fontFamily: FontStyle.regularFont,
     fontSize: wp('2.3'),
-    color: darkThemeActivator ? AppColors.white:AppColors.primary,
+    color: darkThemeActivator ? AppColors.white : AppColors.primary,
   }),
   nameAndMsgContainer: {
     flexDirection: 'column',
-    paddingHorizontal: 14,
+    paddingHorizontal: wp('4'),
     width: wp('78'),
     // backgroundColor: 'green',
   },
@@ -157,14 +150,14 @@ const HomeNeoCards = StyleSheet.create({
   },
   dpHeader: {
     height: hp('5'),
-    backgroundColor:  AppColors.white,
-    padding:5,
-    paddingHorizontal:13,
-    alignSelf:'flex-start',
+    backgroundColor: AppColors.white,
+    padding: 5,
+    paddingHorizontal: 13,
+    alignSelf: 'flex-start',
     // width: hp('30%'),
     // position:'absolute'
   },
-  modalView:{
+  modalView: {
     backgroundColor: AppColors.white,
     alignItems: 'center',
     justifyContent: 'center',
@@ -208,7 +201,7 @@ const HomeNeoCards = StyleSheet.create({
     color: AppColors.gray,
     fontSize: hp('1.7'),
     textAlign: 'center',
-    fontFamily: FontStyle.regularFont
+    fontFamily: FontStyle.lightFont
   }
 });
 

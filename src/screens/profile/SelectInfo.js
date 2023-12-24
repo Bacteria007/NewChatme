@@ -26,8 +26,8 @@ const SelectInfo = ({ iconName2, props }) => {
 
   const StoreUpdatedNameInDb = () => {
     const formData = new FormData();
-    formData.append('_id', currentUser.userId);
-    formData.append('name', userinput);
+    formData.append('userId', currentUser.userId);
+    formData.append('newName', userinput);
     fetch(`${baseUrl}/updateProfileName`, {
       method: 'POST',
       body: formData,
@@ -53,13 +53,14 @@ const SelectInfo = ({ iconName2, props }) => {
             AsyncStorage.setItem('name', data.result.name);
           }
         });
+        setIsModalOpened(false)
       })
       .catch(error => console.log('res error', error));
   };
 
   useEffect(() => {
-    let userNaame = currentUser.name;
-    storeUserName(userNaame);
+    let userName = currentUser.name;
+    storeUserName(userName);
   }, []);
   useEffect(() => {
     setUserinput(userName);
@@ -90,11 +91,7 @@ const SelectInfo = ({ iconName2, props }) => {
           onBackdropPress={() => {
             setIsModalOpened(false);
           }}
-          style={{
-            backgroundColor: 'transparent',
-            margin: 0,
-            justifyContent: 'flex-end',
-          }}>
+          style={{  margin: 0,justifyContent: 'flex-end' }}>
           <View style={[ProfileScreenStyleSheet.ModalDesign]}>
             <Text
               style={{

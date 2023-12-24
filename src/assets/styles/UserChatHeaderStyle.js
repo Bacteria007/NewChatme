@@ -17,7 +17,7 @@ const UserChatHeaderStyle = StyleSheet.create({
     // borderBottomColor:'grey'
   }),
   changedHeaderContainerView: bgColor => ({
-    backgroundColor: bgColor,
+    backgroundColor: AppColors.lightBlack,
     height: hp('7%'),
     width: wp('100'),
     flexDirection: 'row',
@@ -26,7 +26,7 @@ const UserChatHeaderStyle = StyleSheet.create({
     justifyContent: 'space-between',
     // backgroundColor:'red',
     alignItems: 'center',
-    elevation: 4,
+    // elevation: 4,
   }),
   headerView: {
     flexDirection: 'row',
@@ -64,11 +64,11 @@ const UserChatHeaderStyle = StyleSheet.create({
     borderRadius: 100,
   },
   profileNameContainerStyle: {
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   profileNameTextStyle: clr => ({
-    fontSize: wp('5%'),
+    fontSize: wp('4%'),
     color: clr,
     textAlign:'center',
     marginLeft:wp('3'),

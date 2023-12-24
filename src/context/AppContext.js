@@ -12,6 +12,7 @@ export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
   const apiKey = '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';
   const baseUrl = 'http://192.168.43.122:8888';
+  const baseUrl = 'http://192.168.43.122:8888';
 
   const [userName, setUserName] = useState('');
   const [storedUser, setStoredUser] = useState('');
@@ -20,13 +21,7 @@ export const AppProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
   const [selectedImageUri, setSelectedImageUri] = useState('');
   const [token, setToken] = useState(AsyncStorage.getItem('token'))
-  const [isNewMsg, setIsNewMsg] = useState(false);
-  const [unreadMessageCount, setUnreadMessageCount] = useState(0);
-  const [chatWithNewMsg, setChatWithNewMsg] = useState({ chatId: null, unreadMessagesCount: 0 });
-
-  const updateIsNewMsg = (val) => {
-    setIsNewMsg(val)
-  }
+ 
   const updateToken = (e) => {
     setToken(e)
   }
@@ -94,11 +89,6 @@ export const AppProvider = ({ children }) => {
         language,
         token,
         apiKey,
-        isNewMsg,
-        chatWithNewMsg,
-        unreadMessageCount,
-        setUnreadMessageCount,
-        updateIsNewMsg,
         storeUserName,
         storeLanguage,
         updateCurrentUser,
@@ -106,7 +96,6 @@ export const AppProvider = ({ children }) => {
         updateToken,
         storeLoggedinStatus,
         storeImageUri,
-        setChatWithNewMsg,
       }}>
       {children}
     </AppContext.Provider>
