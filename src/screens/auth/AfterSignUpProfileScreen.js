@@ -161,9 +161,13 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
           name: data.updated.name,
         }));
         AsyncStorage.setItem('name', data.updated.name);
+        AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(true))
         const idOfUser = currentUser.userId;
         const nameofUser = data.updated.name;
         storeUserName(nameofUser);
+        const isSignupProccessComplete=await AsyncStorage.getItem('isSignupProccessComplete')
+
+        console.log("AfterSignUpProfileScreen isSignupProccessComplete",isSignupProccessComplete)
 
         initializeZego(idOfUser, nameofUser);
         navigation.replace("DrawerStack");
@@ -200,7 +204,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
           console.log('token verify console', data.message);
         }
       })
-      .catch(error => console.log('res error', error));
+      .catch(error => console.log('res error fetch profile img', error));
   }
   useEffect(() => {
     fetchProfileImage()

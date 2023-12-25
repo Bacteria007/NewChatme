@@ -96,7 +96,7 @@ const SignUpScreen = ({ navigation }) => {
       data: formdata,
       headers: { 'Content-Type': 'multipart/form-data' },
     })
-      .then(function (response) {
+      .then (function (response) {
         if (response.data.save === true) {
           console.log('respose signup vala', response.data);
           const uId = response.data.newUser._id;
@@ -115,10 +115,14 @@ const SignUpScreen = ({ navigation }) => {
             AsyncStorage.setItem('phoneNo',response.data.newUser.phoneNo)
             AsyncStorage.setItem('token', response.data.token);
             getToken()
-            // AsyncStorage.setItem('user', JSON.stringify({userId:response.data.newUser._id,phoneNumber:response.data.newUser.phoneNo}))
+            AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(false))
+            const isSignupProccessComplete= AsyncStorage.getItem('isSignupProccessComplete')
+
+            console.log("signup isSignupProccessComplete",isSignupProccessComplete)
+    
             // getStoredUserDetails()
           // storeLoggedinStatus(true)
-          navigation.navigate('AfterSignUpProfileScreen');
+          navigation.replace('AfterSignUpProfileScreen');
 
           }
         } else {

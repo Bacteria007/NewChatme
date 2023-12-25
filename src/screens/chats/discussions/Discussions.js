@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
-import { FlatList, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { FlatList,RefreshControl, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 import { ThemeContext } from '../../../context/ThemeContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
@@ -24,7 +24,21 @@ const Discussions = (props) => {
   const [contactList, setContactList] = useState([]);
   const [userNotFound, setUserNotFound] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = () => {
+    // Perform the data fetching or refreshing logic here
+    // For example, you can fetch new messages from the server
+    // and update the state to trigger a re-render
+    setRefreshing(true);
+
+    // Simulate fetching new data (replace this with your actual data fetching logic)
+    setTimeout(() => {
+      const newMessages = [...contactList]; // Fetch new messages
+      setContactList(newMessages);
+      setRefreshing(false);
+    }, 1000); // Add a delay to simulate the fetching process
+  };
   const fetchContactList = useCallback(async () => {
 
     try {
@@ -130,7 +144,13 @@ const Discussions = (props) => {
                 ListHeaderComponent={<BotDiscussion navigation={props.navigation} />}
                 ListHeaderComponentStyle={HomeNeoCards.flatlistHeaderComponent}
                 ListFooterComponent={FooterComponent}
-
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#7E8DF5" // Customize the pull-to-refresh indicator color
+                  />
+                }
               />
               :
               !isLoading && (

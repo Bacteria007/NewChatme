@@ -128,6 +128,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
             let token = data.token
             console.log('newUser ======== ', newUser)
             AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(true))
+            AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(true))
             AsyncStorage.setItem('token', token);
             AsyncStorage.setItem('profileImage', newUser.profileImage)
             AsyncStorage.setItem('name', newUser.name)
