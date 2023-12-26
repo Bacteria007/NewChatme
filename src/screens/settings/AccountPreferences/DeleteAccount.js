@@ -12,6 +12,9 @@ import DeleteAccountStyle from '../../../assets/styles/DeleteAccountStyle';
 import LongButton from '../../../components/Buttons/LongButton';
 
 const DeleteAccount = ({navigation}) => {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
     <View style={[DeleteAccountStyle.containerView]}>
       <InnerScreensHeader navigation={navigation} screenName="Delete Account" />
