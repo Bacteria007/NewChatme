@@ -9,7 +9,7 @@ import WebView from 'react-native-webview';
 import AppColors from '../../../assets/colors/Appcolors';
 import Containers from '../../../assets/styles/Containers';
 import ReactNativeModal from 'react-native-modal';
-import GenerateVideoHtml from '../../reels/ReelsHtmlVideo';
+import GenerateVideoHtml from '../../Reels/ReelsHtmlVideo';
 import MyActivityStyleSheet from '../../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';

@@ -31,7 +31,7 @@ import ReactNativeModal from 'react-native-modal';
 import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import MyActivityStyleSheet from '../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
 import { FlatList } from 'react-native';
-import GenerateVideoHtml from '../reels/ReelsHtmlVideo';
+import GenerateVideoHtml from '../Reels/ReelsHtmlVideo';
 import WebView from 'react-native-webview';
 import { Icons } from '../../assets/Icons';
 import SelectInfo from './SelectInfo';
