@@ -1,5 +1,5 @@
 import {View, Text,TextInput} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
 import {Icons} from '../../../assets/Icons';
 import AppColors from '../../../assets/colors/Appcolors';
@@ -12,6 +12,7 @@ import DeleteAccountStyle from '../../../assets/styles/DeleteAccountStyle';
 import LongButton from '../../../components/Buttons/LongButton';
 
 const DeleteAccount = ({navigation}) => {
+  const [password, setPassword] = useState('')
   return (
     <View style={[DeleteAccountStyle.containerView]}>
       <InnerScreensHeader navigation={navigation} screenName="Delete Account" />
