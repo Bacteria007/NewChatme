@@ -106,6 +106,7 @@ const LogInScreen = ({ navigation }) => {
           updateCurrentUser({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name, fcmToken: fcmToken })
           // AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name,fcmToken:fcmToken }))
           AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(true))
+          AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(true))
           console.log("login token", response.data.token)
           AsyncStorage.setItem('token', response.data.token);
           AsyncStorage.setItem('profileImage', res.profileImage)

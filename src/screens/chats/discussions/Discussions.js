@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
-import { FlatList, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { FlatList,RefreshControl, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 import { ThemeContext } from '../../../context/ThemeContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
@@ -24,11 +24,25 @@ const Discussions = (props) => {
   const [contactList, setContactList] = useState([]);
   const [userNotFound, setUserNotFound] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    // Perform the data fetching or refreshing logic here
+    // For example, you can fetch new messages from the server
+    // and update the state to trigger a re-render
+    setRefreshing(true);
+
+    // Simulate fetching new data (replace this with your actual data fetching logic)
+    setTimeout(() => {
+      const newMessages = [...contactList]; // Fetch new messages
+      setContactList(newMessages);
+      setRefreshing(false);
+    }, 1000); // Add a delay to simulate the fetching process
+  };
   const fetchContactList = useCallback(async () => {
 
     try {
-      await fetch(`${baseUrl}/userContactsWithMessages?userId=${currentUser.userId}`, {
+      await fetch(`${baseUrl}/userContacts?userId=${currentUser.userId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -36,12 +50,11 @@ const Discussions = (props) => {
         },
       }).then(async (response) => {
         const data = await response.json();
-        // console.log('cccccccccccccccc',data)
-        if(data.message=="Please provide a valid token."){
-          Alert.alert("Provide a valid token.")
-        }else if(data.message=='Please provide a token.'){
-          Alert.alert('Token required')
-        }else{
+        // if(data.message=="Please provide a valid token."){
+        //   Alert.alert("Provide a valid token.")
+        // }else if(data.message=='Please provide a token.'){
+        //   Alert.alert('Token required')
+        // }else{
         const filterContact = data.filter(contact => {
           // Check if senderID and currentUser.id are equal and deletedBySender is true
           if (
@@ -55,12 +68,11 @@ const Discussions = (props) => {
           ) {
             return false; // Don't include this message in the filtered list
           }
-        
+
           return true; // Include other messages in the filtered list
         });
         setContactList(filterContact);
         setIsLoading(false)
-      }
 
       }).catch((error) => {
         console.error('Error fetching contact list:', error);
@@ -73,8 +85,6 @@ const Discussions = (props) => {
     }
 
   }, [baseUrl, currentUser.userId, token]);
-
-
   const handleSearch = text => {
     setSearchText(text);
     if (text === '') {
@@ -104,7 +114,7 @@ const Discussions = (props) => {
         <Primary_StatusBar />
         <AppHeader navigation={props.navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
         {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>}
-        <BotDiscussion navigation={props.navigation} />
+
         {searchText !== '' && searchedChat.length === 0 && userNotFound === true ? (
           <View style={Containers.centerContainer}>
             <Text style={HomeNeoCards.noSearchResultText}>No user with this name.</Text>
@@ -119,26 +129,34 @@ const Discussions = (props) => {
                 renderItem={({ item }) => {
                   return (
                     <RenderComponent
-                      name={item.contactData?item.contactData.name:null}
-                      dp={item.contactData?item.contactData.profileImage:null}
+                      name={item.contactData.name}
+                      dp={item.contactData.profileImage}
                       callingScreen={"Discussions"}
                       discussions_item={item}
+                      contactsSetList={(cl) => {    // Ye ContactList ka setter beja hai
+                        setContactList(cl)
+                      }}
                       contact={contactList}    // Ye ContactList ka getter beja hai
                       navigation={props.navigation}
-
                     />
                   )
                 }}
-                // ListHeaderComponent={<BotDiscussion navigation={props.navigation} />}
-                // ListHeaderComponentStyle={HomeNeoCards.flatlistHeaderComponent}
+                ListHeaderComponent={<BotDiscussion navigation={props.navigation} />}
+                ListHeaderComponentStyle={HomeNeoCards.flatlistHeaderComponent}
                 ListFooterComponent={FooterComponent}
-
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#7E8DF5" // Customize the pull-to-refresh indicator color
+                  />
+                }
               />
               :
               !isLoading && (
-                <View style={Containers.centerContainer}>
-                  {/* <Text style={HomeNeoCards.noSearchResultText}>You have no friends.</Text> */}
-                  <AddFriendBtn btnTitle={'Add Friends'} onPress={() => { props.navigation.navigate("DrawerStack", { screen: "Home", params: { screen: "Discover" } }) }} />
+                  <View style={Containers.centerContainer}>
+                    <Text style={HomeNeoCards.noSearchResultText}>You have no friends.</Text>                 
+                  <AddFriendBtn btnTitle={'Add Friends'} onPress={()=>{props.navigation.navigate("DrawerStack",{screen:"Home",params:{screen:"Discover"}})}}/>  
                 </View>
               )
           )}
