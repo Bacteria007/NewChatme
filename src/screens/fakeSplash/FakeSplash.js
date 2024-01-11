@@ -20,7 +20,9 @@ const FakeSplash = ({navigation}) => {
        const name=await AsyncStorage.getItem('name')
        const Id=await AsyncStorage.getItem('Id')
        const phoneNo=await AsyncStorage.getItem('phoneNo')
+       const isSignupProccessComplete=await AsyncStorage.getItem('isSignupProccessComplete')
         console.log("splash",currentUserStatus)
+        console.log("splash isSignupProccessComplete",isSignupProccessComplete)
         
         if(currentUserStatus==='true'){
           console.log("async sy user true check kia", `Bearer ${storedToken}` )
@@ -31,13 +33,20 @@ const FakeSplash = ({navigation}) => {
               await axios.post(`${baseUrl}/verify`, {},{
                 headers: { Authorization: `Bearer ${storedToken}` }
               }).then(function(response){
-                if(response.data.matched){
+                if(response.data.matched==true && isSignupProccessComplete=='true'){
+                  console.log("if cond both true")
                   updateCurrentUser({userId: Id, phoneNumber: phoneNo, profileImage: profileImage, name:name})
                   updateToken(storedToken)
                   navigation.replace('DrawerStack');
 
-                }else{
-                  console.log('Auto-login failed:', error);
+                }else if(isSignupProccessComplete=='false'){
+                  console.log("elseif cond isSignupProccessComplete false")
+                  updateCurrentUser({userId: Id, phoneNumber: phoneNo, profileImage: profileImage, name:name})
+                  updateToken(storedToken)
+                  navigation.replace('AfterSignUpProfileScreen');
+                }
+                else{
+                  console.log('signup process not performed');
               navigation.replace('LogInScreen');
                 }
               })

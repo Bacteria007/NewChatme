@@ -71,6 +71,7 @@ const DrawerScreens = () => {
 
       // await AsyncStorage.setItem('fcmToken','');
       await AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(false))
+      await AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(false))
       await AsyncStorage.setItem('token', '')
       await AsyncStorage.setItem('profileImage', '')
       await AsyncStorage.setItem('name', '')
