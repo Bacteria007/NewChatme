@@ -66,6 +66,7 @@ const SignUpScreen = ({ navigation }) => {
   const handleCountrySelect = country => {
     setSelectedCountry(country);
     setCountryCode(country.callingCode);
+
   };
   const getFcmToken = async () => {
     // Get the FCM token when the component mounts (app starts or user logs in)
@@ -86,9 +87,10 @@ const SignUpScreen = ({ navigation }) => {
 
   const handleSignUp = ({ navigation }) => {
     const formdata = new FormData();
-    formdata.append('phoneNo', phoneNumber);
+    formdata.append('phoneNo', `+${countryCode}${phoneNumber}`);
     formdata.append('password', password);
     formdata.append('fcmToken', fcmToken);
+    formdata.append('country', selectedCountry.name);
 
     axios({
       method: 'post',
@@ -138,7 +140,7 @@ const SignUpScreen = ({ navigation }) => {
   // }
   // AsyncStorage.removeItem("user")
   useEffect(() => {
-    setSelectedCountry({ cca2: 'PK', callingCode: '92' });
+    setSelectedCountry({ cca2: 'PK', callingCode: '92' ,name:'Pakistan'});
     setCountryCode('92');
   }, []);
 

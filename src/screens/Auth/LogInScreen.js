@@ -89,7 +89,7 @@ const LogInScreen = ({ navigation }) => {
 
   const userLogin = ({ navigation }) => {
     const formdata = new FormData();
-    formdata.append('phoneNo', phoneNumber);
+    formdata.append('phoneNo', `+${countryCode}${phoneNumber}`);
     formdata.append('password', password);
     formdata.append('fcmToken', fcmToken);
     axios({
@@ -109,7 +109,7 @@ const LogInScreen = ({ navigation }) => {
           await AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(true))
           console.log("login token", response.data.token)
           await AsyncStorage.setItem('token', response.data.token);
-          await AsyncStorage.setItem('profileImage', res.profileImage)
+          {res?.profileImage!=null||undefined ?await AsyncStorage.setItem('profileImage', res.profileImage):await AsyncStorage.setItem('profileImage', '')}
           await AsyncStorage.setItem('name', res.name)
           await AsyncStorage.setItem('Id', res._id)
           await AsyncStorage.setItem('fcmToken', fcmToken)
@@ -139,7 +139,7 @@ const LogInScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    setSelectedCountry({ cca2: 'PK', callingCode: '92' });
+    setSelectedCountry({ cca2: 'PK', callingCode: '92',name:'Pakistan' });
     setCountryCode('92');
   }, []);
 

@@ -1,4 +1,4 @@
-import {View, Text,TextInput, KeyboardAvoidingView, ScrollView, ToastAndroid} from 'react-native';
+import {View, Text,TextInput, KeyboardAvoidingView, ScrollView, ToastAndroid, Alert} from 'react-native';
 import React, { useContext, useState } from 'react';
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
 import {Icons} from '../../../assets/Icons';
@@ -20,15 +20,14 @@ const DeleteAccount = ({navigation}) => {
   const { baseUrl, currentUser,updateCurrentUser, token } = useContext(AppContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [country, setCountry] = useState('')
+  const [countryCode, setCountryCode] = useState('')
 
   const dltAccount = async (navigation) => {
     const formData = new FormData();
     formData.append('userId', currentUser.userId);
     formData.append('name', currentUser.name);
-    formData.append('phoneNo', phoneNumber);
+    formData.append('phoneNo', `${countryCode}${phoneNumber}`);
     formData.append('password', password);
-    formData.append('country', country);
 
     try {
       const response = await fetch(`${baseUrl}/deleteAccount`, {
@@ -117,10 +116,10 @@ const DeleteAccount = ({navigation}) => {
           To delete your account, confirm your country code and enter your phone
           number.
         </Text>
-        <Text style={[DeleteAccountStyle.labelText]}>Country</Text>
+        <Text style={[DeleteAccountStyle.labelText]}>Country code</Text>
         <TextInput
-        placeholder="country"
-        onChangeText={text => setCountry(text)}
+        placeholder="country code"
+        onChangeText={text => setCountryCode(text)}
         style={[{
           borderBottomWidth: wp('0.1%'),
           fontSize: wp('4.5%'),
@@ -151,10 +150,16 @@ const DeleteAccount = ({navigation}) => {
         }]}
         onChangeText={text => setPassword(text)}
       />
-      <TouchableRipple borderless onPress={() => dltAccount({navigation})}
+      <TouchableRipple borderless onPress={() => {
+        if(countryCode.includes('+')){
+          dltAccount({navigation})
+        }else{
+          Alert.alert("Country code must includes '+' symbol.")
+        }
+      }}
                 style={{
-                  height: hp('6'),
-    width: hp('14'),
+                  height: hp('5.5'),
+    width: hp('16'),
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: wp('8%'),
@@ -164,7 +169,7 @@ const DeleteAccount = ({navigation}) => {
                 }}>
                 <Text style={{
     color: AppColors.white,
-    fontSize: wp('6%'),
+    fontSize: wp('4.5%'),
     fontFamily: FontStyle.regularFont,
   }}>
                   Delete

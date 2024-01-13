@@ -39,7 +39,7 @@ const FakeSplash = ({navigation}) => {
                   updateToken(storedToken)
                   navigation.replace('DrawerStack');
 
-                }else if(isSignupProccessComplete=='false'){
+                }else if(response.data.matched==true &&isSignupProccessComplete=='false'){
                   console.log("elseif cond isSignupProccessComplete false")
                   updateCurrentUser({userId: Id, phoneNumber: phoneNo, profileImage: profileImage, name:name})
                   updateToken(storedToken)
