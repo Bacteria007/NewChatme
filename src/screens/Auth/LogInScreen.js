@@ -98,22 +98,22 @@ const LogInScreen = ({ navigation }) => {
       data: formdata,
       headers: { 'Content-Type': 'multipart/form-data' },
     })
-      .then(function (response) {
+      .then(async function (response) {
         if (response.data.match == true) {
 
           console.log("login", response.data)
           let res = response.data.loggedInUser
           updateCurrentUser({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name, fcmToken: fcmToken })
           // AsyncStorage.setItem('user', JSON.stringify({ userId: res._id, phoneNumber: res.phoneNo, profileImage: res.profileImage, name: res.name,fcmToken:fcmToken }))
-          AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(true))
-          AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(true))
+          await AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(true))
+          await AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(true))
           console.log("login token", response.data.token)
-          AsyncStorage.setItem('token', response.data.token);
-          AsyncStorage.setItem('profileImage', res.profileImage)
-          AsyncStorage.setItem('name', res.name)
-          AsyncStorage.setItem('Id', res._id)
-          AsyncStorage.setItem('fcmToken', fcmToken)
-          AsyncStorage.setItem('phoneNo', res.phoneNo)
+          await AsyncStorage.setItem('token', response.data.token);
+          await AsyncStorage.setItem('profileImage', res.profileImage)
+          await AsyncStorage.setItem('name', res.name)
+          await AsyncStorage.setItem('Id', res._id)
+          await AsyncStorage.setItem('fcmToken', fcmToken)
+          await AsyncStorage.setItem('phoneNo', res.phoneNo)
           getToken()
           // storeLoggedinStatus(true)
           // getStoredUserDetails()

@@ -131,7 +131,7 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
           </TouchableRipple>
           <View style={[UserChatHeaderStyle.leftInnerView]}>
             <View style={[UserChatHeaderStyle.dpContainerView]}>
-              {item.profileImage ?
+              {item?.profileImage ?
                 <Image
                   source={{ uri: `${baseUrl}${item.profileImage}` }}
                   style={[UserChatHeaderStyle.dpImageStyle]}
@@ -144,7 +144,7 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
             </View>
             <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
               <Text style={[UserChatHeaderStyle.profileNameTextStyle(theme.profileNameColor)]}>
-                {item.name ? ChatHeaderNameSubString(item.name) : null}
+                {item?.name ? ChatHeaderNameSubString(item?.name) : null}
               </Text>
               {/* <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
                   Online
@@ -212,8 +212,8 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
                 }}
                 invitees={[
                   {
-                    userID: item._id,
-                    userName: item.name,
+                    userID: item?._id,
+                    userName: item?.name,
                   },
                 ]}
                 isVideoCall={false}

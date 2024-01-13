@@ -55,6 +55,8 @@ const Discussions = (props) => {
         // }else if(data.message=='Please provide a token.'){
         //   Alert.alert('Token required')
         // }else{
+          console.log("discussion ma all contacts",data)
+          if(data!=[]){
         const filterContact = data.filter(contact => {
           // Check if senderID and currentUser.id are equal and deletedBySender is true
           if (
@@ -74,7 +76,7 @@ const Discussions = (props) => {
         setContactList(filterContact);
         setIsLoading(false)
 
-      }).catch((error) => {
+      }}).catch((error) => {
         console.error('Error fetching contact list:', error);
         setIsLoading(false)
       })
@@ -98,15 +100,35 @@ const Discussions = (props) => {
       setSearchedChat(filteredChats)
     }
   }
-
   useEffect(() => {
-    console.log('fetchContactList>>>>>>')
-    getToken()
-    fetchContactList().then(() => { setIsLoading(false) })
+    const fetchData = async () => {
+      try {
+        await getToken();
+        await fetchContactList();
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error in useEffect:', error);
+        setIsLoading(false);
+      }
+    };
+  
+    fetchData();
+  
     props.navigation.addListener('focus', () => {
-      fetchContactList();
+      fetchData();
     });
-  }, [fetchContactList]);
+  
+    // No need to specify dependencies for this effect
+  }, []);
+  
+  // useEffect(async() => {
+  //   console.log('fetchContactList>>>>>>')
+  //   await getToken()
+  //   await fetchContactList().then(() => { setIsLoading(false) })
+  //   props.navigation.addListener('focus', () => {
+  //     fetchContactList();
+  //   });
+  // }, [fetchContactList]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -129,8 +151,8 @@ const Discussions = (props) => {
                 renderItem={({ item }) => {
                   return (
                     <RenderComponent
-                      name={item.contactData.name}
-                      dp={item.contactData.profileImage}
+                      name={item.contactData?.name}
+                      dp={item.contactData?.profileImage}
                       callingScreen={"Discussions"}
                       discussions_item={item}
                       contactsSetList={(cl) => {    // Ye ContactList ka setter beja hai
