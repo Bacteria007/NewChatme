@@ -30,9 +30,9 @@ const FakeSplash = ({navigation}) => {
             // Verify token with server
             console.log("token",storedToken)
             try {
-              await axios.post(`${baseUrl}/verify`, {},{
+              await axios.post(`${baseUrl}/verify?id=${Id}`, {},{
                 headers: { Authorization: `Bearer ${storedToken}` }
-              }).then(function(response){
+              }).then(async function(response){
                 if(response.data.matched==true && isSignupProccessComplete=='true'){
                   console.log("if cond both true")
                   updateCurrentUser({userId: Id, phoneNumber: phoneNo, profileImage: profileImage, name:name})
@@ -44,6 +44,16 @@ const FakeSplash = ({navigation}) => {
                   updateCurrentUser({userId: Id, phoneNumber: phoneNo, profileImage: profileImage, name:name})
                   updateToken(storedToken)
                   navigation.replace('AfterSignUpProfileScreen');
+                }else if(response.data.message==="This account has been deleted."&& isSignupProccessComplete=='true'){
+                  console.log("elseif cond This account has been deleted")
+                  await AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(false))
+                  await AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(false))
+                  await AsyncStorage.setItem('token', '')
+                  await AsyncStorage.setItem('profileImage', '')
+                  await AsyncStorage.setItem('name', '')
+                  await AsyncStorage.setItem('Id', '')
+                  await AsyncStorage.setItem('phoneNo', '')
+                  navigation.replace('LogInScreen');
                 }
                 else{
                   console.log('signup process not performed');
