@@ -69,7 +69,7 @@ const NewGroup = (props) => {
     };
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <StatusBar backgroundColor={AppColors.Lavender} barStyle={'dark-content'} />
+            {/* <StatusBar backgroundColor={AppColors.Lavender} barStyle={'dark-content'} /> */}
             <InnerScreensHeader screenName={"NewGroup"} navigation={props.navigation} />
             <View style={CreateGroupScreenStyle.container(AppColors.Lavender)}>
                 <View style={CreateGroupScreenStyle.avatarAndNameContainer}>

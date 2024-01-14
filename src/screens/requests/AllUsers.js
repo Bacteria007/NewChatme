@@ -78,7 +78,6 @@ const AllUsers = ({ navigation }) => {
         // } else{
 
         setAllPendingRequests(allFetchedRequests);
-        return allFetchedRequests;
         // }
       } else {
         console.log('error fetching pending request');
@@ -103,7 +102,6 @@ const AllUsers = ({ navigation }) => {
         const allFetchedRequests = await result.json();
         // //console.log('all pending req.........', allFetchedRequests)
         setWaitingRequests(allFetchedRequests);
-        return allFetchedRequests;
       } else {
         console.log('error fetching pending request');
       }
@@ -125,11 +123,8 @@ const AllUsers = ({ navigation }) => {
       );
       //yha b khud e kr lyna token k error msgs ko deal blky jha jha tmny kam kia un sab ma khud e krlo jesy deal krna
       if (response.ok) {
-        console.log('reqz::::::::::', waitingRequests);
+
         const data = await response.json();
-        console.log('data::::::::::', data);
-        await fetchPendingRequest();
-        await fetchWaitingRequest();
         setPeople(data);
         setIsLoading(false);
       } else {
@@ -158,14 +153,8 @@ const AllUsers = ({ navigation }) => {
       if (response.ok) {
         setIsSending(false);
         setRequestSent(true);
-        setBadgeCount(prevCount => prevCount + 1);
-
-        // Fetch pending and waiting requests
-        const pdata = await fetchPendingRequest();
-        console.log('pdata###########', pdata);
-        const wdata = await fetchWaitingRequest();
-        console.log('wdata*********', wdata);
-
+        fetchPendingRequest()
+        fetchWaitingRequest()
         const res = await response.json();
         console.log('sendRequest========', res);
 
@@ -202,9 +191,9 @@ const AllUsers = ({ navigation }) => {
       },
     );
     if (result.ok) {
-      await fetchPendingRequest();
-      await fetchWaitingRequest();
       const resultJson = await result.json();
+      fetchPendingRequest()
+      fetchWaitingRequest()
       console.log('cancel successfully...', resultJson);
     } else if (result.status == 404) {
       console.log('request not found');
@@ -216,21 +205,21 @@ const AllUsers = ({ navigation }) => {
   // Hooks---------------------------------
   useEffect(() => {
     fetchPeople().then(() => setIsLoading(false))
-    console.log('people', people);
+    // console.log('people....', people);
     navigation.addListener('focus', () => {
       fetchPeople();
     });
   }, []);
   useEffect(() => {
     fetchPendingRequest();
-    console.log('allPendingRequests', allPendingRequests);
+    // console.log('allPendingRequests', allPendingRequests);
     navigation.addListener('focus', () => {
       fetchPendingRequest();
     });
   }, []);
   useEffect(() => {
     fetchWaitingRequest();
-    console.log('waitingRequests', waitingRequests);
+    // console.log('waitingRequests', waitingRequests);
     navigation.addListener('focus', () => {
       fetchWaitingRequest();
     });
@@ -240,6 +229,8 @@ const AllUsers = ({ navigation }) => {
     console.log('issending', isSending);
   }, [isSending, requestSent]);
   // =============
+
+
   const renderPeople = item => {
     // console.log("item__",item)
 
@@ -283,7 +274,7 @@ const AllUsers = ({ navigation }) => {
             ) ? (
             <Text style={styles.reqText}>Requested...</Text>
           ) : */}
-          { allPendingRequests.length > 0 &&
+          {allPendingRequests.length > 0 &&
             allPendingRequests.some(
               pendingRequest => pendingRequest.responderId._id == item._id,
             ) ? (

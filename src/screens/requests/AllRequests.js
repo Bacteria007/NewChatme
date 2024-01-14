@@ -23,8 +23,7 @@ const AllRequest = ({ navigation }) => {
     const [waitingRequests, setWaitingRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [profileModals, setProfileModals] = useState([]);
-    
-    console.log(profileModals)
+
     const showProfileModal = (index) => {
         console.log('👋', index)
         const updatedProfileModals = [...profileModals];
@@ -122,7 +121,7 @@ const AllRequest = ({ navigation }) => {
             fetchWaitingRequest();
         });
         // console.log('Ⓜ️',profileModals)
-    }, [fetchWaitingRequest]);
+    }, [waitingRequests]);
 
     // Render requests
     const renderRequests = (item, index) => {
@@ -230,7 +229,7 @@ const AllRequest = ({ navigation }) => {
                     :
                     !isLoading && (
                         <View style={Containers.centerContainer}>
-                            <Text style={HomeNeoCards.noSearchResultText}>You have no requests.</Text>
+                            <Text style={HomeNeoCards.noSearchResultText}>No new requests.</Text>
                         </View>
                     )
                 }

@@ -89,7 +89,7 @@ const LogInScreen = ({ navigation }) => {
 
   const userLogin = ({ navigation }) => {
     const formdata = new FormData();
-    formdata.append('phoneNo', `+${countryCode}${phoneNumber}`);
+    formdata.append('phoneNo', `${phoneNumber}`);
     formdata.append('password', password);
     formdata.append('fcmToken', fcmToken);
     axios({

@@ -236,6 +236,7 @@ const UserChat = (props) => {
             chatId: contact._id,
             mood: moodOfUser,
           };
+          console.log('kkmm',messageData)
           await socket.emit('send_message', messageData);
           setIsSending(false);
           scrollToBottom();
@@ -253,6 +254,7 @@ const UserChat = (props) => {
           chatId: contact._id,
           mood: 'normal',
         };
+        console.log('kkmm cth',messageData)
 
         await socket.emit('send_message', messageData);
         setIsSending(false);
@@ -405,7 +407,7 @@ const UserChat = (props) => {
   }, []);
   useEffect(() => {
     isUserBlocked()
-  }, [scrollToBottom])
+  }, [])
   return (
     <PaperProvider>
       <View styles={UserChatStyle.contianer(theme.chatScreenColor)}>

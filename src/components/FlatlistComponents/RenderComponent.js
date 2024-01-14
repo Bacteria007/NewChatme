@@ -282,7 +282,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                   <Icons.Ionicons
                     name={'people'}
                     size={150}
-                    color={theme.profileNameColor}
+                    color={AppColors.black}
                   />
                 </View>
               )}

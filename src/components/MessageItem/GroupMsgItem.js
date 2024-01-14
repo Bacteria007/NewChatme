@@ -84,7 +84,7 @@ const GroupMsgItem = ({ msgData, msgId, setChangeHeader, changeHeader, setMsgId 
                 {msgData.text}
               </Text>
             ) : (
-              <Image source={{ uri: `${baseUrl}${msgData.image}` }} style={{ height: hp('30'), width: wp('40') }} resizeMode='cover' />
+              <Image source={{ uri: `${baseUrl}${msgData.image}` }} style={UserChatStyle.imageMsgStyle} resizeMode='cover' />
             )}
             <View style={UserChatStyle.timeAndMood}>
               {msgData.msg_type == "text" &&
@@ -121,7 +121,7 @@ const GroupMsgItem = ({ msgData, msgId, setChangeHeader, changeHeader, setMsgId 
                   color={AppColors.white}
                 />
               </TouchableOpacity>
-              <Text style={{ fontSize: wp('5.5'), color: AppColors.white, textAlign: 'center', fontFamily: FontStyle.regularFont, marginLeft: wp('3') }}>{msgData.sender_id == currentUser.userId ? "You" : msgData.sender_name}</Text>
+              <Text style={UserChatStyle.imageSenderNameStyle}>{msgData.sender_id == currentUser.userId ? "You" : msgData.sender_name}</Text>
             </View>
             <ZoomImage source={{ uri: msgData.image ? `${baseUrl}${msgData.image}` : null }} />
           </View>

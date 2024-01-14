@@ -66,12 +66,12 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
             <Text
               style={UserChatStyle.textStyle}>
               {msgItem.content}
-            </Text> : <Image source={{ uri: `${baseUrl}${msgItem.image}` }} resizeMode='cover' style={{ height: hp('30%'), width: wp('50%') }} />}
+            </Text> : <Image source={{ uri: `${baseUrl}${msgItem.image}` }} resizeMode='cover' style={UserChatStyle.imageMsgStyle} />}
 
           <View style={UserChatStyle.timeAndMood}>
             <Text
               style={UserChatStyle.msgAndMoodText(msgItem.senderId === currentUser.userId)}>
-              {(!msgItem.senderId == currentUser.userId || !msgItem.content == 'ChatMe_Image') ? `mood: ${msgItem.mood}` : null}{' '}
+              {(!(msgItem.senderId == currentUser.userId) && !(msgItem.content == 'ChatMe_Image')) ? `mood: ${msgItem.mood}`:null }{' '}
             </Text>
             <Text style={UserChatStyle.timeStyle}>
               {moment(msgItem.createdAt).format('hh:mm a ')}
@@ -100,7 +100,7 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
                     color={AppColors.white}
                   />
                 </TouchableOpacity>
-                <Text style={{ fontSize: wp('5.5'), color: AppColors.white, textAlign: 'center',fontFamily:FontStyle.regularFont,marginLeft:wp('3') }}>{msgItem.senderId == currentUser.userId ? "You" : receiver.name}</Text>
+                <Text style={UserChatStyle.imageSenderNameStyle}>{msgItem.senderId == currentUser.userId ? "You" : receiver.name}</Text>
             </View>
             <ZoomImage source={{ uri: msgItem.image ? `${baseUrl}${msgItem.image}` : null }} />
           </View>
