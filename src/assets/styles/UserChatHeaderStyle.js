@@ -17,7 +17,7 @@ const UserChatHeaderStyle = StyleSheet.create({
     // borderBottomColor:'grey'
   }),
   changedHeaderContainerView: bgColor => ({
-    backgroundColor: AppColors.lightBlack,
+    backgroundColor: bgColor,
     height: hp('7%'),
     width: wp('100'),
     flexDirection: 'row',
@@ -28,6 +28,8 @@ const UserChatHeaderStyle = StyleSheet.create({
     alignItems: 'center',
     // elevation: 4,
   }),
+  callModalItem: (bgColor) => ({ justifyContent: 'flex-start', alignItems: 'center', backgroundColor: bgColor, padding: hp('3'), borderTopLeftRadius: 30, borderTopRightRadius: 30, elevation: 4 }),
+  audioCallView: (bgColor) => ({ paddingHorizontal: 30, flexDirection: 'row', backgroundColor: bgColor, justifyContent: 'center', alignItems: 'center', marginBottom: 10 }),
   headerView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -37,15 +39,15 @@ const UserChatHeaderStyle = StyleSheet.create({
     width: 'auto',
     justifyContent: 'space-between',
     paddingHorizontal: wp('2'),
-    alignContent:'center',
+    alignContent: 'center',
     // backgroundColor: 'red',
   },
   leftInnerView: {
     flexDirection: 'row',
     width: 'auto',
-    alignItems:'center',
-    paddingHorizontal:wp('1'),
-    justifyContent:'space-between',
+    alignItems: 'center',
+    paddingHorizontal: wp('1'),
+    justifyContent: 'space-between',
     // backgroundColor:'green',
   },
   rightView: {
@@ -70,16 +72,16 @@ const UserChatHeaderStyle = StyleSheet.create({
   profileNameTextStyle: clr => ({
     fontSize: wp('4%'),
     color: clr,
-    textAlign:'center',
-    marginLeft:wp('3'),
-    fontFamily:FontStyle.regularFont
+    textAlign: 'center',
+    marginLeft: wp('3'),
+    fontFamily: FontStyle.regularFont
   }),
-  memberText:{
+  memberText: {
     fontSize: wp('3.5%'),
     color: AppColors.gray,
-    textAlign:'left',
-    marginLeft:wp('2'),
-    fontFamily:FontStyle.regularFont
+    textAlign: 'left',
+    marginLeft: wp('2'),
+    fontFamily: FontStyle.regularFont
   },
   profileStatusStyle: {
     color: AppColors.black,
@@ -92,7 +94,7 @@ const UserChatHeaderStyle = StyleSheet.create({
     alignItems: 'center',
     height: hp('5'),
     width: hp('5'),
-    alignSelf:'center',
+    alignSelf: 'center',
   },
   modalMainContainer: {
     height: hp('20'),
@@ -101,42 +103,42 @@ const UserChatHeaderStyle = StyleSheet.create({
     borderRadius: wp('4'),
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center', 
+    alignSelf: 'center',
   },
-  modalTitleText:{
+  modalTitleText: {
     fontSize: hp('1.7'),
     color: AppColors.black,
     fontFamily: FontStyle.lightFont,
     textAlign: 'center',
   },
-  modalBtnView:{
+  modalBtnView: {
     flexDirection: 'row',
     width: wp('50'),
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:hp('3'),
+    marginTop: hp('3'),
   },
-  modalBtn:(btnClr)=>({
+  modalBtn: (btnClr) => ({
     borderRadius: hp('2'),
     justifyContent: 'center',
     alignItems: 'center',
     height: hp('4'),
     width: hp('10'),
-    alignSelf:'center',
-    backgroundColor:btnClr,
-    marginHorizontal:wp('2')
+    alignSelf: 'center',
+    backgroundColor: btnClr,
+    marginHorizontal: wp('2')
 
   }),
-  modalBtnText:{
+  modalBtnText: {
     fontSize: hp('1.5'),
     color: AppColors.black,
     fontFamily: FontStyle.regularFont,
     textAlign: 'center',
   },
- menuStyle:{ backgroundColor: AppColors.white, borderRadius: 15 },
- menuTitleStyle:{ fontFamily: FontStyle.regularFont, fontSize: wp('4') },
+  menuStyle: { backgroundColor: AppColors.white, borderRadius: 15 },
+  menuTitleStyle: { fontFamily: FontStyle.regularFont, fontSize: wp('4') },
 
- 
+
 });
 
 export default UserChatHeaderStyle;

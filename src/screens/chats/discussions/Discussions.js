@@ -42,7 +42,7 @@ const Discussions = (props) => {
   const fetchContactList = useCallback(async () => {
 
     try {
-      await fetch(`${baseUrl}/userContacts?userId=${currentUser.userId}`, {
+      await fetch(`${baseUrl}/userContactsWithMessages?userId=${currentUser.userId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,

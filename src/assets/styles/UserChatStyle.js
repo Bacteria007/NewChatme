@@ -34,12 +34,13 @@ const UserChatStyle = StyleSheet.create({
     maxWidth: wp('80'),
     elevation: 4,
   }),
+  imageMsgStyle:{ height: hp('30'), width: wp('50'),borderRadius:wp('1') },
   timeAndMood: {
     flexDirection: 'row',
     alignSelf: 'flex-end',
     justifyContent: 'space-between',
     maxWidth: wp('70%'),
-  },
+  },imageSenderNameStyle:{ fontSize: wp('5.5'), color: AppColors.white, textAlign: 'center',fontFamily:FontStyle.regularFont,marginLeft:wp('3') },
   timeStyle: {
     fontSize: hp('1.1'),
     marginLeft: 10,

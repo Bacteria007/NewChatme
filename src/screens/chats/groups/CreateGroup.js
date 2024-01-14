@@ -145,7 +145,7 @@ const CreateGroup = ({ navigation }) => {
                 onPress={() => {
                   toggleSelection(item)
                 }}
-                containerStyle={{ marginRight: wp('-0.2'), padding: 0 }}
+                containerStyle={{ marginRight: wp('-0.2'), padding: 0,backgroundColor:theme.backgroundColor }}
 
               />
             </View>

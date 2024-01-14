@@ -180,13 +180,13 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
               <Menu.Item
                 titleStyle={UserChatHeaderStyle.menuTitleStyle}
                 onPress={() => { showClearChatModal(); closeMenu() }} title="Clear Chat" />
-              {/* <Divider /> */}
+              <Divider />
               {console.log("is blocked", isBlocked)}
               {console.log("i init blocking", iInitBlock)}
 
               {isBlocked == true && iInitBlock == true ? <Menu.Item
                 titleStyle={UserChatHeaderStyle.menuTitleStyle}
-                onPress={() => { showUnBlockModal(); closeMenu() }} title="UnBlock" /> : <Menu.Item
+                onPress={() => { showUnBlockModal(); closeMenu() }} title="Unblock" /> : <Menu.Item
                 titleStyle={UserChatHeaderStyle.menuTitleStyle}
                 onPress={() => { showBlockModal(); closeMenu() }} title="Block" />}
 

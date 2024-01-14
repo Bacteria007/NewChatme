@@ -95,7 +95,7 @@ const GroupChat = props => {
           msg_type: 'text',
           mood: 'normal',
         };
-        // console.log('msg ^^^^^^^^^^^^^^^^', msgData);
+        console.log('msg ^^^^^^^^^^^^^^^^', msgData);
         await socket.emit('send_group_message', msgData);
         setNewMsg('');
         scrollToBottom();

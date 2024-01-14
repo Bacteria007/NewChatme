@@ -26,7 +26,7 @@ const DeleteAccount = ({navigation}) => {
     const formData = new FormData();
     formData.append('userId', currentUser.userId);
     formData.append('name', currentUser.name);
-    formData.append('phoneNo', `${countryCode}${phoneNumber}`);
+    formData.append('phoneNo', `+${countryCode}${phoneNumber}`);
     formData.append('password', password);
 
     try {
@@ -148,6 +148,7 @@ const DeleteAccount = ({navigation}) => {
           fontSize: wp('4.5%'),
           paddingBottom: wp('-2%'),
         }]}
+        autoCapitalize='none'
         onChangeText={text => setPassword(text)}
       />
       <TouchableRipple borderless onPress={() => {
