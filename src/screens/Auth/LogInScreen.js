@@ -89,7 +89,8 @@ const LogInScreen = ({ navigation }) => {
 
   const userLogin = ({ navigation }) => {
     const formdata = new FormData();
-    formdata.append('phoneNo', `+${countryCode}${phoneNumber}`);
+    formdata.append('phoneNo', `${phoneNumber}`);
+    // formdata.append('phoneNo', `+${countryCode}${phoneNumber}`);
     formdata.append('password', password);
     formdata.append('fcmToken', fcmToken);
     axios({
@@ -99,7 +100,8 @@ const LogInScreen = ({ navigation }) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
       .then(async function (response) {
-        if (response.data.match == true) {
+        console.log("login res",response)
+        if (response.data.match === true) {
 
           console.log("login", response.data)
           let res = response.data.loggedInUser
@@ -122,8 +124,10 @@ const LogInScreen = ({ navigation }) => {
           navigation.replace("DrawerStack");
         }
         else {
-
-          if (response.data.message === 'Invalid phone number or password') {
+          if (response.data.match == false&&response.data.message==="Your account is temporarily blocked by the admin due to violations."){
+            alert("Your account is temporarily blocked by the admin due to violations.")
+          }
+          else if (response.data.message === 'Invalid phone number'||response.data.message === 'Invalid password') {
             alert('Invalid phone number or password');
           } else {
             alert(

@@ -54,6 +54,16 @@ const FakeSplash = ({navigation}) => {
                   await AsyncStorage.setItem('Id', '')
                   await AsyncStorage.setItem('phoneNo', '')
                   navigation.replace('LogInScreen');
+                }else if(response.data.message==="Your account is temporarily blocked by the admin due to violations."&& isSignupProccessComplete=='true'){
+                  console.log("elseif cond This account is temporarily blocked by the admin due to violations.")
+                  await AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(false))
+                  await AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(false))
+                  await AsyncStorage.setItem('token', '')
+                  await AsyncStorage.setItem('profileImage', '')
+                  await AsyncStorage.setItem('name', '')
+                  await AsyncStorage.setItem('Id', '')
+                  await AsyncStorage.setItem('phoneNo', '')
+                  navigation.replace('LogInScreen');
                 }
                 else{
                   console.log('signup process not performed');
