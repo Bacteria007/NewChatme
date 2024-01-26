@@ -10,7 +10,7 @@ const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
-  const apiKey = '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';
+  const apiKey = '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';
   const baseUrl = 'http://192.168.43.122:8888';
 
   const [userName, setUserName] = useState('');

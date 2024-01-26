@@ -35,7 +35,7 @@ const ChatBot = props => {
 
   //***********************************     VARIABLES   ************************* */
   const flatListRef = useRef(null);
-  const apiKey = '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';
+  const apiKey = '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';
   const apiURL =
     'https://api.openai.com/v1/engines/text-davinci-003/completions';
 
