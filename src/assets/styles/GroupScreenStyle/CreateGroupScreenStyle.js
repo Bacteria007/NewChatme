@@ -196,11 +196,13 @@ const CreateGroupScreenStyle = StyleSheet.create({
     top: 0,
   },
   enterNameTextinput: {
-    width: wp('100%'),
+    width: wp('30%'),
+    height:hp('6%'),
     fontFamily: FontStyle.boldFont,
     textAlign: 'center',
     // backgroundColor: 'yellow',
-    marginBottom: -14,
+    marginBottom: hp('-1'),
+    // borderBottomColor:AppColors.primary,borderBottomWidth:wp('0.2%')
   },
   msgText: {
     fontFamily: FontStyle.regularFont,
@@ -270,6 +272,7 @@ const CreateGroupScreenStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: 'red',
+    // width:wp('100%'),
     height: hp('25'),
   },
   horizontalLineStyle: {

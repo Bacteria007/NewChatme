@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { View, Text, Image, TouchableOpacity, TextInput, FlatList, SafeAreaView, StatusBar, Alert } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { View, Text, Image, TouchableOpacity, TextInput, FlatList, SafeAreaView, StatusBar, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader'
 import CreateGroupScreenStyle from '../../../assets/styles/GroupScreenStyle/CreateGroupScreenStyle'
 import { Icons } from '../../../assets/Icons'
@@ -8,7 +8,7 @@ import AppContext from '../../../context/AppContext'
 import { ThemeContext } from '../../../context/ThemeContext'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import AppColors from '../../../assets/colors/Appcolors'
-import { FAB } from 'react-native-paper'
+import { Badge, FAB } from 'react-native-paper'
 import { capitalizeFirstLetter } from '../../../helpers/UiHelpers/CapitalizeFirstLetter'
 import { SelectImage } from '../../../helpers/launchCameraHelper/SelectImage'
 
@@ -19,6 +19,7 @@ const NewGroup = (props) => {
     const [groupName, setgroupName] = useState('');
     const [isCreating, setIsCreating] = useState(false);
     const [groupDisplayPic, setGroupDisplayPic] = useState('');
+    const [isDeselected, setIsDeselected] = useState(false)
 
     const handleSelectImage = () => {
         SelectImage(setGroupDisplayPic);
@@ -67,7 +68,11 @@ const NewGroup = (props) => {
             Alert.alert('pleaes add at least 3 member');
         }
     };
+    useEffect(()=>{
+console.log("deselctmem")
+    },[isDeselected])
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <SafeAreaView style={{ flex: 1 }}>
             {/* <StatusBar backgroundColor={AppColors.Lavender} barStyle={'dark-content'} /> */}
             <InnerScreensHeader screenName={"NewGroup"} navigation={props.navigation} />
@@ -92,22 +97,29 @@ const NewGroup = (props) => {
                     <TextInput
                         value={groupName}
                         placeholder="Group Name"
-                        cursorColor={"rgba(0,0,0,0.4)"}
+                        cursorColor={AppColors.primary}
                         placeholderTextColor={AppColors.black}
                         style={CreateGroupScreenStyle.enterNameTextinput}
                         textAlign='center'
-                        autoFocus={false}
+                        autoFocus={true}
                         onChangeText={e => { setgroupName(e) }}
-
                     />
                     <Text style={CreateGroupScreenStyle.msgText}>Provide a group subject and optional group icon</Text>
                 </View>
                 <View style={CreateGroupScreenStyle.participantsSectionContainer}>
                     <View style={CreateGroupScreenStyle.participantsTextContainer}>
                         <Text style={CreateGroupScreenStyle.participantsText}>Participants: </Text>
-                        <View style={CreateGroupScreenStyle.participantsNumberContainer}>
+                        {/* <View style={CreateGroupScreenStyle.participantsNumberContainer}>
                             <Text style={CreateGroupScreenStyle.participantsNumber}>{selectedMembers.length - 1}</Text>
-                        </View>
+                        </View> */}
+                        <Badge
+                size={wp('7.1')}
+                visible={true}
+                style={{ backgroundColor: AppColors.primary,alignSelf:'center',justifyContent:'center' ,alignItems:'center'}}
+              >
+                <Text style={{alignSelf:'center',fontSize: hp('2.1'),}}>{selectedMembers.length - 1}</Text>
+                
+              </Badge>
 
                     </View>
                     <FlatList
@@ -129,7 +141,7 @@ const NewGroup = (props) => {
                                         </View>
                                         <TouchableOpacity onPress={() => {
                                             deselectMember(item);
-                                            props.navigation.goBack();
+                                            setIsDeselected(true)
                                         }} style={CreateGroupScreenStyle.deSelectIconBtn}>
                                             <Icons.AntDesign name="close" size={10} color="white" />
                                         </TouchableOpacity>
@@ -154,6 +166,7 @@ const NewGroup = (props) => {
             </View>
 
         </SafeAreaView>
+        </TouchableWithoutFeedback>
     )
 }
 

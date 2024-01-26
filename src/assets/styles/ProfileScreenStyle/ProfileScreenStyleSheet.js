@@ -52,7 +52,7 @@ const ProfileScreenStyleSheet = StyleSheet.create({
     backgroundColor: AppColors.periWinkle,
   },
   TextView: { flexDirection: 'row', marginTop: hp('2') },
-  text: (clr) => ({ fontSize: wp('6'), fontFamily: 'Poppins-Regular', color: clr }),
+  text: (clr) => ({ fontSize: wp('6'), fontFamily: AppColors.regularFont, color: clr }),
   itemStyle: {
     flexDirection: 'row',
     alignItems: 'center',

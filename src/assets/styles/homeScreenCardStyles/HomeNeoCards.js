@@ -107,14 +107,14 @@ const HomeNeoCards = StyleSheet.create({
   },
 
   profileName: textColor => ({
-    fontFamily: FontStyle.regularFont,
+    fontFamily: FontStyle.mediumFont,
     fontSize: wp('4'),
     color: textColor,
     letterSpacing: 0.3,
   }),
   lastMsg: textColor => ({
     fontFamily: FontStyle.regularFont,
-    fontSize: wp('2.7'),
+    fontSize: wp('3'),
     color: textColor,
   }),
   lastMsgTime: darkThemeActivator => ({

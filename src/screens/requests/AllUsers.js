@@ -25,6 +25,7 @@ import FooterComponent from '../../components/FlatlistComponents/FooterComponent
 import ReelscreenStyle from '../../assets/styles/ReelStyleSheet/ReelscreenStyle';
 import { capitalizeFirstLetter } from '../../helpers/UiHelpers/CapitalizeFirstLetter';
 import { CreateNameSubString } from '../../helpers/UiHelpers/CreateSubString';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AllUsers = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
@@ -36,11 +37,11 @@ const AllUsers = ({ navigation }) => {
   const [badgeCount, setBadgeCount] = useState(0);
   const [allPendingRequests, setAllPendingRequests] = useState([]);
   const [waitingRequests, setWaitingRequests] = useState([]);
+  const [waitingReqC, setWaitingReqC] = useState(0)
   const [clickedItem, setClickedItem] = useState(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [seacrhedPeople, setSeacrhedPeople] = useState('');
   const [someoneNotFound, setSomeoneNotFound] = useState(false); // FUNCTIONS-----------------------------
-
   const handleSearch = text => {
     setSearchText(text);
     if (text === '') {
@@ -102,6 +103,7 @@ const AllUsers = ({ navigation }) => {
         const allFetchedRequests = await result.json();
         // //console.log('all pending req.........', allFetchedRequests)
         setWaitingRequests(allFetchedRequests);
+         setWaitingReqC(allFetchedRequests.length)
       } else {
         console.log('error fetching pending request');
       }
@@ -315,6 +317,7 @@ const AllUsers = ({ navigation }) => {
           navigation={navigation}
           searchQuery={searchText}
           handleSearchOnChange={handleSearch}
+          waitingReqC={waitingReqC}
         />
         {isLoading && <View style={ReelscreenStyle.LoaderView}><ActivityIndicator size="small" color={'black'} /></View>}
         {searchText !== '' &&
@@ -322,7 +325,7 @@ const AllUsers = ({ navigation }) => {
           someoneNotFound === true ? (
           <View style={Containers.centerContainer}>
             <Text style={HomeNeoCards.noSearchResultText}>
-              No user this name.
+              No user with this name.
             </Text>
           </View>
         ) : people.length != 0 ? (

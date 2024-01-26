@@ -34,14 +34,15 @@ const GroupStyles = StyleSheet.create({
         elevation: 8,
       },
       newGroupNameStyle: darkThemeActivator => ({
-        fontFamily: FontStyle.regularFont,
+        fontFamily: FontStyle.mediumFont,
         fontSize: wp('4'),
         color: darkThemeActivator ? "white" : AppColors.primary,
+        // opacity:0.9,
         marginLeft: wp('4'),
         letterSpacing: 1,
-        textShadowColor: darkThemeActivator ? AppColors.primary: 'rgba(255, 0, 0, 0.2)',
-        textShadowOffset: { width: 1.5, height: 1.5 }, // Shadow offset
-        textShadowRadius: 1.5, // Shadow radius
+        // textShadowColor: darkThemeActivator ? AppColors.primary: 'rgba(255, 0, 0, 0.2)',
+        // textShadowOffset: { width: 1.5, height: 1.5 }, // Shadow offset
+        // textShadowRadius: 1.5, // Shadow radius
     
       }),
 })

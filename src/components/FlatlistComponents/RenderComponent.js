@@ -11,6 +11,7 @@ import AppContext from '../../context/AppContext';
 import moment from 'moment';
 import { CreateLastMsgSubString, CreateNameSubString } from '../../helpers/UiHelpers/CreateSubString';
 import FontStyle from '../../assets/styles/FontStyle';
+import { Badge } from 'react-native-paper';
 
 const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_item, navigation, messageList, setMessageList }) => {
   const { theme, darkThemeActivator } = useContext(ThemeContext);
@@ -230,20 +231,23 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                   ]}
               </Text>
               {(callingScreen == "Discussions" && (discussions_item.unReadMeassagesCount !== 0) &&
-                (<View style={{ height: hp(2.5), width: hp(2.5), backgroundColor: AppColors.Mauve, borderRadius: hp(2.5), justifyContent: 'center', alignItems: 'center' }}>
-                  <Text style={{ color: 'white', fontSize: hp('1.2'), fontFamily: FontStyle.regularFont, textAlign: 'center' }}>
-                    {discussions_item.unReadMeassagesCount}
-                  </Text>
-                </View>
+                (<Badge
+                  size={hp('2.8')}
+                  visible={true}
+                  style={{ backgroundColor: AppColors.Mauve }}
+                >
+                  {discussions_item.unReadMeassagesCount}
+                </Badge>
                 )
               )}
               {(callingScreen == "Groups" && (groups_item.unReadMeassagesCount !== 0) &&
-                <View style={{ height: hp(2.5), width: hp(2.5), backgroundColor: AppColors.Mauve, borderRadius: hp(2.5), justifyContent: 'center', alignItems: 'center' }}>
-                  <Text style={{ color: 'white', fontSize: hp('1.2'), fontFamily: FontStyle.regularFont, textAlign: 'center' }}>
-                    {groups_item.unReadMeassagesCount}
-                  </Text>
-                </View>
-
+                <Badge
+                size={24}
+                visible={true}
+                style={{ backgroundColor: AppColors.Mauve }}
+              >
+                {groups_item.unReadMeassagesCount}
+              </Badge>
               )}
             </View>
           </View>
