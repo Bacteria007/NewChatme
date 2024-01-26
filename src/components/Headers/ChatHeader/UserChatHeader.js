@@ -217,7 +217,8 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
                   },
                 ]}
                 isVideoCall={false}
-                resourceID={'incoming123'}
+                resourceID={'chatme_outcall'}
+                
               />
             </View>
             <View style={{ paddingHorizontal: 30, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -234,7 +235,7 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
                   },
                 ]}
                 isVideoCall={true}
-                resourceID={'incoming123'}
+                resourceID={'chatme_outcall'}
               />
             </View>
           </View>

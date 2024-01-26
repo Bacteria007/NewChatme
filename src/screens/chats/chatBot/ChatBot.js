@@ -24,7 +24,7 @@ import AppContext from '../../../context/AppContext';
 const ChatBot = props => {
 
   //***********************************      USE STATE    ************************* */
-  const { baseUrl, currentUser,token } = useContext(AppContext)
+  const { baseUrl, currentUser,token,apiKey,apiURL } = useContext(AppContext)
   const [data, setData] = useState([]);
   const [msgHistory, setMessageHistory] = useState([]);
   const [textInput, setTextInput] = useState('');
@@ -35,9 +35,6 @@ const ChatBot = props => {
 
   //***********************************     VARIABLES   ************************* */
   const flatListRef = useRef(null);
-  const apiKey = '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';
-  const apiURL =
-    'https://api.openai.com/v1/engines/text-davinci-003/completions';
 
   //***********************************      FUNCTIONS    ************************* */
 
@@ -215,4 +212,5 @@ const ChatBot = props => {
 };
 
 export default ChatBot;
+
 

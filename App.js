@@ -43,8 +43,7 @@ const AuthStack = () => (
     <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
     <Stack.Screen name="LogInScreen" component={LogInScreen} options={{ headerShown: false }} />
     <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
-    <Stack.Screen name="AfterSignUpProfileScreen" component={AfterSignUpProfileScreen}
-      options={{ headerShown: false }} />
+    <Stack.Screen name="AfterSignUpProfileScreen" component={AfterSignUpProfileScreen} options={{ headerShown: false }} />
   </Stack.Navigator>
 )
 const SettingsStack = () => (
@@ -65,33 +64,15 @@ const SettingsStack = () => (
     <Stack.Screen name="Requests" component={AllRequest} options={{ headerShown: false }} />
   </Stack.Navigator>
 )
-const InnerScreens = () => {
-  const [currentRoute, setCurrentRoute] = useState('')
-  const route = useRoute()
-  useFocusEffect(() => {
-    const routeName = getFocusedRouteNameFromRoute(route)
-    // console.log('✅✅✅✅✅', routeName);
-    setCurrentRoute(routeName)
-  });
-  useEffect(() => {
-
-    if (currentRoute === "NewGroup") {
-      StatusBar.setBarStyle('dark-content');
-      StatusBar.setBackgroundColor(AppColors.Lavender);
-    }
-  }, [currentRoute]);
-  return <Stack.Navigator options={{ headerShown: false }}
-    screenOptions={{
-      animation: 'simple_push'
-    }}
-  >
+const InnerScreens = () => (
+  <Stack.Navigator options={{ headerShown: false }} screenOptions={{ animation: 'simple_push' }} >
     <Stack.Screen name="ChatBot" component={ChatBot} options={{ headerShown: false }} />
     <Stack.Screen name="UserChat" component={UserChat} options={{ headerShown: false }} />
     <Stack.Screen name="GroupChat" component={GroupChat} options={{ headerShown: false }} />
     <Stack.Screen name="CreateGroup" component={CreateGroup} options={{ headerShown: false }} />
     <Stack.Screen name="NewGroup" component={NewGroup} options={{ headerShown: false }} />
   </Stack.Navigator>
-}
+)
 
 const App = () => {
 
