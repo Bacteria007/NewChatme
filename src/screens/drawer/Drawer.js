@@ -28,6 +28,7 @@ import axios from 'axios';
 import RNExitApp from 'react-native-exit-app';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/ProfileScreenStyleSheet';
+import { uninitZegoFunc } from '../../helpers/ZegoCloudFunction/ZegoInitFunction';
 
 
 const Drawer = createDrawerNavigator();
@@ -78,16 +79,17 @@ const DrawerScreens = () => {
       await AsyncStorage.setItem('Id', '')
       await AsyncStorage.setItem('phoneNo', '')
       console.log(currentUser.name, 'logout');
-      RNExitApp.exitApp();
-
+      RNExitApp.exitApp()
+      // uninitZegoFunc()
       navigation.replace('Splash');
-      // navigation.replace('LogInScreen');
+      // navigation.replace('AuthStack',{screen:'LogInScreen'});
 
     } catch (error) {
       console.log('Error while logging out:', error);
       Alert.alert('You are unable to logout, try again later!');
     }
   };
+
   return (
     <View style={{ flex: 1 }}>
       <Drawer.Navigator
@@ -122,16 +124,16 @@ const DrawerScreens = () => {
                 <Animated.View
                   style={[Containers.centerContainer, { height: hp('25%') }]}>
                   <View style={styles.imageView}>
-                  {currentUser.profileImage!=null ? <Image source={{ uri: `${baseUrl}${currentUser?.profileImage} ` }} style={styles.imageStyle} />
-                   :
-                    <View style={[ProfileScreenStyleSheet.innerNeomorph]}>
-                      <Icons.MaterialIcons
-                        name="person"
-                        size={60}
-                        color={AppColors.black} 
-                      />
-                  </View>
-                   }
+                    {currentUser.profileImage != null ? <Image source={{ uri: `${baseUrl}${currentUser?.profileImage} ` }} style={styles.imageStyle} />
+                      :
+                      <View style={[ProfileScreenStyleSheet.innerNeomorph]}>
+                        <Icons.MaterialIcons
+                          name="person"
+                          size={60}
+                          color={AppColors.black}
+                        />
+                      </View>
+                    }
                   </View>
                   <Text style={styles.userNameText}>
                     {currentUser?.name}

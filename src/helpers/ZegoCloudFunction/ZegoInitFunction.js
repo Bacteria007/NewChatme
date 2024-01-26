@@ -8,8 +8,8 @@ import * as ZPNs from 'zego-zpns-react-native';
 export const initializeZego = async (userID, userName) => {
   try {
     await ZegoUIKitPrebuiltCallService.init(
-      1617716185, // You can get it from ZEGOCLOUD's console
-      'ee65fec3b30e731f5f1c2e07b133ee4bc7fc7fbe6ab2a8297ecdbc9918632533',
+      1657455243, // You can get it from ZEGOCLOUD's console
+      '9b10813a0aa13fe9876c71c54fe1aa03242ee9f0ed15bc483310aab7f3b267c0',
       userID,
       userName,
       [ZIM, ZPNs],
@@ -17,7 +17,7 @@ export const initializeZego = async (userID, userName) => {
         // Your Zego configuration options here
         ringtoneConfig: {
           incomingCallFileName: 'ring1.mp3',
-          outgoingCallFileName: 'ring1.mp3',
+          outgoingCallFileName: 'outgoing.mp3',
         },
         requireConfig: data => {
           return {
@@ -48,3 +48,6 @@ export const initializeZego = async (userID, userName) => {
     console.error('Zego initialization error:', error);
   }
 };
+export const uninitZegoFunc= async () => {
+  return ZegoUIKitPrebuiltCallService.uninit()
+}

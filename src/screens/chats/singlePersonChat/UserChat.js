@@ -29,7 +29,7 @@ import axios from 'axios';
 const UserChat = (props) => {
 
   // GLOBAL STATES
-  const { baseUrl, currentUser, token, apiKey } = useContext(AppContext);
+  const { baseUrl, currentUser, token, apiKey,apiURL } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
 
   // VARIABLES
@@ -213,8 +213,7 @@ const UserChat = (props) => {
   const sendMessage = async () => {
     setIsSending(true);
     await axios
-      .post(
-        'https://api.openai.com/v1/engines/text-davinci-003/completions',
+      .post(apiURL,
         {
           prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
           max_tokens: 1024,

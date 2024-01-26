@@ -34,8 +34,9 @@ const Discussions = (props) => {
 
     // Simulate fetching new data (replace this with your actual data fetching logic)
     setTimeout(() => {
-      const newMessages = [...contactList]; // Fetch new messages
-      setContactList(newMessages);
+      // const newMessages = [...contactList]; // Fetch new messages
+      // setContactList(newMessages);
+      fetchContactList()
       setRefreshing(false);
     }, 1000); // Add a delay to simulate the fetching process
   };
