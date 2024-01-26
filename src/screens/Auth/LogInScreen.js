@@ -89,8 +89,8 @@ const LogInScreen = ({ navigation }) => {
 
   const userLogin = ({ navigation }) => {
     const formdata = new FormData();
-    formdata.append('phoneNo', `${phoneNumber}`);
-    // formdata.append('phoneNo', `+${countryCode}${phoneNumber}`);
+    // formdata.append('phoneNo', `${phoneNumber}`);
+    formdata.append('phoneNo', `+${countryCode}${phoneNumber}`);
     formdata.append('password', password);
     formdata.append('fcmToken', fcmToken);
     axios({
@@ -218,7 +218,7 @@ const LogInScreen = ({ navigation }) => {
           </View>
           <TouchableOpacity
             onPress={() => {
-              if ((phoneNumber == '') & (password == '')) {
+              if ((phoneNumber == '') || (password == '')) {
                 setPasswordSnackWidth(!false);
                 showSnackbar('Enter Phone Number and Password');
                 return;

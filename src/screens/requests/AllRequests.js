@@ -23,6 +23,7 @@ const AllRequest = ({ navigation }) => {
     const [waitingRequests, setWaitingRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [profileModals, setProfileModals] = useState([]);
+    const [accepted, setAccepted] = useState(false)
 
     const showProfileModal = (index) => {
         console.log('👋', index)
@@ -77,6 +78,7 @@ const AllRequest = ({ navigation }) => {
                 ToastAndroid.showWithGravity('user added in friend list.', ToastAndroid.SHORT, ToastAndroid.CENTER,);
                 const res = await response.json();
                 console.log("accept request ka response", res)
+                setAccepted(res.accepted)
             } else {
                 ToastAndroid.showWithGravity('user is not added in friend list.', ToastAndroid.SHORT, ToastAndroid.CENTER,);
                 console.log('Error accepting request');
@@ -101,6 +103,7 @@ const AllRequest = ({ navigation }) => {
                 ToastAndroid.showWithGravity('request rejected successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER,);
                 const res = await response.json();
                 console.log("reject request ka response", res)
+                setAccepted(res.rejected)
             } else if (response.status == 404) {
                 console.log('reject request not found');
 
@@ -120,8 +123,8 @@ const AllRequest = ({ navigation }) => {
         navigation.addListener('focus', () => {
             fetchWaitingRequest();
         });
-        // console.log('Ⓜ️',profileModals)
-    }, [waitingRequests]);
+        console.log('Ⓜ️allllllllllllllllllllllllll',)
+    }, [accepted]);
 
     // Render requests
     const renderRequests = (item, index) => {

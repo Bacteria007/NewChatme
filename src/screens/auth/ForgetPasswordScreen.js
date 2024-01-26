@@ -96,7 +96,10 @@ const ForgetPasswordScreen = ({ navigation }) => {
         else {
           if (data.matched === true) {
             setToggleState(0);
-          } else {
+          } else if (data.matched === false&&data.message==="Your account is temporarily blocked by the admin due to violations.") {
+            Alert.alert("Your account is temporarily blocked by the admin due to violations.")
+          }
+          else {
             Alert.alert("Please enter the right answers")
           }
 

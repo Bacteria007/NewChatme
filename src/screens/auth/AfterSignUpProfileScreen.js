@@ -50,7 +50,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
 
   const handleNextBtn = () => {
     Keyboard.dismiss();
-    if (ques1 == '' && ques2 == '') {
+    if (ques1 === '' || ques2 === ''||name==='') {
       alert('Plz enter the required field');
     } else {
       handleProfileUpdate();
