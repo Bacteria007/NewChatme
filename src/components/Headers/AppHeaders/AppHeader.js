@@ -21,14 +21,13 @@ import BotChatHeaderStyle from '../../../assets/styles/BotStyleSheet/BotChatHead
 import { Primary_StatusBar } from '../../statusbars/Primary_StatusBar';
 import { SearchBar } from '@rneui/base';
 import FontStyle from '../../../assets/styles/FontStyle';
-import { Searchbar, TouchableRipple } from 'react-native-paper';
+import { Badge, Searchbar, TouchableRipple } from 'react-native-paper';
 import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
-const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange }) => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const AppHeader = ({ navigation,waitingReqC, headerTitle, searchQuery, handleSearchOnChange }) => {
 
   const { updateTheme, theme, darkThemeActivator, changeThemeState, setLightTheme, setDarkTheme } = useContext(ThemeContext);
 
-
-  
   const rippleColor = 'rgba(0,0,0,0.2)'
 
   return (
@@ -49,20 +48,26 @@ const AppHeader = ({ navigation, headerTitle, searchQuery, handleSearchOnChange 
             <Text style={[AppHeaderStyle.appNameStyle, { color: theme.headerIconsColor }]}>{headerTitle}</Text>
             <View>
               {headerTitle == "People" ?
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("SettingStack",{screen:"Requests"});
-                  }}>
-                  <Text style={{ color: AppColors.primary, fontFamily: FontStyle.regularFont, fontSize: 11 }}>Requests</Text>
-                  {/* <Icons.MaterialCommunityIcons
-                    name="bell"
-                    size={wp('7%')}
-                    color={theme.headerIconsColor}
-                    style={{ marginLeft: wp('2%') }}
-                /> */}
-
-                </TouchableOpacity>
-                :
+ <TouchableOpacity
+ onPress={() => {
+   navigation.navigate("SettingStack", { screen: "Requests" });
+ }}
+>
+ <Badge
+   visible={waitingReqC > 0} // Show badge only if waitingReqC is greater than 0
+   size={20}
+   style={{
+     backgroundColor: AppColors.primary,
+     marginLeft: wp('2%'),
+     marginBottom:hp('-0.4%')
+   }}
+ >
+   <Text style={{ color: 'white', fontFamily: FontStyle.regularFont, fontSize: wp('3%') }}>
+     {waitingReqC}
+   </Text>
+ </Badge>
+ <Text style={{ color: AppColors.primary, fontFamily: FontStyle.regularFont, fontSize: 11 }}>Requests</Text>
+</TouchableOpacity>                :
                 darkThemeActivator ? (
                   <TouchableRipple
                     rippleColor={rippleColor}

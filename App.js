@@ -32,6 +32,7 @@ import { enableScreens } from "react-native-screens";
 import { Primary_StatusBar } from './src/components/statusbars/Primary_StatusBar';
 import NewGroup from './src/screens/chats/groups/NewGroup';
 import AppColors from './src/assets/colors/Appcolors';
+import PublicProfile from './src/screens/profile/PublicProfile';
 enableScreens()
 
 
@@ -71,6 +72,7 @@ const InnerScreens = () => (
     <Stack.Screen name="GroupChat" component={GroupChat} options={{ headerShown: false }} />
     <Stack.Screen name="CreateGroup" component={CreateGroup} options={{ headerShown: false }} />
     <Stack.Screen name="NewGroup" component={NewGroup} options={{ headerShown: false }} />
+    <Stack.Screen name="publicProfile" component={PublicProfile} options={{ headerShown: false }} />
   </Stack.Navigator>
 )
 

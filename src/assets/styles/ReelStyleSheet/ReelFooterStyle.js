@@ -12,9 +12,9 @@ const ReelFooterStyle = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     paddingHorizontal: wp('3.5%'),
-    paddingVertical: hp('12%'),
+    paddingBottom: hp('11%'),
     flexDirection: 'row',
-    // backgroundColor:AppColors.greenBlue,
+    // backgroundColor:AppColors.primary,
     position:'absolute',
     bottom:0,
     right:0,left:0
@@ -22,7 +22,10 @@ const ReelFooterStyle = StyleSheet.create({
   leftContainer:{
     flexDirection: 'row',
     alignItems: 'center',
-    // width: wp('50%')
+    // backgroundColor: AppColors.white,
+    width: wp('70%'),
+    position:'absolute',
+    bottom:hp('0')
   },
   imageContainer:{
     height: hp('4.5%'),
@@ -33,6 +36,12 @@ const ReelFooterStyle = StyleSheet.create({
   imageStyle:{height: hp('4.5%'),
   borderRadius: 100,
   width: hp('4.5%'),},
+  imageStyle2:{height: hp('7%'),
+  borderRadius: 100,
+  width: hp('7%'),
+  marginBottom:hp('4')
+},
+
   profileName:{
     fontSize: wp('4.5%'),
     marginLeft: wp('1.5%'),
@@ -41,7 +50,10 @@ const ReelFooterStyle = StyleSheet.create({
     fontFamily: FontStyle.semiBoldFont,
     color: AppColors.white,
   },
-  rightContainer:{justifyContent:'center'}
+  rightContainer:{justifyContent:'space-between',height:hp('30')},
+  likeCount:{
+    color:AppColors.white,fontFamily:FontStyle.mediumFont,fontSize:wp('5'),alignSelf:'center'
+  }
 });
 
 export default ReelFooterStyle;

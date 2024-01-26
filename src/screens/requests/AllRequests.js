@@ -19,7 +19,7 @@ import ReactNativeModal from 'react-native-modal';
 
 const AllRequest = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
-    const { baseUrl, currentUser, token } = useContext(AppContext);
+    const { baseUrl, currentUser, token, } = useContext(AppContext);
     const [waitingRequests, setWaitingRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [profileModals, setProfileModals] = useState([]);
