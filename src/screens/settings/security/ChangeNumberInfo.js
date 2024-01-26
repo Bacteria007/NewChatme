@@ -28,7 +28,7 @@ const ChangeNumberInfo = ({navigation}) => {
         If you have both a new phone & a new number,first chnage your number on
         your old phone
       </Text>
-      <LongButton navigation={navigation} />
+      <LongButton btnTitle={"Next"} onPress={() => {navigation.replace('changeNumber')}} />
       </View>
     </View>
   );

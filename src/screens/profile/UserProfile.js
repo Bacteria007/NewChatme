@@ -402,13 +402,12 @@ const UserProfile = props => {
                   </TouchableOpacity>
                 )}
               </View>
-              <View style={{ flexDirection: 'row' }}>
-                <ScrollView horizontal>
-                  <View>
+                <ScrollView horizontal >
+                
                     {allUploads.length != 0 ? (
                       <FlatList
                         horizontal
-                        data={allUploads.slice(0, 3)}
+                        data={allUploads}
                         key={1}
                         showsVerticalScrollIndicator={false}
                         keyExtractor={(item, index) => index.toString()}
@@ -420,7 +419,15 @@ const UserProfile = props => {
                             true,
                           );
                           return (
-                            <View style={{ borderRadius: 10 }} >
+                            <TouchableRipple
+                            rippleColor={rippleColor}
+                            borderless
+                            style={{ borderRadius: 10 }}
+                            onPress={() => {
+                              props.navigation.navigate('SettingStack', {
+                                screen: 'activity',
+                              });
+                            }}>
                               <View
                                 style={[
                                   MyActivityStyleSheet.reelsView,
@@ -444,10 +451,12 @@ const UserProfile = props => {
                                     elevation: 4,
                                   }}
                                 />
-                              </View>
                             </View>
+                            </TouchableRipple>
+                            
                           );
                         }}
+                       
                       />
                     ) : (
                       <Text
@@ -458,8 +467,7 @@ const UserProfile = props => {
                         no uploads.
                       </Text>
                     )}
-                  </View>
-                  {allUploads.length > 2 && (
+                  {/* {allUploads.length > 2 && (
                     <TouchableRipple
                       rippleColor={rippleColor}
                       borderless
@@ -487,12 +495,13 @@ const UserProfile = props => {
                         />
                       </View>
                     </TouchableRipple>
-                  )}
+                  )} */}
+                
+                
                 </ScrollView>
-              </View>
+            
             </View>
           </View>
-          <View style={{ height: hp('10') }}></View>
         </ScrollView>
       </View>
       <ReactNativeModal

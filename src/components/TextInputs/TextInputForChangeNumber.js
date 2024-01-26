@@ -10,14 +10,12 @@ import {
 import FontStyle from '../../assets/styles/FontStyle';
 
 
-const TextInputForChangeNumber = () => {
-    const [countryCode, setCountryCode] = useState('92');
+const TextInputForChangeNumber = ({setPhoneNo,setCountryCode,}) => {
   return (
     <View style={[TextInputStyleForChangeNumber.containerViewStyle]}>
     <View style={[TextInputStyleForChangeNumber.innerView]}>
     <Text style={[TextInputStyleForChangeNumber.plusText]}>+</Text>
     <TextInput
-      value={countryCode}
       keyboardType='numeric'
       onChangeText={text => {
         setCountryCode(text);
@@ -29,6 +27,9 @@ const TextInputForChangeNumber = () => {
       <TextInput
         placeholder="phone number"
         keyboardType='numeric'
+        onChangeText={text => {
+          setPhoneNo(text);
+        }}
         // underlineColorAndroid={AppColors.black}
         style={[TextInputStyleForChangeNumber.phoneNumberTextinputStyle]}
       />

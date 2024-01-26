@@ -1,7 +1,7 @@
-import {View, Text,TextInput, KeyboardAvoidingView, ScrollView, ToastAndroid, Alert} from 'react-native';
+import { View, Text, TextInput, KeyboardAvoidingView, ScrollView, ToastAndroid, Alert } from 'react-native';
 import React, { useContext, useState } from 'react';
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
-import {Icons} from '../../../assets/Icons';
+import { Icons } from '../../../assets/Icons';
 import AppColors from '../../../assets/colors/Appcolors';
 import {
   widthPercentageToDP as wp,
@@ -16,8 +16,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNExitApp from 'react-native-exit-app';
 
 
-const DeleteAccount = ({navigation}) => {
-  const { baseUrl, currentUser,updateCurrentUser, token } = useContext(AppContext);
+const DeleteAccount = ({ navigation }) => {
+  const { baseUrl, currentUser, updateCurrentUser, token } = useContext(AppContext);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('')
@@ -52,9 +52,9 @@ const DeleteAccount = ({navigation}) => {
           await AsyncStorage.setItem('profileImage', '')
           await AsyncStorage.setItem('name', '')
           await AsyncStorage.setItem('Id', '')
-          await AsyncStorage.setItem('phoneNo', '')  
-          updateCurrentUser({}) 
-          RNExitApp.exitApp();     
+          await AsyncStorage.setItem('phoneNo', '')
+          updateCurrentUser({})
+          RNExitApp.exitApp();
           // navigation.replace('LogInScreen')
         } else {
           ToastAndroid.showWithGravity('Something went wrong, please try again later.', ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -63,9 +63,9 @@ const DeleteAccount = ({navigation}) => {
       }
     } catch (error) {
       console.error('Error deleting account:', error);
-  };
+    };
 
-};
+  };
 
   return (
     <View style={[DeleteAccountStyle.containerView]}>
@@ -75,111 +75,111 @@ const DeleteAccount = ({navigation}) => {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
       >
         <ScrollView
-          contentContainerStyle={{ paddingBottom: hp('5%'),}}
+          contentContainerStyle={{ paddingBottom: hp('5%'), }}
           showsVerticalScrollIndicator={false}>
 
-      <View style={[DeleteAccountStyle.mainView]}>
-      <View style={[DeleteAccountStyle.warningView]}>
-        <View style={[DeleteAccountStyle.warningLeftView]}>
-          <Icons.FontAwesome
-            name="exclamation-triangle"
-            size={wp('5.5%')}
-            color={AppColors.red}
-          />
-        </View>
-        <View style={[DeleteAccountStyle.warningRightView]}>
-          <Text style={[DeleteAccountStyle.warningHeadText]}>
-            Deleting your account will:
-          </Text>
-          <View style={[DeleteAccountStyle.buletedView]}>
-            <Text>{'\u25cf'} </Text>
-            <Text style={[DeleteAccountStyle.buletedText]}>
-              Delete your account from ChatMe
-            </Text>
-          </View>
-          <View style={[DeleteAccountStyle.buletedView]}>
-            <Text>{'\u25cf'} </Text>
-            <Text style={[DeleteAccountStyle.buletedText]}>
-              Earase your message history
-            </Text>
-          </View>
-          <View style={[DeleteAccountStyle.buletedView]}>
-            <Text>{'\u25cf'} </Text>
-            <Text style={[DeleteAccountStyle.buletedText]}>
-              Delete you from all of your ChatMe groups
-            </Text>
-          </View>
-        </View>
-      </View>
-      <View style={[DeleteAccountStyle.actionContainerView]}>
-        <Text style={[DeleteAccountStyle.actionConfirmText]}>
-          To delete your account, confirm your country code and enter your phone
-          number.
-        </Text>
-        <Text style={[DeleteAccountStyle.labelText]}>Country code</Text>
-        <TextInput
-        placeholder="country code"
-        onChangeText={text => setCountryCode(text)}
-        style={[{
-          borderBottomWidth: wp('0.1%'),
-          fontSize: wp('4.5%'),
-          paddingBottom: wp('-2%'),
-        }]}
-      />
-        {/* <View style={[DeleteAccountStyle.underlineView]}></View> */}
-        <Text style={[DeleteAccountStyle.labelText]}>Phone</Text>
-        <TextInput
-        placeholder="phone number"
-        keyboardType='numeric'
-        style={[{
-          borderBottomWidth: wp('0.1%'),
-          fontSize: wp('4.5%'),
-          paddingBottom: wp('-2%'),
-        }]}
-        maxLength={15}
-        onChangeText={text => setPhoneNumber(text)}
-        />
-        {/* <View style={[DeleteAccountStyle.underlineView]}></View> */}
-        <Text style={[DeleteAccountStyle.labelText]}>Password</Text>
-        <TextInput
-        placeholder="password"
-        style={[{
-          borderBottomWidth: wp('0.1%'),
-          fontSize: wp('4.5%'),
-          paddingBottom: wp('-2%'),
-        }]}
-        autoCapitalize='none'
-        onChangeText={text => setPassword(text)}
-      />
-      <TouchableRipple borderless onPress={() => {
-        if(countryCode.includes('+')){
-          dltAccount({navigation})
-        }else{
-          Alert.alert("Country code must includes '+' symbol.")
-        }
-      }}
+          <View style={[DeleteAccountStyle.mainView]}>
+            <View style={[DeleteAccountStyle.warningView]}>
+              <View style={[DeleteAccountStyle.warningLeftView]}>
+                <Icons.FontAwesome
+                  name="exclamation-triangle"
+                  size={wp('5.5%')}
+                  color={AppColors.red}
+                />
+              </View>
+              <View style={[DeleteAccountStyle.warningRightView]}>
+                <Text style={[DeleteAccountStyle.warningHeadText]}>
+                  Deleting your account will:
+                </Text>
+                <View style={[DeleteAccountStyle.buletedView]}>
+                  <Text>{'\u25cf'} </Text>
+                  <Text style={[DeleteAccountStyle.buletedText]}>
+                    Delete your account from ChatMe
+                  </Text>
+                </View>
+                <View style={[DeleteAccountStyle.buletedView]}>
+                  <Text>{'\u25cf'} </Text>
+                  <Text style={[DeleteAccountStyle.buletedText]}>
+                    Earase your message history
+                  </Text>
+                </View>
+                <View style={[DeleteAccountStyle.buletedView]}>
+                  <Text>{'\u25cf'} </Text>
+                  <Text style={[DeleteAccountStyle.buletedText]}>
+                    Delete you from all of your ChatMe groups
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View style={[DeleteAccountStyle.actionContainerView]}>
+              <Text style={[DeleteAccountStyle.actionConfirmText]}>
+                To delete your account, confirm your country code and enter your phone
+                number.
+              </Text>
+              <Text style={[DeleteAccountStyle.labelText]}>Country code</Text>
+              <TextInput
+                placeholder="country code"
+                onChangeText={text => setCountryCode(text)}
+                style={[{
+                  borderBottomWidth: wp('0.1%'),
+                  fontSize: wp('4.5%'),
+                  paddingBottom: wp('-2%'),
+                }]}
+              />
+              {/* <View style={[DeleteAccountStyle.underlineView]}></View> */}
+              <Text style={[DeleteAccountStyle.labelText]}>Phone</Text>
+              <TextInput
+                placeholder="phone number"
+                keyboardType='numeric'
+                style={[{
+                  borderBottomWidth: wp('0.1%'),
+                  fontSize: wp('4.5%'),
+                  paddingBottom: wp('-2%'),
+                }]}
+                maxLength={15}
+                onChangeText={text => setPhoneNumber(text)}
+              />
+              {/* <View style={[DeleteAccountStyle.underlineView]}></View> */}
+              <Text style={[DeleteAccountStyle.labelText]}>Password</Text>
+              <TextInput
+                placeholder="password"
+                style={[{
+                  borderBottomWidth: wp('0.1%'),
+                  fontSize: wp('4.5%'),
+                  paddingBottom: wp('-2%'),
+                }]}
+                autoCapitalize='none'
+                onChangeText={text => setPassword(text)}
+              />
+              <TouchableRipple borderless onPress={() => {
+                if (countryCode.includes('+')) {
+                  dltAccount({ navigation })
+                } else {
+                  Alert.alert("Country code must includes '+' symbol.")
+                }
+              }}
                 style={{
                   height: hp('5.5'),
-    width: hp('16'),
+                  width: hp('16'),
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: wp('8%'),
                   marginTop: wp('20%'),
-                  alignSelf:'center',
+                  alignSelf: 'center',
                   backgroundColor: AppColors.primary,
                 }}>
                 <Text style={{
-    color: AppColors.white,
-    fontSize: wp('4.5%'),
-    fontFamily: FontStyle.regularFont,
-  }}>
+                  color: AppColors.white,
+                  fontSize: wp('4.5%'),
+                  fontFamily: FontStyle.regularFont,
+                }}>
                   Delete
                 </Text>
               </TouchableRipple>
-      {/* <LongButton/> */}
-      </View>
-      </View>
-      </ScrollView></KeyboardAvoidingView>
+              {/* <LongButton/> */}
+            </View>
+          </View>
+        </ScrollView></KeyboardAvoidingView>
     </View>
   );
 };

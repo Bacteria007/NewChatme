@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -13,27 +13,45 @@ const NotificationStyle = StyleSheet.create({
     backgroundColor: AppColors.white,
   },
   mainView: {
-    padding: wp('4%'),
+    padding: wp('6%'),
+    // justifyContent:'center',alignItems:'center'
   },
-  sectionHeadText: {
-    fontFamily: FontStyle.regularFont,
-    fontSize: wp('4.5%'),
-    color: AppColors.gray,
-    // paddingVertical:hp('3%')
-    
-  },
-  touchableText: {
-    fontFamily: FontStyle.regularFont,
-    fontSize: wp('4.8%'),
+  text: {
+    fontFamily: FontStyle.mediumFont,
+    fontSize: wp('5%'),
+    paddingBottom: hp('4'),
     color: AppColors.black,
-    paddingTop:hp('3%')
 
   },
-  selectedToneText: {
+  textInput: {
     fontFamily: FontStyle.regularFont,
-    fontSize: wp('3.7%'),
-    color: AppColors.gray,
-    paddingBottom:hp('3%')
+    fontSize: wp('4.5%'),
+    width: wp('87%'),
+    borderBottomColor: AppColors.black,
+    elevation: 1,
+    color: AppColors.black,
+    maxHeight: hp('40'),
+    paddingHorizontal: wp('4'),
+    // borderRadius: wp('10%'),
+    // borderWidth: wp('0.25'),
+    // backgroundColor: AppColors.gray,
+    // height: hp('8'),
+    // marginRight: wp('6'),
+  },
+  touchableText: {
+    color: AppColors.white,
+    fontSize: wp('4.5%'),
+    fontFamily: FontStyle.regularFont,
+  },
+  touchableView: {
+    height: hp('5.5'),
+    width: hp('16'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: wp('8%'),
+    marginTop: wp('20%'),
+    alignSelf: 'center',
+    backgroundColor: AppColors.primary,
   },
 });
 

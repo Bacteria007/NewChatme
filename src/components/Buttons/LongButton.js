@@ -2,14 +2,12 @@ import { View, Text ,TouchableOpacity} from 'react-native'
 import React from 'react'
 import ButtonStyle from '../../assets/styles/ButtonStyle';
 
-const LongButton = ({navigation}) => {
+const LongButton = ({onPress,btnTitle}) => {
   return (
     <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('changeNumber');
-        }}>
+        onPress={onPress}>
         <View style={[ButtonStyle.longButtonViewStyle]}>
-          <Text style={[ButtonStyle.longButtonTextStyle]}>Next</Text>
+          <Text style={[ButtonStyle.longButtonTextStyle]}>{btnTitle}</Text>
         </View>
       </TouchableOpacity>
   )

@@ -265,8 +265,16 @@ const SignUpScreen = ({ navigation }) => {
                   return;
                 }
               } else {
-                // navigation.replace('AfterSignUpProfileScreen');
-                handleSignUp({ navigation });
+                if (!specialCharRegex.test(password)) {
+                  setPasswordSnackWidth(!false);
+                  showSnackbar(
+                    TranslationFile[language]
+                      .Password_must_contain_at_least_one_special_character,
+                  );
+                  return;
+                } else{
+                  handleSignUp({ navigation });
+                }
               }
 
               // handleSubmit();
