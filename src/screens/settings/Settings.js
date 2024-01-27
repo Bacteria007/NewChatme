@@ -215,29 +215,6 @@ const Settings = ({ navigation }) => {
                             </View>
                         }
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { navigation.navigate("SettingStack",{screen:'notification'}) }}>
-                        <View style={SettingScreenStyle.itemStyle}>
-                            <Avatar.Icon
-                                size={iconSize}
-                                icon="bell"
-                                style={{ backgroundColor: 'transparent' }}
-                                color="tomato"
-                            />
-                            <View style={{ flex: 1 }}>
-                                <Text style={SettingScreenStyle.itemName(textColor)}>Notifications</Text>
-                            </View>
-                            <Icons.Entypo
-                                name={arrow_icon}
-                                size={arrowSize}
-                                color={arrowColor}
-                            />
-                        </View>
-                        {darkThemeActivator ? <CustomDivider /> :
-                            <View style={SettingScreenStyle.dividerContainer}>
-                                <Divider />
-                            </View>
-                        }
-                    </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
                             navigation.navigate("SettingStack",{screen:'Requests'});
@@ -258,7 +235,35 @@ const Settings = ({ navigation }) => {
                                 color={arrowColor}
                             />
                         </View>
+                        {darkThemeActivator ? <CustomDivider /> :
+                            <View style={SettingScreenStyle.dividerContainer}>
+                                <Divider />
+                            </View>
+                        }
 
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { navigation.navigate("SettingStack",{screen:'help'}) }}>
+                        <View style={SettingScreenStyle.itemStyle}>
+                            <Avatar.Icon
+                                size={iconSize}
+                                icon="help-with-circle"
+                                style={{ backgroundColor: 'transparent' }}
+                                color="tomato"
+                            />
+                            <View style={{ flex: 1 }}>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>Help</Text>
+                            </View>
+                            <Icons.Entypo
+                                name={arrow_icon}
+                                size={arrowSize}
+                                color={arrowColor}
+                            />
+                        </View>
+                        {/* {darkThemeActivator ? <CustomDivider /> :
+                            <View style={SettingScreenStyle.dividerContainer}>
+                                <Divider />
+                            </View>
+                        } */}
                     </TouchableOpacity>
                 </Card>
                 {/* notifications */}
