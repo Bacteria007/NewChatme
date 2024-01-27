@@ -12,7 +12,7 @@ import AppContext from '../../../context/AppContext'
 import { TouchableRipple } from 'react-native-paper'
 
 
-const Notification = ({ navigation }) => {
+const Help = ({ navigation }) => {
   const { baseUrl, currentUser, token } = useContext(AppContext)
 
   const [helpMessage, setHelpMessage] = useState('')
@@ -54,7 +54,7 @@ const Notification = ({ navigation }) => {
   };
   return (
     <View style={[NotificationStyle.containerView]}>
-      <InnerScreensHeader navigation={navigation} screenName='Notifications' />
+      <InnerScreensHeader navigation={navigation} screenName='Help center' />
       <View style={[NotificationStyle.mainView]}>
         <Text style={[NotificationStyle.text]}>Sender name : {currentUser.name}</Text>
         <TextInput
@@ -81,4 +81,4 @@ const Notification = ({ navigation }) => {
   )
 }
 
-export default Notification
+export default Help

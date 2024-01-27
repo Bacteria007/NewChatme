@@ -13,7 +13,7 @@ import BlockContacts from './src/screens/settings/security/BlockContacts';
 import DeleteAccount from './src/screens/settings/AccountPreferences/DeleteAccount';
 import MyActivity from './src/screens/settings/AccountPreferences/MyActivity';
 import LogInScreen from './src/screens/Auth/LogInScreen';
-import Notification from './src/screens/settings/Notification/Notification';
+import Notification from './src/screens/settings/HelpCenter/Help';
 import ChatBot from './src/screens/chats/chatBot/ChatBot';
 import LanguageChangeScreen from './src/components/LanguageChange/LanguageChangeScreen';
 import { AppProvider } from './src/context/AppContext';
@@ -33,6 +33,7 @@ import { Primary_StatusBar } from './src/components/statusbars/Primary_StatusBar
 import NewGroup from './src/screens/chats/groups/NewGroup';
 import AppColors from './src/assets/colors/Appcolors';
 import PublicProfile from './src/screens/profile/PublicProfile';
+import Help from './src/screens/settings/HelpCenter/Help';
 enableScreens()
 
 
@@ -61,8 +62,8 @@ const SettingsStack = () => (
     <Stack.Screen name="changePassword" component={ChangePassword} options={{ headerShown: false }} />
     <Stack.Screen name="deleteAccount" component={DeleteAccount} options={{ headerShown: false }} />
     <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} options={{ headerShown: false }} />
-    <Stack.Screen name="notification" component={Notification} options={{ headerShown: false }} />
     <Stack.Screen name="Requests" component={AllRequest} options={{ headerShown: false }} />
+    <Stack.Screen name="help" component={Help} options={{ headerShown: false }} />
   </Stack.Navigator>
 )
 const InnerScreens = () => (
