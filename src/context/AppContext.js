@@ -10,9 +10,9 @@ const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
-  const apiKey = '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';
+  const apiKey =   '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';
   const baseUrl = 'http://192.168.43.122:8888';
-
+const apiURL='https://api.openai.com/v1/engines/text-davinci-003/completions';
   const [userName, setUserName] = useState('');
   const [storedUser, setStoredUser] = useState('');
   const [language, setLanguage] = useState('English');
@@ -88,6 +88,7 @@ export const AppProvider = ({ children }) => {
         language,
         token,
         apiKey,
+        apiURL,
         storeUserName,
         storeLanguage,
         updateCurrentUser,

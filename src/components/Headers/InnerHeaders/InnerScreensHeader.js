@@ -23,7 +23,7 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
 
   return (
     <View style={[DrawerHeaderStyle.containerView]}>
-      <View style={DrawerHeaderStyle.headerView(screenName !=="NewGroup"?theme.backgroundColor:AppColors.Lavender)}>
+      <View style={DrawerHeaderStyle.headerView(screenName !=="NewGroup"?(screenName==="Posts"?AppColors.black:theme.backgroundColor):AppColors.Lavender)}>
         <Primary_StatusBar />
         <TouchableRipple
           onPress={() => {
@@ -42,11 +42,11 @@ const InnerScreensHeader = ({ navigation, screenName }) => {
           <Icons.Ionicons
             name="arrow-back"
             size={wp('7%')}
-            color={theme.headerIconsColor}
+            color={screenName==="Posts"?AppColors.white:theme.headerIconsColor}
             style={{ marginLeft: wp('2%') }}
           />
         </TouchableRipple>
-        <Text style={[DrawerHeaderStyle.screenNameStyle, { color: theme.headerIconsColor }]}>{screenName=="NewGroup"?"New Group":screenName}</Text>
+        <Text style={[DrawerHeaderStyle.screenNameStyle, { color: screenName==="Posts"?AppColors.white:theme.headerIconsColor }]}>{screenName=="NewGroup"?"New Group":screenName}</Text>
       </View>
     </View>
 

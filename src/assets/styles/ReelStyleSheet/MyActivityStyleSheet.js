@@ -8,11 +8,13 @@ import AppColors from '../../colors/Appcolors';
 const MyActivityStyleSheet = StyleSheet.create({
     mainContainer: bgcolor => ({
         flex: 1,
-        backgroundColor: bgcolor
+        backgroundColor: bgcolor,
+        opacity:0.7
     }),
     reelsContainer: {
         flex: 1,
         justifyContent: 'flex-start',
+        marginHorizontal:wp('1')
         // backgroundColor:'red'
     },
     lottieContainer: {
@@ -47,13 +49,16 @@ const MyActivityStyleSheet = StyleSheet.create({
         textAlign: 'center',
     }),
     reelsView: {
-        borderWidth: 1,
-        borderColor: AppColors.white,
+        // borderWidth: 1,
+        // borderColor: AppColors.white,
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-       
+        elevation:0.9,marginTop:hp('0.5')
     },
-    reelStyle: { width: wp('32.5'), height: wp('32')},
+    reelStyle: { width: wp('32.5'),
+        borderWidth: 1,marginRight:wp('0.5'),
+    borderColor: AppColors.white, 
+    height: wp('32')},
     reelsModal: {
         backgroundColor: 'rgba(0,0,0,0.5)',
         alignItems: 'center',

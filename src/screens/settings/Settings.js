@@ -242,6 +242,29 @@ const Settings = ({ navigation }) => {
                         }
 
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { navigation.navigate("SettingStack",{screen:'Friends'}) }}>
+                        <View style={SettingScreenStyle.itemStyle}>
+                            <Avatar.Icon
+                                size={iconSize}
+                                icon="help-with-circle"
+                                style={{ backgroundColor: 'transparent' }}
+                                color="tomato"
+                            />
+                            <View style={{ flex: 1 }}>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>Friends</Text>
+                            </View>
+                            <Icons.Entypo
+                                name={arrow_icon}
+                                size={arrowSize}
+                                color={arrowColor}
+                            />
+                        </View>
+                        {darkThemeActivator ? <CustomDivider /> :
+                            <View style={SettingScreenStyle.dividerContainer}>
+                                <Divider />
+                            </View>
+                        }
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => { navigation.navigate("SettingStack",{screen:'help'}) }}>
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
@@ -267,6 +290,8 @@ const Settings = ({ navigation }) => {
                     </TouchableOpacity>
                 </Card>
                 {/* notifications */}
+
+
             </View>
             <View style={Containers.centercontent}>
                 <ReactNativeModal

@@ -20,6 +20,8 @@ const ReelHeader = ({navigation}) => {
     maxWidth: 1080,
     maxHeight: 1080,
     quality: 1,
+    durationLimit: 300, // set the maximum duration for the video
+    title: 'Select Video',
   };
   const iconcolor = AppColors.white;
 
@@ -77,7 +79,7 @@ const ReelHeader = ({navigation}) => {
                 ) {
                   uploadVideo(res.assets[0]);
                 } else {
-                  Alert.alert('you can just upload videos');
+                  Alert.alert('you can just upload videos',res.assets[0].type);
                 }
               }
             });

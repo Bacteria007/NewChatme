@@ -15,7 +15,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Reals = props => {
   //   **********************************           VARIABLES               ****************************
-  const { baseUrl, token } = useContext(AppContext);
+  const { baseUrl, token, currentUser } = useContext(AppContext);
 
   //   **********************************          USE STATE               ****************************
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,7 +46,7 @@ const Reals = props => {
   };
   const likeVideo = async () => {
     console.log("like consle", `${uploadedReels[currentIndex]?.uri.uri}`)
-    await fetch(`${baseUrl}/likeVideo?videoUrl=${uploadedReels[currentIndex]?.uri.uri}`, {
+    await fetch(`${baseUrl}/likeVideo?videoUrl=${uploadedReels[currentIndex]?.uri.uri}&userId=${currentUser.userId}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -60,13 +60,15 @@ const Reals = props => {
           Alert.alert('Token required')
         } else {
           if (data.success) {
-            setIsVideoLiked(true)
-            setLikeCount(data.likeCount)
+            setUploadedReels(prevState => {
+              const updatedReels = [...prevState];
+              updatedReels[currentIndex].isLiked = true;
+              updatedReels[currentIndex].likeCount = data.likeCount;
+              return updatedReels;
+            });
+            setIsVideoLiked(true);
+            setLikeCount(data.likeCount);
           }
-          else {
-            setIsVideoLiked(false)
-          }
-
         }
       })
       .catch(error => console.log(error));
@@ -74,7 +76,7 @@ const Reals = props => {
   };
   const dislikeVideo = async () => {
     console.log("like consle", `${uploadedReels[currentIndex]?.uri.uri}`)
-    await fetch(`${baseUrl}/dislikeVideo?videoUrl=${uploadedReels[currentIndex]?.uri.uri}`, {
+    await fetch(`${baseUrl}/dislikeVideo?videoUrl=${uploadedReels[currentIndex]?.uri.uri}&userId=${currentUser.userId}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -88,13 +90,15 @@ const Reals = props => {
           Alert.alert('Token required')
         } else {
           if (data.success) {
-            setIsVideoLiked(false)
-            setLikeCount(data.likeCount)
+            setUploadedReels(prevState => {
+              const updatedReels = [...prevState];
+              updatedReels[currentIndex].isLiked = false;
+              updatedReels[currentIndex].likeCount = data.likeCount;
+              return updatedReels;
+            });
+            setIsVideoLiked(false);
+            setLikeCount(data.likeCount);
           }
-          else {
-            setIsVideoLiked(false)
-          }
-
         }
       })
       .catch(error => console.log(error));
@@ -103,7 +107,7 @@ const Reals = props => {
 
   // ------------------------
   const UploadedReels = async () => {
-    await fetch(`${baseUrl}/uploadedReels`, {
+    await fetch(`${baseUrl}/uploadedReels?userId=${currentUser.userId}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -116,21 +120,22 @@ const Reals = props => {
         } else if (data.message == 'Please provide a token.') {
           Alert.alert('Token required')
         } else {
-          const videosWithSources = data.UploadedVideos.map(video => ({
-            uri: { uri: video.video }, // Convert the path to a source object
+          const videosWithSources = data.UploadedVideos ? data.UploadedVideos.map(video => ({
+            uri: { uri: video.video },
             desc: video.name,
             reelUploader: video.userId,
             isLiked: video.isLiked,
             likeCount: video.likeCount,
-          }));
-          console.log("alll reel res ==============",videosWithSources)
+          })) : [];
+
+          console.log("alll reel res ==============", videosWithSources)
 
           // console.log("fetch reel response",videosWithSources)
           setUploadedReels(videosWithSources);
           setIsLoadingData(false)
           setIsVideoLiked(videosWithSources[currentIndex].isLiked);
           setLikeCount(videosWithSources[currentIndex].likeCount);
-            }
+        }
       })
       .catch(error => console.log(error));
     setIsLoadingData(false)
@@ -142,6 +147,8 @@ const Reals = props => {
   // ------------------------
   const changeIndex = ({ index }) => {
     setCurrentIndex(index);
+    setIsVideoLiked(uploadedReels[index]?.isLiked || false);
+    setLikeCount(uploadedReels[index]?.likeCount || 0);
   };
   //   **********************************          USE EFFECTS               ****************************
 
@@ -214,7 +221,7 @@ const Reals = props => {
                     )}
 
                   </TouchableOpacity>
-                  <ReelFooter onPressShare={() => shareVideo()} onPressLike={() => likeVideo()} onPressDislike={()=>dislikeVideo()} isVideoLiked={isVideoLiked} likeCount={likeCount} item={item.reelUploader} navigation={props.navigation}/>
+                  <ReelFooter onPressShare={() => shareVideo()} onPressLike={() => likeVideo()} onPressDislike={() => dislikeVideo()} isVideoLiked={isVideoLiked} likeCount={likeCount} item={item.reelUploader} navigation={props.navigation} />
                 </View>
               );
             }}
