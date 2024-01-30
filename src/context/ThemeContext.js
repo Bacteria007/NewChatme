@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react';
 import AppColors from '../assets/colors/Appcolors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DarkTheme = {
 
@@ -68,13 +69,17 @@ export const ThemeProvider = ({ children }) => {
     const [darkThemeActivator, setDarkThemeActivator] = useState(false)
 
     // Function to update the theme
-    const setLightTheme = () => {
+    const setLightTheme = async() => {
         setTheme(LightTheme);
         setDarkThemeActivator(false);
+        await AsyncStorage.setItem('darkTheme',JSON.stringify(false))
+        console.log("dark theme set false",await AsyncStorage.getItem('darkTheme'))
     };
-    const setDarkTheme = () => {
+    const setDarkTheme = async() => {
         setTheme(DarkTheme);
         setDarkThemeActivator(true)
+        await AsyncStorage.setItem('darkTheme',JSON.stringify(true))
+        console.log("dark theme set true",await AsyncStorage.getItem('darkTheme'))
     };
     const changeThemeState = () => {
         setDarkThemeActivator(!darkThemeActivator)

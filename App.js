@@ -34,6 +34,8 @@ import NewGroup from './src/screens/chats/groups/NewGroup';
 import AppColors from './src/assets/colors/Appcolors';
 import PublicProfile from './src/screens/profile/PublicProfile';
 import Help from './src/screens/settings/HelpCenter/Help';
+import AllFriends from './src/screens/settings/AccountPreferences/AllFriends';
+import UserUploads from './src/screens/profile/UserUploads';
 enableScreens()
 
 
@@ -64,6 +66,7 @@ const SettingsStack = () => (
     <Stack.Screen name="ForgetPassword" component={ForgetPasswordScreen} options={{ headerShown: false }} />
     <Stack.Screen name="Requests" component={AllRequest} options={{ headerShown: false }} />
     <Stack.Screen name="help" component={Help} options={{ headerShown: false }} />
+    <Stack.Screen name="Friends" component={AllFriends} options={{ headerShown: false }} />
   </Stack.Navigator>
 )
 const InnerScreens = () => (
@@ -74,6 +77,7 @@ const InnerScreens = () => (
     <Stack.Screen name="CreateGroup" component={CreateGroup} options={{ headerShown: false }} />
     <Stack.Screen name="NewGroup" component={NewGroup} options={{ headerShown: false }} />
     <Stack.Screen name="publicProfile" component={PublicProfile} options={{ headerShown: false }} />
+    <Stack.Screen name="UserUploads" component={UserUploads} options={{ headerShown: false }} />
   </Stack.Navigator>
 )
 

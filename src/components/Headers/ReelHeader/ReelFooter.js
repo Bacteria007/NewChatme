@@ -22,9 +22,9 @@ const ReelFooter = ({ onPressShare,item,onPressLike,onPressDislike,isVideoLiked 
         }}>
         <View style={[ReelFooterStyle.leftContainer]}>
           <View style={[ReelFooterStyle.imageContainer]}>
-            {item.profileImage?
+            {item?.profileImage?
             <Image
-              source={{uri:`${baseUrl}${item.profileImage}`}}
+              source={{uri:`${baseUrl}${item?.profileImage}`}}
               style={[ReelFooterStyle.imageStyle]}
             />
             :
@@ -35,7 +35,7 @@ const ReelFooter = ({ onPressShare,item,onPressLike,onPressDislike,isVideoLiked 
             
             }
           </View>
-          <Text style={[ReelFooterStyle.profileName]}>{item.name}</Text>
+          <Text style={[ReelFooterStyle.profileName]}>{item?.name}</Text>
         </View>
       </Animated.View>
       <View style={[ReelFooterStyle.rightContainer]}>
@@ -48,7 +48,7 @@ onPress={()=>{
 
 }}>
           <Image
-              source={{uri:`${baseUrl}${item.profileImage}`}}
+              source={{uri:`${baseUrl}${item?.profileImage}`}}
               style={[ReelFooterStyle.imageStyle2]}
             />
             </TouchableOpacity>

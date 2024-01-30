@@ -28,7 +28,7 @@ const UserChatInputStyle = StyleSheet.create({
     
   }, 
   input:{
-    width: wp('90'),
+    width: wp('75'),
     alignItems: 'center',
     alignSelf: 'flex-start',
     // maxHeight:hp('6%'),

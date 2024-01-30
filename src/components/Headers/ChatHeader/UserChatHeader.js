@@ -38,7 +38,7 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
   const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
-
+console.log("header item-------------",item)
   const [clearChatModal, setClearChatModal] = useState(false);
   const showClearChatModal = () => {
     setClearChatModal(true);
@@ -129,6 +129,14 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
               color={theme.profileNameColor}
             />
           </TouchableRipple>
+          <TouchableOpacity
+          onPress={()=>{
+            navigation.navigate('InnerScreens', {
+              screen: 'publicProfile',
+              params: {data:item},
+            });
+          
+          }}>
           <View style={[UserChatHeaderStyle.leftInnerView]}>
             <View style={[UserChatHeaderStyle.dpContainerView]}>
               {item?.profileImage ?
@@ -151,6 +159,7 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
                 </Text> */}
             </View>
           </View>
+          </TouchableOpacity>
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
           <TouchableRipple borderless onPress={showModal}

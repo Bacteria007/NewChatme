@@ -16,7 +16,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {Primary_StatusBar} from '../../../components/statusbars/Primary_StatusBar';
+import { Primary_StatusBar } from '../../../components/statusbars/Primary_StatusBar';
 import BotChatHeader from '../../../components/Headers/ChatHeader/BotChatHeader';
 import BotScreenStyleSheet from '../../../assets/styles/BotStyleSheet/BotScreenStyleSheet';
 import AppContext from '../../../context/AppContext';
@@ -24,7 +24,7 @@ import AppContext from '../../../context/AppContext';
 const ChatBot = props => {
 
   //***********************************      USE STATE    ************************* */
-  const { baseUrl, currentUser,token,apiKey,apiURL } = useContext(AppContext)
+  const { baseUrl, currentUser, token, apiKey, apiURL } = useContext(AppContext)
   const [data, setData] = useState([]);
   const [msgHistory, setMessageHistory] = useState([]);
   const [textInput, setTextInput] = useState('');
@@ -32,7 +32,7 @@ const ChatBot = props => {
   const [botMsg, setBotMsg] = useState('');
   let msgOfBot;
 
-
+  console.log("chat bot ", apiKey, apiURL)
   //***********************************     VARIABLES   ************************* */
   const flatListRef = useRef(null);
 
@@ -43,12 +43,15 @@ const ChatBot = props => {
   // },[botMsg])
   const handleSend = async () => {
     const prompt = textInput;
-    const response = await axios.post(
+    console.log("enter into",textInput)
+    await axios.post(
       apiURL,
       {
-        prompt: prompt,
+        // messages: [{ 'role': "user", "content": textInput }],
+        prompt:prompt,
         max_tokens: 900,
         temperature: 1.0,
+        model: 'davinci-002'
       },
       {
         headers: {
@@ -56,29 +59,33 @@ const ChatBot = props => {
           Authorization: `Bearer ${apiKey}`,
         },
       },
-    );
-    const text = response.data.choices[0].text;
-    setBotMsg(text)
-    msgOfBot=text;
-    const timestamp = new Date().toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    ).then((response) => {
+      console.log("gpt===========res", response)
+      const text = response.data.choices[0].text;
+      setBotMsg(text)
+      msgOfBot = text;
+      const timestamp = new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
 
-    setUserMsg(textInput)
-    setData(prevData => [
-      ...prevData,
-      { type: 'user', text: textInput, timestamp: timestamp },
-
-    ]);
-    setTextInput('');
-    setTimeout(() => {
+      setUserMsg(textInput)
       setData(prevData => [
         ...prevData,
-        { type: 'bot', text: text, timestamp: timestamp },
+        { type: 'user', text: textInput, timestamp: timestamp },
+
       ]);
-    }, 1000);
-    storeInDb()
+      setTextInput('');
+      setTimeout(() => {
+        setData(prevData => [
+          ...prevData,
+          { type: 'bot', text: text, timestamp: timestamp },
+        ]);
+      }, 1000);
+      storeInDb()
+    }).catch((err) => {
+      console.log("catch gpt error", err)
+    })
 
   };
 
@@ -88,7 +95,7 @@ const ChatBot = props => {
     formData.append("userMsg", textInput);
     formData.append("botMsg", msgOfBot);
     console.log("bot_msg", msgOfBot);
-        // formData.append("timestamp", timestamp);
+    // formData.append("timestamp", timestamp);
     const response = await fetch(`${baseUrl}/storeBotMsg`, {
       method: 'POST',
       headers: {
