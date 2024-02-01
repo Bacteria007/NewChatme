@@ -39,8 +39,8 @@ const UserChatHeaderStyle = StyleSheet.create({
     width: 'auto',
     justifyContent: 'space-between',
     paddingHorizontal: wp('2'),
-    alignContent: 'center',
-    // backgroundColor: 'red',
+    alignItems: 'center',
+    // backgroundColor: 'blue',
   },
   leftInnerView: {
     flexDirection: 'row',
@@ -49,6 +49,7 @@ const UserChatHeaderStyle = StyleSheet.create({
     paddingHorizontal: wp('1'),
     justifyContent: 'space-between',
     // backgroundColor:'green',
+   
   },
   rightView: {
     justifyContent: 'center',
@@ -64,6 +65,7 @@ const UserChatHeaderStyle = StyleSheet.create({
     height: hp('5%'),
     width: hp('5%'),
     borderRadius: hp('5%'),
+    
   },
   profileNameContainerStyle: {
     justifyContent: 'flex-start',
