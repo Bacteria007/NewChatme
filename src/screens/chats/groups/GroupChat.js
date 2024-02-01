@@ -47,6 +47,30 @@ const GroupChat = props => {
   const hideModal = () => setVisible(false);
 
   // FUNCTION
+  const receivePreviousMessagesFromDb = async () => {
+    await fetch(`${baseUrl}/message_history/?groupId=${groupId}&userId=${currentUser.userId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(async res => {
+        const msgs = await res.json();
+        if (msgs.message == 'Please provide a valid token.') {
+          Alert.alert('Provide a valid token.');
+        } else if (msgs.message == 'Please provide a token.') {
+          Alert.alert('Token required');
+        } else {
+          setMsgList(msgs);
+          setIsLoading(false)
+          scrollToBottom();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   const sendMessage = async () => {
     setIsSending(true);
     await axios
@@ -243,7 +267,8 @@ const GroupChat = props => {
   }, [handleGetCurrentMsg]);
 
   useEffect(() => {
-    setMsgList(allGroupMsgs)
+    // setMsgList(allGroupMsgs)
+    receivePreviousMessagesFromDb()
   }, []);
   const joinGroupChat = async () => {
     const data = { user_name: currentUser.name, group_name: item.group_name, groupId: groupId }
@@ -337,12 +362,13 @@ const GroupChat = props => {
           coverScreen={true}
           style={GroupChatStyle.modalStyle}>
           <View style={GroupChatStyle.modalMainView}>
-            <ScrollView>
+            
               <Image
                 source={{ uri: selecetdImageMsg ? selecetdImageMsg.uri : null }}
                 style={GroupChatStyle.image}
+               resizeMode='contain'
               />
-            </ScrollView>
+            
             <View style={GroupChatStyle.iamgeHeader}>
               <TouchableRipple
                 rippleColor={theme.rippleColor}
