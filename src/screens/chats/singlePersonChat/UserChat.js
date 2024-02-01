@@ -29,7 +29,7 @@ import axios from 'axios';
 const UserChat = (props) => {
 
   // GLOBAL STATES
-  const { baseUrl, currentUser, token, apiKey,apiURL } = useContext(AppContext);
+  const { baseUrl, currentUser, token, apiKey, apiURL } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
 
   // VARIABLES
@@ -137,29 +137,29 @@ const UserChat = (props) => {
       console.error('Error deleting message:', error);
     }
   };
-  // const messagesFromDb = async () => {
-  //   const res = await fetch(`${baseUrl}/messages?chatId=${contact._id}&userId=${currentUser.userId}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //       'Content-Type': 'application/json',
-  //     },
-  //   });
-  //   const data = await res.json();
+  const messagesFromDb = async () => {
+    const res = await fetch(`${baseUrl}/messages?chatId=${contact._id}&userId=${currentUser.userId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
 
-  //   if (data.message == 'Please provide a valid token.') {
-  //     Alert.alert('Provide a valid token.');
-  //   } else if (data.message == 'Please provide a token.') {
-  //     Alert.alert('Token required');
-  //   } else {
-  //     const filterMsgs = data.filter(message => {
-  //       return !message.deletedBy.includes(currentMessage.userId);
-  //     });
-  //     setMessageList(filterMsgs);
-  //     // console.log('//////////////////\\\\\\\\\\\\\\\\\\',messageList)
-  //     setIsLoading(false)
-  //   }
-  // };
+    if (data.message == 'Please provide a valid token.') {
+      Alert.alert('Provide a valid token.');
+    } else if (data.message == 'Please provide a token.') {
+      Alert.alert('Token required');
+    } else {
+      const filterMsgs = data.filter(message => {
+        return !message.deletedBy.includes(currentMessage.userId);
+      });
+      setMessageList(filterMsgs);
+      // console.log('//////////////////\\\\\\\\\\\\\\\\\\',messageList)
+      setIsLoading(false)
+    }
+  };
   const joinPrivateChat = async () => {
     const joinData = {
       receiverId: receiver._id,
@@ -235,7 +235,7 @@ const UserChat = (props) => {
             chatId: contact._id,
             mood: moodOfUser,
           };
-          console.log('kkmm',messageData)
+          console.log('kkmm', messageData)
           await socket.emit('send_message', messageData);
           setIsSending(false);
           scrollToBottom();
@@ -253,7 +253,7 @@ const UserChat = (props) => {
           chatId: contact._id,
           mood: 'normal',
         };
-        console.log('kkmm cth',messageData)
+        console.log('kkmm cth', messageData)
 
         await socket.emit('send_message', messageData);
         setIsSending(false);
@@ -396,7 +396,8 @@ const UserChat = (props) => {
     };
   }, [handleGetCurrentMsg]);
   useEffect(() => {
-    setMessageList(allMsgs)
+    // setMessageList(allMsgs)
+    messagesFromDb()
   }, []);
   useEffect(() => {
     joinPrivateChat();
@@ -413,7 +414,7 @@ const UserChat = (props) => {
         <Primary_StatusBar />
         <View style={{ height: hp('100%'), width: wp('100%') }}>
           {changeHeader != true ? (
-            <UserChatHeader item={receiver} navigation={props.navigation} clearFunc={() => { clearChat() }} iInitBlock={iInitBlock} blockFunc={()=>{userBlocked()}} unBlockFunc={()=>{userUnBlocked()}} isBlocked={isBlocked} />
+            <UserChatHeader item={receiver} navigation={props.navigation} clearFunc={() => { clearChat() }} iInitBlock={iInitBlock} blockFunc={() => { userBlocked() }} unBlockFunc={() => { userUnBlocked() }} isBlocked={isBlocked} />
           ) : (
             <ChangedChatHeader
               // msgId={msgId}
@@ -479,20 +480,11 @@ const UserChat = (props) => {
         style={GroupChatStyle.modalStyle}
       >
         <View style={GroupChatStyle.modalMainView}>
-          <ScrollView
-            contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-          // maximumZoomScale={2} 
-          >
-            <ScrollView
-              contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-              horizontal={true}
-            >
-              <Image
-                source={{ uri: imagMessage ? imagMessage.uri : null }}
-                style={GroupChatStyle.image}
-              />
-            </ScrollView>
-          </ScrollView>
+          <Image
+            source={{ uri: imagMessage ? imagMessage.uri : null }}
+            style={GroupChatStyle.image}
+            resizeMode="contain"
+          />
           <View style={GroupChatStyle.iamgeHeader}>
             <TouchableRipple
               rippleColor={theme.rippleColor}
