@@ -1,99 +1,80 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import React, { useContext, useRef } from 'react';
-import InnerScreensHeader from '../components/Headers/InnerHeaders/InnerScreensHeader';
-import { Icons } from '../assets/Icons';
-import TermsStyle from '../assets/styles/tremsAndConditions/TermsStyle';
-import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated'
-import { useDrawerProgress } from '@react-navigation/drawer'
-import { ThemeContext } from '../context/ThemeContext';
+import { View, Text, StyleSheet } from 'react-native'
+import React, { useContext } from 'react'
+import InnerScreensHeader from '../components/Headers/InnerHeaders/InnerScreensHeader'
+import DrawerScreenswrapper from './drawer/DrawerScreenswrapper'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import AppColors from '../assets/colors/Appcolors'
+import DeviceInfo from 'react-native-device-info';
+import { ThemeContext } from '../context/ThemeContext'
+import { Primary_StatusBar } from '../components/statusbars/Primary_StatusBar'
+import FontStyle from '../assets/styles/FontStyle'
 
 const TermsAndConditions = ({ navigation }) => {
-  const scrollViewRef = useRef(null);
-  const{theme}=useContext(ThemeContext)
-  const scrollToTop = () => {
-    scrollViewRef.current.scrollTo({ y: 0, animated: true });
-  };
+  const { theme, darkThemeActivator } = useContext(ThemeContext);
 
-  ///drawer wrapper
-
-  const progress = useDrawerProgress()
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { perspective: 1000 },
-      { scale: interpolate(progress.value, [0, 1], [1, 0.8], 'clamp') },
-      // { rotateY: `${interpolate(progress.value, [0, 1], [0, -10], 'clamp')}deg` },
-      { translateX: interpolate(progress.value, [0, 1], [0, 0, -60], 'clamp') }
-    ],
-    overflow: 'hidden',
-    borderRadius: progress.value === 1 ? 18 : 0,
-    shadowColor: 'rgba(0,0,0,1)', // Shadow color
-    shadowOpacity: 1, // Opacity of the shadow
-    shadowRadius: 10, // Radius of the shadow blur
-    shadowOffset: {
-      width: 0, // Horizontal offset
-      height: -10, // Vertical offset
-    },
-    elevation: 10,
-    
-
-  }));
-
-  //
+  const appVersion = DeviceInfo.getVersion();
   return (
-    <Animated.ScrollView ref={scrollViewRef} style={[TermsStyle.container,animatedStyle]}>
-      <InnerScreensHeader
-        navigation={navigation}
-        screenName={'Terms and conditions'}
-        />
-      <View style={TermsStyle.content}>
-        <Text style={TermsStyle.title}>Terms and Conditions</Text>
-        <Text style={TermsStyle.body}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus
-          arcu non tellus fermentum pulvinar. Vestibulum facilisis ex quis sem
-          sollicitudin fermentum. Integer cursus justo id dui scelerisque
-          feugiat. Nunc vitae tortor leo. Quisque pharetra dolor id lectus
-          viverra fermentum. Fusce sollicitudin, justo id tempor consectetur,
-          justo lectus eleifend velit, at ultrices mauris lorem quis nisl.
-        </Text>
-        <Text style={TermsStyle.body}>
-          In hac habitasse platea dictumst. Suspendisse et lectus malesuada,
-          aliquam orci at, congue magna. Nullam sodales ipsum at pharetra
-          interdum. Etiam efficitur purus quis turpis ullamcorper, vel
-          vestibulum metus maximus. Vestibulum ante ipsum primis in faucibus
-          orci luctus et ultrices posuere cubilia curae; Vestibulum vitae
-          suscipit est, ut efficitur sem. Duis tristique odio id justo malesuada
-          rutrum. Suspendisse potenti. Nulla facilisi. Ut blandit ante tellus,
-          vitae consequat dolor tempus id.
-        </Text>
-        <Text style={TermsStyle.body}>
-          In hac habitasse platea dictumst. Suspendisse et lectus malesuada,
-          aliquam orci at, congue magna. Nullam sodales ipsum at pharetra
-          interdum. Etiam efficitur purus quis turpis ullamcorper, vel
-          vestibulum metus maximus. Vestibulum ante ipsum primis in faucibus
-          orci luctus et ultrices posuere cubilia curae; Vestibulum vitae
-          suscipit est, ut efficitur sem. Duis tristique odio id justo malesuada
-          rutrum. Suspendisse potenti. Nulla facilisi. Ut blandit ante tellus,
-          vitae consequat dolor tempus id.
-        </Text>
-
-        <TouchableOpacity
-          onPress={() => {
-            scrollToTop();
-          }}
-        style={TermsStyle.arrowupStyle(theme.homeCardColor)}
-        >
-            <Icons.AntDesign name="arrowup" size={20} color={theme.profileNameColor} />
-        </TouchableOpacity>
+    <DrawerScreenswrapper>
+      <InnerScreensHeader screenName={"Terms And Conditions"} navigation={navigation} />
+      <View style={styles.container(theme.backgroundColor)}>
+        <View style={{ justifyContent: 'center', padding: 10, marginBottom: hp('4') }}>
+          <Text style={styles.title(theme.profileNameColor)}> Terms of Use</Text>
+          <Text style={styles.description(theme.lastMsgColor)}>
+            Welcome to the GoChat Messenger mobile application (“Application”, “GoChat Messenger”), operated by Emirates Telecommunications Group Company P.J.S.C , duly established under the laws of the United Arab Emirates by virtue of Federal Decree No. 78 of 1976 having its head office at the intersection of Sheikh Zayed 1st Street and Sheikh Rashid Bin Saeed Al Maktoum Road, P.O. Box 3838, Abu Dhabi, United Arab Emirates (“we,” “us”, “our” or “Etisalat”).
+            These Terms of Use (“Terms”) govern your access and use of the GoChat Messenger and our related services, applications, products and content (collectively the “Services”). Thank you for using our services. Now, please pause, grab a cup of coffee and carefully read the following pages. It will take you approximately 20 minutes.
+          </Text>
+          <Text style={{ fontFamily: FontStyle.regularFont }}></Text>
+          <Text style={styles.version(theme.lastMsgColor)}>App Version: {appVersion}</Text>
+        </View>
       </View>
-    </Animated.ScrollView>
-  );
-};
+    </DrawerScreenswrapper>
+
+  )
+}
+const styles = StyleSheet.create({
+  container: (bgColor) => ({
+    flex: 1,
+    padding: wp('10%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: bgColor,
+    height: hp('100'),
+    width: wp('100')
+  }),
+  title: (clr) => ({
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: clr, textAlign: 'center',
+    fontFamily: FontStyle.regularFont
+
+  }),
+  description: (clr) => ({
+    fontSize: 16,
+    color: clr,
+    marginBottom: 20,
+    fontFamily: FontStyle.regularFont
+  }),
+  version: (clr) => ({
+    fontSize: 14,
+    color: clr, textAlign: 'center',
+    fontFamily: FontStyle.regularFont
+  }),
+});
+
 
 export default TermsAndConditions;
 
 
+// const scrollToTop = () => {
+//   scrollViewRef.current.scrollTo({ y: 0, animated: true });
+// };
+
+// <TouchableOpacity
+//           onPress={() => {
+//             scrollToTop();
+//           }}
+//           style={TermsStyle.arrowupStyle(theme.homeCardColor)}
+//           >
+//             <Icons.AntDesign name="arrowup" size={20} color={theme.profileNameColor} />
+//         </TouchableOpacity>

@@ -37,7 +37,7 @@ import { Icons } from '../../assets/Icons';
 import SelectInfo from './SelectInfo';
 
 const UserProfile = props => {
-  const {    token,    baseUrl,    storeUserName,    currentUser,    updateCurrentUser,    userName,    selectedImageUri,    storeImageUri,  } = useContext(AppContext);
+  const { token, baseUrl, storeUserName, currentUser, updateCurrentUser, userName, selectedImageUri, storeImageUri, } = useContext(AppContext);
   const { theme, darkThemeActivator } = useContext(ThemeContext);
   const arrow_icon = 'pencil';
   const iconSize = wp('9%');
@@ -188,7 +188,7 @@ const UserProfile = props => {
               ProfileScreenStyleSheet.innerContainer(theme.backgroundColor),
             ]}>
             <ImageBackground
-              source={{ uri:`${baseUrl}${currentUser.profileImage}` }}
+              source={{ uri: `${baseUrl}${currentUser.profileImage}` }}
               imageStyle={[ProfileScreenStyleSheet.bgImageStyle]}
             />
           </View>
@@ -207,7 +207,7 @@ const UserProfile = props => {
                       <Icons.MaterialIcons
                         name="person"
                         size={60}
-                        color={AppColors.black} 
+                        color={AppColors.black}
                       />
                     </Neomorph>
                   </Neomorph>
@@ -311,7 +311,7 @@ const UserProfile = props => {
                   Phone number
                 </Text>
                 <Text style={ProfileScreenStyleSheet.itemName(infoColor)}>
-                  +92 {currentUser.phoneNumber}
+                   {currentUser.phoneNumber}
                 </Text>
               </View>
               <Icons.MaterialCommunityIcons
@@ -352,17 +352,14 @@ const UserProfile = props => {
             </View>
           </TouchableOpacity>
           <CustomDivider />
-          <View
-            style={[
-              ProfileScreenStyleSheet.itemStyle,
-              { alignItems: 'center' },
-            ]}>
+          <View style={ProfileScreenStyleSheet.itemStyle}>
             <View style={{ flex: 1, marginLeft: wp('3') }}>
+              {/* Uploads text view */}
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  alignItems: 'center',
+                  alignItems: 'center'
                 }}>
                 <Text
                   style={ProfileScreenStyleSheet.uploadsText(
@@ -378,8 +375,9 @@ const UserProfile = props => {
                     onPress={() => {
                       props.navigation.navigate('SettingStack', {
                         screen: 'activity',
-                      });
-                    }}>
+                      })
+                    }}
+                  >
                     <View
                       style={{
                         flexDirection: 'row',
@@ -402,72 +400,16 @@ const UserProfile = props => {
                   </TouchableOpacity>
                 )}
               </View>
-                <ScrollView horizontal >
-                
-                    {allUploads.length != 0 ? (
-                      <FlatList
-                        horizontal
-                        data={allUploads}
-                        key={1}
-                        showsVerticalScrollIndicator={false}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item, index }) => {
-                          const HtmlVideo = GenerateVideoHtml(
-                            baseUrl,
-                            item,
-                            false,
-                            true,
-                          );
-                          return (
-                            <TouchableRipple
-                            rippleColor={rippleColor}
-                            borderless
-                            style={{ borderRadius: 10 }}
-                            onPress={() => {
-                              props.navigation.navigate('SettingStack', {
-                                screen: 'activity',
-                              });
-                            }}>
-                              <View
-                                style={[
-                                  MyActivityStyleSheet.reelsView,
-                                  { borderRadius: 10 },
-                                ]}>
-                                <WebView
-                                  originWhitelist={['*']}
-                                  source={{ html: `${HtmlVideo}` }}
-                                  scrollEnabled={false}
-                                  showsVerticalScrollIndicator={false}
-                                  showsHorizontalScrollIndicator={false}
-                                  setDisplayZoomControls={false}
-                                  setBuiltInZoomControls={false}
-                                  style={[
-                                    MyActivityStyleSheet.reelStyle,
-                                    { borderRadius: 10 },
-                                  ]}
-                                  containerStyle={{
-                                    borderRadius: 10,
-                                    marginHorizontal: wp('1'),
-                                    elevation: 4,
-                                  }}
-                                />
-                            </View>
-                            </TouchableRipple>
-                            
-                          );
-                        }}
-                       
-                      />
-                    ) : (
-                      <Text
-                        style={ProfileScreenStyleSheet.noFriendsText(
-                          theme.lastMsgColor,
-                        )}>
-                        {' '}
-                        no uploads.
-                      </Text>
-                    )}
-                  {/* {allUploads.length > 2 && (
+              {/* Flatlist  */}
+              {allUploads.length != 0 ? (
+                <FlatList
+                  horizontal
+                  data={allUploads.slice(0, 2)}
+                  key={1}
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+                  keyExtractor={(item, index) => index.toString()}
+                  ListFooterComponent={allUploads.length > 2 && (
                     <TouchableRipple
                       rippleColor={rippleColor}
                       borderless
@@ -495,11 +437,52 @@ const UserProfile = props => {
                         />
                       </View>
                     </TouchableRipple>
-                  )} */}
-                
-                
-                </ScrollView>
-            
+                  )}
+                  ListFooterComponentStyle={{ alignSelf: 'center', marginLeft: 5 }}
+                  renderItem={({ item, index }) => {
+                    const HtmlVideo = GenerateVideoHtml(baseUrl, item, false, true);
+                    return (
+                      <TouchableRipple
+                        rippleColor={rippleColor}
+                        borderless
+                        style={{
+                          borderRadius: 10,
+                          marginHorizontal: wp('1'),
+                          borderWidth: darkThemeActivator ? 1 : 0,
+                          borderColor: "grey",
+                        }}
+                        onPress={() => {
+                          props.navigation.navigate('SettingStack', {
+                            screen: 'activity',
+                          })
+                        }}>
+                        <WebView
+                          originWhitelist={['*']}
+                          source={{ html: `${HtmlVideo}` }}
+                          scrollEnabled={false}
+                          showsVerticalScrollIndicator={false}
+                          showsHorizontalScrollIndicator={false}
+                          setDisplayZoomControls={false}
+                          setBuiltInZoomControls={false}
+                          containerStyle={{
+                            borderRadius: 10,
+                            height: wp('32'),
+                            width: wp('32.5'),
+                            // backgroundColor: 'blue',
+                          }}
+                        />
+                      </TouchableRipple>
+                    );
+                  }}
+
+                />
+              ) : (
+                <View style={{ marginTop: hp('3') }}>
+                  <Text style={[ProfileScreenStyleSheet.noFriendsText(theme.lastMsgColor)]}>
+                    no uploads.
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         </ScrollView>
