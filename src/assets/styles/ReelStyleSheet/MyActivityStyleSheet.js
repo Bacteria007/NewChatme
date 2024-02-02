@@ -9,20 +9,20 @@ const MyActivityStyleSheet = StyleSheet.create({
     mainContainer: bgcolor => ({
         flex: 1,
         backgroundColor: bgcolor,
-        opacity:0.7
+        opacity: 0.7
     }),
     reelsContainer: {
         flex: 1,
         justifyContent: 'flex-start',
-        marginHorizontal:wp('1')
+        marginHorizontal: wp('1')
         // backgroundColor:'red'
     },
     lottieContainer: {
         justifyContent: 'center',
         alignItems: 'center',
         // backgroundColor: 'red',
-        height:hp('100'),
-        width:wp('100')
+        height: hp('100'),
+        width: wp('100')
 
     },
     loadingLottieStyle: {
@@ -53,12 +53,16 @@ const MyActivityStyleSheet = StyleSheet.create({
         // borderColor: AppColors.white,
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        elevation:0.9,marginTop:hp('0.5')
+        // elevation: 0.9,
+        marginTop: hp('0.5')
     },
-    reelStyle: { width: wp('32.5'),
-        borderWidth: 1,marginRight:wp('0.5'),
-    borderColor: AppColors.white, 
-    height: wp('32')},
+    reelStyle: {
+        height: wp('32'),
+        width: wp('32.5'),
+        // borderWidth: 1,
+        marginRight: wp('0.5'),
+        // borderColor: AppColors.white,
+    },
     reelsModal: {
         backgroundColor: 'rgba(0,0,0,0.5)',
         alignItems: 'center',

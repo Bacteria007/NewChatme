@@ -11,6 +11,7 @@ import AppContext from '../../context/AppContext';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/ProfileScreenStyleSheet';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const SelectInfo = ({ iconName2, props }) => {
   const modalfontsize = wp('4.6%');
@@ -20,6 +21,7 @@ const SelectInfo = ({ iconName2, props }) => {
 
   const { userName, storeUserName, currentUser, baseUrl, updateCurrentUser } =
     useContext(AppContext);
+    const { theme, darkThemeActivator } = useContext(ThemeContext);
 
   const [userinput, setUserinput] = useState(userName);
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -77,7 +79,7 @@ const SelectInfo = ({ iconName2, props }) => {
               type={Icons.MaterialCommunityIcons}
               name={iconName2}
               size={iconSize}
-              color={AppColors.black}
+              color={theme.profileNameColor}
               // style={{margin: 15}}
             />
           </View>

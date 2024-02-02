@@ -7,6 +7,7 @@ import AppColors from '../../assets/colors/Appcolors'
 import DeviceInfo from 'react-native-device-info';
 import { ThemeContext } from '../../context/ThemeContext'
 import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar'
+import FontStyle from '../../assets/styles/FontStyle'
 
 const AboutUs = ({ navigation }) => {
   const { theme, darkThemeActivator } = useContext(ThemeContext);
@@ -21,6 +22,7 @@ const AboutUs = ({ navigation }) => {
           <Text style={styles.description(theme.lastMsgColor)}>
             Welcome to our app! Here, you'll find information about our app and the team behind it.
           </Text>
+          <Text style={{fontFamily:FontStyle.regularFont}}></Text>
           <Text style={styles.version(theme.lastMsgColor)}>App Version: {appVersion}</Text>
         </View>
       </View>
@@ -42,17 +44,21 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: clr,textAlign:'center'
+    color: clr,textAlign:'center',
+    fontFamily:FontStyle.regularFont
+    
   }),
   description: (clr) => ({
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 20,
-    color: clr,textAlign:'center'
+    color: clr,textAlign:'center',
+    fontFamily:FontStyle.regularFont
   }),
   version: (clr) => ({
     fontSize: 14,
-    color: clr,textAlign:'center'
+    color: clr,textAlign:'center',
+    fontFamily:FontStyle.regularFont
   }),
 });
 
