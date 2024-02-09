@@ -246,7 +246,9 @@ const Settings = ({ navigation }) => {
                         <View style={SettingScreenStyle.itemStyle}>
                             <Avatar.Icon
                                 size={iconSize}
-                                icon="help-with-circle"
+                                icon={() => (
+                                    <Icons.FontAwesome5 name="user-friends" size={iconSize/3} color={"blue"} />
+                                  )}
                                 style={{ backgroundColor: 'transparent' }}
                                 color="tomato"
                             />

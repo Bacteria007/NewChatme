@@ -1,4 +1,4 @@
-import { View, Text,TextInput, ToastAndroid, Alert } from 'react-native'
+import { View, Text, TextInput, ToastAndroid, Alert } from 'react-native'
 import React, { useContext, useState } from 'react'
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader'
 import ChangeNumberStyle from '../../../assets/styles/ChangeNumberStyle'
@@ -9,16 +9,21 @@ import {
 } from 'react-native-responsive-screen';
 import { ThemeContext } from '../../../context/ThemeContext'
 import AppContext from '../../../context/AppContext'
+import AppColors from '../../../assets/colors/Appcolors'
+import FontStyle from '../../../assets/styles/FontStyle'
 
 
-const ChangePassword = ({navigation}) => {
-  const {theme}=useContext(ThemeContext);
-  const { baseUrl, getToken,token, updateCurrentUser, currentUser } = useContext(AppContext)
+const ChangePassword = ({ navigation }) => {
+  const { theme, darkThemeActivator } = useContext(ThemeContext);
+  const maintextColor = theme.profileNameColor
+  const btnColor = AppColors.white
+  const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
+  const { baseUrl, getToken, token, updateCurrentUser, currentUser } = useContext(AppContext)
 
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
 
-  const changepassword=async()=>{
+  const changepassword = async () => {
     const formdata = new FormData();
     formdata.append('userId', currentUser.userId);
     formdata.append('oldPassword', `${oldPassword}`);
@@ -55,7 +60,7 @@ const ChangePassword = ({navigation}) => {
   }
 
   return (
-    <View style={{flex:1,backgroundColor:theme.backgroundColor}}>
+    <View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
       <InnerScreensHeader navigation={navigation} screenName="Change password" />
       <View style={[ChangeNumberStyle.mainViewStyle(theme.backgroundColor)]}>
         <Text
@@ -63,34 +68,42 @@ const ChangePassword = ({navigation}) => {
           Enter your old password to change current password:
         </Text>
         <TextInput
-        placeholder="old password"
-        onChangeText={text => {
-          setOldPassword(text);
-        }}
-        autoCapitalize="none"
-        style={[{
-          borderBottomWidth: wp('0.1%'),
-          fontSize: wp('4.5%'),
-          paddingBottom: wp('-2%'),
-        }]}
-      />
+          placeholder="old password"
+          onChangeText={text => {
+            setOldPassword(text);
+          }}
+          autoCapitalize="none"
+          style={[{
+            fontSize: wp('3%'),
+            paddingBottom: wp('-2%'),
+            color: secondaryTextColor,
+            borderBottomWidth: hp('0.15'),
+            fontFamily: FontStyle.regularFont,
+            borderBottomColor: darkThemeActivator ? AppColors.gray : AppColors.black,
+          }]}
+          placeholderTextColor={AppColors.gray}
+        />
         <Text
           style={[ChangeNumberStyle.headTextStyle]}>
           Enter your new password to change current password:
         </Text>
         <TextInput
-        placeholder="new password"
-        onChangeText={text => {
-          setNewPassword(text);
-        }}
-        autoCapitalize="none"
-        style={[{
-          borderBottomWidth: wp('0.1%'),
-          fontSize: wp('4.5%'),
-          paddingBottom: wp('-2%'),
-        }]}
-      />        
-        <LongButton btnTitle={"Confirm"}  onPress={()=>{changepassword()}}  />
+          placeholder="new password"
+          onChangeText={text => {
+            setNewPassword(text);
+          }}
+          autoCapitalize="none"
+          style={[{
+            fontSize: wp('3%'),
+            paddingBottom: wp('-2%'),
+            borderBottomWidth: hp('0.15'),
+            borderBottomColor: darkThemeActivator ? AppColors.gray : AppColors.black,
+            fontFamily: FontStyle.regularFont
+          }]}
+          placeholderTextColor={AppColors.gray}
+
+        />
+        <LongButton btnTitle={"Confirm"} onPress={() => { changepassword() }} />
       </View>
 
     </View>

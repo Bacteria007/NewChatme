@@ -11,6 +11,7 @@ const ChangeNumberStyle = StyleSheet.create({
   mainViewStyle: bgcolor => ({
     paddingHorizontal: wp('6%'),
     backgroundColor: bgcolor,
+    flex:1
   }),
   headTextStyle: clr => ({
     fontSize: wp('4.7%'),

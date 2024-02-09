@@ -25,8 +25,9 @@ const DarkTheme = {
     addBtnColor: AppColors.black,
     addBtnTextColor: AppColors.white,
     headerColor: AppColors.darkThemeColors.bgColor,
-    rippleColor:'rgba(255,255,255,0.2)',
+    rippleColor: 'rgba(255,255,255,0.2)',
     chatScreenColor: AppColors.darkThemeColors.bgColor,
+    nextBtn: AppColors.black
 
 
 };
@@ -53,9 +54,9 @@ const LightTheme = {
     addBtnColor: AppColors.black,
     addBtnTextColor: AppColors.white,
     headerColor: AppColors.white,
-    rippleColor:AppColors.lightBlack,
-    chatScreenColor:AppColors.white,
-
+    rippleColor: AppColors.lightBlack,
+    chatScreenColor: AppColors.white,
+    nextBtn: AppColors.white
 
 };
 
@@ -69,26 +70,26 @@ export const ThemeProvider = ({ children }) => {
     const [darkThemeActivator, setDarkThemeActivator] = useState(false)
 
     // Function to update the theme
-    const setLightTheme = async() => {
+    const setLightTheme = async () => {
         setTheme(LightTheme);
         setDarkThemeActivator(false);
-        await AsyncStorage.setItem('darkTheme',JSON.stringify(false))
-        console.log("dark theme set false",await AsyncStorage.getItem('darkTheme'))
+        await AsyncStorage.setItem('darkTheme', JSON.stringify(false))
+        console.log("dark theme set false", await AsyncStorage.getItem('darkTheme'))
     };
-    const setDarkTheme = async() => {
+    const setDarkTheme = async () => {
         setTheme(DarkTheme);
         setDarkThemeActivator(true)
-        await AsyncStorage.setItem('darkTheme',JSON.stringify(true))
-        console.log("dark theme set true",await AsyncStorage.getItem('darkTheme'))
+        await AsyncStorage.setItem('darkTheme', JSON.stringify(true))
+        console.log("dark theme set true", await AsyncStorage.getItem('darkTheme'))
     };
     const changeThemeState = () => {
         setDarkThemeActivator(!darkThemeActivator)
     }
     const toggleTheme = () => {
-        if(darkThemeActivator){
+        if (darkThemeActivator) {
             setLightTheme()
         }
-        else{
+        else {
             setDarkTheme()
         }
     }

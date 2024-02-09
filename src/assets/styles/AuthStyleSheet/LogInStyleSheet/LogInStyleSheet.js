@@ -4,6 +4,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import AppColors from '../../../colors/Appcolors';
+import FontStyle from '../../FontStyle';
 
 const LogInStyleSheet = StyleSheet.create({
   container: bgcolor => ({
@@ -18,7 +19,7 @@ const LogInStyleSheet = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor:'red',
-    flex:1
+    flex: 1
   },
   contentContainer: {
     // height: hp('85'),
@@ -28,16 +29,13 @@ const LogInStyleSheet = StyleSheet.create({
     // backgroundColor:'red'
   },
 
-  title: {
+  title: (clr) => ({
     fontSize: hp('3'),
     fontFamily: 'Poppins-Medium',
     paddingTop: hp('3'),
-    color: AppColors.primary,
+    color: clr,
     textAlign: 'center',
-    // textShadowColor: 'red',
-    // textShadowOffset: { width: 0.5, height: 0.5 },
-    // textShadowRadius: 0.1,
-  },
+  }),
   text: {
     textAlign: 'center',
   },
@@ -56,8 +54,9 @@ const LogInStyleSheet = StyleSheet.create({
     borderRadius: wp('1.5'),
     width: wp('85'),
     paddingVertical: hp('1'),
+    color:"white"
   },
-  countryCode: {
+  countryCode: (clr) => ({
     fontSize: wp('5'),
     borderColor: AppColors.primary,
     borderWidth: wp('0.25'),
@@ -66,8 +65,8 @@ const LogInStyleSheet = StyleSheet.create({
     textAlign: 'center',
     borderRadius: wp('1.5'),
     textAlignVertical: 'center',
-    color: AppColors.black,
-  },
+    color: clr,
+  }),
   passwordIcon: {
     fontSize: wp('6'),
     height: hp('7'),
@@ -94,15 +93,15 @@ const LogInStyleSheet = StyleSheet.create({
     // backgroundColor:'red',
     height: hp('7'),
   },
-  forgotpasswordText: {
+  forgotpasswordText: (clr)=>({
     marginBottom: hp('5'),
     alignSelf: 'flex-end',
     marginTop: hp('1'),
-    color: AppColors.black,
+    color: clr,
     fontFamily: 'Poppins-Regular',
     textAlign: 'right',
-  },
-  phoneNumberInput: {
+  }),
+  phoneNumberInput: (clr)=>({
     fontSize: wp('5'),
     height: hp('7'),
     width: wp('68'),
@@ -110,15 +109,18 @@ const LogInStyleSheet = StyleSheet.create({
     borderColor: AppColors.primary,
     borderWidth: wp('0.25'),
     paddingHorizontal: wp('5'),
-  },
+    color:clr
 
-  passwordInput: {
+  }),
+
+  passwordInput:  (clr)=>({
     height: hp('7'),
     width: wp('68'),
     fontSize: wp('5'),
 
     paddingHorizontal: wp('6'),
-  },
+    color:clr
+  }),
   TouchableButtonStyle: {
     width: wp('85'),
     borderColor: AppColors.primary,
@@ -129,11 +131,12 @@ const LogInStyleSheet = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  TouchableTextStyle: {
+  TouchableTextStyle: (clr) => ({
     fontSize: wp('5'),
-    color: AppColors.white,
-    fontFamily: 'Poppins-Regular',
-  },
+    color:clr,
+    fontFamily: FontStyle.mediumFont,
+
+  }),
   signupLineContainer: {
     flexDirection: 'row',
     justifyContent: 'center',

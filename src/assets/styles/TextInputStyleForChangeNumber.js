@@ -15,24 +15,34 @@ const TextInputStyleForChangeNumber = StyleSheet.create({
   },
   innerView: {
     flexDirection: 'row',
-    borderBottomWidth: wp('0.1%'),
   },
-  plusText: {
+  plusText: (clr)=>({
     fontSize: wp('4%'),
-    textAlignVertical:'bottom',
+    textAlignVertical:'center',
     fontFamily: FontStyle.lightFont,
-    color: AppColors.black,
-  },
-  countryCodeTextInputStyle: {
-    fontSize: wp('5.5%'),
-    paddingBottom: hp('-2%'),
-  },
-  phoneNumberTextinputStyle: {
-    borderBottomWidth: wp('0.1%'),
-    fontSize: wp('5.5%'),
+    color: clr,
+    // backgroundColor:'red'
+
+  }),
+  countryCodeTextInputStyle: (darkThemeActivator,clr)=>({
+    fontSize: wp('3.5%'),
+    // paddingBottom: hp('-2%'),
+    color:clr,
+    fontFamily:FontStyle.regularFont,
+    borderBottomWidth:hp('0.15'),
+    borderBottomColor: darkThemeActivator ? AppColors.gray : AppColors.black,
+
+  }),
+  phoneNumberTextinputStyle: (darkThemeActivator,clr)=>({
+    fontSize: wp('3.5%'),
     width: wp('67%'),
-    paddingBottom: wp('-2%'),
-  },
+    // paddingBottom: wp('-2%'),
+    color:clr,
+    fontFamily:FontStyle.regularFont,
+    borderBottomWidth:hp('0.15'),
+    borderBottomColor: darkThemeActivator ? AppColors.gray : AppColors.black,
+
+  }),
 });
 
 export default TextInputStyleForChangeNumber;

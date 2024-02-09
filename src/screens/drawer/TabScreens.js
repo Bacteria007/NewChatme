@@ -123,7 +123,7 @@ const TabScreens = () => {
                                 <Icons.Ionicons size={21} name={'search-sharp'} color={iconColor} />
 
                             );
-                        } else if (route.name === 'Reels') {
+                        } else if (route.name === 'Strings') {
                             return focused ? (
                                 <Icons.FontAwesome5 name="stream" size={reelsIconSize} color={iconColor}
                                 />
@@ -144,7 +144,7 @@ const TabScreens = () => {
                 <Tab.Screen name="Chats" component={Discussions} />
                 <Tab.Screen name="Groups" component={Groups} />
                 <Tab.Screen name="Calls" component={Calls} />
-                <Tab.Screen name="Reels" component={Reels} />
+                <Tab.Screen name="Strings" component={Reels} />
                 <Tab.Screen name="Discover" component={AllUsers} />
             </Tab.Navigator>
         </Animated.View>

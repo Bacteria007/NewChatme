@@ -28,9 +28,15 @@ import FontStyle from '../../assets/styles/FontStyle';
 import { ThemeContext } from '../../context/ThemeContext';
 // import UseScreenFocus from '../../components/HelperFunctions/AutoRefreshScreen/UseScreenFocus';
 import messaging from '@react-native-firebase/messaging';
+import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/LogInStyleSheet';
 const SignUpScreen = ({ navigation }) => {
-  const { language,baseUrl,updateCurrentUser,storeImageUri,getToken,storeLoggedinStatus,getStoredUserDetails } = useContext(AppContext);
-  const { theme } = useContext(ThemeContext);
+  const { language, baseUrl, updateCurrentUser, storeImageUri, getToken, storeLoggedinStatus, getStoredUserDetails } = useContext(AppContext);
+  const { theme, darkThemeActivator } = useContext(ThemeContext);
+
+  const maintextColor = theme.profileNameColor
+  const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
+  const btnColor = AppColors.white
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('');
@@ -98,33 +104,33 @@ const SignUpScreen = ({ navigation }) => {
       data: formdata,
       headers: { 'Content-Type': 'multipart/form-data' },
     })
-      .then (function (response) {
+      .then(function (response) {
         if (response.data.save === true) {
           console.log('respose signup vala', response.data);
           const uId = response.data.newUser._id;
           console.log('type of', typeof uId);
           // console.log("asyncSignup",AsyncStorage.setItem('user', uId))
 
-          if(response.data.newUser==="A user with the same phone number already exists."){
+          if (response.data.newUser === "A user with the same phone number already exists.") {
             setErrorMessage(true)
             setAlreadyExist(response.data.newUser)
-          }else{
+          } else {
             storeImageUri('')
-            console.log("signup res token",response.data.token)
-            updateCurrentUser({userId:response.data.newUser._id,phoneNumber:response.data.newUser.phoneNo})
-            AsyncStorage.setItem('isUserLoggedIn',JSON.stringify(true))
-            AsyncStorage.setItem('Id',response.data.newUser._id)
-            AsyncStorage.setItem('phoneNo',response.data.newUser.phoneNo)
+            console.log("signup res token", response.data.token)
+            updateCurrentUser({ userId: response.data.newUser._id, phoneNumber: response.data.newUser.phoneNo })
+            AsyncStorage.setItem('isUserLoggedIn', JSON.stringify(true))
+            AsyncStorage.setItem('Id', response.data.newUser._id)
+            AsyncStorage.setItem('phoneNo', response.data.newUser.phoneNo)
             AsyncStorage.setItem('token', response.data.token);
             getToken()
             AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(false))
-            const isSignupProccessComplete= AsyncStorage.getItem('isSignupProccessComplete')
+            const isSignupProccessComplete = AsyncStorage.getItem('isSignupProccessComplete')
 
-            console.log("signup isSignupProccessComplete",isSignupProccessComplete)
-    
+            console.log("signup isSignupProccessComplete", isSignupProccessComplete)
+
             // getStoredUserDetails()
-          // storeLoggedinStatus(true)
-          navigation.replace('AfterSignUpProfileScreen');
+            // storeLoggedinStatus(true)
+            navigation.replace('AfterSignUpProfileScreen');
 
           }
         } else {
@@ -140,7 +146,7 @@ const SignUpScreen = ({ navigation }) => {
   // }
   // AsyncStorage.removeItem("user")
   useEffect(() => {
-    setSelectedCountry({ cca2: 'PK', callingCode: '92' ,name:'Pakistan'});
+    setSelectedCountry({ cca2: 'PK', callingCode: '92', name: 'Pakistan' });
     setCountryCode('92');
   }, []);
 
@@ -158,8 +164,8 @@ const SignUpScreen = ({ navigation }) => {
             source={require('../../assets/imges/AuthScreenPictures/SignUpPic/SignUpPic.png')}
             style={[SignUpStyleSheet.image]}
           />
-          <Text style={[SignUpStyleSheet.title]}>
-            {TranslationFile[language].Enter_Your_Phone_Number}
+          <Text style={LogInStyleSheet.title(maintextColor)}>
+            {TranslationFile[language].Create_Account}
           </Text>
           <View style={[SignUpStyleSheet.countryContainer]}>
             <CountryPicker
@@ -169,19 +175,22 @@ const SignUpScreen = ({ navigation }) => {
               withCallingCode
               countryCode={selectedCountry?.cca2}
               onSelect={handleCountrySelect}
-              // translation="eng"
+              theme={{ onBackgroundTextColor: secondaryTextColor }}
+            // translation="eng"
             />
           </View>
 
           <View style={[SignUpStyleSheet.phoneNumberContainer]}>
-            <Text style={[SignUpStyleSheet.countryCode]}>+{countryCode}</Text>
+            <Text style={LogInStyleSheet.countryCode(secondaryTextColor)}>+{countryCode}</Text>
             <TextInput
-              style={[SignUpStyleSheet.phoneNumberInput]}
+              style={LogInStyleSheet.phoneNumberInput(secondaryTextColor)}
               placeholder={TranslationFile[language].Phone_Number}
               onChangeText={text => setPhoneNumber(text)}
               keyboardType="numeric"
               maxLength={15}
               value={phoneNumber}
+              placeholderTextColor={AppColors.gray}
+
             />
           </View>
           {errorMessage && (
@@ -197,11 +206,12 @@ const SignUpScreen = ({ navigation }) => {
 
           <View style={[SignUpStyleSheet.passwordContainer]}>
             <TextInput
-              style={[SignUpStyleSheet.passwordInput]}
+              style={LogInStyleSheet.passwordInput(secondaryTextColor)}
               secureTextEntry={passwordVisible}
               placeholder={TranslationFile[language].Password}
               autoCapitalize="none"
               onChangeText={text => setPassword(text)}
+              placeholderTextColor={AppColors.gray}
             />
             <TouchableOpacity
               onPress={() => {
@@ -209,7 +219,7 @@ const SignUpScreen = ({ navigation }) => {
               }}>
               <Icons.Feather
                 name={passwordVisible === true ? 'eye' : 'eye-off'}
-                style={[SignUpStyleSheet.passwordIcon]}
+                style={LogInStyleSheet.passwordIcon}
               />
             </TouchableOpacity>
           </View>
@@ -272,7 +282,7 @@ const SignUpScreen = ({ navigation }) => {
                       .Password_must_contain_at_least_one_special_character,
                   );
                   return;
-                } else{
+                } else {
                   handleSignUp({ navigation });
                 }
               }
@@ -280,16 +290,16 @@ const SignUpScreen = ({ navigation }) => {
               // handleSubmit();
             }}
             style={[SignUpStyleSheet.TouchableButtonStyle]}>
-            <Text style={[SignUpStyleSheet.TouchableTextStyle]}>
+            <Text style={LogInStyleSheet.TouchableTextStyle(btnColor)}>
               {TranslationFile[language].Next}
             </Text>
           </TouchableOpacity>
 
-          <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',margin:wp('3%')}}>
-          <Text style={{fontFamily:FontStyle.mediumFont}}>Have an account?{' '}</Text>
-          <TouchableOpacity onPress={()=>{
-            navigation.replace('LogInScreen')
-          }}><Text style={{color:AppColors.primary,fontFamily:FontStyle.mediumFont}}>Login</Text></TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: wp('3%') }}>
+            <Text style={{ fontFamily: FontStyle.regularFont, color: maintextColor }}>Have an account?{' '}</Text>
+            <TouchableOpacity onPress={() => {
+              navigation.replace('LogInScreen')
+            }}><Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Login</Text></TouchableOpacity>
 
           </View>
         </ScrollView>
@@ -301,17 +311,17 @@ const SignUpScreen = ({ navigation }) => {
         style={
           passwordSnackWidth === true
             ? {
-                backgroundColor: '#D3D3D3',
-                width: wp('80'),
-                marginBottom: hp('6'),
-                alignSelf: 'center',
-              }
+              backgroundColor: '#D3D3D3',
+              width: wp('80'),
+              marginBottom: hp('6'),
+              alignSelf: 'center',
+            }
             : {
-                backgroundColor: '#D3D3D3',
-                width: wp('55'),
-                marginBottom: hp('6'),
-                alignSelf: 'center',
-              }
+              backgroundColor: '#D3D3D3',
+              width: wp('55'),
+              marginBottom: hp('6'),
+              alignSelf: 'center',
+            }
         }>
         <Text style={[SignUpStyleSheet.text]}>{snackbarMessage}</Text>
       </Snackbar>

@@ -35,7 +35,10 @@ import { SelectImage } from '../../helpers/launchCameraHelper/SelectImage';
 const AfterSignUpProfileScreen = ({ navigation }) => {
 
   const { language, baseUrl, currentUser, updateCurrentUser, selectedImageUri, storeImageUri, token, storeUserName } = useContext(AppContext);
-  const { theme, darkThemeActivator } = useContext(ThemeContext);
+  const { theme, darkThemeActivator ,toggleTheme} = useContext(ThemeContext);
+  const maintextColor = theme.profileNameColor
+  const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
+  const btnColor = theme.nextBtn
 
   const [name, setName] = useState('');
   const [ques1, setQues1] = useState('');
@@ -50,7 +53,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
 
   const handleNextBtn = () => {
     Keyboard.dismiss();
-    if (ques1 === '' || ques2 === ''||name==='') {
+    if (ques1 === '' || ques2 === '' || name === '') {
       alert('Plz enter the required field');
     } else {
       handleProfileUpdate();
@@ -165,9 +168,9 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
         const idOfUser = currentUser.userId;
         const nameofUser = data.updated.name;
         storeUserName(nameofUser);
-        const isSignupProccessComplete=await AsyncStorage.getItem('isSignupProccessComplete')
+        const isSignupProccessComplete = await AsyncStorage.getItem('isSignupProccessComplete')
 
-        console.log("AfterSignUpProfileScreen isSignupProccessComplete",isSignupProccessComplete)
+        console.log("AfterSignUpProfileScreen isSignupProccessComplete", isSignupProccessComplete)
 
         initializeZego(idOfUser, nameofUser);
         navigation.replace("DrawerStack");
@@ -227,6 +230,8 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
           {/* <Text style={AfterSignUpStyleSheet.Text1}>
             {TranslationFile[language].Complete_your_profile}
           </Text> */}
+                  <Text onPress={toggleTheme} style={{ color: 'white', fontSize: 20 }}>theme</Text>
+
           <View style={AfterSignUpStyleSheet.ImageContainer}>
             <View>
               <View style={{ position: 'relative' }}>
@@ -239,12 +244,11 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
                       <Icons.MaterialIcons
                         name="person"
                         size={60}
-                        color={AppColors.black} // Change this color to match your design
+                        color={AppColors.black}
                       />
                     </Neomorph>
                   </Neomorph>
                 ) : (
-
                   <Image
                     source={{ uri: `${baseUrl}${selectedImageUri}` }}
                     style={{
@@ -267,7 +271,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
                   { position: 'absolute', right: 0, bottom: 0 },
                 ]}
               >
-                <Icons.MaterialIcons name="edit" size={15} color="white" />
+                <Icons.MaterialIcons name="edit" size={15} color={darkThemeActivator?AppColors.black:AppColors.white} />
               </TouchableOpacity>
             </View>
           </View>
@@ -279,8 +283,9 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
           <View style={{ justifyContent: 'center' }}>
             <TextInput
               placeholder={'Account ' + TranslationFile[language].Name}
+              placeholderTextColor={AppColors.gray}
               value={name}
-              style={AfterSignUpStyleSheet.TextInputContainer}
+              style={AfterSignUpStyleSheet.TextInputContainer(secondaryTextColor)}
               onChangeText={value => {
                 setName(value);
                 // storeUserName(value)
@@ -295,14 +300,15 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
               {important_note}
             </Text>
             <View style={AfterSignUpStyleSheet.quesView}>
-              <Text style={AfterSignUpStyleSheet.displyNameText}>
+              <Text style={AfterSignUpStyleSheet.displyNameText(maintextColor)}>
                 {TranslationFile[language].What_is_your_favourite_fruit}
               </Text>
             </View>
             <TextInput
               placeholder={TranslationFile[language].Answer}
+              placeholderTextColor={AppColors.gray}
               value={ques1}
-              style={AfterSignUpStyleSheet.TextInputContainer}
+              style={AfterSignUpStyleSheet.TextInputContainer(secondaryTextColor)}
               onChangeText={value => {
                 setQues1(value);
               }}
@@ -310,14 +316,15 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
 
             />
             <View style={AfterSignUpStyleSheet.quesView}>
-              <Text style={AfterSignUpStyleSheet.displyNameText}>
+              <Text style={AfterSignUpStyleSheet.displyNameText(maintextColor)}>
                 {TranslationFile[language].What_is_your_favourite_game}
               </Text>
             </View>
             <TextInput
               placeholder={TranslationFile[language].Answer}
+              placeholderTextColor={AppColors.gray}
               value={ques2}
-              style={AfterSignUpStyleSheet.TextInputContainer}
+              style={AfterSignUpStyleSheet.TextInputContainer(secondaryTextColor)}
               onChangeText={value => {
                 setQues2(value);
               }}

@@ -25,11 +25,17 @@ import CountryPicker from 'react-native-country-picker-modal';
 import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/LogInStyleSheet';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { ThemeContext } from '../../context/ThemeContext';
+import AppColors from '../../assets/colors/Appcolors';
 
 
 const ForgetPasswordScreen = ({ navigation }) => {
   const { language, baseUrl, updateCurrentUser, getToken } = useContext(AppContext);
-  const { theme } = useContext(ThemeContext);
+  const { theme, darkThemeActivator } = useContext(ThemeContext);
+  const maintextColor = theme.profileNameColor
+  const btnColor = AppColors.white
+ 
+  const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
+
   const [ques1, setQues1] = useState('');
   const [ques2, setQues2] = useState('');
   const [phoneNo, setPhoneNo] = useState('')
@@ -96,7 +102,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
         else {
           if (data.matched === true) {
             setToggleState(0);
-          } else if (data.matched === false&&data.message==="Your account is temporarily blocked by the admin due to violations.") {
+          } else if (data.matched === false && data.message === "Your account is temporarily blocked by the admin due to violations.") {
             Alert.alert("Your account is temporarily blocked by the admin due to violations.")
           }
           else {
@@ -193,6 +199,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
                   withCallingCode
                   countryCode={selectedCountry?.cca2}
                   onSelect={handleCountrySelect}
+                  theme={{ onBackgroundTextColor: secondaryTextColor }}
                 // translation="eng"
                 />
               </View>
@@ -200,47 +207,53 @@ const ForgetPasswordScreen = ({ navigation }) => {
             <View style={ForgetScreenStyle.phoneNoAndCountryContainer}>
 
               <View style={[LogInStyleSheet.phoneNumberContainer]}>
-                <Text style={[LogInStyleSheet.countryCode]}>+{countryCode}</Text>
+                <Text style={LogInStyleSheet.countryCode(secondaryTextColor)}>+{countryCode}</Text>
                 <TextInput
-                  style={[LogInStyleSheet.phoneNumberInput]}
+                  style={LogInStyleSheet.phoneNumberInput(secondaryTextColor)}
                   placeholder="Phone Number"
                   onChangeText={text => setPhoneNo(text)}
                   keyboardType="numeric"
                   maxLength={15}
                   value={phoneNo}
+                  placeholderTextColor={AppColors.gray}
+
                 />
               </View>
             </View>
             <View style={ForgetScreenStyle.securityQuestionsContainer}>
               <Text style={ForgetScreenStyle.Text2}>Security questions</Text>
               <View style={ForgetScreenStyle.quesView}>
-                <Text style={ForgetScreenStyle.displyNameText}>
+                <Text style={ForgetScreenStyle.displyNameText(secondaryTextColor)}>
                   Q1 : What is your favourite fruit?
                 </Text>
               </View>
               <TextInput
                 placeholder="Answer"
                 value={ques1}
-                style={ForgetScreenStyle.TextInputContainer}
+                style={ForgetScreenStyle.TextInputContainer(secondaryTextColor)}
                 onChangeText={value => {
                   setQues1(value);
                 }}
                 autoCapitalize='none'
+                placeholderTextColor={AppColors.gray}
+
               />
 
               <View style={ForgetScreenStyle.quesView}>
-                <Text style={ForgetScreenStyle.displyNameText}>
+                <Text style={ForgetScreenStyle.displyNameText(secondaryTextColor)}>
                   Q2 : What is your favourite game?
                 </Text>
               </View>
               <TextInput
                 placeholder="Answer"
                 value={ques2}
-                style={ForgetScreenStyle.TextInputContainer}
+                style={ForgetScreenStyle.TextInputContainer(secondaryTextColor)}
                 onChangeText={value => {
                   setQues2(value);
                 }}
                 autoCapitalize='none'
+                placeholderTextColor={AppColors.gray}
+
               />
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -267,7 +280,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
                   }
                 }}
                 style={ForgetScreenStyle.TouchableButtonStyle}>
-                <Text style={ForgetScreenStyle.TouchableTextStyle}>
+                <Text style={LogInStyleSheet.TouchableTextStyle(btnColor)}>
                   {TranslationFile[language].Next}
                 </Text>
               </TouchableOpacity>
@@ -277,7 +290,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
           <>
             <Text style={ForgetScreenStyle.Text2}>Change Password</Text>
             <View style={ForgetScreenStyle.quesView}>
-              <Text style={ForgetScreenStyle.displyNameText}>Password:</Text>
+              <Text style={ForgetScreenStyle.displyNameText(theme.profileNameColor)}>Password:</Text>
             </View>
             <View style={ForgetScreenStyle.passwordContainer}>
               <TextInput
@@ -300,7 +313,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <View style={ForgetScreenStyle.quesView}>
-              <Text style={ForgetScreenStyle.displyNameText}>
+              <Text style={ForgetScreenStyle.displyNameText(theme.profileNameColor)}>
                 Confirm Password:
               </Text>
             </View>
@@ -312,6 +325,8 @@ const ForgetPasswordScreen = ({ navigation }) => {
                 onChangeText={value => {
                   setConfirmPassword(value);
                 }}
+                placeholderTextColor={AppColors.gray}
+
               />
 
               <TouchableOpacity
@@ -328,7 +343,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => { validateInputFields() }}
                 style={ForgetScreenStyle.TouchableButtonStyle} >
-                <Text style={ForgetScreenStyle.TouchableTextStyle}>
+                <Text style={LogInStyleSheet.TouchableTextStyle(btnColor)}>
                   {TranslationFile[language].Next}
                 </Text>
               </TouchableOpacity>

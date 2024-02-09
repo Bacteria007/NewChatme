@@ -107,7 +107,7 @@ const HomeNeoCards = StyleSheet.create({
   },
 
   profileName: textColor => ({
-    fontFamily: FontStyle.mediumFont,
+    fontFamily: FontStyle.regularFont,
     fontSize: wp('4'),
     color: textColor,
     letterSpacing: 0.3,

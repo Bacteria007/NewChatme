@@ -14,21 +14,17 @@ import { ZoomVideo } from '../../helpers/UiHelpers/ZoomVideo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Reals = props => {
-  //   **********************************           VARIABLES               ****************************
-  const { baseUrl, token, currentUser } = useContext(AppContext);
 
-  //   **********************************          USE STATE               ****************************
+  const { baseUrl, token, currentUser } = useContext(AppContext);
+  //USE STATE
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
   const [uploadedReels, setUploadedReels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingData, setIsLoadingData] = useState(true);
-  const [isVideoLiked, setIsVideoLiked] = useState(false)
-  const [likeCount, setLikeCount] = useState(0)
-
-  //   **********************************          USE REF               ****************************
+  //    USE REF
   const videoRef = useRef(null);
-  //   **********************************          FUNCTIONS               ****************************
+  //    FUNCTIONS
   const shareVideo = async () => {
     const videoUri = `${baseUrl}${uploadedReels[currentIndex]?.uri.uri}`;
 
@@ -62,13 +58,11 @@ const Reals = props => {
           if (data.success) {
             setUploadedReels(prevState => {
               const updatedReels = [...prevState];
-              updatedReels[currentIndex].isLiked = true;
-              updatedReels[currentIndex].likeCount = data.likeCount;
+              updatedReels[currentIndex].likes = data.updatedVideo.likes;
               return updatedReels;
             });
-            setIsVideoLiked(true);
-            setLikeCount(data.likeCount);
           }
+          console.log('like ????????', data)
         }
       })
       .catch(error => console.log(error));
@@ -92,13 +86,12 @@ const Reals = props => {
           if (data.success) {
             setUploadedReels(prevState => {
               const updatedReels = [...prevState];
-              updatedReels[currentIndex].isLiked = false;
-              updatedReels[currentIndex].likeCount = data.likeCount;
+              updatedReels[currentIndex].likes = data.updatedVideo.likes;
               return updatedReels;
-            });
-            setIsVideoLiked(false);
-            setLikeCount(data.likeCount);
+            })
           }
+          console.log('dis????????', data)
+
         }
       })
       .catch(error => console.log(error));
@@ -126,15 +119,17 @@ const Reals = props => {
             reelUploader: video.userId,
             isLiked: video.isLiked,
             likeCount: video.likeCount,
+            createdAt: video.createdAt,
+            likes: video.likes
+
           })) : [];
 
           console.log("alll reel res ==============", videosWithSources)
 
           // console.log("fetch reel response",videosWithSources)
           setUploadedReels(videosWithSources);
-          setIsLoadingData(false)
-          setIsVideoLiked(videosWithSources[currentIndex].isLiked);
-          setLikeCount(videosWithSources[currentIndex].likeCount);
+          setIsLoadingData(false);
+          setIsLoading(false);
         }
       })
       .catch(error => console.log(error));
@@ -147,23 +142,18 @@ const Reals = props => {
   // ------------------------
   const changeIndex = ({ index }) => {
     setCurrentIndex(index);
-    setIsVideoLiked(uploadedReels[index]?.isLiked || false);
-    setLikeCount(uploadedReels[index]?.likeCount || 0);
+    // setIsVideoLiked(uploadedReels[index]?.isLiked || false);
+    // setLikeCount(uploadedReels[index]?.likeCount || 0);
   };
-  //   **********************************          USE EFFECTS               ****************************
+  //    USE EFFECTS
 
   useEffect(() => {
-    UploadedReels().then(() => { setIsLoadingData(false) })
+    UploadedReels()
     props.navigation.addListener('focus', () => {
-      UploadedReels().then(() => { setIsLoadingData(false) })
+      UploadedReels()
     });
   }, []);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  }, []);
 
   useEffect(() => {
     if (videoRef?.current) {
@@ -198,8 +188,7 @@ const Reals = props => {
                   <TouchableOpacity
                     style={[ReelscreenStyle.TouchableOpacityStyle]}
                     activeOpacity={1}
-                    onPress={toggleVideoPlayback}
-                  >
+                    onPress={toggleVideoPlayback}>
                     {isLoading ? (
                       <View style={ReelscreenStyle.LoaderView}>
                         <ActivityIndicator
@@ -212,16 +201,23 @@ const Reals = props => {
                       <WebView
                         originWhitelist={['*']}
                         source={{
-                          html: `${HtmlVideo}`
+                          html: `${HtmlVideo}`,
                         }}
                         style={[ReelscreenStyle.backgroundVideo]}
-
                       />
-                      // <ZoomVideo source={item}/>
                     )}
-
                   </TouchableOpacity>
-                  <ReelFooter onPressShare={() => shareVideo()} onPressLike={() => likeVideo()} onPressDislike={() => dislikeVideo()} isVideoLiked={isVideoLiked} likeCount={likeCount} item={item.reelUploader} navigation={props.navigation} />
+                  <ReelFooter
+                    callingScreen={'reel'}
+                    onPressShare={() => shareVideo()}
+                    onPressLike={() => likeVideo()}
+                    onPressDislike={() => dislikeVideo()}
+                    isVideoLiked={item.likes?.includes(currentUser.userId)}
+                    likeCount={item.likes?.length}
+                    item={item.reelUploader}
+                    navigation={props.navigation}
+                    createdAt={item.createdAt}
+                  />
                 </View>
               );
             }}

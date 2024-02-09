@@ -4,17 +4,18 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import AppColors from '../../../colors/Appcolors';
+import FontStyle from '../../FontStyle';
 
 const ForgetScreenStyle = StyleSheet.create({
-  container: (bgcolor)=>({
+  container: (bgcolor) => ({
     flex: 1,
-    backgroundColor:bgcolor,
+    backgroundColor: bgcolor,
     paddingTop: hp('1'),
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   }),
-  phoneNoAndCountryContainer:{ flex: 1, width: wp('100'), justifyContent: 'center', alignItems: 'center' },
-  securityQuestionsContainer:{ flex: 1, width: wp('100'), justifyContent:'center', alignItems: 'flex-start',paddingLeft:wp('9') },
+  phoneNoAndCountryContainer: { flex: 1, width: wp('100'), justifyContent: 'center', alignItems: 'center' },
+  securityQuestionsContainer: { flex: 1, width: wp('100'), justifyContent: 'center', alignItems: 'flex-start', paddingLeft: wp('9') },
   TouchableButtonStyle: {
     width: wp('83'),
     borderRadius: wp('1.5'),
@@ -29,25 +30,26 @@ const ForgetScreenStyle = StyleSheet.create({
     alignItems: 'center',
     marginTop: hp('5'),
   },
-  TouchableTextStyle: {
+  TouchableTextStyle: (clr) => ({
     fontSize: wp('5'),
-    color: AppColors.white,
-    fontFamily: 'Poppins-Regular',
-  },
+    color: clr,
+    fontFamily: FontStyle.regularFont,
+  }),
 
   Text1: {
     fontSize: wp('6'),
-    fontFamily: 'Poppins-Medium ',
+    fontFamily: FontStyle.mediumFont,
     color: AppColors.dodgerblue,
   },
 
-  displyNameText: {
-    color: AppColors.black,
-  },
+  displyNameText: (clr) => ({
+    color: clr,
+    fontFamily: FontStyle.regularFont
+  }),
 
   Text2: {
     fontSize: wp('6'),
-    fontFamily: 'Poppins-Bold ',
+    fontFamily: FontStyle.regularFont,
     color: AppColors.primary,
     marginTop: hp('5'),
     marginBottom: hp('2'),
@@ -66,13 +68,14 @@ const ForgetScreenStyle = StyleSheet.create({
     width: wp('90'),
     justifyContent: 'center',
   },
-  TextInputContainer: {
+  TextInputContainer: (clr) => ({
     borderBottomWidth: hp('0.1'),
     borderColor: AppColors.primary,
     width: wp('75'),
     alignSelf: 'center',
-    height: hp('5'),
-  },
+    color: clr,
+    fontFamily: FontStyle.regularFont
+  }),
   text: {
     textAlign: 'center',
   },
@@ -104,10 +107,10 @@ const ForgetScreenStyle = StyleSheet.create({
     borderWidth: wp('0.25'),
     height: hp('7'),
     width: wp('25'),
-    justifyContent:'center',
-    alignItems:'center',
-    flexDirection:'row',
-    borderRadius:wp('1.5'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: wp('1.5'),
   },
   countryCode: {
     fontSize: wp('5'),
@@ -115,7 +118,7 @@ const ForgetScreenStyle = StyleSheet.create({
     textAlignVertical: 'center',
     color: AppColors.black,
   },
-phoneNumberInput: {
+  phoneNumberInput: {
     fontSize: wp('5'),
     height: hp('7'),
     width: wp('57'),
