@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
-import { FlatList,RefreshControl, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { FlatList, RefreshControl, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 import { ThemeContext } from '../../../context/ThemeContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
@@ -56,28 +56,29 @@ const Discussions = (props) => {
         // }else if(data.message=='Please provide a token.'){
         //   Alert.alert('Token required')
         // }else{
-          console.log("discussion ma all contacts",data)
-          if(data!=[]){
-        const filterContact = data.filter(contact => {
-          // Check if senderID and currentUser.id are equal and deletedBySender is true
-          if (
-            contact.userId === currentUser.userId &&
-            contact.deletedBySender === true
-          ) {
-            return false; // Don't include this message in the filtered list
-          } else if (
-            contact.friendId === currentUser.userId &&
-            contact.deletedByReceiver === true
-          ) {
-            return false; // Don't include this message in the filtered list
-          }
+        console.log("discussion ma all contacts", data)
+        if (data != []) {
+          const filterContact = data.filter(contact => {
+            // Check if senderID and currentUser.id are equal and deletedBySender is true
+            if (
+              contact.userId === currentUser.userId &&
+              contact.deletedBySender === true
+            ) {
+              return false; // Don't include this message in the filtered list
+            } else if (
+              contact.friendId === currentUser.userId &&
+              contact.deletedByReceiver === true
+            ) {
+              return false; // Don't include this message in the filtered list
+            }
 
-          return true; // Include other messages in the filtered list
-        });
-        setContactList(filterContact);
-        setIsLoading(false)
+            return true; // Include other messages in the filtered list
+          });
+          setContactList(filterContact);
+          setIsLoading(false)
 
-      }}).catch((error) => {
+        }
+      }).catch((error) => {
         console.error('Error fetching contact list:', error);
         setIsLoading(false)
       })
@@ -101,27 +102,25 @@ const Discussions = (props) => {
       setSearchedChat(filteredChats)
     }
   }
+  const fetchData = async () => {
+    try {
+      await getToken();
+      await fetchContactList();
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error in useEffect:', error);
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await getToken();
-        await fetchContactList();
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error in useEffect:', error);
-        setIsLoading(false);
-      }
-    };
-  
     fetchData();
-  
     props.navigation.addListener('focus', () => {
       fetchData();
     });
-  
+
     // No need to specify dependencies for this effect
   }, []);
-  
+
   // useEffect(async() => {
   //   console.log('fetchContactList>>>>>>')
   //   await getToken()
@@ -177,9 +176,9 @@ const Discussions = (props) => {
               />
               :
               !isLoading && (
-                  <View style={Containers.centerContainer}>
-                    <Text style={HomeNeoCards.noSearchResultText}>You have no friends.</Text>                 
-                  <AddFriendBtn btnTitle={'Add Friends'} onPress={()=>{props.navigation.navigate("DrawerStack",{screen:"Home",params:{screen:"Discover"}})}}/>  
+                <View style={Containers.centerContainer}>
+                  <Text style={HomeNeoCards.noSearchResultText}>You have no friends.</Text>
+                  <AddFriendBtn btnTitle={'Add Friends'} onPress={() => { props.navigation.navigate("DrawerStack", { screen: "Home", params: { screen: "Discover" } }) }} />
                 </View>
               )
           )}

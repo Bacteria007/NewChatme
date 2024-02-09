@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -8,26 +8,30 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const DeleteAccountStyle = StyleSheet.create({
-  containerView: {
-    backgroundColor: AppColors.white,
+  containerView: (clr) => ({
+    backgroundColor: clr,
     flex: 1,
-  },
-  mainView: {
+  }),
+  mainView: (clr) => ({
     padding: wp('5%'),
-  },
-  warningView: {
+    backgroundColor: clr,
+
+  }),
+  warningView: (clr) => ({
     flexDirection: 'row',
     // borderBottomWidth: wp('0.3%'),
     borderBottomColor: AppColors.tab,
     // backgroundColor: AppColors.tab,
     // elevation: 3,
-  },
-  warningLeftView: {
+    backgroundColor: clr,
+
+  }),
+  warningLeftView: (clr) => ({
     width: wp('7%'),
     alignItems: 'center',
     paddingTop: hp('0.4%'),
-    // backgroundColor:AppColors.primary
-  },
+    backgroundColor: clr,
+  }),
   warningHeadText: {
     color: AppColors.red,
     fontSize: wp('5%'),
@@ -39,29 +43,40 @@ const DeleteAccountStyle = StyleSheet.create({
   buletedView: {
     flexDirection: 'row',
   },
-  buletedText: {
+  buletedText: (clr) => ({
     fontSize: wp('3.5%'),
     fontFamily: FontStyle.regularFont,
-  },
+    color: clr
+  }),
   actionContainerView: {
     // paddingLeft: wp('20%'),
     paddingTop: hp('3%'),
   },
-  actionConfirmText: {
+  actionConfirmText: (dark) => ({
     fontSize: wp('3.9%'),
-    color: AppColors.black,
+    color: dark ? AppColors.lightwhite : AppColors.black,
     fontFamily: FontStyle.mediumFont,
-  },
+
+  }),
   labelText: {
     marginTop: hp('3%'),
     marginBottom: hp('-1%'),
-    color: AppColors.primary,opacity:0.8,
+    color: AppColors.primary, opacity: 0.8,
     fontFamily: FontStyle.mediumFont,
 
   },
   underlineView: {
     borderBottomWidth: wp('0.1%'),
   },
+  textinput: (darkThemeActivator, color) => ({
+    borderBottomWidth: wp('0.1%'),
+    fontFamily: FontStyle.regularFont,
+    paddingBottom: wp('-2%'),
+    color: color,
+    borderBottomWidth: hp('0.15'),
+    borderBottomColor: darkThemeActivator ? AppColors.gray : AppColors.black,
+
+  })
 });
 
 export default DeleteAccountStyle;

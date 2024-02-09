@@ -7,15 +7,18 @@ import TextInputForChangeNumber from '../../../components/TextInputs/TextInputFo
 import { ThemeContext } from '../../../context/ThemeContext';
 import AppContext from '../../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppColors from '../../../assets/colors/Appcolors';
 
 const ChangeNumber = ({ navigation }) => {
-  const { theme } = useContext(ThemeContext)
+  const { theme, darkThemeActivator } = useContext(ThemeContext);
+  const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
   const { baseUrl, getToken,token, updateCurrentUser, currentUser } = useContext(AppContext)
 
   const [oldPhoneNo, setOldPhoneNo] = useState('')
   const [oldCountryCode, setOldCountryCode] = useState('')
   const [newPhoneNo, setNewPhoneNo] = useState('')
   const [newCountryCode, setNewCountryCode] = useState('')
+ 
   const changenumber=async()=>{
     const formdata = new FormData();
     formdata.append('userId', currentUser.userId);
@@ -60,17 +63,17 @@ const ChangeNumber = ({ navigation }) => {
     }
   }
   return (
-    <View style={{ backgroundColor: 'white', flex: 1 }}>
+    <View style={{ backgroundColor: theme.backgroundColor, flex: 1 }}>
       <InnerScreensHeader navigation={navigation} screenName="Change number" />
       <View style={[ChangeNumberStyle.mainViewStyle(theme.backgroundColor)]}>
         <Text
-          style={[ChangeNumberStyle.headTextStyle]}>
+          style={[ChangeNumberStyle.headTextStyle(secondaryTextColor)]}>
           Enter your old phone number with country code:
         </Text>
         <TextInputForChangeNumber setPhoneNo={setOldPhoneNo} setCountryCode={setOldCountryCode}
 />
         <Text
-          style={[ChangeNumberStyle.headTextStyle]}>
+          style={[ChangeNumberStyle.headTextStyle(secondaryTextColor)]}>
           Enter your new phone number with country code:
         </Text>
         <TextInputForChangeNumber setPhoneNo={setNewPhoneNo} setCountryCode={setNewCountryCode}/>

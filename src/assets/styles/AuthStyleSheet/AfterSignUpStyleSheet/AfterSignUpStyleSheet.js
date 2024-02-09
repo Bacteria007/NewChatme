@@ -83,7 +83,8 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     backgroundColor: darkThemeActivator ? 'white' : 'black' ,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth:1.3,borderColor:'white',
+    borderWidth:1.3,
+    borderColor:'white',
     }),
 
   ImageBackTouchable: {
@@ -98,11 +99,11 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor: 'red',
   },
-  displyNameText: {
-    color: AppColors.black,
+  displyNameText:(clr)=>({
+    color:clr,
     fontFamily:FontStyle.regularFont,
     fontSize:wp('3')
-  },
+  }),
   floatingInputView: { height: hp('7'), width: wp('90'), marginTop: hp('2') },
   floatingInputContainer: {
     borderWidth: hp('0.2'),
@@ -135,7 +136,7 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     paddingHorizontal: wp('3.75'),
   },
   
-  TextInputContainer: {
+  TextInputContainer: (clr)=>({
     borderBottomWidth: hp('0.1'),
     paddingHorizontal: wp('2'),
     borderColor: AppColors.primary,
@@ -143,8 +144,9 @@ const AfterSignUpStyleSheet = StyleSheet.create({
     alignSelf: 'center',
     height: hp('5.8'),
     fontFamily:FontStyle.regularFont,
-    fontSize:wp('3')
-  },
+    fontSize:wp('3'),
+    color:clr
+  }),
   // ////////////////// MODAL STYLE \\\\\\\\\\\\\\\\\
   modalText: {
     fontSize: hp('1.8'),

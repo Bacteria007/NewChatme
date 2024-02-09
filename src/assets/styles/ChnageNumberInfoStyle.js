@@ -20,15 +20,16 @@ const ChnageNumberInfoStyle = StyleSheet.create({
   textContainerView: {
     paddingHorizontal: wp('6%'),
   },
-  headText: {
-    color: AppColors.black,
+  headText: (clr)=>({
+    color: clr,
     fontSize: wp('4.7%'),
     fontFamily: FontStyle.italicFont,
-  },
-  plainText: {
+  }),
+  plainText: (clr)=>({
     fontSize: wp('3.7%'),
     fontFamily: FontStyle.italicFont,
-  },
+    color:clr,
+ }),
 });
 
 export default ChnageNumberInfoStyle;

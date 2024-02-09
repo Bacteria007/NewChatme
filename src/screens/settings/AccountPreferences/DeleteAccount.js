@@ -14,14 +14,20 @@ import AppContext from '../../../context/AppContext';
 import { Button, Menu, Divider, IconButton, TouchableRipple } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNExitApp from 'react-native-exit-app';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 
 const DeleteAccount = ({ navigation }) => {
+  //  Constants
   const { baseUrl, currentUser, updateCurrentUser, token } = useContext(AppContext);
+  const { theme, darkThemeActivator } = useContext(ThemeContext)
+  const maintextColor = theme.profileNameColor
+  const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
+  // Variables
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [countryCode, setCountryCode] = useState('')
-
+  // Functions
   const dltAccount = async (navigation) => {
     const formData = new FormData();
     formData.append('userId', currentUser.userId);
@@ -68,7 +74,7 @@ const DeleteAccount = ({ navigation }) => {
   };
 
   return (
-    <View style={[DeleteAccountStyle.containerView]}>
+    <View style={DeleteAccountStyle.containerView(theme.backgroundColor)}>
       <InnerScreensHeader navigation={navigation} screenName="Delete Account" />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
@@ -78,9 +84,9 @@ const DeleteAccount = ({ navigation }) => {
           contentContainerStyle={{ paddingBottom: hp('5%'), }}
           showsVerticalScrollIndicator={false}>
 
-          <View style={[DeleteAccountStyle.mainView]}>
-            <View style={[DeleteAccountStyle.warningView]}>
-              <View style={[DeleteAccountStyle.warningLeftView]}>
+          <View style={[DeleteAccountStyle.mainView(theme.backgroundColor)]}>
+            <View style={[DeleteAccountStyle.warningView(theme.backgroundColor)]}>
+              <View style={[DeleteAccountStyle.warningLeftView(theme.backgroundColor)]}>
                 <Icons.FontAwesome
                   name="exclamation-triangle"
                   size={wp('5.5%')}
@@ -92,27 +98,27 @@ const DeleteAccount = ({ navigation }) => {
                   Deleting your account will:
                 </Text>
                 <View style={[DeleteAccountStyle.buletedView]}>
-                  <Text>{'\u25cf'} </Text>
-                  <Text style={[DeleteAccountStyle.buletedText]}>
+                  <Text style={{ color: secondaryTextColor }}>{'\u25cf'} </Text>
+                  <Text style={[DeleteAccountStyle.buletedText(secondaryTextColor)]}>
                     Delete your account from ChatMe
                   </Text>
                 </View>
                 <View style={[DeleteAccountStyle.buletedView]}>
-                  <Text>{'\u25cf'} </Text>
-                  <Text style={[DeleteAccountStyle.buletedText]}>
+                  <Text style={{ color: secondaryTextColor }}>{'\u25cf'} </Text>
+                  <Text style={[DeleteAccountStyle.buletedText(secondaryTextColor)]}>
                     Earase your message history
                   </Text>
                 </View>
                 <View style={[DeleteAccountStyle.buletedView]}>
-                  <Text>{'\u25cf'} </Text>
-                  <Text style={[DeleteAccountStyle.buletedText]}>
+                  <Text style={{ color: secondaryTextColor }}>{'\u25cf'} </Text>
+                  <Text style={[DeleteAccountStyle.buletedText(secondaryTextColor)]}>
                     Delete you from all of your ChatMe groups
                   </Text>
                 </View>
               </View>
             </View>
             <View style={[DeleteAccountStyle.actionContainerView]}>
-              <Text style={[DeleteAccountStyle.actionConfirmText]}>
+              <Text style={[DeleteAccountStyle.actionConfirmText(darkThemeActivator)]}>
                 To delete your account, confirm your country code and enter your phone
                 number.
               </Text>
@@ -120,37 +126,31 @@ const DeleteAccount = ({ navigation }) => {
               <TextInput
                 placeholder="country code"
                 onChangeText={text => setCountryCode(text)}
-                style={[{
-                  borderBottomWidth: wp('0.1%'),
-                  fontSize: wp('4.5%'),
-                  paddingBottom: wp('-2%'),
-                }]}
-              />
+                style={DeleteAccountStyle.textinput(darkThemeActivator, secondaryTextColor)}
+          placeholderTextColor={AppColors.gray}
+             
+             />
               {/* <View style={[DeleteAccountStyle.underlineView]}></View> */}
               <Text style={[DeleteAccountStyle.labelText]}>Phone</Text>
               <TextInput
                 placeholder="phone number"
                 keyboardType='numeric'
-                style={[{
-                  borderBottomWidth: wp('0.1%'),
-                  fontSize: wp('4.5%'),
-                  paddingBottom: wp('-2%'),
-                }]}
+                style={DeleteAccountStyle.textinput(darkThemeActivator, secondaryTextColor)}
                 maxLength={15}
                 onChangeText={text => setPhoneNumber(text)}
-              />
+          placeholderTextColor={AppColors.gray}
+             
+             />
               {/* <View style={[DeleteAccountStyle.underlineView]}></View> */}
               <Text style={[DeleteAccountStyle.labelText]}>Password</Text>
               <TextInput
                 placeholder="password"
-                style={[{
-                  borderBottomWidth: wp('0.1%'),
-                  fontSize: wp('4.5%'),
-                  paddingBottom: wp('-2%'),
-                }]}
+                style={DeleteAccountStyle.textinput(darkThemeActivator, secondaryTextColor)}
                 autoCapitalize='none'
                 onChangeText={text => setPassword(text)}
-              />
+          placeholderTextColor={AppColors.gray}
+           
+           />
               <TouchableRipple borderless onPress={() => {
                 if (countryCode.includes('+')) {
                   dltAccount({ navigation })

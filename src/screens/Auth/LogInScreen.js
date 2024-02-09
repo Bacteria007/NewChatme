@@ -31,7 +31,10 @@ import messaging from '@react-native-firebase/messaging';
 const LogInScreen = ({ navigation }) => {
 
   const { baseUrl, getToken, updateCurrentUser, storeLoggedinStatus } = useContext(AppContext)
-  const { theme } = useContext(ThemeContext)
+  const { theme, darkThemeActivator, toggleTheme } = useContext(ThemeContext)
+  const maintextColor = theme.profileNameColor
+  const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
+  const btnColor = AppColors.white
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
@@ -44,8 +47,6 @@ const LogInScreen = ({ navigation }) => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
-
-  // UseScreenFocus(getStoredUserDetails)
   UseScreenFocus(initializeZego)
 
   const getFcmToken = async () => {
@@ -63,13 +64,10 @@ const LogInScreen = ({ navigation }) => {
   useEffect(() => {
     getFcmToken()
   }, []);
-
-
   const showSnackbar = message => {
     setSnackbarMessage(message);
     setVisible(true);
   };
-
   const isValidPhoneNumber = () => {
     try {
       const parsedPhoneNumber = phoneNumberUtil.parseAndKeepRawInput(
@@ -81,12 +79,10 @@ const LogInScreen = ({ navigation }) => {
       return false;
     }
   };
-
   const handleCountrySelect = country => {
     setSelectedCountry(country);
     setCountryCode(country.callingCode);
   };
-
   const userLogin = ({ navigation }) => {
     const formdata = new FormData();
     // formdata.append('phoneNo', `${phoneNumber}`);
@@ -100,7 +96,7 @@ const LogInScreen = ({ navigation }) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
       .then(async function (response) {
-        console.log("login res",response)
+        console.log("login res", response)
         if (response.data.match === true) {
 
           console.log("login", response.data)
@@ -111,7 +107,7 @@ const LogInScreen = ({ navigation }) => {
           await AsyncStorage.setItem('isSignupProccessComplete', JSON.stringify(true))
           console.log("login token", response.data.token)
           await AsyncStorage.setItem('token', response.data.token);
-          {res?.profileImage!=null||undefined ?await AsyncStorage.setItem('profileImage', res.profileImage):await AsyncStorage.setItem('profileImage', '')}
+          { res?.profileImage != null || undefined ? await AsyncStorage.setItem('profileImage', res.profileImage) : await AsyncStorage.setItem('profileImage', '') }
           await AsyncStorage.setItem('name', res.name)
           await AsyncStorage.setItem('Id', res._id)
           await AsyncStorage.setItem('fcmToken', fcmToken)
@@ -124,10 +120,10 @@ const LogInScreen = ({ navigation }) => {
           navigation.replace("DrawerStack");
         }
         else {
-          if (response.data.match == false&&response.data.message==="Your account is temporarily blocked by the admin due to violations."){
+          if (response.data.match == false && response.data.message === "Your account is temporarily blocked by the admin due to violations.") {
             alert("Your account is temporarily blocked by the admin due to violations.")
           }
-          else if (response.data.message === 'Invalid phone number'||response.data.message === 'Invalid password') {
+          else if (response.data.message === 'Invalid phone number' || response.data.message === 'Invalid password') {
             alert('Invalid phone number or password');
           } else {
             alert(
@@ -143,7 +139,7 @@ const LogInScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    setSelectedCountry({ cca2: 'PK', callingCode: '92',name:'Pakistan' });
+    setSelectedCountry({ cca2: 'PK', callingCode: '92', name: 'Pakistan' });
     setCountryCode('92');
   }, []);
 
@@ -154,17 +150,18 @@ const LogInScreen = ({ navigation }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
       >
+        <Text onPress={toggleTheme} style={{ color: 'white', fontSize: 20 }}>theme</Text>
         <ScrollView
           contentContainerStyle={LogInStyleSheet.scrollContainer}
           showsVerticalScrollIndicator={false}>
           <View style={LogInStyleSheet.contentContainer}>
             <Image
               source={require('../../assets/imges/AuthScreenPictures/LOgInPic/login4.png')}
-              style={[LogInStyleSheet.image]}
+              style={LogInStyleSheet.image}
             />
-            <Text style={[LogInStyleSheet.title]}>LogIn to Continue!</Text>
+            <Text style={LogInStyleSheet.title(maintextColor)}>LogIn to Continue!</Text>
           </View>
-          <View style={[LogInStyleSheet.countryContainer]}>
+          <View style={LogInStyleSheet.countryContainer}>
             <CountryPicker
               withFilter
               withFlag
@@ -172,29 +169,34 @@ const LogInScreen = ({ navigation }) => {
               withCallingCode
               countryCode={selectedCountry?.cca2}
               onSelect={handleCountrySelect}
+              theme={{ onBackgroundTextColor: secondaryTextColor }}
             // translation="eng"
+
             />
           </View>
 
           <View style={[LogInStyleSheet.phoneNumberContainer]}>
-            <Text style={[LogInStyleSheet.countryCode]}>+{countryCode}</Text>
+            <Text style={LogInStyleSheet.countryCode(secondaryTextColor)}>+{countryCode}</Text>
             <TextInput
-              style={[LogInStyleSheet.phoneNumberInput]}
+              style={LogInStyleSheet.phoneNumberInput(secondaryTextColor)}
               placeholder="Phone Number"
               onChangeText={text => setPhoneNumber(text)}
               keyboardType="numeric"
               maxLength={15}
               value={phoneNumber}
+              placeholderTextColor={AppColors.gray}
+
             />
           </View>
 
           <View style={[LogInStyleSheet.passwordContainer]}>
             <TextInput
-              style={[LogInStyleSheet.passwordInput]}
+              style={LogInStyleSheet.passwordInput(secondaryTextColor)}
               secureTextEntry={passwordVisible}
               placeholder="Password"
               autoCapitalize="none"
               onChangeText={text => setPassword(text)}
+              placeholderTextColor={AppColors.gray}
             />
             <TouchableOpacity
               onPress={() => {
@@ -202,16 +204,16 @@ const LogInScreen = ({ navigation }) => {
               }}>
               <Icons.Feather
                 name={passwordVisible === true ? 'eye' : 'eye-off'}
-                style={[LogInStyleSheet.passwordIcon]}
+                style={LogInStyleSheet.passwordIcon}
               />
             </TouchableOpacity>
           </View>
           <View style={{ width: wp('85') }}>
             <TouchableOpacity
               onPress={() => {
-                navigation.replace("SettingStack",{screen:"ForgetPassword"});
+                navigation.replace("SettingStack", { screen: "ForgetPassword" });
               }}>
-              <Text style={[LogInStyleSheet.forgotpasswordText]}>
+              <Text style={[LogInStyleSheet.forgotpasswordText(maintextColor)]}>
                 Forgot Password?
               </Text>
             </TouchableOpacity>
@@ -256,14 +258,14 @@ const LogInScreen = ({ navigation }) => {
               // handleSignUp({navigation})
             }}
             style={[LogInStyleSheet.TouchableButtonStyle]}>
-            <Text style={[LogInStyleSheet.TouchableTextStyle]}>LogIn</Text>
+            <Text style={LogInStyleSheet.TouchableTextStyle(btnColor)}>LogIn</Text>
           </TouchableOpacity>
           <View style={LogInStyleSheet.signupLineContainer}>
-            <Text style={{ fontFamily: FontStyle.mediumFont }}>Don't have an account?{' '}</Text>
+            <Text style={{ fontFamily: FontStyle.regularFont, color: maintextColor }}>Don't have an account?{' '}</Text>
             <TouchableOpacity onPress={() => {
-              navigation.replace("AuthStack",{screen:"SignUpScreen"})
+              navigation.replace("AuthStack", { screen: "SignUpScreen" })
             }}>
-              <Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Signup</Text></TouchableOpacity>
+              <Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont, }}>Signup</Text></TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -287,7 +289,7 @@ const LogInScreen = ({ navigation }) => {
             }
         }>
         <Snackbar>
-          <Text style={[LogInStyleSheet.text]}>{snackbarMessage}</Text>
+          <Text style={LogInStyleSheet.text}>{snackbarMessage}</Text>
         </Snackbar>
       </View>
     </View>

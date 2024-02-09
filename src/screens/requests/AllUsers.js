@@ -317,7 +317,7 @@ const AllUsers = ({ navigation }) => {
           navigation={navigation}
           searchQuery={searchText}
           handleSearchOnChange={handleSearch}
-          waitingReqC={waitingReqC}
+          waitingReqC={waitingRequests.length}
         />
         {isLoading && <View style={ReelscreenStyle.LoaderView}><ActivityIndicator size="small" color={'black'} /></View>}
         {searchText !== '' &&
