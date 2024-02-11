@@ -20,11 +20,18 @@ import { Primary_StatusBar } from '../../../components/statusbars/Primary_Status
 import BotChatHeader from '../../../components/Headers/ChatHeader/BotChatHeader';
 import BotScreenStyleSheet from '../../../assets/styles/BotStyleSheet/BotScreenStyleSheet';
 import AppContext from '../../../context/AppContext';
+// import {Configuration,OpenAIApi} from 'openai'
+// const config=new Configuration({
+//    apiKey :   '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'
+
+// })
+// const openai=new OpenAIApi(config)
+
 
 const ChatBot = props => {
 
   //***********************************      USE STATE    ************************* */
-  const { baseUrl, currentUser, token, apiKey, apiURL } = useContext(AppContext)
+  const { baseUrl, currentUser, token,  apiURL } = useContext(AppContext)
   const [data, setData] = useState([]);
   const [msgHistory, setMessageHistory] = useState([]);
   const [textInput, setTextInput] = useState('');
@@ -32,7 +39,7 @@ const ChatBot = props => {
   const [botMsg, setBotMsg] = useState('');
   let msgOfBot;
 
-  console.log("chat bot ", apiKey, apiURL)
+  console.log("chat bot ", openai, apiURL)
   //***********************************     VARIABLES   ************************* */
   const flatListRef = useRef(null);
 
@@ -41,53 +48,71 @@ const ChatBot = props => {
   // useEffect(()=>{
   //   console.log("Bot Msg")
   // },[botMsg])
-  const handleSend = async () => {
-    const prompt = textInput;
-    console.log("enter into",textInput)
-    await axios.post(
-      apiURL,
-      {
-        // messages: [{ 'role': "user", "content": textInput }],
-        prompt:prompt,
-        max_tokens: 900,
-        temperature: 1.0,
-        model: 'davinci-002'
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-        },
-      },
-    ).then((response) => {
-      console.log("gpt===========res", response)
-      const text = response.data.choices[0].text;
-      setBotMsg(text)
-      msgOfBot = text;
-      const timestamp = new Date().toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
+  const handleSend=async()=>{
+try{
+  const response=await openai.createCompletion({
+    model:'text-davinci-003',
+    prompt:`You:${textInput}\nAI:`,
+    temperature:0,
+    max_tokens:60,
+    top_p:1.0,
+    frequency_penalty:0.5,
+    presence_penalty:0.0,
+    stop:['You:']
+  })
+  console.log("api res",response.data.choices[0].text)
+}
+catch(error){
+  console.log("bot catch error",error)
+}
+  }
+  // const handleSend = async () => {
+  //   const prompt = textInput;
+  //   console.log("enter into",textInput)
+  //   await axios.post(
+  //     apiURL,
+  //     {
+  //       // messages: [{ 'role': "user", "content": textInput }],
+  //       prompt:prompt,
+  //       max_tokens: 900,
+  //       temperature: 1.0,
+  //       model: 'gpt-3.5-turbo-instruct, babbage-002, davinci-002'
+  //     },
+  //     {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${openai}`,
+  //       },
+  //     },
+  //   ).then((response) => {
+  //     console.log("gpt===========res", response)
+  //     const text = response.data.choices[0].text;
+  //     setBotMsg(text)
+  //     msgOfBot = text;
+  //     const timestamp = new Date().toLocaleTimeString([], {
+  //       hour: '2-digit',
+  //       minute: '2-digit',
+  //     });
 
-      setUserMsg(textInput)
-      setData(prevData => [
-        ...prevData,
-        { type: 'user', text: textInput, timestamp: timestamp },
+  //     setUserMsg(textInput)
+  //     setData(prevData => [
+  //       ...prevData,
+  //       { type: 'user', text: textInput, timestamp: timestamp },
 
-      ]);
-      setTextInput('');
-      setTimeout(() => {
-        setData(prevData => [
-          ...prevData,
-          { type: 'bot', text: text, timestamp: timestamp },
-        ]);
-      }, 1000);
-      storeInDb()
-    }).catch((err) => {
-      console.log("catch gpt error", err)
-    })
+  //     ]);
+  //     setTextInput('');
+  //     setTimeout(() => {
+  //       setData(prevData => [
+  //         ...prevData,
+  //         { type: 'bot', text: text, timestamp: timestamp },
+  //       ]);
+  //     }, 1000);
+  //     storeInDb()
+  //   }).catch((err) => {
+  //     console.log("catch gpt error", err)
+  //   })
 
-  };
+  // };
 
   const storeInDb = async () => {
     const formData = new FormData();

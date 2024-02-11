@@ -3,16 +3,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as RNLocalize from 'react-native-localize';
 import { io } from 'socket.io-client';
 import { AppState } from 'react-native';
+// import {Configuration,OpenAIApi} from 'openai'
 
 import PushNotification from 'react-native-push-notification';
 import messaging from '@react-native-firebase/messaging';
 const AppContext = React.createContext();
+// const config=new Configuration({
+//    apiKey :   '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'
 
+// })
+// const openai=new OpenAIApi(config)
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
-  const apiKey =   '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';
-  const baseUrl = 'http://192.168.43.145:8888';
-const apiURL='https://api.openai.com/v1/engines/text-davinci-003/completions';
+  const baseUrl = 'http://192.168.43.122:8888';
+  const apiKey =   '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';
+const apiURL='https://api.openai.com/v1/completions';
   const [userName, setUserName] = useState('');
   const [storedUser, setStoredUser] = useState('');
   const [language, setLanguage] = useState('English');
@@ -88,6 +93,7 @@ const apiURL='https://api.openai.com/v1/engines/text-davinci-003/completions';
         language,
         token,
         apiKey,
+        // openai,
         apiURL,
         storeUserName,
         storeLanguage,
