@@ -34,7 +34,6 @@
     "google-libphonenumber": "^3.2.32",
     "lottie-react-native": "^6.1.2",
     "moment": "^2.29.4",
-    "openai": "^4.26.0",
     "react": "18.2.0",
     "react-delegate-component": "^1.0.0",
     "react-native": "0.71.10",
