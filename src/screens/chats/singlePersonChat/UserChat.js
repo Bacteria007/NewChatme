@@ -25,12 +25,18 @@ import ReactNativeModal from 'react-native-modal';
 import GroupChatStyle from '../../../assets/styles/GroupScreenStyle/GroupChatStyle';
 import { Icons } from '../../../assets/Icons';
 import axios from 'axios';
+import AudioRecord from 'react-native-audio-record';
+import Sound from 'react-native-sound';
+import moment from 'moment'
 
 const UserChat = (props) => {
 
   // GLOBAL STATES
   const { baseUrl, currentUser, token, apiKey, apiURL } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
+  // PARAMS
+  const { contact, allMsgs } = props.route.params;
+  const receiver = contact.contactData;
 
   // VARIABLES
   const flatListRef = useRef(null);
@@ -42,6 +48,14 @@ const UserChat = (props) => {
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
   const [isSending, setIsSending] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isSendingAudio, setIsSendingAudio] = useState(false);
+  const [audioFile, setAudioFile] = useState('');
+  const [audioPlayer, setAudioPlayer] = useState('');
+  const [recordingStartTime, setRecordingStartTime] = useState(null);
+  const [intervalId, setIntervalId] = useState(null);
+  const [timer, setTimer] = useState(1);
+
   const [isLoading, setIsLoading] = useState(true)
   const [lastAction, setLastAction] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -50,12 +64,6 @@ const UserChat = (props) => {
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-
-  // PARAMS
-  const { contact, allMsgs } = props.route.params;
-  const receiver = contact.contactData;
-  // console.log('ak', allMsgs)
-  // FUNCTIONS
 
   const scrollToBottom = () => {
     // // console.log('---------------------');
@@ -178,9 +186,9 @@ const UserChat = (props) => {
     SelectImage(setImagMessage)
   };
   const sendImageMessage = async () => {
-    // console.log("{{{{{{}}}}}}", imagMessage)
-    const formdata = new FormData();
+
     // console.log("KKKKKKKKKK", typeof imagMessage)
+    const formdata = new FormData();
     formdata.append('content', 'ChatMe_Image');
     formdata.append('senderId', currentUser.userId);
     formdata.append('recieverId', receiver._id);
@@ -198,18 +206,86 @@ const UserChat = (props) => {
 
     if (!response.ok) {
       // console.log("+>", response)
+      setImagMessage('')
       hideModal()
       throw new Error(`HTTP error image! Status: ${response.status}`);
     } else {
       const data = await response.json();
+      setImagMessage('')
       // console.log('send img res', data.newImage);
       scrollToBottom()
       hideModal()
     }
+  };
 
-    // console.error(`catch sending img msg error: ${error.message}`);
+  const startRecording = () => {
+    const audioSettings = {
+      sampleRate: 16000,
+      channels: 1,
+      bitsPerSample: 16,
+      audioSource: 6, // Use the appropriate audio source
+    };
+
+    AudioRecord.init(audioSettings);
+    setRecordingStartTime(moment() + 1);
+    setIsRecording(true);
+    setTimer(0);
+
+    AudioRecord.start();
+  };
+  const playAudio = () => {
+    if (audioPlayer) {
+      audioPlayer.play((success) => {
+        if (!success) {
+          console.error('Error playing audio');
+        }
+      });
+    }
+  };
+  const sendAudioMessage = async () => {
+    setIsRecording(false);
+    setIsSendingAudio(true);
+    await playAudio();
+    const audioFile = await AudioRecord.stop();
+    const audioMsg = {
+      uri: `file://${audioFile}`,
+      type: 'audio/mp3',
+      name: 'audio.wav',
+    }
+    const formdata = new FormData();
+
+    formdata.append('content', 'ChatMe_AudioMessage');
+    formdata.append('senderId', currentUser.userId);
+    formdata.append('recieverId', receiver._id);
+    formdata.append('chatId', contact._id);
+    formdata.append('audio', audioMsg);
+
+    try {
+      console.log('ChatMe_AudioMessage', audioMsg);
+      const response = await fetch(`${baseUrl}/sendVoiceMsgg`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formdata,
+      });
+
+      if (!response.ok) {
+        // If the response status is not OK (e.g., 404 or 500), throw an error
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setIsSendingAudio(false);
+      console.log('Voice message sent:', data);
+    } catch (error) {
+      setIsSendingAudio(false);
+      console.error('Error while sending audio:', error.message);
+    }
 
   };
+
   const sendMessage = async () => {
     setIsSending(true);
     await axios
@@ -388,11 +464,53 @@ const UserChat = (props) => {
 
   // HOOKS
   useEffect(() => {
+    // Initialize the audio player when the component mounts
+    if (audioFile) {
+      const player = new Sound(audioFile, '', (error) => {
+        if (error) {
+          console.error('Error initializing audio player:', error);
+        }
+      });
+      setAudioPlayer(player);
+    }
+
+    return () => {
+      // Release the audio player when the component unmounts
+      if (audioPlayer) {
+        audioPlayer.release();
+      }
+    };
+  }, [audioFile]);
+  useEffect(() => {
+    const updateTimer = () => {
+      const currentTime = moment();
+      const elapsedSeconds = currentTime.diff(recordingStartTime, 'seconds');
+      setTimer(elapsedSeconds);
+    };
+
+    let intervalId;
+
+    if (isRecording) {
+      // Update timer every second while recording
+      intervalId = setInterval(updateTimer, 1000);
+    } else {
+      // Clear interval when not recording
+      clearInterval(intervalId);
+    }
+
+    // Clean up on component unmount
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isRecording, recordingStartTime]);
+  useEffect(() => {
     socket.on(`receive_message`, handleGetCurrentMsg);
     socket.on(`receive_image_message`, handleGetCurrentMsg);
+    socket.on(`receive_voice_message`, handleGetCurrentMsg);
     return () => {
       socket.off(`receive_message`, handleGetCurrentMsg);
       socket.off(`receive_image_message`, handleGetCurrentMsg);
+      socket.off(`receive_voice_message`, handleGetCurrentMsg);
     };
   }, [handleGetCurrentMsg]);
   useEffect(() => {
@@ -444,6 +562,7 @@ const UserChat = (props) => {
                     document={document}
                     changeHeader={changeHeader}
                     msgId={msgId}
+                    // playAudio={playAudio}
                   />
                 )}
                 keyExtractor={(item, index) => index.toString()}
@@ -466,6 +585,11 @@ const UserChat = (props) => {
               isSending={isSending}
               currentMessage={currentMessage}
               setCurrentMessage={(msg) => setCurrentMessage(msg)}
+              startRecording={startRecording}
+              isRecording={isRecording}
+              timer={timer}
+              isSendingAudio={isSendingAudio}
+              sendAudioMessage={sendAudioMessage}
             />
             }
           </KeyboardAvoidingView>
@@ -481,7 +605,7 @@ const UserChat = (props) => {
       >
         <View style={GroupChatStyle.modalMainView}>
           <Image
-            source={{ uri: imagMessage ? imagMessage.uri : null }}
+            source={{ uri: imagMessage.uri ? imagMessage.uri : '' }}
             style={GroupChatStyle.image}
             resizeMode="contain"
           />

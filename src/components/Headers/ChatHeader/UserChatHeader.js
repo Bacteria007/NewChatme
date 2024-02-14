@@ -38,7 +38,7 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
   const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
-console.log("header item-------------",item)
+// console.log("header item-------------",item)
   const [clearChatModal, setClearChatModal] = useState(false);
   const showClearChatModal = () => {
     setClearChatModal(true);
