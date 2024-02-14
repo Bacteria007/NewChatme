@@ -153,10 +153,12 @@ const GroupChat = props => {
       // // console.log("((((((((((((((+>")
       // // console.log(msgList)
       // // console.log("((((((((((((((+>")
+      setSelecetdImageMsg('')
       hideModal();
       scrollToBottom();
     } else {
       // // console.log("((((((((((((((+>", result)
+      setSelecetdImageMsg('')
       throw new Error(`HTTP error image! Status: ${result.status}`);
     }
   };
@@ -364,7 +366,7 @@ const GroupChat = props => {
           <View style={GroupChatStyle.modalMainView}>
             
               <Image
-                source={{ uri: selecetdImageMsg ? selecetdImageMsg.uri : null }}
+                source={{ uri: selecetdImageMsg.uri ? selecetdImageMsg.uri : '' }}
                 style={GroupChatStyle.image}
                resizeMode='contain'
               />

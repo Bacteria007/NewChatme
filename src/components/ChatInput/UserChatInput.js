@@ -24,7 +24,8 @@ import AppContext from '../../context/AppContext';
 import axios from 'axios';
 import { ThemeContext } from '../../context/ThemeContext';
 import { requestCameraAndGalleryPermission } from '../Permission/Permission';
-
+import AudioRecord from 'react-native-audio-record';
+import Sound from 'react-native-sound';
 
 const UserChatInput = ({
   currentMessage,
@@ -32,9 +33,14 @@ const UserChatInput = ({
   inputRef,
   callSendMessageFunc,
   callSendImageMessageFunc,
-  isSending
+  isSending,
+  startRecording,
+  isRecording,
+  sendAudioMessage, isSendingAudio,
+  timer
 }) => {
   const { theme } = useContext(ThemeContext);
+  const { baseUrl } = useContext(AppContext);
   const iconsColor = AppColors.coolgray
   const iconsColor2 = AppColors.black
   const screenDimensions = Dimensions.get('window');
@@ -43,8 +49,8 @@ const UserChatInput = ({
   const [keyboardOpen, setKeyboardOpen] = useState(false);
 
   const handleContentSizeChange = (contentHeight) => {
-    setInputHeight(Math.min(contentHeight, 6 * 18)); 
-    setIsScrollEnabled(contentHeight / 18 > 6); 
+    setInputHeight(Math.min(contentHeight, 6 * 18));
+    setIsScrollEnabled(contentHeight / 18 > 6);
   };
 
   const handleFocus = () => {
@@ -72,48 +78,62 @@ const UserChatInput = ({
     };
   }, []);
 
+
   return (
     <View style={[UserChatInputStyle.main_input_and_mic(theme.chatScreenColor), { paddingBottom: keyboardOpen ? screenDimensions.width * 0.06 : screenDimensions.width * 0 }]}>
       <View style={UserChatInputStyle.input_and_all_icons}>
         <ScrollView style={UserChatInputStyle.scroll_inputText} scrollEnabled showsVerticalScrollIndicator>
-          <TextInput
-            style={[UserChatInputStyle.input,{maxHeight:inputHeight}]}
-            placeholder="Message"
-            value={currentMessage}
-            onChangeText={(txt) => { setCurrentMessage(txt) }}
-            keyboardType='twitter'
-            multiline={true}
-            
-            placeholderTextColor={AppColors.gray}
-            onContentSizeChange={(e) =>
-              handleContentSizeChange(
-                e.nativeEvent.contentSize.height
-              )
-            }
-            underlineColorAndroid={'transparent'}
-            scrollEnabled={isScrollEnabled}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            ref={inputRef}
-          />
+          {isRecording ?
+            <Text style={{ color: iconsColor2 }}>{`Recording: ${timer} seconds`}</Text>
+            :
+
+            <TextInput
+              style={[UserChatInputStyle.input, { maxHeight: inputHeight }]}
+              placeholder="Message"
+              value={currentMessage}
+              onChangeText={(txt) => { setCurrentMessage(txt) }}
+              keyboardType='twitter'
+              multiline={true}
+
+              placeholderTextColor={AppColors.gray}
+              onContentSizeChange={(e) =>
+                handleContentSizeChange(
+                  e.nativeEvent.contentSize.height
+                )
+              }
+              underlineColorAndroid={'transparent'}
+              scrollEnabled={isScrollEnabled}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              ref={inputRef}
+            />
+          }
         </ScrollView>
-        {currentMessage == '' && <TouchableOpacity
-          onPress={() => { callSendImageMessageFunc() }}>
-          <Icons.FontAwesome name="camera" size={wp('5.5%')} color={iconsColor} />
-        </TouchableOpacity>
+        {currentMessage == '' &&
+          (!isRecording && <TouchableOpacity
+            onPress={() => { callSendImageMessageFunc() }}>
+            <Icons.FontAwesome name="camera" size={wp('5.5%')} color={iconsColor} />
+          </TouchableOpacity>)
         }
-        {/* </View> */}
       </View>
       {currentMessage == '' ? (
-        <TouchableOpacity>
-          <View style={[UserChatInputStyle.microphoneContainerView]}>
-            <Icons.FontAwesome
-              name="microphone"
-              size={wp('5.7%')}
-              color={iconsColor2}
-            />
-          </View>
-        </TouchableOpacity>
+        isRecording ? (
+          <TouchableOpacity onPress={() => { sendAudioMessage() }}>
+            <View style={[UserChatInputStyle.microphoneContainerView]}>
+              {isSendingAudio ?
+                <ActivityIndicator size="small" color={iconsColor2} /> // Show loading animation
+                :
+                <Icons.Ionicons name='send-sharp' size={wp('5.7%')} color={iconsColor2} />
+              }
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={startRecording}>
+            <View style={[UserChatInputStyle.microphoneContainerView]}>
+              <Icons.FontAwesome name="microphone" size={24} color={iconsColor2} />
+            </View>
+          </TouchableOpacity>
+        )
       ) : (
         <TouchableOpacity
           onPress={() => { callSendMessageFunc() }}>
@@ -123,7 +143,6 @@ const UserChatInput = ({
             {isSending ? (
               <ActivityIndicator size="small" color={iconsColor2} /> // Show loading animation
             ) : (
-
               <Icons.Ionicons name='send-sharp' size={wp('5.7%')} color={iconsColor2} />
             )}
           </View>
