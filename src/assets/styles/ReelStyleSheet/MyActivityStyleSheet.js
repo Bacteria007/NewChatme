@@ -49,19 +49,19 @@ const MyActivityStyleSheet = StyleSheet.create({
         textAlign: 'center',
     }),
     reelsView: {
-        // borderWidth: 1,
-        // borderColor: AppColors.white,
+        borderWidth: 1,
+        borderColor: AppColors.purple,
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         // elevation: 0.9,
-        marginTop: hp('0.5')
+        margin: hp('0.5'),
     },
     reelStyle: {
-        height: wp('32'),
-        width: wp('32.5'),
+        height: wp('30'),
+        width: wp('30'),
         // borderWidth: 1,
-        marginRight: wp('0.5'),
-        // borderColor: AppColors.white,
+        // // marginRight: wp('0.5'),
+        // borderColor: AppColors.purple,
     },
     reelsModal: {
         backgroundColor: 'rgba(0,0,0,0.5)',
@@ -72,7 +72,7 @@ const MyActivityStyleSheet = StyleSheet.create({
         width: wp('100'),
     },
     viewInModal: {
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.lightBlack2,
         height: hp('80'),
         width: wp('80'),
         alignItems: 'center',

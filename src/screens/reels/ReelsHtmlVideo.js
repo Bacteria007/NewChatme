@@ -16,7 +16,7 @@ const GenerateVideoHtml=(baseUrl, item, autoplay = true,muted=false) => `
 </head>
 <body>
   <video ${autoplay ? 'autoplay' : ''} controls  ${muted ? 'muted' : ''} loop>
-    <source src="${baseUrl}${item.uri.uri}" type="video/mp4">
+    <source src="${baseUrl}${item.uri}" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 </body>

@@ -15,21 +15,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ReelHeader = ({navigation}) => {
   
   const { baseUrl,token,currentUser } = useContext(AppContext);
+ const videoLength=40
   let options = {
     mediaType: 'video',
     maxWidth: 1080,
     maxHeight: 1080,
     quality: 1,
-    durationLimit: 300, // set the maximum duration for the video
+    durationLimit: videoLength,
     title: 'Select Video',
   };
   const iconcolor = AppColors.white;
 
   const uploadVideo = async Response => {
-    // const userData = await AsyncStorage.getItem('user');
-
-    // const  userParseData = JSON.parse(userData);
-    // const parseId = userParseData.userId;
+      if (Response.duration > videoLength) {
+        Alert.alert('Video duration exceeds 30 seconds');
+        return;
+      }
     const formData = new FormData();
     formData.append('userId', currentUser.userId);
     formData.append('name', 'Video');
@@ -55,35 +56,53 @@ const ReelHeader = ({navigation}) => {
       <Text style={[ReelHeaderStyle.screenNameStyle]}>Reels</Text>
       <View style={[ReelHeaderStyle.iconContainer]}>
         <TouchableOpacity
+          // onPress={() => {
+          //   launchImageLibrary(options, res => {
+          //     if (!res.didCancel && !res.error) {
+          //       if (
+          //         res.assets[0].type === 'video/mp4' ||
+          //         res.assets[0].type === 'video/avi' ||
+          //         res.assets[0].type === 'video/mkv' ||
+          //         res.assets[0].type === 'video/mov' ||
+          //         res.assets[0].type === 'video/wmv' ||
+          //         res.assets[0].type === 'video/flv' ||
+          //         res.assets[0].type === 'video/webm' ||
+          //         res.assets[0].type === 'video/3gp' ||
+          //         res.assets[0].type === 'video/gif' ||
+          //         res.assets[0].type === 'video/mk3d' ||
+          //         res.assets[0].type === 'video/mts' ||
+          //         res.assets[0].type === 'video/vob' ||
+          //         res.assets[0].type === 'video/rm' ||
+          //         res.assets[0].type === 'video/swf' ||
+          //         res.assets[0].type === 'video/ogv' ||
+          //         res.assets[0].type === 'video/mpeg' ||
+          //         res.assets[0].type === 'video/m2ts' 
+          //       ) {
+          //         uploadVideo(res.assets[0]);
+          //       } else {
+          //         Alert.alert('you can just upload videos',res.assets[0].type);
+          //       }
+          //     }
+          //   });
+          // }}
           onPress={() => {
-            launchImageLibrary(options, res => {
+            launchImageLibrary(options, (res) => {
               if (!res.didCancel && !res.error) {
                 if (
-                  res.assets[0].type === 'video/mp4' ||
-                  res.assets[0].type === 'video/avi' ||
-                  res.assets[0].type === 'video/mkv' ||
-                  res.assets[0].type === 'video/mov' ||
-                  res.assets[0].type === 'video/wmv' ||
-                  res.assets[0].type === 'video/flv' ||
-                  res.assets[0].type === 'video/webm' ||
-                  res.assets[0].type === 'video/3gp' ||
-                  res.assets[0].type === 'video/gif' ||
-                  res.assets[0].type === 'video/mk3d' ||
-                  res.assets[0].type === 'video/mts' ||
-                  res.assets[0].type === 'video/vob' ||
-                  res.assets[0].type === 'video/rm' ||
-                  res.assets[0].type === 'video/swf' ||
-                  res.assets[0].type === 'video/ogv' ||
-                  res.assets[0].type === 'video/mpeg' ||
-                  res.assets[0].type === 'video/m2ts' 
+                  res.assets[0].type.startsWith('video/') &&
+                  res.assets[0].duration <= videoLength
                 ) {
+                  console.log(res.assets[0]);
                   uploadVideo(res.assets[0]);
                 } else {
-                  Alert.alert('you can just upload videos',res.assets[0].type);
+                  console.log(res.assets[0]);
+
+                  Alert.alert(`Please select a valid video within ${videoLength} seconds`);
                 }
               }
             });
-          }}>
+          }}
+          >
           <Icons.AntDesign
             name="pluscircleo"
             size={wp('7.5%')}

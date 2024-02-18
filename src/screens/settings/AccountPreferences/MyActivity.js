@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
-import { View, FlatList, TouchableOpacity, Alert, Text, ScrollView, SafeAreaView,ActivityIndicator  } from 'react-native'
+import { View, FlatList, TouchableOpacity, Alert, Text, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native'
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
 import AppContext from '../../../context/AppContext';
 import LottieView from 'lottie-react-native';
@@ -14,7 +14,8 @@ import MyActivityStyleSheet from '../../../assets/styles/ReelStyleSheet/MyActivi
 import { ThemeContext } from '../../../context/ThemeContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
-
+import Video from 'react-native-video'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 const MyActivity = ({ navigation }) => {
   const { baseUrl, currentUser, token } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
@@ -26,7 +27,25 @@ const MyActivity = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [reelid, setReelid] = useState(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
 
+  const toggleVideoPlayback = () => {
+    setIsVideoPlaying(!isVideoPlaying);
+  };
+  // ------------------------
+  const changeIndex = ({ index }) => {
+    setCurrentIndex(index);
+    // setIsVideoLiked(uploadedReels[index]?.isLiked || false);
+    // setLikeCount(uploadedReels[index]?.likeCount || 0);
+  };
+  const onBuffer = e => {
+    console.log('buffering....', e);
+  };
+
+  // ------------------------
+  const onError = e => {
+    console.log('error raised', e);
+  };
   const showModal = () => {
     setIsModalVisible(true)
   }
@@ -52,7 +71,7 @@ const MyActivity = ({ navigation }) => {
         } else {
           const videosWithSources = data.UploadedVideos.map(video => ({
             _id: video._id,
-            uri: { uri: video.video },
+            uri: video.video,
             desc: video.name,
             user: video.userId
           }));
@@ -103,6 +122,7 @@ const MyActivity = ({ navigation }) => {
   // EFFECTS
   useEffect(() => {
     fetchUploadedVideos(); // Call the new function to fetch uploaded videos
+
     setTimeout(() => {
       setIsLoading(false); // Set loading state to false after 2 seconds
     }, 1000);
@@ -117,15 +137,15 @@ const MyActivity = ({ navigation }) => {
         <InnerScreensHeader navigation={navigation} screenName="My uploads" />
         <View style={MyActivityStyleSheet.reelsContainer}>
           {isLoading ? (
-            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-            <ActivityIndicator size={20} color={AppColors.black} style={{alignSelf:'center'}}/>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <ActivityIndicator size={20} color={AppColors.black} style={{ alignSelf: 'center' }} />
             </View>
           ) : (
             <View style={Containers.centercontent}>
               {allUploads.length === 0 ? (
                 <View style={MyActivityStyleSheet.lottieContainer}>
                   <Text style={HomeNeoCards.noSearchResultText}>You have no uploads.</Text>
-                  </View>
+                </View>
               ) : (
                 <FlatList
                   data={allUploads}
@@ -135,6 +155,7 @@ const MyActivity = ({ navigation }) => {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item, index }) => {
                     const HtmlVideo = GenerateVideoHtml(baseUrl, item, false, true);
+                    console.log('/////ttttt', item)
                     return (
                       <TouchableOpacity
                         onPress={() => {
@@ -146,20 +167,18 @@ const MyActivity = ({ navigation }) => {
                         }}
                       >
                         <View style={MyActivityStyleSheet.reelsView}>
-                          <View
+                          <Video
+                            source={{ uri: `${baseUrl}${item.uri}` }}
+                            ref={videoRef}
+                            resizeMode="cover"
+                            paused={true}
+                            repeat={true}
+                            onBuffer={onBuffer}
+                            onError={onError}
+                            onLoad={() => setIsLoading(false)} // Set isLoading to false when video is loaded
                             style={MyActivityStyleSheet.reelStyle}
-                          >
-                            <WebView
-                              originWhitelist={['*']}
-                              source={{ html: `${HtmlVideo}` }}
-                              style={MyActivityStyleSheet.reelStyle}
-                              scrollEnabled={false}
-                              showsVerticalScrollIndicator={false}
-                              showsHorizontalScrollIndicator={false}
-                              setDisplayZoomControls={false}
-                              setBuiltInZoomControls={false}
-                            />
-                          </View>
+
+                          />
                         </View>
                       </TouchableOpacity>
                     )
@@ -178,7 +197,7 @@ const MyActivity = ({ navigation }) => {
                         <Text style={MyActivityStyleSheet.headerDescriptionText}>{allUploads[currentIndex].user.name}</Text>
                         <TouchableRipple
                           onPress={() => {
-                            //console.log("cur============", allUploads[currentIndex])
+                            console.log("cur============", allUploads[currentIndex])
                             deleteReel(allUploads[currentIndex]);
                             setIsModalVisible(false);
                           }}
@@ -191,7 +210,13 @@ const MyActivity = ({ navigation }) => {
                           />
                         </TouchableRipple>
                         <TouchableRipple
-                          onPress={() => setIsModalVisible(false)}
+
+                          onPress={() => {
+                            setIsModalVisible(false)
+                            console.log("cur============", allUploads[currentIndex].uri)
+                            console.log("cur============", currentIndex)
+
+                          }}
                           rippleColor="rgba(0, 0, 0, 0.3)"
                         >
                           <IconButton
@@ -201,12 +226,32 @@ const MyActivity = ({ navigation }) => {
                           />
                         </TouchableRipple>
                       </View>
-                      <WebView
-                        containerStyle={MyActivityStyleSheet.webviewContainerStyle}
-                        source={{ html: GenerateVideoHtml(baseUrl, allUploads[currentIndex], true, false) }}
-                        style={MyActivityStyleSheet.webviewContainerStyle}
-                        mediaPlaybackRequiresUserAction={false}
-                      />
+                      {isLoading ? (
+                        <View style={ReelscreenStyle.LoaderView}>
+                          <ActivityIndicator
+                            size="large"
+                            color={AppColors.white}
+                            style={ReelscreenStyle.LoaderStyle}
+                          />
+                        </View>
+                      ) : (
+                        <Video
+                          source={{ uri: `${baseUrl}${allUploads[currentIndex].uri}` }}
+                          ref={videoRef}
+                          resizeMode="center"
+                          paused={false}
+                          repeat={false}
+                          onBuffer={onBuffer}
+                          onError={onError}
+                          onLoad={() => setIsLoading(false)} // Set isLoading to false when video is loaded
+                          style={{
+                            width: wp('80'),
+                            height: hp('80'),
+                            flex: 1,
+                          }}
+                          onEnd={hideModal}
+                        />
+                      )}
                     </View>
                   ) : null}
                 </View>

@@ -9,11 +9,16 @@ import AppContext from '../../context/AppContext';
 import Share from 'react-native-share';
 import { Text } from 'react-native-paper';
 import WebView from 'react-native-webview';
+import Video from 'react-native-video'
 import GenerateVideoHtml from './ReelsHtmlVideo';
 import { ZoomVideo } from '../../helpers/UiHelpers/ZoomVideo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import VideoPlayer from 'react-native-video-player'
+import { widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import MediaControls from 'react-native-media-controls'
 
-const Reals = props => {
+
+const Reels = props => {
 
   const { baseUrl, token, currentUser } = useContext(AppContext);
   //USE STATE
@@ -22,11 +27,11 @@ const Reals = props => {
   const [uploadedReels, setUploadedReels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingData, setIsLoadingData] = useState(true);
-  //    USE REF
   const videoRef = useRef(null);
+
   //    FUNCTIONS
   const shareVideo = async () => {
-    const videoUri = `${baseUrl}${uploadedReels[currentIndex]?.uri.uri}`;
+    const videoUri = `${baseUrl}${uploadedReels[currentIndex]?.uri}`;
 
     try {
       const options = {
@@ -40,9 +45,16 @@ const Reals = props => {
       console.log('Error sharing video:', error);
     }
   };
+  const onBuffer = e => {
+    console.log('buffering....', e);
+  };
+  const onError = e => {
+    console.log('error raised', e);
+  };
+
   const likeVideo = async () => {
-    console.log("like consle", `${uploadedReels[currentIndex]?.uri.uri}`)
-    await fetch(`${baseUrl}/likeVideo?videoUrl=${uploadedReels[currentIndex]?.uri.uri}&userId=${currentUser.userId}`, {
+    console.log("like consle", `${uploadedReels[currentIndex]?.uri}`)
+    await fetch(`${baseUrl}/likeVideo?videoUrl=${uploadedReels[currentIndex]?.uri}&userId=${currentUser.userId}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -69,8 +81,8 @@ const Reals = props => {
     setIsLoadingData(false)
   };
   const dislikeVideo = async () => {
-    console.log("like consle", `${uploadedReels[currentIndex]?.uri.uri}`)
-    await fetch(`${baseUrl}/dislikeVideo?videoUrl=${uploadedReels[currentIndex]?.uri.uri}&userId=${currentUser.userId}`, {
+    console.log("like consle", `${uploadedReels[currentIndex]?.uri}`)
+    await fetch(`${baseUrl}/dislikeVideo?videoUrl=${uploadedReels[currentIndex]?.uri}&userId=${currentUser.userId}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -97,8 +109,6 @@ const Reals = props => {
       .catch(error => console.log(error));
     setIsLoadingData(false)
   };
-
-  // ------------------------
   const UploadedReels = async () => {
     await fetch(`${baseUrl}/uploadedReels?userId=${currentUser.userId}`, {
       method: 'POST',
@@ -114,7 +124,7 @@ const Reals = props => {
           Alert.alert('Token required')
         } else {
           const videosWithSources = data.UploadedVideos ? data.UploadedVideos.map(video => ({
-            uri: { uri: video.video },
+            uri: video.video,
             desc: video.name,
             reelUploader: video.userId,
             isLiked: video.isLiked,
@@ -135,11 +145,9 @@ const Reals = props => {
       .catch(error => console.log(error));
     setIsLoadingData(false)
   };
-  // ------------------------
   const toggleVideoPlayback = () => {
     setIsVideoPlaying(!isVideoPlaying);
   };
-  // ------------------------
   const changeIndex = ({ index }) => {
     setCurrentIndex(index);
     // setIsVideoLiked(uploadedReels[index]?.isLiked || false);
@@ -198,12 +206,25 @@ const Reals = props => {
                         />
                       </View>
                     ) : (
-                      <WebView
-                        originWhitelist={['*']}
-                        source={{
-                          html: `${HtmlVideo}`,
-                        }}
-                        style={[ReelscreenStyle.backgroundVideo]}
+                      // <WebView
+                      //   originWhitelist={['*']}
+                      //   source={{
+                      //     html: `${HtmlVideo}`,
+                      //   }}
+                      //   style={ReelscreenStyle.backgroundVideo}
+                      // />
+                  
+                          <Video
+                          source={{ uri: `${baseUrl}${item.uri}` }}
+                          ref={videoRef}
+                          resizeMode="cover"
+                          paused={currentIndex !== index || !isVideoPlaying}
+                          repeat={true}
+                          onBuffer={onBuffer}
+                          onError={onError}
+                          onLoad={() => setIsLoading(false)} // Set isLoading to false when video is loaded
+                          style={ReelscreenStyle.backgroundVideo}
+                          
                       />
                     )}
                   </TouchableOpacity>
@@ -213,10 +234,10 @@ const Reals = props => {
                     onPressLike={() => likeVideo()}
                     onPressDislike={() => dislikeVideo()}
                     isVideoLiked={item.likes?.includes(currentUser.userId)}
-                    likeCount={item.likes?.length}
                     item={item.reelUploader}
-                    navigation={props.navigation}
+                    likeCount={item.likes?.length}
                     createdAt={item.createdAt}
+                    navigation={props.navigation}
                   />
                 </View>
               );
@@ -236,4 +257,4 @@ const Reals = props => {
   );
 };
 
-export default Reals;
+export default Reels;
