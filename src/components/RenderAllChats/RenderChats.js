@@ -114,9 +114,9 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
         onLongPress={handleLongPress}
       >
         <View style={UserChatStyle.userMessageContainer(msgItem.senderId === currentUser.userId)}>
-          {msgItem.content == 'text' ?
+          {msgItem.msg_type == 'text' ?
             <Text style={UserChatStyle.textStyle}>{msgItem.content}</Text>
-            : [msgItem.content == 'ChatMe_Image' ?
+            : [msgItem.msg_type == 'image' ?
               <Image source={{ uri: `${baseUrl}${msgItem.image}` }} resizeMode='cover' style={UserChatStyle.imageMsgStyle} />
               :
               <>

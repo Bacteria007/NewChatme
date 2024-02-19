@@ -38,7 +38,7 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
   const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
-// console.log("header item-------------",item)
+  // console.log("header item-------------",item)
   const [clearChatModal, setClearChatModal] = useState(false);
   const showClearChatModal = () => {
     setClearChatModal(true);
@@ -130,35 +130,29 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
             />
           </TouchableRipple>
           <TouchableOpacity
-          onPress={()=>{
-            navigation.navigate('InnerScreens', {
-              screen: 'publicProfile',
-              params: {data:item},
-            });
-          
-          }}>
-          <View style={[UserChatHeaderStyle.leftInnerView]}>
-            <View style={[UserChatHeaderStyle.dpContainerView]}>
-              {item?.profileImage ?
-                <Image
-                  source={{ uri: `${baseUrl}${item.profileImage}` }}
-                  style={[UserChatHeaderStyle.dpImageStyle]}
-                /> :
-                <Image
-                  source={require('../../../assets/imges/default/userProfileDark.jpg')}
-                  style={[UserChatHeaderStyle.dpImageStyle]}
-                />
-              }
-            </View>
-            <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
-              <Text style={[UserChatHeaderStyle.profileNameTextStyle(theme.profileNameColor)]}>
-                {item?.name ? ChatHeaderNameSubString(item?.name) : null}
-              </Text>
-              {/* <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
+            onPress={() => { navigation.navigate('InnerScreens', { screen: 'publicProfile', params: { data: item } }) }}>
+            <View style={[UserChatHeaderStyle.leftInnerView]}>
+              <View style={[UserChatHeaderStyle.dpContainerView]}>
+                {item?.profileImage ?
+                  <Image
+                    source={{ uri: `${baseUrl}${item.profileImage}` }}
+                    style={[UserChatHeaderStyle.dpImageStyle]}
+                  /> :
+                  <Image
+                    source={require('../../../assets/imges/default/userProfileDark.jpg')}
+                    style={[UserChatHeaderStyle.dpImageStyle]}
+                  />
+                }
+              </View>
+              <View style={[UserChatHeaderStyle.profileNameContainerStyle]}>
+                <Text style={[UserChatHeaderStyle.profileNameTextStyle(theme.profileNameColor)]}>
+                  {item?.name ? ChatHeaderNameSubString(item?.name) : null}
+                </Text>
+                {/* <Text style={[UserChatHeaderStyle.profileStatusStyle]}>
                   Online
                 </Text> */}
+              </View>
             </View>
-          </View>
           </TouchableOpacity>
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -227,7 +221,7 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
                 ]}
                 isVideoCall={false}
                 resourceID={'chatme_outcall'}
-                
+
               />
             </View>
             <View style={{ paddingHorizontal: 30, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>

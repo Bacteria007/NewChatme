@@ -22,6 +22,7 @@ import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/Prof
 import { Image } from 'react-native';
 import FontStyle from '../../assets/styles/FontStyle';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
+import Video from 'react-native-video'
 
 const PublicProfile = (props) => {
   const { baseUrl, currentUser, token } = useContext(AppContext);
@@ -43,12 +44,6 @@ const PublicProfile = (props) => {
   const [totalFriendsCount, setTotalFriendsCount] = useState(0)
   const { data } = props.route.params;
   console.log("public profile", data)
-  const showProfileModal = () => {
-    setProfileModal(true);
-  };
-  const hideProfileModal = () => {
-    setProfileModal(false);
-  };
 
   const showModal = () => {
     setIsModalVisible(true)
@@ -75,7 +70,7 @@ const PublicProfile = (props) => {
         } else {
           const videosWithSources = res.UploadedVideos.map(video => ({
             _id: video._id,
-            uri: { uri: video.video },
+            uri: video.video,
             desc: video.name,
             user: video.userId
           }));
@@ -139,17 +134,17 @@ const PublicProfile = (props) => {
           console.log("friend infooooooooooooo", res)
 
           setTotalFriendsCount(res.totalFrnds)
-          if(data._id===currentUser.userId){
+          if (data._id === currentUser.userId) {
             setAlreadyFriend(true)
-          }else{
-            if(res.alreadyFriend=='pending'){
+          } else {
+            if (res.alreadyFriend == 'pending') {
               setAlreadyFriend(false)
               setRequestSent(true)
-            }else if(res.alreadyFriend==false){
+            } else if (res.alreadyFriend == false) {
               setAlreadyFriend(false)
               setRequestSent(false)
             }
-            else{
+            else {
               setAlreadyFriend(true)
             }
           }
@@ -214,7 +209,14 @@ const PublicProfile = (props) => {
     }
   };
 
+  const onBuffer = e => {
+    console.log('buffering....', e);
+  };
 
+  // ------------------------
+  const onError = e => {
+    console.log('error raised', e);
+  };
 
 
   // EFFECTS
@@ -232,88 +234,69 @@ const PublicProfile = (props) => {
   }, [reelid]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{
-        flex: 1,
-        backgroundColor: theme.backgroundColor,
-        // opacity:0.7
-    }}>
+    <SafeAreaView style={{ flex: 1,backgroundColor: theme.backgroundColor }}>
+      <ScrollView style={{  flex: 1 }}>
         <InnerScreensHeader navigation={props.navigation} screenName={data.name} />
-          <Image
-            source={{ uri: `${baseUrl}${data.profileImage}` }}
-            style={{
-              height: hp('30%'),
-              width: wp('100%'),
-              resizeMode: 'cover',
-            }}
-          />
-        <View style={{ flexDirection: 'row',alignItems:'center',margin: wp('5.5') }}>
-          <TouchableRipple
-            rippleColor={'rgba(0,0,0,1)'}
-            borderless
-            // style={[ProfileScreenStyleSheet.img]}
-            onPress={() => {
-              showProfileModal();
-              console.log(`${baseUrl}${data.profileImage}`);
-            }}>
-            <Image
+        <Image
+          source={{ uri: `${baseUrl}${data.profileImage}` }}
+          style={{
+            height: hp('30%'),
+            width: wp('100%'),
+            resizeMode: 'cover',
+          }}
+        />
+        <View style={{ flexDirection: 'row', width: wp('100'), paddingTop: hp('2.5') }}>
+          <View style={{ justifyContent: 'center', width: wp('20'), alignItems: 'center' }}>
+            <Image style={[{ height: hp('7%'), width: hp('7%'), borderRadius: wp('100') }]}
               source={{ uri: `${baseUrl}${data.profileImage}` }}
-              style={[{
-                height: hp('13%'),
-                width: hp('13%'),
-                marginRight:wp('5'),
-                borderRadius: wp('100'),
-                backgroundColor: AppColors.periWinkle,
-              }]}
             />
-          </TouchableRipple>
-          <View>
-          <Text
-            style={[{ fontSize: wp('7'), fontFamily: FontStyle.mediumFont, opacity: 0.9, color: theme.profileNameColor, marginTop: hp('1') }]}>
-            {data.name}
-          </Text>
-          <Text
-            style={[{ fontSize: wp('4.5'), fontFamily: FontStyle.regularFont, color: theme.profileNameColor, opacity: 0.9 ,marginTop:hp('-1.5')}]}>
-            {data.country}
-          </Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' ,width:wp('56')}}>
-            <Text
-              style={[{ fontSize: wp('4.5'), fontFamily: FontStyle.regularFont, color: AppColors.primary, opacity: 0.8, }]}>
-              {totalFriendsCount} friends
-            </Text>
-            {alreadyFriend === false && <View>
-              {
-                requestSent===true ? <TouchableOpacity
-                  onPress={() => {
-                    // setClickedItem(data);
-                    cancelRequest();
-                  }} style={{
-                    backgroundColor: AppColors.primary,
-                    opacity: 0.9,
-                    paddingHorizontal: wp('4'),
-                    //  paddingVertical: hp('0.1'),
-                    borderRadius: wp('1.7'),
-                  }}
-                >
-                  <Text style={{ color: AppColors.white, fontFamily: FontStyle.regularFont, fontSize: wp('5'), paddingTop: hp('0.4') }}>Cancel</Text>
-                </TouchableOpacity>
-                  :
-                  <TouchableOpacity
+          </View>
+          <View style={{ paddingHorizontal: wp('5'), flex: 1, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
+            <View>
+              <Text
+                style={[{ fontSize: wp('7'), opacity: 0.8, fontFamily: FontStyle.regularFont, color: theme.profileNameColor, }]}>
+                {data.name}
+              </Text>
+              <Text
+                style={[{ fontSize: wp('4.5'), fontFamily: FontStyle.regularFont, color: AppColors.primary, opacity: 0.7 }]}>
+                {totalFriendsCount} friends
+              </Text>
+            </View>
+            {alreadyFriend === false &&
+              <View style={{ justifyContent: 'center', alignItems: "center" }}>
+                {
+                  requestSent === true ? <TouchableOpacity
                     onPress={() => {
                       // setClickedItem(data);
-                      sendRequest();
-                    }} style={{
-                      backgroundColor: AppColors.primary,
-                      opacity: 0.9,
-                      paddingHorizontal: wp('5'),
-                      //  paddingVertical: hp('0.1'),
-                      borderRadius: wp('1.7'),
+                      cancelRequest();
                     }}
+                    style={HomeNeoCards.addUserinGroup(AppColors.primary)}
+
                   >
-                    <Text style={{ color: AppColors.white, fontFamily: FontStyle.regularFont, fontSize: wp('5'), paddingTop: hp('0.4') }}>Add</Text>
+                    <Text style={{
+                      color: AppColors.white,
+                      fontSize: hp('1.7'),
+                      fontFamily: FontStyle.regularFont,
+                    }}>Cancel</Text>
                   </TouchableOpacity>
-              }</View>}
-          </View>
+                    :
+                    <TouchableOpacity
+                      onPress={() => {
+                        // setClickedItem(data);
+                        sendRequest();
+                      }}
+                      style={HomeNeoCards.addUserinGroup(AppColors.primary)}
+
+                    >
+                      <Text style={{
+                        color: AppColors.white,
+                        fontSize: hp('1.7'),
+                        fontFamily: FontStyle.regularFont,
+                      }}>Add</Text>
+                    </TouchableOpacity>
+                }
+              </View>
+            }
           </View>
         </View>
         <View style={MyActivityStyleSheet.reelsContainer}>
@@ -335,30 +318,31 @@ const PublicProfile = (props) => {
                   showsVerticalScrollIndicator={false}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item, index }) => {
-                    const HtmlVideo = GenerateVideoHtml(baseUrl, item, false, true);
+                    console.log('...', item)
                     return (
                       <TouchableOpacity
                         onPress={() => {
                           setCurrentVideo(item);
                           setCurrentIndex(index);
-                          props.navigation.navigate('UserUploads', { currentIndex: currentIndex,currentVideo:item,data:data })
+                          props.navigation.navigate('UserUploads', { currentIndex: currentIndex, currentVideo: item, data: data })
                           setReelid(item._id)
-                          //console.log("reel id", item._id)
                         }}
                       >
                         <View style={MyActivityStyleSheet.reelsView}>
                           <View
                             style={MyActivityStyleSheet.reelStyle}
                           >
-                            <WebView
-                              originWhitelist={['*']}
-                              source={{ html: `${HtmlVideo}` }}
+                            <Video
+                              source={{ uri: `${baseUrl}${item.uri}` }}
+                              ref={videoRef}
+                              resizeMode="cover"
+                              paused={true}
+                              repeat={true}
+                              onBuffer={onBuffer}
+                              onError={onError}
+                              onLoad={() => setIsLoading(false)} // Set isLoading to false when video is loaded
                               style={MyActivityStyleSheet.reelStyle}
-                              scrollEnabled={false}
-                              showsVerticalScrollIndicator={false}
-                              showsHorizontalScrollIndicator={false}
-                              setDisplayZoomControls={false}
-                              setBuiltInZoomControls={false}
+
                             />
                           </View>
                         </View>
@@ -412,40 +396,6 @@ const PublicProfile = (props) => {
                   ) : null}
                 </View>
               </ReactNativeModal>
-              <ReactNativeModal
-                visible={profileModal}
-                coverScreen={true}
-                style={HomeNeoCards.modalContainer}
-                animationIn="slideInUp"
-                animationOut="slideInDown"
-                onDismiss={hideProfileModal}
-                onBackdropPress={hideProfileModal}
-                onBackButtonPress={hideProfileModal}>
-                <View style={HomeNeoCards.modalView}>
-                  {data.profileImage == null ? (
-                    <View style={HomeNeoCards.dpVew}>
-                      <Image
-                        source={require('../../assets/imges/default/userProfileDark.jpg')}
-                        style={{
-                          height: hp('45%'),
-                          width: hp('45%'),
-                          resizeMode: 'cover',
-                        }}
-                      />
-                    </View>
-                  ) : (
-                    <Image
-                      source={{ uri: `${baseUrl}${data.profileImage}` }}
-                      style={{
-                        height: hp('40%'),
-                        width: hp('40%'),
-                        resizeMode: 'cover',
-                      }}
-                    />
-                  )}
-                </View>
-              </ReactNativeModal>
-
             </View>
           )}
         </View>

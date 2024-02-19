@@ -163,7 +163,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                 {callingScreen !== 'Groups'
                   ? [
                     discussions_item.latestMessage &&
-                    (discussions_item.latestMessage.content == 'ChatMe_Image' ? (
+                    (discussions_item.latestMessage.msg_type == 'image' || discussions_item.latestMessage.msg_type == 'audio' ? (
                       <View
                         style={{
                           flexDirection: 'row',
@@ -171,7 +171,7 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                           justifyContent: 'center',
                         }}>
                         <Icons.FontAwesome
-                          name="image"
+                          name={discussions_item.latestMessage.msg_type == "audio" ? "microphone" : "image"}
                           size={wp('3.7')}
                           color={AppColors.gray}
                         />
@@ -179,14 +179,14 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
                         <Text
                           style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
                           {' '}
-                          image
+                         {discussions_item.latestMessage.msg_type}
                         </Text>
                       </View>
                     ) : CreateLastMsgSubString(discussions_item.latestMessage.content)
                     )
                   ]
                   : [
-                    groups_item.latestMessage !== null &&
+                    groups_item.latestMessage &&
                     (groups_item.latestMessage.msg_type == 'text' ? (
                       <Text numberOfLines={1} style={HomeNeoCards.lastMsg(theme.lastMsgColor)}>
                         <Text
@@ -242,12 +242,12 @@ const RenderComponent = ({ name, dp, callingScreen, discussions_item, groups_ite
               )}
               {(callingScreen == "Groups" && (groups_item.unReadMeassagesCount !== 0) &&
                 <Badge
-                size={24}
-                visible={true}
-                style={{ backgroundColor: AppColors.Mauve }}
-              >
-                {groups_item.unReadMeassagesCount}
-              </Badge>
+                  size={24}
+                  visible={true}
+                  style={{ backgroundColor: AppColors.Mauve }}
+                >
+                  {groups_item.unReadMeassagesCount}
+                </Badge>
               )}
             </View>
           </View>
