@@ -78,6 +78,7 @@ const AllGroups = ({ navigation }) => {
     <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
       <Primary_StatusBar />
       <AppHeader navigation={navigation} headerTitle={'Groups'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+      <GroupListHeaderComponent navigation={navigation} />
       {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>}
       {searchText !== '' && searchedGroups.length === 0 && groupNotFound === true ? (
         <View style={Containers.centerContainer}>
@@ -91,8 +92,6 @@ const AllGroups = ({ navigation }) => {
             data={searchedGroups != '' ? searchedGroups : allGroups}
             renderItem={({ item }) => <RenderComponent name={item.group_name} dp={item.group_dp} callingScreen={"Groups"} groups_item={item} navigation={navigation} noti={(val) => handleNotification(val)} />}
             ref={flatListRef}
-            ListHeaderComponent={<GroupListHeaderComponent navigation={navigation} />}
-            ListHeaderComponentStyle={HomeNeoCards.flatlistHeaderComponent}
             ListFooterComponent={FooterComponent}
           />
           : !isLoading && (

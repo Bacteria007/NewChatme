@@ -102,41 +102,34 @@ const Discussions = (props) => {
       setSearchedChat(filteredChats)
     }
   }
-  const fetchData = async () => {
-    try {
-      await getToken();
-      await fetchContactList();
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error in useEffect:', error);
-      setIsLoading(false);
-    }
-  };
+
   useEffect(() => {
-    fetchData();
+    const fetchData = async () => {
+      try {
+        await getToken();
+        await fetchContactList();
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error in useEffect:', error);
+        setIsLoading(false);
+      }
+    };
+    fetchData()
     props.navigation.addListener('focus', () => {
-      fetchData();
+     fetchContactList()
     });
+    
+  }, [fetchContactList]);
 
-    // No need to specify dependencies for this effect
-  }, []);
-
-  // useEffect(async() => {
-  //   console.log('fetchContactList>>>>>>')
-  //   await getToken()
-  //   await fetchContactList().then(() => { setIsLoading(false) })
-  //   props.navigation.addListener('focus', () => {
-  //     fetchContactList();
-  //   });
-  // }, [fetchContactList]);
-
-  return (
+    return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
         <Primary_StatusBar />
         <AppHeader navigation={props.navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
-        {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>}
-
+        <BotDiscussion navigation={props.navigation} />
+        {isLoading && <View style={Containers.centerContainer}>
+          <ActivityIndicator size="small" color={'black'} />
+        </View>}
         {searchText !== '' && searchedChat.length === 0 && userNotFound === true ? (
           <View style={Containers.centerContainer}>
             <Text style={HomeNeoCards.noSearchResultText}>No user with this name.</Text>
@@ -158,13 +151,11 @@ const Discussions = (props) => {
                       contactsSetList={(cl) => {    // Ye ContactList ka setter beja hai
                         setContactList(cl)
                       }}
-                      contact={contactList}    // Ye ContactList ka getter beja hai
+                      contact={contactList}
                       navigation={props.navigation}
                     />
                   )
                 }}
-                ListHeaderComponent={<BotDiscussion navigation={props.navigation} />}
-                ListHeaderComponentStyle={HomeNeoCards.flatlistHeaderComponent}
                 ListFooterComponent={FooterComponent}
                 refreshControl={
                   <RefreshControl
