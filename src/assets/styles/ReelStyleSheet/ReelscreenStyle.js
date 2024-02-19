@@ -33,11 +33,12 @@ const ReelscreenStyle = StyleSheet.create({
     height: hp('4'),
     width: wp('10')
   },
-  LoaderView: {
+  LoaderView: (bg)=>({
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
-  },
+    alignItems: 'center',
+    backgroundColor:bg
+  }),
 });
 
 export default ReelscreenStyle;

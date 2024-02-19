@@ -21,6 +21,7 @@ import { socket } from "../../../helpers/Socket/Socket";
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import { SelectImage } from '../../../helpers/launchCameraHelper/SelectImage';
 import Containers from '../../../assets/styles/Containers';
+import UserChatStyle from '../../../assets/styles/UserChatStyle';
 
 const GroupChat = props => {
 
@@ -243,11 +244,11 @@ const GroupChat = props => {
   const handleGetCurrentMsg = msgData => {
     if (msgData.sender_id != userId) {
       handleNotification(msgData);
-      
+
     } else {
       // console.log('msg notification gya tmhary receiver ko');
     }
-    console.log('gdata: ',msgData);
+    console.log('gdata: ', msgData);
     setMsgList([...msgList, msgData]);
     scrollToBottom();
   };
@@ -286,14 +287,11 @@ const GroupChat = props => {
 
   return (
     <PaperProvider>
-      <GestureHandlerRootView
-        style={GroupChatStyle.container(theme.backgroundColor)}>
-        <KeyboardAvoidingView
-          style={GroupChatStyle.secondContainer(theme.backgroundColor)}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 22}>
-          <Primary_StatusBar />
-          {changeHeader ? (
+
+      <View styles={UserChatStyle.contianer(theme.chatScreenColor)}>
+        <Primary_StatusBar />
+        <View style={{ height: hp('100%'), width: wp('100%') }}>
+          {changeHeader ?(
             <ChangedChatHeader
               // ID={msgId}
               DeleteFunction={() => { DeleteGroupMessage(msgId) }}
@@ -303,110 +301,115 @@ const GroupChat = props => {
           ) : (
             <GroupChatHeader navigation={props.navigation} item={item} callClearGroupChat={() => { clearGroupChat() }} />
           )}
-          <View style={{ flex: 1 }}>
-            {/* {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>} */}
-            {msgList.length != 0 ? (
-              <FlatList
-                data={msgList.length != 0 ? msgList : []}
-                renderItem={({ item }) => (
-                  <GroupMsgItem
-                    msgData={item}
-                    changeHeader={changeHeader}
-                    setChangeHeader={setChangeHeader}
-                    msgId={msgId}
-                    setMsgId={setMsgId}
-                  />
-                )}
-                keyExtractor={(item, index) => index.toString()}
-                onContentSizeChange={() => {
-                  if (lastAction !== 'delete') {
-                    scrollToBottom();
-                  }
-                  setLastAction(null);
-                }}
-                contentContainerStyle={{ flexGrow: 1 }}
-                ref={flatListRef}
-              // keyboardShouldPersistTaps='never'
-              // extraData={msgList.length != 0 ? msgList : []}
-              // enableOnAndroid={false}
-              />
-            ) : !isLoading && (
-              <View style={GroupChatStyle.startConvBtn}>
-                <Text style={HomeNeoCards.noSearchResultText}>
-                  Start Conversation
-                </Text>
-              </View>
-            )}
-          </View>
-          <GroupChatInput
-            scrollToBottomFunc={() => {
-              scrollToBottom();
-            }}
-            inputRef={inputRef}
-            inputVal={newMsg}
-            setter={msg => setNewMsg(msg)}
-            sendMessageFunc={() => {
-              sendMessage();
-            }}
-            sendGroupImageMessage={() => {
-              handleSelectImage().then(() => {
-                showModal();
-              })
-            }}
-            isSending={isSending}
-          />
-        </KeyboardAvoidingView>
-        <ReactNativeModal
-          visible={visible}
-          onDismiss={hideModal}
-          onBackButtonPress={hideModal}
-          onBackdropPress={hideModal}
-          coverScreen={true}
-          style={GroupChatStyle.modalStyle}>
-          <View style={GroupChatStyle.modalMainView}>
-            
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flexGrow: 1 }}>
+            <View style={{ flex: 1 ,backgroundColor:theme.backgroundColor}}>
+              {/* {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>} */}
+              {msgList.length != 0 ? (
+                <FlatList
+                  data={msgList.length != 0 ? msgList : []}
+                  renderItem={({ item }) => (
+                    <GroupMsgItem
+                      msgData={item}
+                      changeHeader={changeHeader}
+                      setChangeHeader={setChangeHeader}
+                      msgId={msgId}
+                      setMsgId={setMsgId}
+                    />
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                  onContentSizeChange={() => {
+                    if (lastAction !== 'delete') {
+                      scrollToBottom();
+                    }
+                    setLastAction(null);
+                  }}
+                  contentContainerStyle={{ flexGrow: 1 }}
+                  ref={flatListRef}
+                // keyboardShouldPersistTaps='never'
+                // extraData={msgList.length != 0 ? msgList : []}
+                // enableOnAndroid={false}
+                />
+              ) : !isLoading && (
+                <View style={GroupChatStyle.startConvBtn}>
+                  <Text style={HomeNeoCards.noSearchResultText}>
+                    Start Conversation
+                  </Text>
+                </View>
+              )}
+            </View>
+            <GroupChatInput
+              scrollToBottomFunc={() => {
+                scrollToBottom();
+              }}
+              inputRef={inputRef}
+              inputVal={newMsg}
+              setter={msg => setNewMsg(msg)}
+              sendMessageFunc={() => {
+                sendMessage();
+              }}
+              sendGroupImageMessage={() => {
+                handleSelectImage().then(() => {
+                  showModal();
+                })
+              }}
+              isSending={isSending}
+            />
+          </KeyboardAvoidingView>
+          <ReactNativeModal
+            visible={visible}
+            onDismiss={hideModal}
+            onBackButtonPress={hideModal}
+            onBackdropPress={hideModal}
+            coverScreen={true}
+            style={GroupChatStyle.modalStyle}>
+            <View style={GroupChatStyle.modalMainView}>
+
               <Image
                 source={{ uri: selecetdImageMsg.uri ? selecetdImageMsg.uri : '' }}
                 style={GroupChatStyle.image}
-               resizeMode='contain'
+                resizeMode='contain'
               />
-            
-            <View style={GroupChatStyle.iamgeHeader}>
-              <TouchableRipple
-                rippleColor={theme.rippleColor}
-                borderless
-                onPress={() => {
-                  hideModal();
-                }}
-                style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <View style={GroupChatStyle.microphoneContainerView}>
-                  <Icons.Ionicons
-                    name="close"
-                    size={wp('5.7%')}
-                    color={'black'}
-                  />
-                </View>
-              </TouchableRipple>
-              <TouchableRipple
-                rippleColor={theme.rippleColor}
-                borderless
-                onPress={() => {
-                  sendImageMessage();
-                }}>
-                <View style={GroupChatStyle.microphoneContainerView}>
-                  <Icons.Octicons
-                    name="check"
-                    size={wp('5.7%')}
-                    color={'black'}
-                  />
-                </View>
-              </TouchableRipple>
+
+              <View style={GroupChatStyle.iamgeHeader}>
+                <TouchableRipple
+                  rippleColor={theme.rippleColor}
+                  borderless
+                  onPress={() => {
+                    hideModal();
+                  }}
+                  style={{ justifyContent: 'center', alignItems: 'center' }}>
+                  <View style={GroupChatStyle.microphoneContainerView}>
+                    <Icons.Ionicons
+                      name="close"
+                      size={wp('5.7%')}
+                      color={'black'}
+                    />
+                  </View>
+                </TouchableRipple>
+                <TouchableRipple
+                  rippleColor={theme.rippleColor}
+                  borderless
+                  onPress={() => {
+                    sendImageMessage();
+                  }}>
+                  <View style={GroupChatStyle.microphoneContainerView}>
+                    <Icons.Octicons
+                      name="check"
+                      size={wp('5.7%')}
+                      color={'black'}
+                    />
+                  </View>
+                </TouchableRipple>
+              </View>
             </View>
+          </ReactNativeModal>
           </View>
-        </ReactNativeModal>
-      </GestureHandlerRootView>
-    </PaperProvider>
-  );
+      </View>
+        </PaperProvider>
+        );
 };
 
-export default GroupChat;
+        export default GroupChat;

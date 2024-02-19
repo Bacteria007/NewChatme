@@ -3,6 +3,7 @@ import {
   Text,
   Image,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import React, { useContext } from 'react';
 import UserChatHeaderStyle from '../../../assets/styles/UserChatHeaderStyle';
@@ -67,7 +68,7 @@ const GroupChatHeader = ({ item, navigation, callClearGroupChat }) => {
             />
 
           </TouchableRipple>
-
+            <TouchableOpacity onPress={()=>navigation.navigate("InnerScreens", { screen: "GroupProfile", params: { data: {_id:item._id,members:groupMembers,admin:adminId,group_dp:item.group_dp,group_name:item.group_name} } })}>
           <View style={[UserChatHeaderStyle.leftInnerView]}>
             {item.group_dp ?
               <Image source={{ uri: `${baseUrl}/${item.group_dp}` }} style={UserChatHeaderStyle.dpImageStyle} />
@@ -86,6 +87,7 @@ const GroupChatHeader = ({ item, navigation, callClearGroupChat }) => {
               :null
             }
           </View>
+          </TouchableOpacity>
 
         </View>
         <View style={[UserChatHeaderStyle.rightView]}>

@@ -23,6 +23,7 @@ import { Image } from 'react-native';
 import FontStyle from '../../assets/styles/FontStyle';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import Video from 'react-native-video'
+import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
 
 const PublicProfile = (props) => {
   const { baseUrl, currentUser, token } = useContext(AppContext);
@@ -302,7 +303,9 @@ const PublicProfile = (props) => {
         <View style={MyActivityStyleSheet.reelsContainer}>
           {isLoading ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <ActivityIndicator size={20} color={AppColors.black} style={{ alignSelf: 'center' }} />
+                      <AppActivityIndicator/>
+
+               
             </View>
           ) : (
             <View style={Containers.centercontent}>
