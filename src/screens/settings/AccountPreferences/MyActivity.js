@@ -16,6 +16,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
 import Video from 'react-native-video'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import AppActivityIndicator from '../../../components/FlatlistComponents/AppActivityIndicator';
+import ReelscreenStyle from '../../../assets/styles/ReelStyleSheet/ReelscreenStyle';
 const MyActivity = ({ navigation }) => {
   const { baseUrl, currentUser, token } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
@@ -138,7 +140,7 @@ const MyActivity = ({ navigation }) => {
         <View style={MyActivityStyleSheet.reelsContainer}>
           {isLoading ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <ActivityIndicator size={20} color={AppColors.black} style={{ alignSelf: 'center' }} />
+             <AppActivityIndicator/>
             </View>
           ) : (
             <View style={Containers.centercontent}>
@@ -227,12 +229,9 @@ const MyActivity = ({ navigation }) => {
                         </TouchableRipple>
                       </View>
                       {isLoading ? (
-                        <View style={ReelscreenStyle.LoaderView}>
-                          <ActivityIndicator
-                            size="large"
-                            color={AppColors.white}
-                            style={ReelscreenStyle.LoaderStyle}
-                          />
+                        <View style={ReelscreenStyle.LoaderView(theme.backgroundColor)}>
+                                       <AppActivityIndicator/>
+
                         </View>
                       ) : (
                         <Video

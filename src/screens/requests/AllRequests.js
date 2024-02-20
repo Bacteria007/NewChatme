@@ -16,6 +16,7 @@ import ReelscreenStyle from '../../assets/styles/ReelStyleSheet/ReelscreenStyle'
 import { capitalizeFirstLetter } from '../../helpers/UiHelpers/CapitalizeFirstLetter';
 import { CreateNameSubString } from '../../helpers/UiHelpers/CreateSubString';
 import ReactNativeModal from 'react-native-modal';
+import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
 
 const AllRequest = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
@@ -223,7 +224,9 @@ const AllRequest = ({ navigation }) => {
             <View>
                 <Primary_StatusBar />
                 <InnerScreensHeader screenName={"All Request"} navigation={navigation} />
-                {isLoading && <View style={ReelscreenStyle.LoaderView}><ActivityIndicator size="small" color={'black'} /></View>}
+                {isLoading && <View style={ReelscreenStyle.LoaderView}>
+                <AppActivityIndicator/>
+</View>}
                 {waitingRequests.length != 0 ?
                     <FlatList data={waitingRequests} renderItem={({ item, index }) => renderRequests(item, index)} style={{ marginTop: 20 }}
                         ListFooterComponent={FooterComponent}

@@ -13,6 +13,7 @@ import FooterComponent from '../../../components/FlatlistComponents/FooterCompon
 import { ActivityIndicator } from 'react-native-paper';
 import PrimaryBtn from '../../../components/Buttons/PrimaryBtn';
 import AddFriendBtn from '../../../components/Buttons/AddFriendsBtn';
+import AppActivityIndicator from '../../../components/FlatlistComponents/AppActivityIndicator';
 
 const Discussions = (props) => {
   //            **************                    USE STATES      *****************
@@ -128,7 +129,7 @@ const Discussions = (props) => {
         <AppHeader navigation={props.navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
         <BotDiscussion navigation={props.navigation} />
         {isLoading && <View style={Containers.centerContainer}>
-          <ActivityIndicator size="small" color={'black'} />
+          <AppActivityIndicator/>
         </View>}
         {searchText !== '' && searchedChat.length === 0 && userNotFound === true ? (
           <View style={Containers.centerContainer}>

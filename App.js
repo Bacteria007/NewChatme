@@ -36,6 +36,7 @@ import PublicProfile from './src/screens/profile/PublicProfile';
 import Help from './src/screens/settings/HelpCenter/Help';
 import AllFriends from './src/screens/settings/AccountPreferences/AllFriends';
 import UserUploads from './src/screens/profile/UserUploads';
+import GroupProfile from './src/screens/chats/groups/GroupProfile';
 enableScreens()
 
 
@@ -77,6 +78,7 @@ const InnerScreens = () => (
     <Stack.Screen name="CreateGroup" component={CreateGroup} options={{ headerShown: false }} />
     <Stack.Screen name="NewGroup" component={NewGroup} options={{ headerShown: false }} />
     <Stack.Screen name="publicProfile" component={PublicProfile} options={{ headerShown: false }} />
+    <Stack.Screen name="GroupProfile" component={GroupProfile} options={{ headerShown: false }} />
     <Stack.Screen name="UserUploads" component={UserUploads} options={{ headerShown: false }} />
   </Stack.Navigator>
 )

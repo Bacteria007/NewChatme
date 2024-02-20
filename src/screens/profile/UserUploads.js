@@ -12,9 +12,11 @@ import GenerateVideoHtml from '../Reels/ReelsHtmlVideo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeContext } from '../../context/ThemeContext';
 import UserUploadsHeader from '../../components/Headers/ReelHeader/UserUploadsHeader';
+import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
 
 const UserUploads = props => {
   const { baseUrl, token, currentUser } = useContext(AppContext);
+  const { theme } = useContext(ThemeContext);
   const { data, currentVideo } = props.route.params;
   console.log("UserUploads", data)
 
@@ -186,12 +188,8 @@ const UserUploads = props => {
       <View style={[ReelscreenStyle.containerStyle]}>
         <UserUploadsHeader navigation={props.navigation} />
         {/* {isLoadingData && (
-          <View style={ReelscreenStyle.LoaderView}>
-            <ActivityIndicator
-              size="large"
-              color={AppColors.white}
-              style={ReelscreenStyle.LoaderStyle}
-            />
+          <View style={ReelscreenStyle.LoaderView(theme.backgroudColor)}>
+            <AppActivityIndicator/>
           </View>
         )} */}
         {uploadedReels.length != 0 ?
@@ -216,12 +214,8 @@ const UserUploads = props => {
                     activeOpacity={1}
                     onPress={toggleVideoPlayback}>
                     {isLoading ? (
-                      <View style={ReelscreenStyle.LoaderView}>
-                        <ActivityIndicator
-                          size="large"
-                          color={AppColors.white}
-                          style={ReelscreenStyle.LoaderStyle}
-                        />
+                      <View style={ReelscreenStyle.LoaderView(theme.backgroundColor)}>
+                        <AppActivityIndicator/>
                       </View>
                     ) : (
                       <Video

@@ -26,6 +26,7 @@ import ReelscreenStyle from '../../assets/styles/ReelStyleSheet/ReelscreenStyle'
 import { capitalizeFirstLetter } from '../../helpers/UiHelpers/CapitalizeFirstLetter';
 import { CreateNameSubString } from '../../helpers/UiHelpers/CreateSubString';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
 
 const AllUsers = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
@@ -319,7 +320,11 @@ const AllUsers = ({ navigation }) => {
           handleSearchOnChange={handleSearch}
           waitingReqC={waitingRequests.length}
         />
-        {isLoading && <View style={ReelscreenStyle.LoaderView}><ActivityIndicator size="small" color={'black'} /></View>}
+        {isLoading && <View style={ReelscreenStyle.LoaderView(theme.backgroundColor)}>
+          
+        <AppActivityIndicator/>
+          
+          </View>}
         {searchText !== '' &&
           seacrhedPeople.length === 0 &&
           someoneNotFound === true ? (

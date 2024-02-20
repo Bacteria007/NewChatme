@@ -92,7 +92,7 @@ const UserChatInput = ({
               placeholder="Message"
               value={currentMessage}
               onChangeText={(txt) => { setCurrentMessage(txt) }}
-              keyboardType='twitter'
+              keyboardType="default"
               multiline={true}
 
               placeholderTextColor={AppColors.gray}

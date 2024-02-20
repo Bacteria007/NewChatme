@@ -16,6 +16,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import VideoPlayer from 'react-native-video-player'
 import { widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import MediaControls from 'react-native-media-controls'
+import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
 
 
 const Reels = props => {
@@ -176,11 +177,8 @@ const Reels = props => {
         <ReelHeader navigation={props.navigation} />
         {isLoadingData && (
           <View style={ReelscreenStyle.LoaderView}>
-            <ActivityIndicator
-              size="large"
-              color={AppColors.white}
-              style={ReelscreenStyle.LoaderStyle}
-            />
+                    <AppActivityIndicator/>
+
           </View>
         )}
         {uploadedReels.length != 0 ?
@@ -199,11 +197,8 @@ const Reels = props => {
                     onPress={toggleVideoPlayback}>
                     {isLoading ? (
                       <View style={ReelscreenStyle.LoaderView}>
-                        <ActivityIndicator
-                          size="large"
-                          color={AppColors.white}
-                          style={ReelscreenStyle.LoaderStyle}
-                        />
+        <AppActivityIndicator/>
+                        
                       </View>
                     ) : (
                       // <WebView

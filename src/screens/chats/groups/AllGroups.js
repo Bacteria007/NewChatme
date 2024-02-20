@@ -12,6 +12,7 @@ import Containers from '../../../assets/styles/Containers';
 import GroupListHeaderComponent from '../../../components/FlatlistComponents/GroupListHeader';
 import FooterComponent from '../../../components/FlatlistComponents/FooterComponent';
 import AddFriendBtn from '../../../components/Buttons/AddFriendsBtn';
+import AppActivityIndicator from '../../../components/FlatlistComponents/AppActivityIndicator';
 
 const AllGroups = ({ navigation }) => {
   //            **************                    USE STATES      *****************
@@ -79,7 +80,9 @@ const AllGroups = ({ navigation }) => {
       <Primary_StatusBar />
       <AppHeader navigation={navigation} headerTitle={'Groups'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
       <GroupListHeaderComponent navigation={navigation} />
-      {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>}
+      {isLoading && <View style={Containers.centerContainer}>
+        <AppActivityIndicator/>
+        </View>}
       {searchText !== '' && searchedGroups.length === 0 && groupNotFound === true ? (
         <View style={Containers.centerContainer}>
           <Text style={HomeNeoCards.noSearchResultText}>No group with this name.</Text>
