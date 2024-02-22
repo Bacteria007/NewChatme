@@ -293,10 +293,12 @@ const UserChat = (props) => {
         {
           prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
           max_tokens: 1024,
-          temperature: 0.5,
+          temperature: 0.8,
+          model: 'davinci-002'
         },
         {
           headers: {
+            // 'Content-Type': 'application/json',
             Authorization: `Bearer ${apiKey}`,
           },
         },

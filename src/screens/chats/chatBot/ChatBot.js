@@ -30,17 +30,10 @@ const ChatBot = props => {
   const [textInput, setTextInput] = useState('');
   const [userMsg, setUserMsg] = useState('');
   const [botMsg, setBotMsg] = useState('');
+  const flatListRef = useRef(null);
   let msgOfBot;
 
-  console.log("chat bot ", apiKey, apiURL)
-  //***********************************     VARIABLES   ************************* */
-  const flatListRef = useRef(null);
 
-  //***********************************      FUNCTIONS    ************************* */
-
-  // useEffect(()=>{
-  //   console.log("Bot Msg")
-  // },[botMsg])
   const handleSend = async () => {
     const prompt = textInput;
     console.log("enter into",textInput)
@@ -49,8 +42,8 @@ const ChatBot = props => {
       {
         // messages: [{ 'role': "user", "content": textInput }],
         prompt:prompt,
-        max_tokens: 900,
-        temperature: 1.0,
+        max_tokens: 1024,
+        temperature:0.8,
         model: 'davinci-002'
       },
       {

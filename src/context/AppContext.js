@@ -10,9 +10,9 @@ const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
-  const apiKey =   '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';
-  const baseUrl = 'http://192.168.43.145:8888';
-const apiURL='https://api.openai.com/v1/enginipcones/text-davinci-003/completions';
+  const apiKey = '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';
+  const baseUrl = 'http://192.168.0.103:8888';
+  const apiURL = 'https://api.openai.com/v1/completions';
   const [userName, setUserName] = useState('');
   const [storedUser, setStoredUser] = useState('');
   const [language, setLanguage] = useState('English');
@@ -20,7 +20,7 @@ const apiURL='https://api.openai.com/v1/enginipcones/text-davinci-003/completion
   const [currentUser, setCurrentUser] = useState({});
   const [selectedImageUri, setSelectedImageUri] = useState('');
   const [token, setToken] = useState(AsyncStorage.getItem('token'))
- 
+
   const updateToken = (e) => {
     setToken(e)
   }
