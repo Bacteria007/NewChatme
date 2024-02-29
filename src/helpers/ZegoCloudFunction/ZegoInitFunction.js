@@ -7,9 +7,9 @@ import * as ZPNs from 'zego-zpns-react-native';
 
 export const initializeZego = async (userID, userName) => {
   try {
-    await ZegoUIKitPrebuiltCallService.init(
-      1657455243, // You can get it from ZEGOCLOUD's console
-      '9b10813a0aa13fe9876c71c54fe1aa03242ee9f0ed15bc483310aab7f3b267c0',
+  return  await ZegoUIKitPrebuiltCallService.init(
+      1528834225, // You can get it from ZEGOCLOUD's console
+      '1445bd3d3b42e9c47556a7033501dde57aeb4de1aa2a272424511f78c72b85bb',
       userID,
       userName,
       [ZIM, ZPNs],

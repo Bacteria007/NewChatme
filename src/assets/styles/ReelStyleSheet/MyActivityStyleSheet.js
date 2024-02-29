@@ -49,8 +49,8 @@ const MyActivityStyleSheet = StyleSheet.create({
         textAlign: 'center',
     }),
     reelsView: {
-        borderWidth: 1,
-        borderColor: AppColors.purple,
+        // borderWidth: 1,
+        // borderColor: AppColors.purple,
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         // elevation: 0.9,

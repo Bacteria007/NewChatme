@@ -22,7 +22,24 @@ const ChangePassword = ({ navigation }) => {
 
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
+  const showAlert = (message) => {
+    ToastAndroid.showWithGravity(message, ToastAndroid.SHORT, ToastAndroid.CENTER);
+  }
 
+  const checkPassword = () => {
+    if (newPassword === '') {
+      return false;
+    } else if (newPassword.length < 8) {
+      showAlert("Please enter a password with at least 8 characters.")
+      return false;
+    } else if (newPassword !== '' && newPassword !== oldPassword) {
+      changepassword()
+      return true;
+    } else {
+      showAlert("Your new password must be different than your current one.");
+      return false;
+    }
+  }
   const changepassword = async () => {
     const formdata = new FormData();
     formdata.append('userId', currentUser.userId);
@@ -96,14 +113,15 @@ const ChangePassword = ({ navigation }) => {
           style={[{
             fontSize: wp('3%'),
             paddingBottom: wp('-2%'),
+            color: secondaryTextColor,
             borderBottomWidth: hp('0.15'),
+            fontFamily: FontStyle.regularFont,
             borderBottomColor: darkThemeActivator ? AppColors.gray : AppColors.black,
-            fontFamily: FontStyle.regularFont
           }]}
           placeholderTextColor={AppColors.gray}
 
         />
-        <LongButton btnTitle={"Confirm"} onPress={() => { changepassword() }} />
+        <LongButton btnTitle={"Confirm"} onPress={() => { checkPassword() }} />
       </View>
 
     </View>

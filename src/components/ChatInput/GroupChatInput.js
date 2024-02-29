@@ -108,8 +108,8 @@ const GroupChatInput = ({ sendMessageFunc, inputVal, setter, sendGroupImageMessa
                 (
                     <TouchableOpacity disabled>
                         <View style={[UserChatInputStyle.microphoneContainerView]}>
-                            <Icons.Entypo
-                                name="text"
+                            <Icons.Ionicons
+                                name="send-sharp"
                                 size={wp('5.7%')}
                                 color={iconsColor2}
                             />

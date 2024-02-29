@@ -32,7 +32,7 @@ import moment from 'moment'
 const UserChat = (props) => {
 
   // GLOBAL STATES
-  const { baseUrl, currentUser, token, apiKey, apiURL } = useContext(AppContext);
+  const { baseUrl, currentUser, token, apiKey, apiURL,aimodel } = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   // PARAMS
   const { contact, allMsgs } = props.route.params;
@@ -294,7 +294,7 @@ const UserChat = (props) => {
           prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${currentMessage.trim()}"`,
           max_tokens: 1024,
           temperature: 0.8,
-          model: 'davinci-002'
+          model: aimodel
         },
         {
           headers: {

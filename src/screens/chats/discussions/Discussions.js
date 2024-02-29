@@ -28,18 +28,13 @@ const Discussions = (props) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = () => {
-    // Perform the data fetching or refreshing logic here
-    // For example, you can fetch new messages from the server
-    // and update the state to trigger a re-render
     setRefreshing(true);
-
-    // Simulate fetching new data (replace this with your actual data fetching logic)
-    setTimeout(() => {
-      // const newMessages = [...contactList]; // Fetch new messages
-      // setContactList(newMessages);
+    // setTimeout(() => {
+    //   // const newMessages = [...contactList]; // Fetch new messages
+    //   // setContactList(newMessages);
       fetchContactList()
       setRefreshing(false);
-    }, 1000); // Add a delay to simulate the fetching process
+    // }, 1000); // Add a delay to simulate the fetching process
   };
   const fetchContactList = useCallback(async () => {
 
