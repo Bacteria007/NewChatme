@@ -235,8 +235,8 @@ const PublicProfile = (props) => {
   }, [reelid]);
 
   return (
-    <SafeAreaView style={{ flex: 1,backgroundColor: theme.backgroundColor }}>
-      <ScrollView style={{  flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+      <ScrollView style={{ flex: 1 }}>
         <InnerScreensHeader navigation={props.navigation} screenName={data.name} />
         <Image
           source={{ uri: `${baseUrl}${data.profileImage}` }}
@@ -303,9 +303,9 @@ const PublicProfile = (props) => {
         <View style={MyActivityStyleSheet.reelsContainer}>
           {isLoading ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                      <AppActivityIndicator/>
+              <AppActivityIndicator />
 
-               
+
             </View>
           ) : (
             <View style={Containers.centercontent}>
@@ -322,6 +322,8 @@ const PublicProfile = (props) => {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item, index }) => {
                     console.log('...', item)
+                    const HtmlVideo = GenerateVideoHtml(baseUrl, item, true, false)
+
                     return (
                       <TouchableOpacity
                         onPress={() => {
@@ -335,17 +337,20 @@ const PublicProfile = (props) => {
                           <View
                             style={MyActivityStyleSheet.reelStyle}
                           >
-                            <Video
-                              source={{ uri: `${baseUrl}${item.uri}` }}
-                              ref={videoRef}
-                              resizeMode="cover"
-                              paused={true}
-                              repeat={true}
-                              onBuffer={onBuffer}
-                              onError={onError}
-                              onLoad={() => setIsLoading(false)} // Set isLoading to false when video is loaded
-                              style={MyActivityStyleSheet.reelStyle}
+                            <WebView
+                              originWhitelist={['*']}
+                              source={{ html: `${HtmlVideo}` }}
+                              scrollEnabled={false}
+                              showsVerticalScrollIndicator={false}
+                              showsHorizontalScrollIndicator={false}
+                              setDisplayZoomControls={false}
+                              setBuiltInZoomControls={false}
+                              containerStyle={{
+                                borderRadius: 10,
+                                height: wp('32'),
+                                width: wp('32.5'),
 
+                              }}
                             />
                           </View>
                         </View>

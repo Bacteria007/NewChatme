@@ -49,5 +49,6 @@ export const initializeZego = async (userID, userName) => {
   }
 };
 export const uninitZegoFunc= async () => {
+  console.log('inside unint zego');
   return ZegoUIKitPrebuiltCallService.uninit()
 }

@@ -15,22 +15,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ReelHeader = ({navigation}) => {
   
   const { baseUrl,token,currentUser } = useContext(AppContext);
- const videoLength=40
+//  const videoLength=40
   let options = {
     mediaType: 'video',
     maxWidth: 1080,
     maxHeight: 1080,
     quality: 1,
-    durationLimit: videoLength,
+    // durationLimit: videoLength,
     title: 'Select Video',
   };
   const iconcolor = AppColors.white;
 
   const uploadVideo = async Response => {
-      if (Response.duration > videoLength) {
-        Alert.alert('Video duration exceeds 30 seconds');
-        return;
-      }
+      // if (Response.duration > videoLength) {
+      //   Alert.alert('Video duration exceeds 30 seconds');
+      //   return;
+      // }
     const formData = new FormData();
     formData.append('userId', currentUser.userId);
     formData.append('name', 'Video');
@@ -89,15 +89,15 @@ const ReelHeader = ({navigation}) => {
             launchImageLibrary(options, (res) => {
               if (!res.didCancel && !res.error) {
                 if (
-                  res.assets[0].type.startsWith('video/') &&
-                  res.assets[0].duration <= videoLength
+                  res.assets[0].type.startsWith('video/') 
+                  // &&  res.assets[0].duration <= videoLength
                 ) {
                   console.log(res.assets[0]);
                   uploadVideo(res.assets[0]);
                 } else {
-                  console.log(res.assets[0]);
-
-                  Alert.alert(`Please select a valid video within ${videoLength} seconds`);
+                  console.log(res.assets[0]); 
+                  Alert.alert(`Only videos can be uploaded`);
+                  // Alert.alert(`Please select a valid video within ${videoLength} seconds`);
                 }
               }
             });
