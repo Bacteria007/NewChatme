@@ -53,7 +53,7 @@ const ReelHeader = ({navigation}) => {
   };
   return (
     <View style={[ReelHeaderStyle.headerView]}>
-      <Text style={[ReelHeaderStyle.screenNameStyle]}>Reels</Text>
+      <Text style={[ReelHeaderStyle.screenNameStyle]}>Strings</Text>
       <View style={[ReelHeaderStyle.iconContainer]}>
         <TouchableOpacity
           // onPress={() => {

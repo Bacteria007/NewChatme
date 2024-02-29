@@ -145,7 +145,7 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
           }
           <View style={UserChatStyle.timeAndMood}>
             <Text style={UserChatStyle.msgAndMoodText(msgItem.senderId === currentUser.userId)}>
-              {(!(msgItem.senderId == currentUser.userId) && !(msgItem.content == 'ChatMe_Image')) ? `mood: ${msgItem.mood}` : null}{' '}
+              {((msgItem.senderId !== currentUser.userId) && (msgItem.msg_type == 'text')) ? `mood: ${msgItem.mood}` : null}{' '}
             </Text>
             <Text style={UserChatStyle.timeStyle}>
               {moment(msgItem.createdAt).format('hh:mm a ')}
