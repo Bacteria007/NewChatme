@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
-import { FlatList, RefreshControl, View, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { FlatList, RefreshControl, View, SafeAreaView, Text, TouchableOpacity, BackHandler } from 'react-native';
 import AppHeader from '../../../components/Headers/AppHeaders/AppHeader';
 import { ThemeContext } from '../../../context/ThemeContext';
 import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCards';
@@ -14,6 +14,8 @@ import { ActivityIndicator } from 'react-native-paper';
 import PrimaryBtn from '../../../components/Buttons/PrimaryBtn';
 import AddFriendBtn from '../../../components/Buttons/AddFriendsBtn';
 import AppActivityIndicator from '../../../components/FlatlistComponents/AppActivityIndicator';
+import UseScreenFocus from '../../../helpers/AutoRefreshScreen/UseScreenFocus';
+import { initializeZego, uninitZegoFunc } from '../../../helpers/ZegoCloudFunction/ZegoInitFunction';
 
 const Discussions = (props) => {
   //            **************                    USE STATES      *****************
@@ -29,12 +31,8 @@ const Discussions = (props) => {
 
   const onRefresh = () => {
     setRefreshing(true);
-    // setTimeout(() => {
-    //   // const newMessages = [...contactList]; // Fetch new messages
-    //   // setContactList(newMessages);
-      fetchContactList()
-      setRefreshing(false);
-    // }, 1000); // Add a delay to simulate the fetching process
+    fetchContactList()
+    setRefreshing(false);
   };
   const fetchContactList = useCallback(async () => {
 
@@ -99,6 +97,14 @@ const Discussions = (props) => {
     }
   }
 
+  
+  useEffect(() => {
+    props.navigation.addListener('focus', () => {
+      console.log('📞📞📞📞📞init zego in app');
+      initializeZego(currentUser.userId, currentUser.name);
+    });
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -112,19 +118,19 @@ const Discussions = (props) => {
     };
     fetchData()
     props.navigation.addListener('focus', () => {
-     fetchContactList()
+      fetchContactList()
     });
-    
+
   }, [fetchContactList]);
 
-    return (
+  return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
         <Primary_StatusBar />
         <AppHeader navigation={props.navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
         <BotDiscussion navigation={props.navigation} />
         {isLoading && <View style={Containers.centerContainer}>
-          <AppActivityIndicator/>
+          <AppActivityIndicator />
         </View>}
         {searchText !== '' && searchedChat.length === 0 && userNotFound === true ? (
           <View style={Containers.centerContainer}>

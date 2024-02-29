@@ -12,14 +12,21 @@ import AppColors from '../../../assets/colors/Appcolors';
 const ChangeNumber = ({ navigation }) => {
   const { theme, darkThemeActivator } = useContext(ThemeContext);
   const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
-  const { baseUrl, getToken,token, updateCurrentUser, currentUser } = useContext(AppContext)
+  const { baseUrl, getToken, token, updateCurrentUser, currentUser } = useContext(AppContext)
 
   const [oldPhoneNo, setOldPhoneNo] = useState('')
   const [oldCountryCode, setOldCountryCode] = useState('')
   const [newPhoneNo, setNewPhoneNo] = useState('')
   const [newCountryCode, setNewCountryCode] = useState('')
- 
-  const changenumber=async()=>{
+
+
+  const checkNumber=()=>{
+    if (newPhoneNo === '' || oldPhoneNo === '') return false;
+    else {
+      changenumber()
+    }
+  };
+  const changenumber = async () => {
     const formdata = new FormData();
     formdata.append('userId', currentUser.userId);
     // formdata.append('oldPhoneNo', `${oldPhoneNo}`);
@@ -71,13 +78,13 @@ const ChangeNumber = ({ navigation }) => {
           Enter your old phone number with country code:
         </Text>
         <TextInputForChangeNumber setPhoneNo={setOldPhoneNo} setCountryCode={setOldCountryCode}
-/>
+        />
         <Text
           style={[ChangeNumberStyle.headTextStyle(secondaryTextColor)]}>
           Enter your new phone number with country code:
         </Text>
-        <TextInputForChangeNumber setPhoneNo={setNewPhoneNo} setCountryCode={setNewCountryCode}/>
-        <LongButton btnTitle={"Confirm"}  onPress={()=>{changenumber()}}  />
+        <TextInputForChangeNumber setPhoneNo={setNewPhoneNo} setCountryCode={setNewCountryCode} />
+        <LongButton btnTitle={"Confirm"} onPress={() => { checkNumber() }} />
       </View>
     </View>
 
