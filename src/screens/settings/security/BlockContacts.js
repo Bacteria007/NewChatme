@@ -9,11 +9,13 @@ import FontStyle from '../../../assets/styles/FontStyle'
 import Containers from '../../../assets/styles/Containers'
 import LottieView from 'lottie-react-native'
 import { useWorkletCallback } from 'react-native-reanimated'
+import { ThemeContext } from '../../../context/ThemeContext'
 
 const BlockContacts = ({ navigation }) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { baseUrl, currentUser, token } = useContext(AppContext);
+  const { theme,darkThemeActivator } = useContext(ThemeContext);
   const [selectedContact, setSelectedContact] = useState(null);
   const [blockedContactList, setBlockedContactList] = useState([]);
 
@@ -83,7 +85,7 @@ const BlockContacts = ({ navigation }) => {
   // HOOKS
   useEffect(() => { fetchBlockContactList() }, [])
   return (
-    <View style={BlockedScreenStyle.container}>
+    <View style={BlockedScreenStyle.container(theme.backgroundColor)}>
       <InnerScreensHeader navigation={navigation} screenName='Blocked contacts' />
       <View style={BlockedScreenStyle.itemListView}>
         {blockedContactList.length != 0 ?
@@ -115,7 +117,7 @@ const BlockContacts = ({ navigation }) => {
                   </Modal>
                   <View style={BlockedScreenStyle.dpAndNameContainer}>
                     <Image source={{ uri: `${baseUrl}${item.contactData.profileImage}` }} style={BlockedScreenStyle.imageStyle} />
-                    <Text style={BlockedScreenStyle.nameStyle}>{item.contactData.name}</Text>
+                    <Text style={BlockedScreenStyle.nameStyle(darkThemeActivator?AppColors.lightwhite:"black")}>{item.contactData.name}</Text>
                   </View>
                 </TouchableOpacity>
               )
@@ -134,7 +136,7 @@ const BlockContacts = ({ navigation }) => {
 export default BlockContacts
 
 const BlockedScreenStyle = StyleSheet.create({
-  container: { backgroundColor: AppColors.white, flex: 1 },
+  container: (bgClr)=>({ backgroundColor: bgClr, flex: 1 }),
   noContactText: {
     color: AppColors.gray,
     fontSize: wp('4'),
@@ -162,9 +164,9 @@ const BlockedScreenStyle = StyleSheet.create({
     padding: wp('2%'),
   },
   imageStyle: { height: hp('6%'), width: wp('12%'), borderRadius: 25 },
-  nameStyle: {
+  nameStyle: (clr)=>({
     fontSize: wp('6%'),
-    color: AppColors.black,
+    color: clr,
     paddingLeft: wp('3%'),
-  },
+  }),
 });

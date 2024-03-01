@@ -121,6 +121,18 @@
 " Welcome to our app! Here, you'll find information about our app and the team behind it.":"ہماری ایپ میں خوش آمدید! یہاں، آپ کو ہماری ایپ اور اس کے پیچھے والی ٹیم کے بارے میں معلومات ملیں گی۔",
 "App Version:":"ایپ ورژن:",
 "Terms and conditions":"شرائط و ضوابط",
-"Create_Account":"اکاؤنٹ بنائیں"
+"Create_Account":"نیا اکاؤنٹ بنائیں",
+"phone_should_not_start_with_zero":"فون نمبر کے آغاز سے 0 ہٹا دیں۔",
+"password_instruction":"پاس ورڈ میں کم از کم 8 حروف اور ان میں سے ایک خاص علامت ہونا ضروری ہے [!@#$%^&*(),.?'':{}|<>]",
+"Answers_dont_match":"جوابات درست نہیں ہیں۔",
+"User_not_found":"اس نمبر پر اکاؤنٹ موجود نہیں ہے۔",
+"Account_blocked_by_admin":"ایڈمن کی طرف سے آپ کا اکاؤنٹ عارضی طور پر بلاک کر دیا گیا ہے کچھ دنوں بعد دوبارہ کوشش کریں۔",
+"Server_error":"سرور جواب نہیں دے رہا ہے۔",
+"An_error_occurred":"آپ کی درخواست پر اس وقت عمل نہیں کیا جا سکتا۔ براہ کرم کچھ دیر بعد کوشش کریں۔",
+"User_already_exists":"اس فون نمبر پر اکاؤنٹ پہلے سے موجود ہے۔",
+"Account_not_created":"اکاؤنٹ نہیں بنایا جا سکتا۔ بعد میں دوبارہ کوشش کریں۔",
+"Invalid_password":"پاس ورڈ درست نہیں ہے۔",
+"user_name_not_available":"اس نام کا صارف پہلے سے موجود ہے۔"
+
 }
   

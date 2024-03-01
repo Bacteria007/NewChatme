@@ -209,6 +209,8 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
             <View style={{ paddingHorizontal: 30, flexDirection: 'row', backgroundColor: AppColors.white, justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
               <Text style={[UserChatHeaderStyle.profileNameTextStyle(AppColors.black), { marginHorizontal: 10 }]}>Audio call</Text>
               <ZegoSendCallInvitationButton
+
+                
                 onPressed={() => {
                   hideModal();
                   addCallDetailInBackend('audio');
@@ -221,7 +223,6 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
                 ]}
                 isVideoCall={false}
                 resourceID={'chatme_outcall'}
-
               />
             </View>
             <View style={{ paddingHorizontal: 30, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -239,6 +240,7 @@ const UserChatHeader = ({ item, navigation, clearFunc, blockFunc, unBlockFunc, i
                 ]}
                 isVideoCall={true}
                 resourceID={'chatme_outcall'}
+
               />
             </View>
           </View>

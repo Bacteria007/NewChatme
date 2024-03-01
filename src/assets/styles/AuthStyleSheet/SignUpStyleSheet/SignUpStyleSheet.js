@@ -105,6 +105,15 @@ const SignUpStyleSheet = StyleSheet.create({
     borderRadius: wp('1.5'),
     height: hp('7'),
   },
+  passwordErrorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: hp('5'),
+    marginTop:-hp(5),
+    width: wp('85'),
+    justifyContent: 'space-between',
+    height: hp('7'),
+  },
   passwordIcon: {
     fontSize: wp('6'),
     height: hp('7'),

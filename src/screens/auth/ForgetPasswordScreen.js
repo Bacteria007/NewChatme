@@ -33,7 +33,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
   const { theme, darkThemeActivator } = useContext(ThemeContext);
   const maintextColor = theme.profileNameColor
   const btnColor = AppColors.white
- 
+
   const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
 
   const [ques1, setQues1] = useState('');
@@ -46,7 +46,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [toggleState, setToggleState] = useState(1);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [countryCode, setCountryCode] = useState('');
+  const [countryCode, setCountryCode] = useState('+92');
   const [selectedCountry, setSelectedCountry] = useState(null);
   const phoneNumberUtil = PhoneNumberUtil.getInstance();
 
@@ -61,8 +61,9 @@ const ForgetPasswordScreen = ({ navigation }) => {
   }
   const isValidPhoneNumber = () => {
     try {
+
       const parsedPhoneNumber = phoneNumberUtil.parseAndKeepRawInput(
-        phoneNumber,
+        phoneNo,
         selectedCountry?.cca2,
       );
       return phoneNumberUtil.isValidNumber(parsedPhoneNumber);
@@ -78,7 +79,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
 
   const handleForgetPassword = () => {
     const formdata = new FormData();
-    formdata.append('phoneNo', phoneNo);
+    formdata.append('phoneNo', `+${countryCode}${phoneNo}`);
     const securityQuestions = [
       { question: 'What is your favourite fruit?', answer: ques1 },
       { question: 'What is your favourite game?', answer: ques2 },
@@ -95,18 +96,24 @@ const ForgetPasswordScreen = ({ navigation }) => {
       .then((response) => response.json())
       .then(data => {
         console.log('res aya after matching', data)
-        if (phoneNo == '') {
-          Alert.alert("Please enter phone number")
+
+        if (data.matched === true) {
+          console.log(data.matched, 'user match');
+          setToggleState(0);
         }
-        // else if (isValidPhoneNumber()) {
         else {
-          if (data.matched === true) {
-            setToggleState(0);
-          } else if (data.matched === false && data.message === "Your account is temporarily blocked by the admin due to violations.") {
-            Alert.alert("Your account is temporarily blocked by the admin due to violations.")
+          if (data.message == "User_not_found") {
+            Alert.alert(TranslationFile[language].User_not_found)
+
+          }
+          else if (data.message == 'Account_blocked_by_admin') {
+            Alert.alert(TranslationFile[language].Account_blocked_by_admin)
+          }
+          else if (data.message == 'Answers_dont_match') {
+            Alert.alert(TranslationFile[language].Answers_dont_match)
           }
           else {
-            Alert.alert("Please enter the right answers")
+            Alert.alert("Error", TranslationFile[language].Server_error + "\n" + data.message)
           }
 
         }
@@ -119,7 +126,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
   }
   const handleResetPassword = async () => {
     const formdata = new FormData();
-    formdata.append('phoneNo', phoneNo);
+    formdata.append('phoneNo', `+${countryCode}${phoneNo}`);
     formdata.append('password', newPassword);
     try {
       await fetch(`${baseUrl}/resetPassword`, {
@@ -132,7 +139,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
         .then((response) => response.json())
         .then(data => {
           console.log('res aya after changing', data)
-          if (data.login === true) {
+          if (data.matched === true) {
             let newUser = data.updated
             let token = data.token
             console.log('newUser ======== ', newUser)
@@ -148,7 +155,11 @@ const ForgetPasswordScreen = ({ navigation }) => {
             getToken()
             navigation.replace("DrawerStack");
           } else {
-            Alert.alert("There was an issue in logging in,try again")
+            if (data.message == "User_not_found") {
+              Alert.alert(TranslationFile[language].User_not_found)
+            } else {
+              Alert.alert(TranslationFile[language].An_error_occurred)
+            }
           }
         })
         .catch(error => console.log("res error", error));
@@ -157,7 +168,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
     }
   };
   const validateInputFields = () => {
-    if (newPassword == '' && confirmPassword == '') {
+    if (newPassword == '' || confirmPassword == '') {
       showSnackbar(TranslationFile[language].Plz_enter_the_required_field);
       // return
     } else if (newPassword.length < 8) {
@@ -260,22 +271,27 @@ const ForgetPasswordScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => {
                   Keyboard.dismiss;
-                  if ((ques1 == '') & (ques2 == '')) {
+                  if (phoneNo == '') {
                     showSnackbar(
                       TranslationFile[language].Plz_enter_the_required_field,
                     );
                     return;
-                  } else if (ques1 === '') {
+                  }
+                  if (phoneNo.startsWith('0')) {
+                    showSnackbar(TranslationFile[language].phone_should_not_start_with_zero)
+                    return
+                  }
+                  if (!isValidPhoneNumber()) {
+                    showSnackbar(TranslationFile[language].Phone_number_is_not_valid)
+                    return
+                  }
+                  if ((ques1 == '') || (ques2 == '')) {
                     showSnackbar(
                       TranslationFile[language].Plz_enter_the_required_field,
                     );
                     return;
-                  } else if (ques2 === '') {
-                    showSnackbar(
-                      TranslationFile[language].Plz_enter_the_required_field,
-                    );
-                    return;
-                  } else {
+                  }
+                  else {
                     handleForgetPassword()
                   }
                 }}
@@ -288,7 +304,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
           </>
         ) : (
           <>
-            <Text style={ForgetScreenStyle.Text2}>Change Password</Text>
+            <Text style={ForgetScreenStyle.Text2}>Reset Password</Text>
             <View style={ForgetScreenStyle.quesView}>
               <Text style={ForgetScreenStyle.displyNameText(theme.profileNameColor)}>Password:</Text>
             </View>

@@ -122,6 +122,16 @@
   " Welcome to our app! Here, you'll find information about our app and the team behind it.": " Welcome to our app! Here, you'll find information about our app and the team behind it.",
   "App Version:": "App Version:",
   "Terms and conditions": "Terms and conditions",
-  "Create_Account":"Create Account"
+  "Create_Account": "Create Account",
+  "phone_should_not_start_with_zero": "Remove 0 from start of  phone number",
+  "password_instruction": "password must conain atleast 8 characters and one special symbol from it  [!@#$%^&*(),.?'':{}|<>]",
+  "Answers_dont_match": "Answers not  match",
+  "User_not_found": "Account not exists on this number",
+  "Account_blocked_by_admin": "Your account is temporarily block by admin.",
+  "Server_error": "Server is not responding",
+  "An_error_occurred": "Something went wrong. Please try again later.",
+  "User_already_exists":"User with this phone number already exist",
+  "Account_not_created":"Account cannot be created. Try again later",
+  "Invalid_password":"Password is invalid",
+  "user_name_not_available":"User name already taken"
 }
-  
