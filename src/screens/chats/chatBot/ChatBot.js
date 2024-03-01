@@ -20,12 +20,14 @@ import { Primary_StatusBar } from '../../../components/statusbars/Primary_Status
 import BotChatHeader from '../../../components/Headers/ChatHeader/BotChatHeader';
 import BotScreenStyleSheet from '../../../assets/styles/BotStyleSheet/BotScreenStyleSheet';
 import AppContext from '../../../context/AppContext';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 
 const ChatBot = props => {
 
   //***********************************      USE STATE    ************************* */
   const { baseUrl, currentUser, token, apiKey, apiURL,aimodel } = useContext(AppContext)
+  const { theme } = useContext(ThemeContext);
   const [data, setData] = useState([]);
   const [msgHistory, setMessageHistory] = useState([]);
   const [textInput, setTextInput] = useState('');
@@ -216,7 +218,7 @@ const ChatBot = props => {
   }, [data]);
   //***********************************      DEWSIGNING OF SCREEN    ************************* */
   return (
-    <View style={BotScreenStyleSheet.container}>
+    <View style={BotScreenStyleSheet.container(theme.chatScreenColor)}>
       <Primary_StatusBar />
       <BotChatHeader navigation={props.navigation} />
 
@@ -226,7 +228,7 @@ const ChatBot = props => {
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         data={data}
-        style={BotScreenStyleSheet.body}
+        style={BotScreenStyleSheet.body(theme.chatScreenColor)}
         contentContainerStyle={BotScreenStyleSheet.contentContainer}
         renderItem={renderMessage}
         onContentSizeChange={() =>
@@ -237,11 +239,13 @@ const ChatBot = props => {
 
       <View style={BotScreenStyleSheet.inputContainer}>
         <TextInput
-          style={BotScreenStyleSheet.input}
+        lightTheme
+          style={BotScreenStyleSheet.input(theme.chatScreenColor)}
           value={textInput}
           onChangeText={text => setTextInput(text)}
           placeholder="Ask me Anything"
-          placeholderTextColor={AppColors.gray}
+          placeholderTextColor={theme.headerSearchText}
+          inputStyle={{ color: theme.headerSearchText }}
         />
 
 

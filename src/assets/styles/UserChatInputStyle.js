@@ -22,7 +22,7 @@ const UserChatInputStyle = StyleSheet.create({
     borderRadius: wp('8%'),
     borderColor: AppColors.Lilac,
     borderWidth: 1,
-    backgroundColor: AppColors.white,
+    // backgroundColor: AppColors.white,
     marginBottom: hp('1%'),
     paddingHorizontal: hp('2%'),
     

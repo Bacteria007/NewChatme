@@ -11,7 +11,7 @@ const AppContext = React.createContext();
 export const AppProvider = ({ children }) => {
   const appName = 'ChatMe';
   const apiKey = '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';
-  const baseUrl = 'http://192.168.0.103:8888';
+  const baseUrl = 'http://192.168.43.122:8888';
   const apiURL = 'https://api.openai.com/v1/completions';
   const aimodel='gpt-3.5-turbo-instruct'
   const [userName, setUserName] = useState('');

@@ -27,7 +27,8 @@ const DarkTheme = {
     headerColor: AppColors.darkThemeColors.bgColor,
     rippleColor: 'rgba(255,255,255,0.2)',
     chatScreenColor: AppColors.darkThemeColors.bgColor,
-    nextBtn: AppColors.black
+    nextBtn: AppColors.black,
+    inputColor:AppColors.white
 
 
 };
@@ -56,8 +57,8 @@ const LightTheme = {
     headerColor: AppColors.white,
     rippleColor: AppColors.lightBlack,
     chatScreenColor: AppColors.white,
-    nextBtn: AppColors.white
-
+    nextBtn: AppColors.white,
+    inputColor:AppColors.gray
 };
 
 

@@ -8,12 +8,12 @@ import AppColors from '../../colors/Appcolors';
 
 const BotChatHeaderStyle = StyleSheet.create({
  
-  headerView: {
+  headerView:bgColor=>( {
     flexDirection: 'row',
     paddingHorizontal: wp('3%'),
     // justifyContent:'center',
-    backgroundColor:AppColors.white
-  },
+    backgroundColor:bgColor
+  }),
   leftview: {
     flexDirection: 'row',
     width: wp('34%'),
@@ -38,11 +38,11 @@ const BotChatHeaderStyle = StyleSheet.create({
     borderRadius: 100,
   },
   profileNameContainerStyle: {marginLeft: wp('2%')},
-BotNameTextStyle: {
+BotNameTextStyle:bgColor=>( {
     fontSize: wp('5.5%'),
-    color: AppColors.black,
+    color: bgColor,
     width:wp('30'),
-  },
+  }),
   profileStatusStyle: {
     color: AppColors.white,
     fontSize: wp('3'),

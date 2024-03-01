@@ -150,7 +150,6 @@ const LogInScreen = ({ navigation }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
       >
-        <Text onPress={toggleTheme} style={{ color: 'white', fontSize: 20 }}>theme</Text>
         <ScrollView
           contentContainerStyle={LogInStyleSheet.scrollContainer}
           showsVerticalScrollIndicator={false}>

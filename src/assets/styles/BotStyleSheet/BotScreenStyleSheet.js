@@ -7,29 +7,29 @@ import {
 import AppColors from '../../colors/Appcolors';
 
 const BotScrenStyleSheet = StyleSheet.create({
-  container: {
+container: bgColor => ( {
     flex: 1,
-    backgroundColor: AppColors.bgprimary,
-  },
+    backgroundColor:bgColor,
+  }),
   timestamp: {
     fontSize: hp('1.5%'),
     color: AppColors.gray,
     alignSelf: 'flex-end',
   },
-  body: {
-    backgroundColor: AppColors.bgprimary,
+  body:bgColor=>( {
+    // backgroundColor: bgColor,
     flex: 1,
     paddingHorizontal: wp('5%'),
     paddingVertical: hp('1%'),
     marginBottom: hp('1%'),
-  },
+  }),
   dpImageStyle: {
     height: hp('5%'),
     width: hp('5%'),
     borderRadius: hp('5'),
   },
-  input: {
-    backgroundColor: AppColors.bgprimary,
+  input:bgColor=>( {
+    backgroundColor: bgColor,
     width: wp('82%'),
     borderColor: AppColors.primary,
     borderRadius: wp('10%'),
@@ -37,12 +37,12 @@ const BotScrenStyleSheet = StyleSheet.create({
     elevation: 1,
     height: hp('6.5'),
     paddingHorizontal: wp('7'),
-  },
+  }),
   inputContainer: {
     flexDirection: 'row',
     width: wp('100%'),
     height: hp('6.5%'),
-    backgroundColor: AppColors.bgprimary,
+    // backgroundColor: AppColors.bgprimary,
     marginBottom: hp('0.75%'),
     paddingHorizontal: wp('2'),
   },
@@ -69,7 +69,7 @@ const BotScrenStyleSheet = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   userMsgContainer: {
-    backgroundColor: AppColors.lightBlack,
+    backgroundColor: AppColors.Lilac,
     maxWidth: '80%',
     paddingVertical: 8,
     paddingHorizontal: 12,
