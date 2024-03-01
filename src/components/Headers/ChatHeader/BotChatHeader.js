@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image,StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import BotChatHeaderStyle from '../../../assets/styles/BotStyleSheet/BotChatHeaderStyle';
 import { Icons } from '../../../assets/Icons';
 import {
@@ -7,12 +7,15 @@ import {
     widthPercentageToDP as wp,
   } from 'react-native-responsive-screen';
 import AppColors from '../../../assets/colors/Appcolors';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 
 const BotChatHeader = ({navigation}) => {
+  const { theme } = useContext(ThemeContext);
+
   return (
 
-    <View style={[BotChatHeaderStyle.headerView]}>
+    <View style={[BotChatHeaderStyle.headerView(theme.chatScreenColor)]}>
      
         <View 
         >
@@ -23,7 +26,7 @@ const BotChatHeader = ({navigation}) => {
           <Icons.FontAwesome5
             name="arrow-left"
             size={wp('5.5%')}
-            color={AppColors.black}
+            color={theme.profileNameColor}
             style={{marginTop: hp('2.8%')}}
           />
         </TouchableOpacity>
@@ -39,7 +42,7 @@ const BotChatHeader = ({navigation}) => {
               />
             </View>
             <View style={[BotChatHeaderStyle.profileNameContainerStyle]}>
-              <Text style={[BotChatHeaderStyle.BotNameTextStyle]}>AI ChatBot</Text>
+              <Text style={[BotChatHeaderStyle.BotNameTextStyle(theme.profileNameColor)]}>AI ChatBot</Text>
             </View>
           </View>
       
