@@ -13,10 +13,9 @@ import Video from 'react-native-video'
 import GenerateVideoHtml from './ReelsHtmlVideo';
 import { ZoomVideo } from '../../helpers/UiHelpers/ZoomVideo';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import VideoPlayer from 'react-native-video-player'
 import { widthPercentageToDP as wp,heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import MediaControls from 'react-native-media-controls'
 import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
+import Icon, { Icons } from '../../assets/Icons';
 
 
 const Reels = props => {
@@ -195,6 +194,7 @@ const Reels = props => {
                     style={[ReelscreenStyle.TouchableOpacityStyle]}
                     activeOpacity={1}
                     onPress={toggleVideoPlayback}>
+                      
                     {isLoading ? (
                       <View style={ReelscreenStyle.LoaderView}>
         <AppActivityIndicator/>
@@ -208,7 +208,7 @@ const Reels = props => {
                       //   }}
                       //   style={ReelscreenStyle.backgroundVideo}
                       // />
-                  
+                  <>
                           <Video
                           source={{ uri: `${baseUrl}${item.uri}` }}
                           ref={videoRef}
@@ -217,10 +217,15 @@ const Reels = props => {
                           repeat={true}
                           onBuffer={onBuffer}
                           onError={onError}
-                          onLoad={() => setIsLoading(false)} // Set isLoading to false when video is loaded
+                          onLoad={() =>{ 
+                          setIsVideoPlaying(true)
+                          setIsLoading(false)}} // Set isLoading to false when video is loaded
                           style={ReelscreenStyle.backgroundVideo}
                           
                       />
+                      <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                      {isVideoPlaying?'':<Icons.AntDesign name='play' size={wp('8.2%')} color={AppColors.white} />}
+                      </View></>
                     )}
                   </TouchableOpacity>
                   <ReelFooter

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import moment from 'moment';
 import UserChatStyle from '../../assets/styles/UserChatStyle';
@@ -29,7 +29,8 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
   const [currentTime, setCurrentTime] = useState(0);
   const [updateInterval, setUpdateInterval] = useState(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false); // New state to track if audio is playing
-
+  const [previousVoice, setPreviousVoice] = useState(null)
+  const audioPlayerRef = useRef(null);
   const rippleColor = 'rgba(0,0,0,0.1)';
   const rippleColor2 = AppColors.tab;
 
@@ -65,7 +66,6 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
     const seconds = Math.floor(timeInSeconds % 60);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
-
   const pause_play = (audioUrl) => {
     console.log("pause/play called with: ", audioUrl);
 
@@ -74,40 +74,105 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
         console.log(audioUrl)
         console.error('Error initializing audio player:', error);
       } else if (!isPlaying) {
-        console.log("play")
-        setAudioPlayer(sound)
+        console.log("play", isPlaying)
+        if (audioPlayerRef.current && audioPlayerRef.current !== sound) {
+          audioPlayerRef.current.stop(() => audioPlayerRef.current.release());
+        }
+
+        audioPlayerRef.current = sound;
+        // setAudioPlayer(sound)
         setIsPlaying(true)
-        sound.play(() => {
-          setIsPlaying(true);
-          const duration = sound.getDuration();
-          setDuration(duration);
-          const interval = setInterval(() => {
-            sound.getCurrentTime((seconds) => {
-              setCurrentTime(seconds);
-            });
-          }, 1000);
-          setUpdateInterval(interval);
-          sound.release()
-        })
-      } else {
-        console.log("pause")
-        setIsPlaying(false);
-        sound.stop(() => {
-          setIsPlaying(false);
-          if (updateInterval) {
-            clearInterval(updateInterval);
-            setUpdateInterval(null);
+        // if (currentTime === 0) {
+        //   sound.getCurrentTime((seconds) => {
+        //     setCurrentTime(seconds);
+        //   });
+        // }
+        console.log("previouse voive console", previousVoice)
+
+        const duration = sound.getDuration();
+        setDuration(duration);
+        console.log('currentTime bahir', currentTime, duration)
+        console.log('currentTime bahir', currentTime, (duration - currentTime).toFixed(2))
+
+        if (currentTime !== duration) {
+          if ((duration - currentTime).toFixed(2) <= 0.5) {
+            console.log("ab ye chla")
+            setCurrentTime(0)
+            sound.setCurrentTime(0)
           }
+          else {
+            const interval = setInterval(() => {
+              sound.getCurrentTime((seconds) => {
+                setCurrentTime(seconds);
+                if (seconds >= duration) {
+                  setIsPlaying(false);
+                  sound.stop(() => sound.release());
+                }
+              });
+            }, 100);
+            setUpdateInterval(interval);
+          }
+        } else {
+          console.log('currentTime inside', currentTime)
+          setCurrentTime(0)
+        }
+        sound.play(() => {
+          // setIsPlaying(true);
+          clearInterval(updateInterval)
+          setIsPlaying(false);
+          // audioPlayerRef.current = null; 
+          sound.release()
+          // setCurrentTime(0)
         })
-        setIsPlaying(false)
-        // setAudioPlayer(null)
+        sound.setCurrentTime(currentTime)
+      } else {
+        console.log("pause", isPlaying)
+        setIsPlaying(false);
+        if (audioPlayerRef.current && audioPlayerRef.current !== sound) {
+          audioPlayerRef.current.pause(() => {
+            setIsPlaying(false);
+            audioPlayerRef.current.release();
+          });
+        }
+        sound.pause(() => {
+          clearInterval(updateInterval);
+          setUpdateInterval(null);
+          if (updateInterval) {
+            console.log("update interval console", updateInterval)
+          }
+          sound.getCurrentTime((seconds) => {
+            setCurrentTime(seconds);
+          })
+        })
         sound.release()
       }
     })
   }
+  useEffect(() => {
+    // playing
+    console.log("audioPlayerRef is null+++++++++++++",audioPlayerRef)
+    // audioPlayerRef.current.play();
+    // stopping after 2 seconds
+    if(audioPlayerRef.current!==null){
+      setTimeout(() => {
+        audioPlayerRef.current.stop();
+      }, 500);
+    }
+  }, [audioPlayerRef]);
+  useEffect(() => {
+    return () => {
+      if (audioPlayer) {
+        audioPlayer.release();
+      }
+
+      if (updateInterval) {
+        clearInterval(updateInterval);
+      }
+    };
+  }, []);
 
   return (
-    <View style={{ backgroundColor: ((changeHeader == true) && (msgId == msgItem._id)) ? (darkThemeActivator ? theme.rippleColor : rippleColor2) : 'transparent', marginBottom: hp('1') }}>
+    <View style={{ backgroundColor: ((changeHeader == true) && (msgId == msgItem._id)) ? (darkThemeActivator ? theme.rippleColor : rippleColor2) : 'transpare nt', marginBottom: hp('1') }}>
       <TouchableRipple
         rippleColor={darkThemeActivator ? theme.rippleColor : rippleColor2}
         onPress={handleOnPress}
@@ -121,7 +186,11 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
               :
               <>
                 <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity onPress={() => pause_play(msgItem.audio)}>
+                  <TouchableOpacity onPress={() => {
+                    pause_play(msgItem.audio)
+                    setPreviousVoice(msgItem.audio)
+                  }
+                  }>
                     <Icons.Ionicons name={isPlaying ? "pause" : "play"} size={24} color="black" />
                   </TouchableOpacity>
                   <Slider
@@ -129,7 +198,7 @@ const RenderChats = ({ msgItem, setChangeHeader, setMsgId, changeHeader, msgId, 
                     minimumValue={0}
                     maximumValue={duration}
                     value={currentTime}
-                    onSlidingComplete={(value) => { audioPlayer.setCurrentTime(0); console.log(value) }}
+                    onSlidingComplete={(value) => { audioPlayer?.setCurrentTime(value); console.log(value) }}
                     maximumTrackTintColor="gray"
                     onValueChange={(value) => { setCurrentTime(value); console.log(value) }}
                     minimumTrackTintColor={AppColors.periWinkle}
