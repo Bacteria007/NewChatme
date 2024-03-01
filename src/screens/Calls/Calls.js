@@ -172,6 +172,7 @@ const Calls = ({ navigation }) => {
 
   //       ***************************            FLATLIST RENDER FUNCTION         **************************************
   const renderItem = ({ item }) => {
+    console.log('➡️➡️➡️➡️➡️➡️➡️➡️➡️➡️',item);
     return (
       <TouchableOpacity
         onLongPress={
@@ -214,14 +215,15 @@ const Calls = ({ navigation }) => {
                 </Text>
                 <View style={HomeNeoCards.timeAndCallType}>
                   {item.isIncomingOrOutgoing == 'outgoing' ? (
+                 
                     <Icons.MaterialCommunityIcons
-                      name="call-made"
-                      color="red"
+                      name="call-received"
+                      color="green"
                       size={iconSize}
                     />
                   ) : (
                     <Icons.MaterialCommunityIcons
-                      name="call-received"
+                      name="call-made"
                       color={'green'}
                       size={iconSize}
                     />

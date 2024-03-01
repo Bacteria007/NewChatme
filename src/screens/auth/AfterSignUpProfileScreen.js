@@ -155,9 +155,9 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
       });
       const data = await response.json();
       console.log('res after updating', data);
-      if (data.message === 'This user name is not available.') {
+      if (data.message === 'user_name_not_available') {
         setErrorMessage(true);
-        setAlreadyExist(data.message);
+        setAlreadyExist(TranslationFile[language].user_name_not_available);
       } else if (data.message !== "Please provide a valid token." || data.message !== 'Please provide a token.') {
         updateCurrentUser(existingData => ({
           ...existingData,
@@ -227,11 +227,6 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
         <ScrollView
           contentContainerStyle={AfterSignUpStyleSheet.scrollContainer}
           showsVerticalScrollIndicator={false}>
-          {/* <Text style={AfterSignUpStyleSheet.Text1}>
-            {TranslationFile[language].Complete_your_profile}
-          </Text> */}
-                  <Text onPress={toggleTheme} style={{ color: 'white', fontSize: 20 }}>theme</Text>
-
           <View style={AfterSignUpStyleSheet.ImageContainer}>
             <View>
               <View style={{ position: 'relative' }}>

@@ -7,6 +7,7 @@ import {
   Image,
   KeyboardAvoidingView,
   ScrollView,
+  Alert,
 } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
 import LogInStyleSheet from '../../assets/styles/AuthStyleSheet/LogInStyleSheet/LogInStyleSheet';
@@ -27,10 +28,11 @@ import { initializeZego } from '../../helpers/ZegoCloudFunction/ZegoInitFunction
 import { ThemeContext } from '../../context/ThemeContext';
 import UseScreenFocus from '../../helpers/AutoRefreshScreen/UseScreenFocus';
 import messaging from '@react-native-firebase/messaging';
+import TranslationFile from '../../assets/translation/TranslationFile';
 
 const LogInScreen = ({ navigation }) => {
 
-  const { baseUrl, getToken, updateCurrentUser, storeLoggedinStatus } = useContext(AppContext)
+  const { baseUrl, getToken, updateCurrentUser, storeLoggedinStatus, language } = useContext(AppContext)
   const { theme, darkThemeActivator, toggleTheme } = useContext(ThemeContext)
   const maintextColor = theme.profileNameColor
   const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
@@ -41,7 +43,7 @@ const LogInScreen = ({ navigation }) => {
   const [countryCode, setCountryCode] = useState('');
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(true);
   const [passwordSnackWidth, setPasswordSnackWidth] = useState(false);
   const [fcmToken, setFcmToken] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -120,16 +122,17 @@ const LogInScreen = ({ navigation }) => {
           navigation.replace("DrawerStack");
         }
         else {
-          if (response.data.match == false && response.data.message === "Your account is temporarily blocked by the admin due to violations.") {
-            alert("Your account is temporarily blocked by the admin due to violations.")
+          if (response.data.match == false && response.data.message === "Account_blocked_by_admin") {
+            Alert.alert(TranslationFile[language].Account_blocked_by_admin)
           }
-          else if (response.data.message === 'Invalid phone number' || response.data.message === 'Invalid password') {
-            alert('Invalid phone number or password');
-          } else {
-            alert(
-              'There was an issue in logging in,try again',
-              'No user found with this phone number or password',
-            );
+          else if (response.data.message === 'User_not_found') {
+            Alert.alert(TranslationFile[language].User_not_found);
+          } else if (response.data.message === 'Invalid_password') {
+            Alert.alert(TranslationFile[language].Invalid_password);
+          }
+          else {
+            Alert.alert(TranslationFile[language].An_error_occurred);
+
           }
         }
       })
@@ -219,12 +222,26 @@ const LogInScreen = ({ navigation }) => {
           </View>
           <TouchableOpacity
             onPress={() => {
-              if ((phoneNumber == '') || (password == '')) {
+              if ((phoneNumber == '') && (password == '')) {
                 setPasswordSnackWidth(!false);
                 showSnackbar('Enter Phone Number and Password');
                 return;
               }
 
+              if (password == '') {
+                setPasswordSnackWidth(!false);
+                showSnackbar('Enter password');
+                return;
+              }
+              if (phoneNumber == '') {
+                setPasswordSnackWidth(!false);
+                showSnackbar('Enter Phone Number');
+                return;
+              }
+              if (phoneNumber.startsWith('0')) {
+                showSnackbar(TranslationFile[language].phone_should_not_start_with_zero)
+                return
+              }
               if (!isValidPhoneNumber()) {
                 if (phoneNumber === '') {
                   setPasswordSnackWidth(!false);
@@ -236,17 +253,20 @@ const LogInScreen = ({ navigation }) => {
                   return;
                 }
               }
-              if (password.length < 8) {
-                if (password === '') {
-                  setPasswordSnackWidth(!false);
-                  showSnackbar('Password must not be empty');
-                  return;
-                } else {
-                  setPasswordSnackWidth(!false);
-                  showSnackbar('Password contain atLeast 8 character');
-                  return;
-                }
-              } else {
+              // Ye instruction signup k waqt achi lagti hy yha i think zrorat nai ==> aqsa
+
+              // if (password.length < 8) {
+              //   if (password === '') {
+              //     setPasswordSnackWidth(!false);
+              //     showSnackbar('Enter Password');
+              //     return;
+              //   } else {
+              //     setPasswordSnackWidth(!false);
+              //     showSnackbar('Password contain atLeast 8 character');
+              //     return;
+              //   }
+              // } 
+              else {
                 console.log('clicked');
                 userLogin({ navigation });
                 // navigation.replace("DrawerStack");
@@ -268,7 +288,7 @@ const LogInScreen = ({ navigation }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      <View
+      <Snackbar
         visible={visible}
         onDismiss={() => setVisible(false)}
         duration={2000}
@@ -287,10 +307,8 @@ const LogInScreen = ({ navigation }) => {
               alignSelf: 'center',
             }
         }>
-        <Snackbar>
-          <Text style={LogInStyleSheet.text}>{snackbarMessage}</Text>
-        </Snackbar>
-      </View>
+        <Text style={LogInStyleSheet.text}>{snackbarMessage}</Text>
+      </Snackbar>
     </View>
   );
 };

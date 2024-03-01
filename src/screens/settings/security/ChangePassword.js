@@ -67,7 +67,7 @@ const ChangePassword = ({ navigation }) => {
             navigation.goBack()
             // navigation.replace("Settings");
           } else {
-            alert("Something went wrong,try again later.")
+            Alert.alert("Something went wrong,try again later.")
           }
         })
         .catch(error => console.log("res error", error));

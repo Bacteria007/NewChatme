@@ -1,5 +1,5 @@
 import { View, Text, TextInput, KeyboardAvoidingView, ScrollView, ToastAndroid, Alert } from 'react-native';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
 import { Icons } from '../../../assets/Icons';
 import AppColors from '../../../assets/colors/Appcolors';
@@ -15,24 +15,58 @@ import { Button, Menu, Divider, IconButton, TouchableRipple } from 'react-native
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNExitApp from 'react-native-exit-app';
 import { ThemeContext } from '../../../context/ThemeContext';
+import PhoneInput from 'react-native-phone-number-input';
+import ValidateNumber from '../../../helpers/phoneNumber/ValidateNumber';
+import TranslationFile from '../../../assets/translation/TranslationFile';
 
 
 const DeleteAccount = ({ navigation }) => {
   //  Constants
-  const { baseUrl, currentUser, updateCurrentUser, token } = useContext(AppContext);
+  const { baseUrl, currentUser, updateCurrentUser, token,language } = useContext(AppContext);
   const { theme, darkThemeActivator } = useContext(ThemeContext)
   const maintextColor = theme.profileNameColor
   const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
   // Variables
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
+  const [phoneNumberError, setPhoneNumberError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [countryCode, setCountryCode] = useState('')
+  const phoneRef = useRef(null)
   // Functions
-  const dltAccount = async (navigation) => {
+  const checkNumber = async () => {
+    console.log('in check number  function');
+    const getFormattedNumber = await phoneRef.current?.getNumberAfterPossiblyEliminatingZero()
+
+    const isPhoneValid = await ValidateNumber(phoneRef, getFormattedNumber.formattedNumber, countryCode);
+
+    if (!isPhoneValid) {
+      setPhoneNumberError("Phone Number is invalid")
+      console.log("Phone Number is invalid")
+      return
+    }
+     if (password.trim() == '') {
+      setPasswordError(TranslationFile[language].Plz_enter_the_required_field)
+      console.log("Please enter your password to delete account.");
+      return
+
+    }
+     if (password.length < 8) {
+      setPasswordError("Password is invalid")
+      console.log("Password is invalid")
+      return
+
+    }
+    else {
+      dltAccount(getFormattedNumber.formattedNumber); // Both phone numbers are valid, proceed with changing number
+    }
+  };
+  const dltAccount = async (phone) => {
     const formData = new FormData();
     formData.append('userId', currentUser.userId);
     formData.append('name', currentUser.name);
-    formData.append('phoneNo', `+${countryCode}${phoneNumber}`);
+    formData.append('phoneNo', phone);
+    // formData.append('phoneNo', `+${countryCode}${phoneNumber}`);
     formData.append('password', password);
 
     try {
@@ -63,7 +97,7 @@ const DeleteAccount = ({ navigation }) => {
           RNExitApp.exitApp();
           // navigation.replace('LogInScreen')
         } else {
-          ToastAndroid.showWithGravity('Something went wrong, please try again later.', ToastAndroid.SHORT, ToastAndroid.CENTER);
+          ToastAndroid.showWithGravity('User not found.', ToastAndroid.SHORT, ToastAndroid.CENTER);
           console.log("account  not dlted")
         }
       }
@@ -122,17 +156,17 @@ const DeleteAccount = ({ navigation }) => {
                 To delete your account, confirm your country code and enter your phone
                 number.
               </Text>
-              <Text style={[DeleteAccountStyle.labelText]}>Country code</Text>
+              {/* <Text style={[DeleteAccountStyle.labelText]}>Country code</Text>
               <TextInput
                 placeholder="country code"
                 onChangeText={text => setCountryCode(text)}
                 style={DeleteAccountStyle.textinput(darkThemeActivator, secondaryTextColor)}
-          placeholderTextColor={AppColors.gray}
-             
-             />
+                placeholderTextColor={AppColors.gray}
+
+              /> */}
               {/* <View style={[DeleteAccountStyle.underlineView]}></View> */}
               <Text style={[DeleteAccountStyle.labelText]}>Phone</Text>
-              <TextInput
+              {/* <TextInput
                 placeholder="phone number"
                 keyboardType='numeric'
                 style={DeleteAccountStyle.textinput(darkThemeActivator, secondaryTextColor)}
@@ -140,7 +174,42 @@ const DeleteAccount = ({ navigation }) => {
                 onChangeText={text => setPhoneNumber(text)}
           placeholderTextColor={AppColors.gray}
              
-             />
+             /> */}
+              <PhoneInput
+                defaultCode='PK'
+                defaultValue='+92'
+                value={phoneNumber}
+                ref={phoneRef}
+                onChangeText={(t) => setPhoneNumber(t)}
+                onChangeCountry={(c) => setCountryCode(c)}
+
+                // styling hy nechy sari
+                containerStyle={{
+                  alignSelf: 'center', marginTop: hp(1.5), backgroundColor: theme.backgroundColor,
+                  justifyContent: 'center', alignItems: 'center', height: 'auto', width: 'auto'
+                }}
+                textInputProps={{
+                  cursorColor: secondaryTextColor,
+                  onFocus: () => setPhoneNumberError(''),
+                  placeholder: "Phone number", placeholderTextColor: "gray",
+                  style: {
+                    color: secondaryTextColor, backgroundColor: theme.backgroundColor,
+                    fontFamily: FontStyle.regularFont, flex: 1, width: 'auto',
+                    height: hp(6), textAlignVertical: 'center', padding: 0, margin: 0,
+                    borderBottomWidth: 1, borderBottomColor: secondaryTextColor
+                  }
+                }}
+
+                textContainerStyle={{ height: 0, backgroundColor: theme.backgroundColor }}
+                codeTextStyle={{ color: secondaryTextColor, fontFamily: FontStyle.regularFont, textAlign: 'center', textAlignVertical: 'center' }}
+                countryPickerButtonStyle={{ backgroundColor: theme.backgroundColor, height: hp(6), width: 'auto', borderBottomWidth: 1, borderBottomColor: secondaryTextColor }}
+                // renderDropdownImage={<Icons.AntDesign name='caretdown' color={secondaryTextColor} />}
+                disableArrowIcon
+                layout='second'
+
+              />
+              {phoneNumberError && <Text style={{ color: 'red', fontFamily: FontStyle.regularFont }}>{phoneNumberError}</Text>}
+
               {/* <View style={[DeleteAccountStyle.underlineView]}></View> */}
               <Text style={[DeleteAccountStyle.labelText]}>Password</Text>
               <TextInput
@@ -148,16 +217,14 @@ const DeleteAccount = ({ navigation }) => {
                 style={DeleteAccountStyle.textinput(darkThemeActivator, secondaryTextColor)}
                 autoCapitalize='none'
                 onChangeText={text => setPassword(text)}
-          placeholderTextColor={AppColors.gray}
-           
-           />
-              <TouchableRipple borderless onPress={() => {
-                if (countryCode.includes('+')) {
-                  dltAccount({ navigation })
-                } else {
-                  Alert.alert("Country code must includes '+' symbol.")
-                }
-              }}
+                placeholderTextColor={AppColors.gray}
+                onFocus={() => setPasswordError('')}
+              />
+              {passwordError && <Text style={{ color: 'red', fontFamily: FontStyle.regularFont }}>{passwordError}</Text>}
+              <TouchableRipple borderless
+                onPress={() => {
+                  checkNumber()
+                }}
                 style={{
                   height: hp('5.5'),
                   width: hp('16'),
