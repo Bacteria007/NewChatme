@@ -11,6 +11,7 @@ import { ThemeContext } from '../../../context/ThemeContext'
 import AppContext from '../../../context/AppContext'
 import AppColors from '../../../assets/colors/Appcolors'
 import FontStyle from '../../../assets/styles/FontStyle'
+import TranslationFile from '../../../assets/translation/TranslationFile'
 
 
 const ChangePassword = ({ navigation }) => {
@@ -18,7 +19,7 @@ const ChangePassword = ({ navigation }) => {
   const maintextColor = theme.profileNameColor
   const btnColor = AppColors.white
   const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
-  const { baseUrl, getToken, token, updateCurrentUser, currentUser } = useContext(AppContext)
+  const { baseUrl, getToken, token, updateCurrentUser, currentUser,language } = useContext(AppContext)
 
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -63,16 +64,21 @@ const ChangePassword = ({ navigation }) => {
             console.log('newUser ======== ', newUser)
             setNewPassword('')
             setOldPassword('')
-            ToastAndroid.showWithGravity('Password is changed successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER);
+            ToastAndroid.showWithGravity(TranslationFile[language].password_changed, ToastAndroid.SHORT, ToastAndroid.CENTER);
             navigation.goBack()
             // navigation.replace("Settings");
           } else {
-            Alert.alert("Something went wrong,try again later.")
+            Alert.alert(TranslationFile[language].An_error_occurred)
           }
         })
-        .catch(error => console.log("res error", error));
+        .catch(error => {console.log("res error", error)
+        Alert.alert(TranslationFile[language].An_error_occurred)
+      
+      });
     } catch (error) {
       console.error('Error updating password:', error);
+      Alert.alert(TranslationFile[language].An_error_occurred)
+
     }
   }
 

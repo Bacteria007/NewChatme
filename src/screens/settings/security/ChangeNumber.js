@@ -14,55 +14,56 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import FontStyle from '../../../assets/styles/FontStyle';
 import { Icons } from '../../../assets/Icons';
 import { Divider } from 'react-native-paper';
+import TranslationFile from '../../../assets/translation/TranslationFile';
 
 const ChangeNumber = ({ navigation }) => {
   const { theme, darkThemeActivator } = useContext(ThemeContext);
   const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
-  const { baseUrl, getToken, token, updateCurrentUser, currentUser } = useContext(AppContext)
+  const { baseUrl, getToken, token, updateCurrentUser, currentUser, language } = useContext(AppContext)
 
   const [oldPhoneNo, setOldPhoneNo] = useState('')
   const [oldCountryCode, setOldCountryCode] = useState('+92')
   const [newPhoneNo, setNewPhoneNo] = useState('')
   const [newCountryCode, setNewCountryCode] = useState('+92')
   const oldPhoneInputRef = useRef(null);
-const newPhoneInputRef = useRef(null);
+  const newPhoneInputRef = useRef(null);
 
-const validatePhoneNumber = async (phoneInputRef, phoneNo, country) => {
-  console.log('in validate number function');
-//   getCountryCode: () => CountryCode
-// getCallingCode: () => string | undefined
-  try {
+  const validatePhoneNumber = async (phoneInputRef, phoneNo, country) => {
+    console.log('in validate number function');
+    //   getCountryCode: () => CountryCode
+    // getCallingCode: () => string | undefined
+    try {
 
-    console.log('checking this',phoneNo);
-    const isValidNumber = await phoneInputRef.current?.isValidNumber(phoneNo)
-    if (!isValidNumber) {
-     console.log(`Invalid ${country} number`);
-      Alert.alert(`Invalid phone number for ${country}`);
+      console.log('checking this', phoneNo);
+      const isValidNumber = await phoneInputRef.current?.isValidNumber(phoneNo)
+      if (!isValidNumber) {
+        console.log(`Invalid ${country} number`);
+        Alert.alert(`Invalid phone number for ${country}`);
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error('Error validating phone number:', error);
       return false;
     }
-    return true;
-  } catch (error) {
-    console.error('Error validating phone number:', error);
-    return false;
-  }
-};
+  };
 
-const checkNumber = async () => {
-  console.log('in check number  function');
-  const oldP=await oldPhoneInputRef.current?.getNumberAfterPossiblyEliminatingZero()
-  const newP=await newPhoneInputRef.current?.getNumberAfterPossiblyEliminatingZero()
-  const oldcode=await oldPhoneInputRef.current?.getCallingCode()
-  const newcode=await newPhoneInputRef.current?.getCallingCode()
+  const checkNumber = async () => {
+    console.log('in check number  function');
+    const oldP = await oldPhoneInputRef.current?.getNumberAfterPossiblyEliminatingZero()
+    const newP = await newPhoneInputRef.current?.getNumberAfterPossiblyEliminatingZero()
+    const oldcode = await oldPhoneInputRef.current?.getCallingCode()
+    const newcode = await newPhoneInputRef.current?.getCallingCode()
 
-  const isOldPhoneValid = await validatePhoneNumber(oldPhoneInputRef, oldP.formattedNumber, oldCountryCode);
-  const isNewPhoneValid = await validatePhoneNumber(newPhoneInputRef, newP.formattedNumber, newCountryCode);
+    const isOldPhoneValid = await validatePhoneNumber(oldPhoneInputRef, oldP.formattedNumber, oldCountryCode);
+    const isNewPhoneValid = await validatePhoneNumber(newPhoneInputRef, newP.formattedNumber, newCountryCode);
 
-  if (isOldPhoneValid && isNewPhoneValid) {
-    changenumber(oldP.formattedNumber,newP.formattedNumber); // Both phone numbers are valid, proceed with changing number
-  }
-};
+    if (isOldPhoneValid && isNewPhoneValid) {
+      changenumber(oldP.formattedNumber, newP.formattedNumber); // Both phone numbers are valid, proceed with changing number
+    }
+  };
 
-  const changenumber = async (oldp,newp) => {
+  const changenumber = async (oldp, newp) => {
     const formdata = new FormData();
     formdata.append('userId', currentUser.userId);
     // formdata.append('oldPhoneNo', `${oldPhoneNo}`);
@@ -97,12 +98,24 @@ const checkNumber = async () => {
             ToastAndroid.showWithGravity('Phone number is changed successfully.', ToastAndroid.SHORT, ToastAndroid.CENTER);
             navigation.goBack()
           } else {
-            Alert.alert(`${data.message}`)
+            if (data.message == "number_already_exist") {
+              Alert.alert(TranslationFile[language].User_already_exists)
+            }
+            else if (data.message == "User_not_found") {
+              Alert.alert(TranslationFile[language].User_not_found)
+            } else if (data.message == "An_error_occurred") {
+              Alert.alert(TranslationFile[language].An_error_occurred)
+            }
           }
         })
-        .catch(error => console.log("res error", error));
+        .catch(error => {
+          console.log("res error", error)
+          Alert.alert(TranslationFile[language].An_error_occurred)
+        });
     } catch (error) {
       console.error('Error updating phone number:', error);
+      Alert.alert(TranslationFile[language].An_error_occurred)
+
     }
   }
   return (
@@ -127,7 +140,7 @@ const checkNumber = async () => {
             justifyContent: 'center', alignItems: 'center', height: 'auto', width: 'auto'
           }}
           textInputProps={{
-            cursorColor:secondaryTextColor,
+            cursorColor: secondaryTextColor,
             placeholder: "Old number...", placeholderTextColor: "gray",
             style: {
               color: secondaryTextColor, backgroundColor: theme.backgroundColor,
@@ -156,13 +169,13 @@ const checkNumber = async () => {
           onChangeText={(t) => setNewPhoneNo(t)}
           onChangeCountry={(c) => setNewCountryCode(c)}
 
-           // styling hy nechy sari
-           containerStyle={{
+          // styling hy nechy sari
+          containerStyle={{
             alignSelf: 'center', marginTop: hp(4), backgroundColor: theme.backgroundColor,
             justifyContent: 'center', alignItems: 'center', height: 'auto', width: 'auto'
           }}
           textInputProps={{
-            cursorColor:secondaryTextColor,
+            cursorColor: secondaryTextColor,
             placeholder: "New number...", placeholderTextColor: "gray",
             style: {
               color: secondaryTextColor, backgroundColor: theme.backgroundColor,

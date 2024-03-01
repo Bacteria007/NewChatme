@@ -132,7 +132,8 @@
 "User_already_exists":"اس فون نمبر پر اکاؤنٹ پہلے سے موجود ہے۔",
 "Account_not_created":"اکاؤنٹ نہیں بنایا جا سکتا۔ بعد میں دوبارہ کوشش کریں۔",
 "Invalid_password":"پاس ورڈ درست نہیں ہے۔",
-"user_name_not_available":"اس نام کا صارف پہلے سے موجود ہے۔"
+"user_name_not_available":"اس نام کا صارف پہلے سے موجود ہے۔",
+"password_changed":"پاس ورڈ تبدیل کر دیا گیا ہے۔"
 
 }
   

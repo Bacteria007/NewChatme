@@ -133,5 +133,6 @@
   "User_already_exists":"User with this phone number already exist",
   "Account_not_created":"Account cannot be created. Try again later",
   "Invalid_password":"Password is invalid",
-  "user_name_not_available":"User name already taken"
+  "user_name_not_available":"User name already taken",
+  "password_changed":"Password changed successfully"
 }
