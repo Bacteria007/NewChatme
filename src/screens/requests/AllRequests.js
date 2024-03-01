@@ -17,10 +17,11 @@ import { capitalizeFirstLetter } from '../../helpers/UiHelpers/CapitalizeFirstLe
 import { CreateNameSubString } from '../../helpers/UiHelpers/CreateSubString';
 import ReactNativeModal from 'react-native-modal';
 import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
+import TranslationFile from '../../assets/translation/TranslationFile';
 
 const AllRequest = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
-    const { baseUrl, currentUser, token, } = useContext(AppContext);
+    const { baseUrl, currentUser, token,language } = useContext(AppContext);
     const [waitingRequests, setWaitingRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [profileModals, setProfileModals] = useState([]);
@@ -223,7 +224,7 @@ const AllRequest = ({ navigation }) => {
         <View style={Containers.whiteCenterContainer(theme.backgroundColor)}>
             <View>
                 <Primary_StatusBar />
-                <InnerScreensHeader screenName={"All Request"} navigation={navigation} />
+                <InnerScreensHeader screenName={TranslationFile[language].All_Request} navigation={navigation} />
                 {isLoading && <View style={ReelscreenStyle.LoaderView}>
                 <AppActivityIndicator/>
 </View>}
@@ -235,7 +236,7 @@ const AllRequest = ({ navigation }) => {
                     :
                     !isLoading && (
                         <View style={Containers.centerContainer}>
-                            <Text style={HomeNeoCards.noSearchResultText}>No new requests.</Text>
+                            <Text style={HomeNeoCards.noSearchResultText}>{TranslationFile[language].No_new_requests}</Text>
                         </View>
                     )
                 }

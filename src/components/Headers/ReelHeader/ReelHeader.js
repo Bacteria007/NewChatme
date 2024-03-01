@@ -11,10 +11,11 @@ import {
 import { launchImageLibrary } from 'react-native-image-picker';
 import AppContext from '../../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TranslationFile from '../../../assets/translation/TranslationFile';
 
 const ReelHeader = ({navigation}) => {
   
-  const { baseUrl,token,currentUser } = useContext(AppContext);
+  const { baseUrl,token,currentUser ,language} = useContext(AppContext);
 //  const videoLength=40
   let options = {
     mediaType: 'video',
@@ -53,7 +54,7 @@ const ReelHeader = ({navigation}) => {
   };
   return (
     <View style={[ReelHeaderStyle.headerView]}>
-      <Text style={[ReelHeaderStyle.screenNameStyle]}>Strings</Text>
+      <Text style={[ReelHeaderStyle.screenNameStyle]}>{TranslationFile[language].Reels}</Text>
       <View style={[ReelHeaderStyle.iconContainer]}>
         <TouchableOpacity
           // onPress={() => {

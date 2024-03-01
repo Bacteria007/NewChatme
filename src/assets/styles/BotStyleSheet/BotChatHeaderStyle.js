@@ -16,9 +16,9 @@ const BotChatHeaderStyle = StyleSheet.create({
   }),
   leftview: {
     flexDirection: 'row',
-    width: wp('34%'),
+    width: wp('38%'),
     height: hp('8%'),
-    marginLeft:wp("5"),
+    marginLeft:wp("7"),
     justifyContent: 'center',
     alignItems:'center',
     // backgroundColor:'red'
@@ -41,7 +41,7 @@ const BotChatHeaderStyle = StyleSheet.create({
 BotNameTextStyle:bgColor=>( {
     fontSize: wp('5.5%'),
     color: bgColor,
-    width:wp('30'),
+    width:wp('35'),
   }),
   profileStatusStyle: {
     color: AppColors.white,

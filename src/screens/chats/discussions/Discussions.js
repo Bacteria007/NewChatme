@@ -16,11 +16,12 @@ import AddFriendBtn from '../../../components/Buttons/AddFriendsBtn';
 import AppActivityIndicator from '../../../components/FlatlistComponents/AppActivityIndicator';
 import UseScreenFocus from '../../../helpers/AutoRefreshScreen/UseScreenFocus';
 import { initializeZego, uninitZegoFunc } from '../../../helpers/ZegoCloudFunction/ZegoInitFunction';
+import TranslationFile from '../../../assets/translation/TranslationFile';
 
 const Discussions = (props) => {
   //            **************                    USE STATES      *****************
   const { theme } = useContext(ThemeContext)
-  const { baseUrl, getToken, token, currentUser } = useContext(AppContext);
+  const { baseUrl, getToken, token, currentUser ,language} = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
@@ -127,14 +128,14 @@ const Discussions = (props) => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
         <Primary_StatusBar />
-        <AppHeader navigation={props.navigation} headerTitle={'Chats'} handleSearchOnChange={handleSearch} searchQuery={searchText} />
+        <AppHeader navigation={props.navigation} headerTitle={TranslationFile[language].Chats} handleSearchOnChange={handleSearch} searchQuery={searchText} />
         <BotDiscussion navigation={props.navigation} />
         {isLoading && <View style={Containers.centerContainer}>
           <AppActivityIndicator />
         </View>}
         {searchText !== '' && searchedChat.length === 0 && userNotFound === true ? (
           <View style={Containers.centerContainer}>
-            <Text style={HomeNeoCards.noSearchResultText}>No user with this name.</Text>
+            <Text style={HomeNeoCards.noSearchResultText}>{TranslationFile[language].No_user_with_this_name}</Text>
           </View>
         ) :
           (
@@ -170,8 +171,8 @@ const Discussions = (props) => {
               :
               !isLoading && (
                 <View style={Containers.centerContainer}>
-                  <Text style={HomeNeoCards.noSearchResultText}>You have no friends.</Text>
-                  <AddFriendBtn btnTitle={'Add Friends'} onPress={() => { props.navigation.navigate("DrawerStack", { screen: "Home", params: { screen: "Discover" } }) }} />
+                  <Text style={HomeNeoCards.noSearchResultText}>{TranslationFile[language].You_have_no_friends}</Text>
+                  <AddFriendBtn btnTitle={TranslationFile[language].Add_Friends} onPress={() => { props.navigation.navigate("DrawerStack", { screen: "Home", params: { screen: "Discover" } }) }} />
                 </View>
               )
           )}

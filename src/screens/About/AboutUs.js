@@ -8,22 +8,24 @@ import DeviceInfo from 'react-native-device-info';
 import { ThemeContext } from '../../context/ThemeContext'
 import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar'
 import FontStyle from '../../assets/styles/FontStyle'
+import AppContext from '../../context/AppContext'
+import TranslationFile from '../../assets/translation/TranslationFile'
 
 const AboutUs = ({ navigation }) => {
   const { theme, darkThemeActivator } = useContext(ThemeContext);
-
+  const {language} = useContext(AppContext);
   const appVersion = DeviceInfo.getVersion();
   return (
     <DrawerScreenswrapper>
-      <InnerScreensHeader screenName={"AboutUs"} navigation={navigation} />
+      <InnerScreensHeader screenName={TranslationFile[language].AboutUs} navigation={navigation} />
       <View style={styles.container(theme.backgroundColor)}>
         <View style={{justifyContent:'center',alignItems:'center',alignSelf:'center',padding:10,marginBottom:hp('4')}}>
-          <Text style={styles.title(theme.profileNameColor)}>About ChatMe</Text>
+          <Text style={styles.title(theme.profileNameColor)}>{TranslationFile[language].About_ChatMe}</Text>
           <Text style={styles.description(theme.lastMsgColor)}>
-            Welcome to our app! Here, you'll find information about our app and the team behind it.
+            {TranslationFile[language].Welcome_to_our_app_Here_youll_find_information_about_our_app_and_the_team_behind_it}
           </Text>
           <Text style={{fontFamily:FontStyle.regularFont}}></Text>
-          <Text style={styles.version(theme.lastMsgColor)}>App Version: {appVersion}</Text>
+          <Text style={styles.version(theme.lastMsgColor)}>{TranslationFile[language].App_Version}: {appVersion}</Text>
         </View>
       </View>
     </DrawerScreenswrapper>

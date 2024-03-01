@@ -277,7 +277,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
           </View> */}
           <View style={{ justifyContent: 'center' }}>
             <TextInput
-              placeholder={'Account ' + TranslationFile[language].Name}
+              placeholder={TranslationFile[language].AccountName}
               placeholderTextColor={AppColors.gray}
               value={name}
               style={AfterSignUpStyleSheet.TextInputContainer(secondaryTextColor)}
@@ -292,7 +292,7 @@ const AfterSignUpProfileScreen = ({ navigation }) => {
             )}
             <Text style={[AfterSignUpStyleSheet.Text2, { marginLeft: 15 }]}>
               {/* {TranslationFile[language].Security_questions} */}
-              {important_note}
+              {TranslationFile[language].important_note}
             </Text>
             <View style={AfterSignUpStyleSheet.quesView}>
               <Text style={AfterSignUpStyleSheet.displyNameText(maintextColor)}>

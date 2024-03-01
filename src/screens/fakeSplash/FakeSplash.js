@@ -9,10 +9,11 @@ import FontStyle from '../../assets/styles/FontStyle';
 import axios from 'axios';
 import { Primary_StatusBar } from '../../components/statusbars/Primary_StatusBar';
 import { ThemeContext } from '../../context/ThemeContext';
+import TranslationFile from '../../assets/translation/TranslationFile';
 
 
 const FakeSplash = ({ navigation }) => {
-  const { updateCurrentUser, updateToken, baseUrl } = useContext(AppContext);
+  const { updateCurrentUser, updateToken, baseUrl,language } = useContext(AppContext);
   const { setDarkTheme, setLightTheme ,theme} = useContext(ThemeContext)
   
   const checkUserStatus = async () => {
@@ -103,7 +104,7 @@ const FakeSplash = ({ navigation }) => {
     <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: theme.backgroundColor}}>
       <Primary_StatusBar />
       <Lottie source={require('../../assets/animations/Lottieanimations/Splash.json')} autoPlay loop style={{ height: wp('50%'), width: wp("50%") }} />
-      <Text style={{ fontSize: wp('6%'), fontFamily: FontStyle.mediumFont, color: AppColors.purple, marginTop: hp('-5%') }}>ChatMe</Text>
+      <Text style={{ fontSize: wp('6%'), fontFamily: FontStyle.mediumFont, color: AppColors.purple, marginTop: hp('-5%') }}>{TranslationFile[language].ChatMe}</Text>
     </View>
   )
 }

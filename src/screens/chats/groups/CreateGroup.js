@@ -17,10 +17,11 @@ import { CheckBox } from '@rneui/themed';
 import CustomSearchBar from '../../../components/SearchBars/CustomSearchBar';
 import { capitalizeFirstLetter } from '../../../helpers/UiHelpers/CapitalizeFirstLetter';
 import FooterComponent from '../../../components/FlatlistComponents/FooterComponent';
+import TranslationFile from '../../../assets/translation/TranslationFile';
 
 const CreateGroup = ({ navigation }) => {
   // STATES
-  const { baseUrl, currentUser, token } = useContext(AppContext);
+  const { baseUrl, currentUser, token ,language} = useContext(AppContext);
   const { theme, darkThemeActivator } = useContext(ThemeContext);
   const [allUsers, setAllUsers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
@@ -129,7 +130,7 @@ const CreateGroup = ({ navigation }) => {
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: wp('75'), paddingLeft: wp('5') }}>
               <View style={{ justifyContent: 'center', alignItems: 'flex-start', }}>
                 <Text style={CreateGroupScreenStyle.profileName(theme.profileNameColor)}>
-                  {capitalizeFirstLetter(item.name)}
+                  {capitalizeFirstLetter(item?.name)}
                 </Text>
                 <Text style={CreateGroupScreenStyle.phoneText}>
                   {item.phoneNo}
@@ -185,7 +186,7 @@ const CreateGroup = ({ navigation }) => {
       {toggleScreen === 1 ?
         <>
           <Primary_StatusBar />
-          <InnerScreensHeader screenName={"Create Group"} navigation={navigation} />
+          <InnerScreensHeader screenName={TranslationFile[language].Create_Group} navigation={navigation} />
           <View style={CreateGroupScreenStyle.container(theme.backgroundColor)}>
             <CustomSearchBar searchQuery={searchText} handleSearchOnChange={handleSearch} />
             {selectedMembers.length > 1 && (

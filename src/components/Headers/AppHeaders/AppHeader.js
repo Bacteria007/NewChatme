@@ -20,6 +20,8 @@ import FontStyle from '../../../assets/styles/FontStyle';
 import { Badge, Searchbar, TouchableRipple } from 'react-native-paper';
 import DrawerHeaderStyle from '../../../assets/styles/DrawerHeaderStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TranslationFile from '../../../assets/translation/TranslationFile';
+import AppContext from '../../../context/AppContext';
 const AppHeader = ({
   navigation,
   waitingReqC,
@@ -35,6 +37,7 @@ const AppHeader = ({
     setLightTheme,
     setDarkTheme,
   } = useContext(ThemeContext);
+  const {language} = useContext(AppContext)
 
   const rippleColor = 'rgba(0,0,0,0.2)';
 
@@ -144,7 +147,7 @@ const AppHeader = ({
           value={searchQuery} // ISS MEIN WO VALUE AIY GI JO K HUM SEARCH KR RAHY HAIN VALUE MREIN DATA DISCUSSION WALI SCREEN SY AA RAHA HAI
           elevation={0}
           underlineColorAndroid={'transparent'}
-          placeholder={`Search`}
+          placeholder={TranslationFile[language].Search}
           placeholderTextColor={theme.headerSearchText} //light
           round
           showCancel

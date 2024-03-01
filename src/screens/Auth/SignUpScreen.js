@@ -294,7 +294,7 @@ const SignUpScreen = ({ navigation }) => {
                 setPasswordVisible(!passwordVisible);
               }}>
               <Icons.Feather
-                name={passwordVisible === true ? 'eye' : 'eye-off'}
+                name={passwordVisible === true ? 'eye-off' : 'eye'}
                 style={LogInStyleSheet.passwordIcon}
               />
             </TouchableOpacity>
@@ -315,10 +315,10 @@ const SignUpScreen = ({ navigation }) => {
           </TouchableOpacity>
 
           <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: wp('3%') }}>
-            <Text style={{ fontFamily: FontStyle.regularFont, color: maintextColor }}>Have an account?{' '}</Text>
+            <Text style={{ fontFamily: FontStyle.regularFont, color: maintextColor }}>{TranslationFile[language].Have_an_account}{' '}</Text>
             <TouchableOpacity onPress={() => {
               navigation.replace('LogInScreen')
-            }}><Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>Login</Text></TouchableOpacity>
+            }}><Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont }}>{TranslationFile[language].LogIn}</Text></TouchableOpacity>
 
           </View>
         </ScrollView>

@@ -9,11 +9,12 @@ import AppContext from '../../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppColors from '../../../assets/colors/Appcolors';
 import PhoneInput from 'react-native-phone-number-input';
+import TranslationFile from '../../../assets/translation/TranslationFile';
 
 const ChangeNumber = ({ navigation }) => {
   const { theme, darkThemeActivator } = useContext(ThemeContext);
   const secondaryTextColor = darkThemeActivator ? AppColors.gray : AppColors.black
-  const { baseUrl, getToken, token, updateCurrentUser, currentUser } = useContext(AppContext)
+  const { baseUrl, getToken, token, updateCurrentUser, currentUser ,language} = useContext(AppContext)
 
   const [oldPhoneNo, setOldPhoneNo] = useState('')
   const [oldCountryCode, setOldCountryCode] = useState('')
@@ -71,7 +72,7 @@ const ChangeNumber = ({ navigation }) => {
   }
   return (
     <View style={{ backgroundColor: theme.backgroundColor, flex: 1 }}>
-      <InnerScreensHeader navigation={navigation} screenName="Change number" />
+      <InnerScreensHeader navigation={navigation} screenName={TranslationFile[language].changeNumber} />
       <View style={[ChangeNumberStyle.mainViewStyle(theme.backgroundColor)]}>
         <Text
           style={[ChangeNumberStyle.headTextStyle(secondaryTextColor)]}>

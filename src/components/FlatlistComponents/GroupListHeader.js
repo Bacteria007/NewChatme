@@ -7,10 +7,12 @@ import { ThemeContext } from '../../context/ThemeContext'
 import { Icons } from '../../assets/Icons'
 import HomeNeoCards from '../../assets/styles/homeScreenCardStyles/HomeNeoCards'
 import { widthPercentageToDP as wp} from 'react-native-responsive-screen'
+import TranslationFile from '../../assets/translation/TranslationFile'
+import AppContext from '../../context/AppContext'
 
 const GroupListHeader = ({navigation}) => {
     const { theme, darkThemeActivator } = useContext(ThemeContext)
-  
+    const {language} = useContext(AppContext)
     return (
         <TouchableOpacity onPress={() => { navigation.navigate("InnerScreens", { screen: "CreateGroup" }) }} >
             <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
@@ -28,7 +30,7 @@ const GroupListHeader = ({navigation}) => {
                             <Icons.MaterialCommunityIcons name="plus" size={wp('3.8%')} color="white" />
                         </TouchableOpacity>
                     </View>
-                    <Text style={GroupStyles.newGroupNameStyle(darkThemeActivator)}>New Group</Text>
+                    <Text style={GroupStyles.newGroupNameStyle(darkThemeActivator)}>{TranslationFile[language].New_Groups}</Text>
                 </Neomorph>
             </View>
         </TouchableOpacity>)

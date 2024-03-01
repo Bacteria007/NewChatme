@@ -3,11 +3,14 @@ import { SearchBar } from '@rneui/base';
 import { ThemeContext } from '../../context/ThemeContext';
 import AppSubHeaderStyle from '../../assets/styles/AppSubHeaderStyle';
 import { widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import TranslationFile from '../../assets/translation/TranslationFile';
+import AppContext from '../../context/AppContext';
 
 
 
 const CustomSearchBar = ({ searchQuery, handleSearchOnChange }) => {
     const { theme, } = useContext(ThemeContext);
+    const {language} = useContext(AppContext)
 
 
     return (
@@ -17,7 +20,7 @@ const CustomSearchBar = ({ searchQuery, handleSearchOnChange }) => {
             value={searchQuery}                     // ISS MEIN WO VALUE AIY GI JO K HUM SEARCH KR RAHY HAIN VALUE MREIN DATA DISCUSSION WALI SCREEN SY AA RAHA HAI
             elevation={0}
             underlineColorAndroid={"transparent"}
-            placeholder={`Search`}
+            placeholder={TranslationFile[language].Search}
             placeholderTextColor={theme.headerSearchText} //light
             round
             showCancel

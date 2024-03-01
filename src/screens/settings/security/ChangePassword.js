@@ -84,14 +84,14 @@ const ChangePassword = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-      <InnerScreensHeader navigation={navigation} screenName="Change password" />
+      <InnerScreensHeader navigation={navigation} screenName={TranslationFile[language].changePassword} />
       <View style={[ChangeNumberStyle.mainViewStyle(theme.backgroundColor)]}>
         <Text
           style={ChangeNumberStyle.headTextStyle(theme.profileNameColor)}>
-          Enter your old password to change current password:
+          {TranslationFile[language].Enter_your_old_password_to_change_current_password}
         </Text>
         <TextInput
-          placeholder="old password"
+          placeholder={TranslationFile[language].old_password}
           onChangeText={text => {
             setOldPassword(text);
           }}
@@ -108,10 +108,10 @@ const ChangePassword = ({ navigation }) => {
         />
         <Text
           style={[ChangeNumberStyle.headTextStyle]}>
-          Enter your new password to change current password:
+          {TranslationFile[language].Enter_your_new_password_to_change_current_password}
         </Text>
         <TextInput
-          placeholder="new password"
+          placeholder={TranslationFile[language].new_password}
           onChangeText={text => {
             setNewPassword(text);
           }}
@@ -127,7 +127,7 @@ const ChangePassword = ({ navigation }) => {
           placeholderTextColor={AppColors.gray}
 
         />
-        <LongButton btnTitle={"Confirm"} onPress={() => { checkPassword() }} />
+        <LongButton btnTitle={TranslationFile[language].Confirm} onPress={() => { checkPassword() }} />
       </View>
 
     </View>

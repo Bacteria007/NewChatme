@@ -10,10 +10,11 @@ import {
 import NotificationStyle from '../../../assets/styles/NotificationStyle'
 import AppContext from '../../../context/AppContext'
 import { TouchableRipple } from 'react-native-paper'
+import TranslationFile from '../../../assets/translation/TranslationFile'
 
 
 const Help = ({ navigation }) => {
-  const { baseUrl, currentUser, token } = useContext(AppContext)
+  const { baseUrl, currentUser, token,language } = useContext(AppContext)
 
   const [helpMessage, setHelpMessage] = useState('')
   const sendHelpMessage = async () => {
@@ -54,11 +55,11 @@ const Help = ({ navigation }) => {
   };
   return (
     <View style={[NotificationStyle.containerView]}>
-      <InnerScreensHeader navigation={navigation} screenName='Help center' />
+      <InnerScreensHeader navigation={navigation} screenName={TranslationFile[language].Help_center} />
       <View style={[NotificationStyle.mainView]}>
-        <Text style={[NotificationStyle.text]}>Sender name : {currentUser.name}</Text>
+        <Text style={[NotificationStyle.text]}>{TranslationFile[language].Sender_name} : {currentUser.name}</Text>
         <TextInput
-          placeholder='Write here about your problem'
+          placeholder={TranslationFile[language].problem}
           placeholderTextColor={AppColors.gray}
           style={NotificationStyle.textInput}
           value={helpMessage}
@@ -72,7 +73,7 @@ const Help = ({ navigation }) => {
         }}
           style={[NotificationStyle.touchableView]}>
           <Text style={[NotificationStyle.touchableText]}>
-            Submit
+            {TranslationFile[language].Submit}
           </Text>
         </TouchableRipple>
 

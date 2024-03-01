@@ -11,9 +11,10 @@ import AppColors from '../../../assets/colors/Appcolors'
 import { Badge, FAB } from 'react-native-paper'
 import { capitalizeFirstLetter } from '../../../helpers/UiHelpers/CapitalizeFirstLetter'
 import { SelectImage } from '../../../helpers/launchCameraHelper/SelectImage'
+import TranslationFile from '../../../assets/translation/TranslationFile'
 
 const NewGroup = (props) => {
-    const { baseUrl, currentUser, token } = useContext(AppContext);
+    const { baseUrl, currentUser, token ,language} = useContext(AppContext);
     const { theme, darkThemeActivator } = useContext(ThemeContext);
     const { selectedMembers, deselectMember, } = props.route.params
     const [groupName, setgroupName] = useState('');
@@ -75,7 +76,7 @@ console.log("deselctmem")
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <SafeAreaView style={{ flex: 1 }}>
             {/* <StatusBar backgroundColor={AppColors.Lavender} barStyle={'dark-content'} /> */}
-            <InnerScreensHeader screenName={"NewGroup"} navigation={props.navigation} />
+            <InnerScreensHeader screenName={TranslationFile[language].NewGroup} navigation={props.navigation} />
             <View style={CreateGroupScreenStyle.container(AppColors.Lavender)}>
                 <View style={CreateGroupScreenStyle.avatarAndNameContainer}>
                     <View style={CreateGroupScreenStyle.circleAroundGroupDp(AppColors.lightBlack2)}>
@@ -96,7 +97,7 @@ console.log("deselctmem")
 
                     <TextInput
                         value={groupName}
-                        placeholder="Group Name"
+                        placeholder={TranslationFile[language].Group_Name}
                         cursorColor={AppColors.primary}
                         placeholderTextColor={AppColors.black}
                         style={CreateGroupScreenStyle.enterNameTextinput}
@@ -104,11 +105,11 @@ console.log("deselctmem")
                         autoFocus={true}
                         onChangeText={e => { setgroupName(e) }}
                     />
-                    <Text style={CreateGroupScreenStyle.msgText}>Provide a group subject and optional group icon</Text>
+                    <Text style={CreateGroupScreenStyle.msgText}>{TranslationFile[language].Provide_a_group_subject}</Text>
                 </View>
                 <View style={CreateGroupScreenStyle.participantsSectionContainer}>
                     <View style={CreateGroupScreenStyle.participantsTextContainer}>
-                        <Text style={CreateGroupScreenStyle.participantsText}>Participants: </Text>
+                        <Text style={CreateGroupScreenStyle.participantsText}>{TranslationFile[language].Participants} </Text>
                         {/* <View style={CreateGroupScreenStyle.participantsNumberContainer}>
                             <Text style={CreateGroupScreenStyle.participantsNumber}>{selectedMembers.length - 1}</Text>
                         </View> */}

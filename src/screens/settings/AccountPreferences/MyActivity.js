@@ -18,8 +18,9 @@ import Video from 'react-native-video'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import AppActivityIndicator from '../../../components/FlatlistComponents/AppActivityIndicator';
 import ReelscreenStyle from '../../../assets/styles/ReelStyleSheet/ReelscreenStyle';
+import TranslationFile from '../../../assets/translation/TranslationFile';
 const MyActivity = ({ navigation }) => {
-  const { baseUrl, currentUser, token } = useContext(AppContext);
+  const { baseUrl, currentUser, token ,language} = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   const userId = currentUser.userId;
   const [currentVideo, setCurrentVideo] = useState(null);
@@ -136,7 +137,7 @@ const MyActivity = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={MyActivityStyleSheet.mainContainer(theme.backgroundColor)}>
-        <InnerScreensHeader navigation={navigation} screenName="My uploads" />
+        <InnerScreensHeader navigation={navigation} screenName={TranslationFile[language].My_uploads} />
         <View style={MyActivityStyleSheet.reelsContainer}>
           {isLoading ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -146,7 +147,7 @@ const MyActivity = ({ navigation }) => {
             <View style={Containers.centercontent}>
               {allUploads.length === 0 ? (
                 <View style={MyActivityStyleSheet.lottieContainer}>
-                  <Text style={HomeNeoCards.noSearchResultText}>You have no uploads.</Text>
+                  <Text style={HomeNeoCards.noSearchResultText}>{TranslationFile[language].You_have_no_uploads}</Text>
                 </View>
               ) : (
                 <FlatList

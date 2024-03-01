@@ -109,7 +109,7 @@ const DeleteAccount = ({ navigation }) => {
 
   return (
     <View style={DeleteAccountStyle.containerView(theme.backgroundColor)}>
-      <InnerScreensHeader navigation={navigation} screenName="Delete Account" />
+      <InnerScreensHeader navigation={navigation} screenName={TranslationFile[language].deleteAccount} />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this offset based on your requirement
@@ -129,32 +129,31 @@ const DeleteAccount = ({ navigation }) => {
               </View>
               <View style={[DeleteAccountStyle.warningRightView]}>
                 <Text style={[DeleteAccountStyle.warningHeadText]}>
-                  Deleting your account will:
+                  {TranslationFile[language].Deleting_your_account_will}
                 </Text>
                 <View style={[DeleteAccountStyle.buletedView]}>
                   <Text style={{ color: secondaryTextColor }}>{'\u25cf'} </Text>
                   <Text style={[DeleteAccountStyle.buletedText(secondaryTextColor)]}>
-                    Delete your account from ChatMe
+                  {TranslationFile[language].Delete_your_account_from_ChatMe}
                   </Text>
                 </View>
                 <View style={[DeleteAccountStyle.buletedView]}>
                   <Text style={{ color: secondaryTextColor }}>{'\u25cf'} </Text>
                   <Text style={[DeleteAccountStyle.buletedText(secondaryTextColor)]}>
-                    Earase your message history
+                  {TranslationFile[language].Earase_your_message_history}
                   </Text>
                 </View>
                 <View style={[DeleteAccountStyle.buletedView]}>
                   <Text style={{ color: secondaryTextColor }}>{'\u25cf'} </Text>
                   <Text style={[DeleteAccountStyle.buletedText(secondaryTextColor)]}>
-                    Delete you from all of your ChatMe groups
+                    {TranslationFile[language].Delete_you_from_all_of_your_ChatMe_groups}
                   </Text>
                 </View>
               </View>
             </View>
             <View style={[DeleteAccountStyle.actionContainerView]}>
               <Text style={[DeleteAccountStyle.actionConfirmText(darkThemeActivator)]}>
-                To delete your account, confirm your country code and enter your phone
-                number.
+                {TranslationFile[language].To_delete_your_account_confirm_your_country_code_and_enter_your_phone_number}
               </Text>
               {/* <Text style={[DeleteAccountStyle.labelText]}>Country code</Text>
               <TextInput
@@ -165,7 +164,7 @@ const DeleteAccount = ({ navigation }) => {
 
               /> */}
               {/* <View style={[DeleteAccountStyle.underlineView]}></View> */}
-              <Text style={[DeleteAccountStyle.labelText]}>Phone</Text>
+              <Text style={[DeleteAccountStyle.labelText]}>{TranslationFile[language].Phone}</Text>
               {/* <TextInput
                 placeholder="phone number"
                 keyboardType='numeric'
@@ -191,7 +190,7 @@ const DeleteAccount = ({ navigation }) => {
                 textInputProps={{
                   cursorColor: secondaryTextColor,
                   onFocus: () => setPhoneNumberError(''),
-                  placeholder: "Phone number", placeholderTextColor: "gray",
+                  placeholder: `${TranslationFile[language].Phone_Number}`, placeholderTextColor: "gray",
                   style: {
                     color: secondaryTextColor, backgroundColor: theme.backgroundColor,
                     fontFamily: FontStyle.regularFont, flex: 1, width: 'auto',
@@ -211,9 +210,9 @@ const DeleteAccount = ({ navigation }) => {
               {phoneNumberError && <Text style={{ color: 'red', fontFamily: FontStyle.regularFont }}>{phoneNumberError}</Text>}
 
               {/* <View style={[DeleteAccountStyle.underlineView]}></View> */}
-              <Text style={[DeleteAccountStyle.labelText]}>Password</Text>
+              <Text style={[DeleteAccountStyle.labelText]}>{TranslationFile[language].Password}</Text>
               <TextInput
-                placeholder="password"
+                placeholder={TranslationFile[language].Password}
                 style={DeleteAccountStyle.textinput(darkThemeActivator, secondaryTextColor)}
                 autoCapitalize='none'
                 onChangeText={text => setPassword(text)}
@@ -240,7 +239,7 @@ const DeleteAccount = ({ navigation }) => {
                   fontSize: wp('4.5%'),
                   fontFamily: FontStyle.regularFont,
                 }}>
-                  Delete
+                  {TranslationFile[language].Delete}
                 </Text>
               </TouchableRipple>
               {/* <LongButton/> */}

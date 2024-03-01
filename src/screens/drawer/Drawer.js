@@ -29,13 +29,14 @@ import RNExitApp from 'react-native-exit-app';
 import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import ProfileScreenStyleSheet from '../../assets/styles/ProfileScreenStyle/ProfileScreenStyleSheet';
 import { uninitZegoFunc } from '../../helpers/ZegoCloudFunction/ZegoInitFunction';
+import TranslationFile from '../../assets/translation/TranslationFile';
 
 
 const Drawer = createDrawerNavigator();
 
 const DrawerScreens = () => {
   const { theme } = useContext(ThemeContext);
-  const { baseUrl, currentUser } = useContext(AppContext);
+  const { baseUrl, currentUser,language } = useContext(AppContext);
   console.log('baseurl', baseUrl);
   console.log('appcontext appjs', currentUser);
 
@@ -147,7 +148,7 @@ const DrawerScreens = () => {
                 <View style={styles.logoutView}>
                   <Icons.AntDesign name="logout" color={AppColors.black} size={iconSize}
                   />
-                  <Text style={styles.logoutText}>  Logout </Text>
+                  <Text style={styles.logoutText}>{TranslationFile[language].logout}</Text>
                 </View>
               </TouchableOpacity>
             </View>

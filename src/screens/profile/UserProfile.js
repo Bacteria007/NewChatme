@@ -35,9 +35,10 @@ import GenerateVideoHtml from '../Reels/ReelsHtmlVideo';
 import WebView from 'react-native-webview';
 import { Icons } from '../../assets/Icons';
 import SelectInfo from './SelectInfo';
+import TranslationFile from '../../assets/translation/TranslationFile';
 
 const UserProfile = props => {
-  const { token, baseUrl, storeUserName, currentUser, updateCurrentUser, userName, selectedImageUri, storeImageUri, } = useContext(AppContext);
+  const { token, baseUrl, storeUserName, currentUser, updateCurrentUser,language, userName, selectedImageUri, storeImageUri, } = useContext(AppContext);
   const { theme, darkThemeActivator } = useContext(ThemeContext);
   const arrow_icon = 'pencil';
   const iconSize = wp('9%');
@@ -178,7 +179,7 @@ const UserProfile = props => {
     <DrawerScreenswrapper>
       <View style={[ProfileScreenStyleSheet.container(theme.backgroundColor)]}>
         <InnerScreensHeader
-          screenName={'Profile'}
+          screenName={TranslationFile[language].Profile}
           navigation={props.navigation}
         />
         {/* main view for profile img */}
@@ -282,7 +283,7 @@ const UserProfile = props => {
               />
               <View style={{ flex: 1 }}>
                 <Text style={ProfileScreenStyleSheet.itemName(textColor)}>
-                  Name
+                  {TranslationFile[language].Name}
                 </Text>
                 <Text style={[ProfileScreenStyleSheet.itemName(infoColor)]}>
                   {' '}
@@ -308,7 +309,7 @@ const UserProfile = props => {
               />
               <View style={{ flex: 1 }}>
                 <Text style={ProfileScreenStyleSheet.itemName(textColor)}>
-                  Phone number
+                  {TranslationFile[language].Phone_number}
                 </Text>
                 <Text style={ProfileScreenStyleSheet.itemName(infoColor)}>
                    {currentUser.phoneNumber}
@@ -341,7 +342,7 @@ const UserProfile = props => {
               />
               <View style={{ flex: 1 }}>
                 <Text style={ProfileScreenStyleSheet.itemName(textColor)}>
-                  Delete Account
+                  {TranslationFile[language].Delete_Account}
                 </Text>
               </View>
               <Icons.MaterialCommunityIcons
@@ -365,7 +366,7 @@ const UserProfile = props => {
                   style={ProfileScreenStyleSheet.uploadsText(
                     theme.profileNameColor,
                   )}>
-                  Uploads
+                  {TranslationFile[language].Uploads}
                 </Text>
                 {allUploads.length > 2 && (
                   <TouchableOpacity
@@ -386,7 +387,7 @@ const UserProfile = props => {
                       }}>
                       <Text
                         style={ProfileScreenStyleSheet.itemName(arrowColor)}>
-                        View All
+                        {TranslationFile[language]?.View_All}
                       </Text>
                       <Text>
                         <Icons.Entypo
@@ -482,7 +483,7 @@ const UserProfile = props => {
               ) : (
                 <View style={{ marginTop: hp('3') }}>
                   <Text style={[ProfileScreenStyleSheet.noFriendsText(theme.lastMsgColor)]}>
-                    no uploads.
+                    {TranslationFile[language].no_uploads}
                   </Text>
                 </View>
               )}

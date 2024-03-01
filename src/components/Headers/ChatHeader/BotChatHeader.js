@@ -8,11 +8,13 @@ import {
   } from 'react-native-responsive-screen';
 import AppColors from '../../../assets/colors/Appcolors';
 import { ThemeContext } from '../../../context/ThemeContext';
+import TranslationFile from '../../../assets/translation/TranslationFile';
+import AppContext from '../../../context/AppContext';
 
 
 const BotChatHeader = ({navigation}) => {
   const { theme } = useContext(ThemeContext);
-
+  const {language} = useContext(AppContext);
   return (
 
     <View style={[BotChatHeaderStyle.headerView(theme.chatScreenColor)]}>
@@ -42,7 +44,7 @@ const BotChatHeader = ({navigation}) => {
               />
             </View>
             <View style={[BotChatHeaderStyle.profileNameContainerStyle]}>
-              <Text style={[BotChatHeaderStyle.BotNameTextStyle(theme.profileNameColor)]}>AI ChatBot</Text>
+              <Text style={[BotChatHeaderStyle.BotNameTextStyle(theme.profileNameColor)]}>{TranslationFile[language].AI_ChatBot}</Text>
             </View>
           </View>
       

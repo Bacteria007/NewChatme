@@ -22,12 +22,13 @@ import HomeNeoCards from '../../../assets/styles/homeScreenCardStyles/HomeNeoCar
 import { SelectImage } from '../../../helpers/launchCameraHelper/SelectImage';
 import Containers from '../../../assets/styles/Containers';
 import UserChatStyle from '../../../assets/styles/UserChatStyle';
+import TranslationFile from '../../../assets/translation/TranslationFile';
 
 const GroupChat = props => {
 
   // VARIABLES
   const { item, allGroupMsgs } = props.route.params;
-  const { baseUrl, currentUser, token, apiKey ,apiURL,aimodel} = useContext(AppContext);
+  const { baseUrl, currentUser, token, apiKey ,apiURL,aimodel,language} = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   let userId = currentUser.userId;
   // console.log('userId====', userId);
@@ -336,7 +337,7 @@ const GroupChat = props => {
               ) : !isLoading && (
                 <View style={GroupChatStyle.startConvBtn}>
                   <Text style={HomeNeoCards.noSearchResultText}>
-                    Start Conversation
+                    {TranslationFile[language].Start_Conversation}
                   </Text>
                 </View>
               )}

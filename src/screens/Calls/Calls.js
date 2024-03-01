@@ -33,9 +33,10 @@ import Containers from '../../assets/styles/Containers';
 import LottieView from 'lottie-react-native';
 import MyActivityStyleSheet from '../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
 import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
+import TranslationFile from '../../assets/translation/TranslationFile';
 
 const Calls = ({ navigation }) => {
-  const { baseUrl, token, currentUser } = useContext(AppContext);
+  const { baseUrl, token, currentUser,language } = useContext(AppContext);
 
   //       ***************************                 STATES         **************************************
   const { theme, darkThemeActivator } = useContext(ThemeContext);
@@ -263,7 +264,7 @@ const Calls = ({ navigation }) => {
       {changeHeader !== true ?
         <AppHeader
           navigation={navigation}
-          headerTitle={'Calls'}
+          headerTitle={TranslationFile[language].Calls}
           handleSearchOnChange={handleSearch}
           searchQuery={searchText}
         />
@@ -282,7 +283,7 @@ const Calls = ({ navigation }) => {
         </View>}
       {searchText !== '' && searchedCalls.length === 0 && callNotFound === true ? (
         <View style={Containers.centerContainer}>
-          <Text style={HomeNeoCards.noSearchResultText}>No caller with this name.</Text>
+          <Text style={HomeNeoCards.noSearchResultText}>{TranslationFile[language].No_caller_with_this_name}</Text>
         </View>
       ) :
         (

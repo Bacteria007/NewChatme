@@ -6,9 +6,12 @@ import { ThemeContext } from '../../../context/ThemeContext';
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
 import AppHeaderStyle from '../../../assets/styles/AppHeaderStyle';
 import GroupStyles from '../../../assets/styles/GroupScreenStyle/AllGroupsStyle';
+import TranslationFile from '../../../assets/translation/TranslationFile';
+import AppContext from '../../../context/AppContext';
 
 const BotDiscussion = ({ navigation }) => {
     const { theme, darkThemeActivator } = useContext(ThemeContext)
+    const {language} = useContext(AppContext)
     return (
         <TouchableOpacity
             onPress={() => {
@@ -29,7 +32,7 @@ const BotDiscussion = ({ navigation }) => {
                 </View>
                 <Text
                     style={GroupStyles.newGroupNameStyle(darkThemeActivator)}>
-                    Your Virtual Friend
+                    {TranslationFile[language]?.your_virtual_friend}
                 </Text>
         </Neomorph>
                         </TouchableOpacity>

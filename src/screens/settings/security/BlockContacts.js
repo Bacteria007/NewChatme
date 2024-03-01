@@ -10,11 +10,12 @@ import Containers from '../../../assets/styles/Containers'
 import LottieView from 'lottie-react-native'
 import { useWorkletCallback } from 'react-native-reanimated'
 import { ThemeContext } from '../../../context/ThemeContext'
+import TranslationFile from '../../../assets/translation/TranslationFile'
 
 const BlockContacts = ({ navigation }) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { baseUrl, currentUser, token } = useContext(AppContext);
+  const { baseUrl, currentUser, token ,language} = useContext(AppContext);
   const { theme,darkThemeActivator } = useContext(ThemeContext);
   const [selectedContact, setSelectedContact] = useState(null);
   const [blockedContactList, setBlockedContactList] = useState([]);
@@ -86,7 +87,7 @@ const BlockContacts = ({ navigation }) => {
   useEffect(() => { fetchBlockContactList() }, [])
   return (
     <View style={BlockedScreenStyle.container(theme.backgroundColor)}>
-      <InnerScreensHeader navigation={navigation} screenName='Blocked contacts' />
+      <InnerScreensHeader navigation={navigation} screenName={TranslationFile[language].Blocked_contacts} />
       <View style={BlockedScreenStyle.itemListView}>
         {blockedContactList.length != 0 ?
           <FlatList
@@ -111,7 +112,7 @@ const BlockContacts = ({ navigation }) => {
                     animationOut={'zoomOut'}>
                     <View style={BlockedScreenStyle.modalView}>
                       <TouchableOpacity onPress={() => { unblockContact(item) }}>
-                        <Text style={BlockedScreenStyle.unBlockBtn}>Unblock {item.contactData.name}</Text>
+                        <Text style={BlockedScreenStyle.unBlockBtn}>{TranslationFile[language].Unblock} {item.contactData.name}</Text>
                       </TouchableOpacity>
                     </View>
                   </Modal>
@@ -125,7 +126,7 @@ const BlockContacts = ({ navigation }) => {
           />
           :
           <View>
-            <Text style={BlockedScreenStyle.noContactText}>No Blocked Contacts.</Text>
+            <Text style={BlockedScreenStyle.noContactText}>{TranslationFile[language].No_Blocked_Contacts}</Text>
           </View>
         }
       </View>

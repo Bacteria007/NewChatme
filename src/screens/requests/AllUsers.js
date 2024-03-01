@@ -27,10 +27,11 @@ import { capitalizeFirstLetter } from '../../helpers/UiHelpers/CapitalizeFirstLe
 import { CreateNameSubString } from '../../helpers/UiHelpers/CreateSubString';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
+import TranslationFile from '../../assets/translation/TranslationFile';
 
 const AllUsers = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
-  const { baseUrl, currentUser, token } = useContext(AppContext);
+  const { baseUrl, currentUser, token,language } = useContext(AppContext);
   const [isSending, setIsSending] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [requestSent, setRequestSent] = useState(false);
@@ -52,9 +53,9 @@ const AllUsers = ({ navigation }) => {
     } else {
       // Filter users based on search query
       const filteredPeople = people.filter(someone =>
-        someone.name.toLowerCase().includes(text.toLowerCase()),
+        someone?.name?.toLowerCase()?.includes(text.toLowerCase()),
       );
-      setSomeoneNotFound(filteredPeople.length === 0);
+      setSomeoneNotFound(filteredPeople?.length === 0);
       setSeacrhedPeople(filteredPeople);
     }
   };
@@ -285,7 +286,7 @@ const AllUsers = ({ navigation }) => {
               <Neomorph
                 swapShadows
                 style={HomeNeoCards.addUserinGroup(AppColors.Mauve)}>
-                <Text style={styles.addCancelText}>Cancel</Text>
+                <Text style={styles.addCancelText}>{TranslationFile[language].Cancel}</Text>
               </Neomorph>
             </TouchableOpacity>
           ) : (
@@ -301,7 +302,7 @@ const AllUsers = ({ navigation }) => {
                 {clickedItem === item && isSending ? (
                   <ActivityIndicator size="small" color={'white'} />
                 ) : (
-                  <Text style={styles.addCancelText}>Add</Text>
+                  <Text style={styles.addCancelText}>{TranslationFile[language].Add}</Text>
                 )}
               </Neomorph>
             </TouchableOpacity>
@@ -314,7 +315,7 @@ const AllUsers = ({ navigation }) => {
     <View style={Containers.whiteCenterContainer(theme.backgroundColor)}>
       <View>
         <AppHeader
-          headerTitle={'People'}
+          headerTitle={TranslationFile[language].People}
           navigation={navigation}
           searchQuery={searchText}
           handleSearchOnChange={handleSearch}
@@ -330,7 +331,7 @@ const AllUsers = ({ navigation }) => {
           someoneNotFound === true ? (
           <View style={Containers.centerContainer}>
             <Text style={HomeNeoCards.noSearchResultText}>
-              No user with this name.
+            {TranslationFile[language].No_user_with_this_name}  
             </Text>
           </View>
         ) : people.length != 0 ? (
@@ -343,7 +344,7 @@ const AllUsers = ({ navigation }) => {
         ) : (
           !isLoading && (<View style={Containers.centerContainer}>
             <Text style={HomeNeoCards.noSearchResultText}>
-              No people were found.
+            {TranslationFile[language].No_people_were_found}  
             </Text>
           </View>)
         )}

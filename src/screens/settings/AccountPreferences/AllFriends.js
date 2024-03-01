@@ -16,11 +16,12 @@ import { Neomorph } from 'react-native-neomorph-shadows-fixes';
 import AppColors from '../../../assets/colors/Appcolors';
 import InnerScreensHeader from '../../../components/Headers/InnerHeaders/InnerScreensHeader';
 import { CreateNameSubString } from '../../../helpers/UiHelpers/CreateSubString';
+import TranslationFile from '../../../assets/translation/TranslationFile';
 
 const AllFriends = (props) => {
   //            **************                    USE STATES      *****************
   const { theme ,darkThemeActivator} = useContext(ThemeContext)
-  const { baseUrl, getToken, token, currentUser } = useContext(AppContext);
+  const { baseUrl, getToken, token, currentUser,language } = useContext(AppContext);
   const flatListRef = useRef(null);
   const [searchText, setSearchText] = useState(''); // USE STATE FOR SEARCHING TEXT
   const [searchedChat, setSearchedChat] = useState([]); // USE STATE ARRAY FOR SEARCHING DiSPLAY SEARCHED USERS
@@ -163,7 +164,7 @@ const AllFriends = (props) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={HomeNeoCards.wholeScreenContainer(theme.backgroundColor)}>
-      <InnerScreensHeader navigation={props.navigation} screenName="All Friends" />
+      <InnerScreensHeader navigation={props.navigation} screenName={TranslationFile[language].All_Friends} />
         {isLoading && <View style={Containers.centerContainer}><ActivityIndicator size="small" color={'black'} /></View>}
 
         {searchText !== '' && searchedChat.length === 0 && userNotFound === true ? (

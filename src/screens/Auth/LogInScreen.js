@@ -161,7 +161,7 @@ const LogInScreen = ({ navigation }) => {
               source={require('../../assets/imges/AuthScreenPictures/LOgInPic/login4.png')}
               style={LogInStyleSheet.image}
             />
-            <Text style={LogInStyleSheet.title(maintextColor)}>LogIn to Continue!</Text>
+            <Text style={LogInStyleSheet.title(maintextColor)}>{TranslationFile[language].LogIn_to_Continue}</Text>
           </View>
           <View style={LogInStyleSheet.countryContainer}>
             <CountryPicker
@@ -181,7 +181,7 @@ const LogInScreen = ({ navigation }) => {
             <Text style={LogInStyleSheet.countryCode(secondaryTextColor)}>+{countryCode}</Text>
             <TextInput
               style={LogInStyleSheet.phoneNumberInput(secondaryTextColor)}
-              placeholder="Phone Number"
+              placeholder={TranslationFile[language].Phone_Number}
               onChangeText={text => setPhoneNumber(text)}
               keyboardType="numeric"
               maxLength={15}
@@ -195,7 +195,7 @@ const LogInScreen = ({ navigation }) => {
             <TextInput
               style={LogInStyleSheet.passwordInput(secondaryTextColor)}
               secureTextEntry={passwordVisible}
-              placeholder="Password"
+              placeholder= {TranslationFile[language].Password}
               autoCapitalize="none"
               onChangeText={text => setPassword(text)}
               placeholderTextColor={AppColors.gray}
@@ -205,7 +205,7 @@ const LogInScreen = ({ navigation }) => {
                 setPasswordVisible(!passwordVisible);
               }}>
               <Icons.Feather
-                name={passwordVisible === true ? 'eye' : 'eye-off'}
+                name={passwordVisible === true ? 'eye-off' : 'eye'}
                 style={LogInStyleSheet.passwordIcon}
               />
             </TouchableOpacity>
@@ -216,7 +216,7 @@ const LogInScreen = ({ navigation }) => {
                 navigation.replace("SettingStack", { screen: "ForgetPassword" });
               }}>
               <Text style={[LogInStyleSheet.forgotpasswordText(maintextColor)]}>
-                Forgot Password?
+              {TranslationFile[language].ForgetPassword}
               </Text>
             </TouchableOpacity>
           </View>
@@ -277,14 +277,14 @@ const LogInScreen = ({ navigation }) => {
               // handleSignUp({navigation})
             }}
             style={[LogInStyleSheet.TouchableButtonStyle]}>
-            <Text style={LogInStyleSheet.TouchableTextStyle(btnColor)}>LogIn</Text>
+            <Text style={LogInStyleSheet.TouchableTextStyle(btnColor)}>{TranslationFile[language].LogIn}</Text>
           </TouchableOpacity>
           <View style={LogInStyleSheet.signupLineContainer}>
-            <Text style={{ fontFamily: FontStyle.regularFont, color: maintextColor }}>Don't have an account?{' '}</Text>
+            <Text style={{ fontFamily: FontStyle.regularFont, color: maintextColor }}>{TranslationFile[language].Don_have_an_account}{' '}</Text>
             <TouchableOpacity onPress={() => {
               navigation.replace("AuthStack", { screen: "SignUpScreen" })
             }}>
-              <Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont, }}>Signup</Text></TouchableOpacity>
+              <Text style={{ color: AppColors.primary, fontFamily: FontStyle.mediumFont, }}>{TranslationFile[language].Signup}</Text></TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

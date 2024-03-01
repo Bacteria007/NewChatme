@@ -120,11 +120,11 @@ const ChangeNumber = ({ navigation }) => {
   }
   return (
     <View style={{ backgroundColor: theme.backgroundColor, flex: 1 }}>
-      <InnerScreensHeader navigation={navigation} screenName="Change number" />
+      <InnerScreensHeader navigation={navigation} screenName={TranslationFile[language].changeNumber} />
       <View style={[ChangeNumberStyle.mainViewStyle(theme.backgroundColor)]}>
         <Text
           style={[ChangeNumberStyle.headTextStyle(secondaryTextColor)]}>
-          Enter your old phone number :
+          {TranslationFile[language].Enter_your_old_phone_number}
         </Text>
         {/* <TextInputForChangeNumber setPhoneNo={setOldPhoneNo} setCountryCode={setOldCountryCode} /> */}
         <PhoneInput
@@ -141,7 +141,7 @@ const ChangeNumber = ({ navigation }) => {
           }}
           textInputProps={{
             cursorColor: secondaryTextColor,
-            placeholder: "Old number...", placeholderTextColor: "gray",
+            placeholder: `${TranslationFile[language].old_number}`, placeholderTextColor: "gray",
             style: {
               color: secondaryTextColor, backgroundColor: theme.backgroundColor,
               fontFamily: FontStyle.regularFont, flex: 1, width: 'auto',
@@ -160,7 +160,7 @@ const ChangeNumber = ({ navigation }) => {
         />
         <Text
           style={[ChangeNumberStyle.headTextStyle(secondaryTextColor)]}>
-          Enter your new phone number :
+          {TranslationFile[language].Enter_your_new_phone_number}
         </Text>
         <PhoneInput
           defaultCode='PK'
@@ -176,7 +176,7 @@ const ChangeNumber = ({ navigation }) => {
           }}
           textInputProps={{
             cursorColor: secondaryTextColor,
-            placeholder: "New number...", placeholderTextColor: "gray",
+            placeholder: `${TranslationFile[language].New_number}`, placeholderTextColor: "gray",
             style: {
               color: secondaryTextColor, backgroundColor: theme.backgroundColor,
               fontFamily: FontStyle.regularFont, flex: 1, width: 'auto',
@@ -192,7 +192,7 @@ const ChangeNumber = ({ navigation }) => {
           disableArrowIcon
           layout='second'
         />
-        <LongButton btnTitle={"Confirm"} onPress={checkNumber} />
+        <LongButton btnTitle={TranslationFile[language].Confirm} onPress={checkNumber} />
       </View>
     </View>
 

@@ -11,6 +11,7 @@ import ReactNativeModal from 'react-native-modal';
 import Containers from '../../assets/styles/Containers';
 import SettingScreenStyle from '../../assets/styles/SettingScreenStyle';
 import CustomDivider from '../../components/CustomDivider';
+import TranslationFile from '../../assets/translation/TranslationFile';
 
 const Settings = ({ navigation }) => {
     const { theme, darkThemeActivator, setDarkTheme, setLightTheme, toggleTheme } = useContext(ThemeContext);
@@ -29,7 +30,7 @@ const Settings = ({ navigation }) => {
 
     return (
         <DrawerScreenswrapper>
-            <InnerScreensHeader screenName={'Settings'} navigation={navigation} />
+            <InnerScreensHeader screenName={TranslationFile[language].Settings} navigation={navigation} />
             <View style={SettingScreenStyle.container(theme.backgroundColor)}>
                 {/* <Text style={SettingScreenStyle.sectionHeadText}>Security</Text> */}
                 {/* Security */}
@@ -46,7 +47,7 @@ const Settings = ({ navigation }) => {
                                 color="steelblue"
                             />
                             <View style={{ flex: 1 }}>
-                                <Text style={SettingScreenStyle.itemName(textColor)}>Change Password</Text>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>{TranslationFile[language].changePassword}</Text>
                             </View>
                             <Icons.Entypo
                                 name={arrow_icon}
@@ -72,7 +73,7 @@ const Settings = ({ navigation }) => {
                                 color="green"
                             />
                             <View style={{ flex: 1 }}>
-                                <Text style={SettingScreenStyle.itemName(textColor)}>Change Number</Text>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>{TranslationFile[language].changeNumber}</Text>
                             </View>
                             <Icons.Entypo
                                 name={arrow_icon}
@@ -98,7 +99,7 @@ const Settings = ({ navigation }) => {
                                 color="red"
                             />
                             <View style={{ flex: 1 }}>
-                                <Text style={SettingScreenStyle.itemName(textColor)}>Blocked Contacts</Text>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>{TranslationFile[language].Blocked_contacts}</Text>
                             </View>
                             <Icons.Entypo
                                 name={arrow_icon}
@@ -122,7 +123,7 @@ const Settings = ({ navigation }) => {
                                 color="fuchsia"
                             />
                             <View style={{ flex: 1 }}>
-                                <Text style={SettingScreenStyle.itemName(textColor)}>Theme</Text>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>{TranslationFile[language].Theme}</Text>
                             </View>
                             <Icons.Entypo
                                 name={arrow_icon}
@@ -148,7 +149,7 @@ const Settings = ({ navigation }) => {
                                 color="lightseagreen"
                             />
                             <View style={{ flex: 1 }}>
-                                <Text style={SettingScreenStyle.itemName(textColor)}>My Uploads</Text>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>{TranslationFile[language].My_uploads}</Text>
                             </View>
                             <Icons.Entypo
                                 name={arrow_icon}
@@ -174,7 +175,7 @@ const Settings = ({ navigation }) => {
                                 color="red"
                             />
                             <View style={{ flex: 1 }}>
-                                <Text style={SettingScreenStyle.itemName(textColor)}>Delete Account</Text>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>{TranslationFile[language].Delete_Account}</Text>
                             </View>
                             <Icons.Entypo
                                 name={arrow_icon}
@@ -227,7 +228,7 @@ const Settings = ({ navigation }) => {
                                 color="gold"
                             />
                             <View style={{ flex: 1 }}>
-                                <Text style={SettingScreenStyle.itemName(textColor)}>Requests</Text>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>{TranslationFile[language].Requests}</Text>
                             </View>
                             <Icons.Entypo
                                 name={arrow_icon}
@@ -253,7 +254,7 @@ const Settings = ({ navigation }) => {
                                 color="tomato"
                             />
                             <View style={{ flex: 1 }}>
-                                <Text style={SettingScreenStyle.itemName(textColor)}>Friends</Text>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>{TranslationFile[language].Friends}</Text>
                             </View>
                             <Icons.Entypo
                                 name={arrow_icon}
@@ -276,7 +277,7 @@ const Settings = ({ navigation }) => {
                                 color="tomato"
                             />
                             <View style={{ flex: 1 }}>
-                                <Text style={SettingScreenStyle.itemName(textColor)}>Help</Text>
+                                <Text style={SettingScreenStyle.itemName(textColor)}>{TranslationFile[language].help}</Text>
                             </View>
                             <Icons.Entypo
                                 name={arrow_icon}

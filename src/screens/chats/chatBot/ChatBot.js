@@ -21,12 +21,13 @@ import BotChatHeader from '../../../components/Headers/ChatHeader/BotChatHeader'
 import BotScreenStyleSheet from '../../../assets/styles/BotStyleSheet/BotScreenStyleSheet';
 import AppContext from '../../../context/AppContext';
 import { ThemeContext } from '../../../context/ThemeContext';
+import TranslationFile from '../../../assets/translation/TranslationFile';
 
 
 const ChatBot = props => {
 
   //***********************************      USE STATE    ************************* */
-  const { baseUrl, currentUser, token, apiKey, apiURL,aimodel } = useContext(AppContext)
+  const { baseUrl, currentUser, token, apiKey, apiURL,aimodel ,language} = useContext(AppContext)
   const { theme } = useContext(ThemeContext);
   const [data, setData] = useState([]);
   const [msgHistory, setMessageHistory] = useState([]);
@@ -243,7 +244,7 @@ const ChatBot = props => {
           style={BotScreenStyleSheet.input(theme.chatScreenColor)}
           value={textInput}
           onChangeText={text => setTextInput(text)}
-          placeholder="Ask me Anything"
+          placeholder={TranslationFile[language].Ask_me_Anything}
           placeholderTextColor={theme.headerSearchText}
           inputStyle={{ color: theme.headerSearchText }}
         />

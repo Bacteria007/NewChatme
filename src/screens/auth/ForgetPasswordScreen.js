@@ -221,7 +221,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
                 <Text style={LogInStyleSheet.countryCode(secondaryTextColor)}>+{countryCode}</Text>
                 <TextInput
                   style={LogInStyleSheet.phoneNumberInput(secondaryTextColor)}
-                  placeholder="Phone Number"
+                  placeholder={TranslationFile[language].Phone_Number}
                   onChangeText={text => setPhoneNo(text)}
                   keyboardType="numeric"
                   maxLength={15}
@@ -232,14 +232,14 @@ const ForgetPasswordScreen = ({ navigation }) => {
               </View>
             </View>
             <View style={ForgetScreenStyle.securityQuestionsContainer}>
-              <Text style={ForgetScreenStyle.Text2}>Security questions</Text>
+              <Text style={ForgetScreenStyle.Text2}>{TranslationFile[language].Security_questions}</Text>
               <View style={ForgetScreenStyle.quesView}>
                 <Text style={ForgetScreenStyle.displyNameText(secondaryTextColor)}>
-                  Q1 : What is your favourite fruit?
+                {TranslationFile[language].What_is_your_favourite_fruit}
                 </Text>
               </View>
               <TextInput
-                placeholder="Answer"
+                placeholder={TranslationFile[language].Answer}
                 value={ques1}
                 style={ForgetScreenStyle.TextInputContainer(secondaryTextColor)}
                 onChangeText={value => {
@@ -252,11 +252,11 @@ const ForgetPasswordScreen = ({ navigation }) => {
 
               <View style={ForgetScreenStyle.quesView}>
                 <Text style={ForgetScreenStyle.displyNameText(secondaryTextColor)}>
-                  Q2 : What is your favourite game?
+                {TranslationFile[language].What_is_your_favourite_game}
                 </Text>
               </View>
               <TextInput
-                placeholder="Answer"
+                placeholder={TranslationFile[language].Answer}
                 value={ques2}
                 style={ForgetScreenStyle.TextInputContainer(secondaryTextColor)}
                 onChangeText={value => {
@@ -304,9 +304,9 @@ const ForgetPasswordScreen = ({ navigation }) => {
           </>
         ) : (
           <>
-            <Text style={ForgetScreenStyle.Text2}>Reset Password</Text>
+            <Text style={ForgetScreenStyle.Text2}>{TranslationFile[language].Reset_Password}</Text>
             <View style={ForgetScreenStyle.quesView}>
-              <Text style={ForgetScreenStyle.displyNameText(theme.profileNameColor)}>Password:</Text>
+              <Text style={ForgetScreenStyle.displyNameText(theme.profileNameColor)}>{TranslationFile[language].Password}:</Text>
             </View>
             <View style={ForgetScreenStyle.passwordContainer}>
               <TextInput
@@ -323,14 +323,14 @@ const ForgetPasswordScreen = ({ navigation }) => {
                   setPasswordVisible(!passwordVisible);
                 }}>
                 <Icons.Feather
-                  name={passwordVisible === true ? 'eye' : 'eye-off'}
+                  name={passwordVisible === true ? 'eye-off' : 'eye'}
                   style={ForgetScreenStyle.passwordIcon}
                 />
               </TouchableOpacity>
             </View>
             <View style={ForgetScreenStyle.quesView}>
               <Text style={ForgetScreenStyle.displyNameText(theme.profileNameColor)}>
-                Confirm Password:
+              {TranslationFile[language].Confirm_Password}
               </Text>
             </View>
             <View style={ForgetScreenStyle.passwordContainer}>
@@ -350,7 +350,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
                   setConfirmPasswordVisible(!confirmPasswordVisible);
                 }}>
                 <Icons.Feather
-                  name={confirmPasswordVisible === true ? 'eye' : 'eye-off'}
+                  name={confirmPasswordVisible === true ? 'eye-off' : 'eye'}
                   style={ForgetScreenStyle.passwordIcon}
                 />
               </TouchableOpacity>
