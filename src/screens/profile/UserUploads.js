@@ -13,6 +13,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeContext } from '../../context/ThemeContext';
 import UserUploadsHeader from '../../components/Headers/ReelHeader/UserUploadsHeader';
 import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
+import WebView from 'react-native-webview';
+import MyActivityStyleSheet from '../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const UserUploads = props => {
   const { baseUrl, token, currentUser } = useContext(AppContext);
@@ -147,7 +150,7 @@ const UserUploads = props => {
         } else {
           const videosWithSources = res.UploadedVideos ? res.UploadedVideos.map(video => ({
             _id: video._id,
-            uri:  video.video ,
+            uri: video.video,
             desc: video.name,
             user: video.userId,
             isLiked: video.isLiked,
@@ -215,10 +218,11 @@ const UserUploads = props => {
                     onPress={toggleVideoPlayback}>
                     {isLoading ? (
                       <View style={ReelscreenStyle.LoaderView(theme.backgroundColor)}>
-                        <AppActivityIndicator/>
+                        <AppActivityIndicator />
                       </View>
                     ) : (
-                      <Video
+                      <View style={MyActivityStyleSheet.reelsView}>
+                       <Video
                         source={{ uri: `${baseUrl}${item.uri}` }}
                         ref={videoRef}
                         resizeMode="cover"
@@ -230,6 +234,7 @@ const UserUploads = props => {
                         style={ReelscreenStyle.backgroundVideo}
 
                       />
+                      </View>
                     )}
                   </TouchableOpacity>
                   <ReelFooter

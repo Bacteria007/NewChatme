@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontStyle from '../../assets/styles/FontStyle';
@@ -31,6 +32,7 @@ import ChangedChatHeader from '../../components/Headers/ChatHeader/ChangedChatHe
 import Containers from '../../assets/styles/Containers';
 import LottieView from 'lottie-react-native';
 import MyActivityStyleSheet from '../../assets/styles/ReelStyleSheet/MyActivityStyleSheet';
+import AppActivityIndicator from '../../components/FlatlistComponents/AppActivityIndicator';
 
 const Calls = ({ navigation }) => {
   const { baseUrl, token, currentUser } = useContext(AppContext);
@@ -273,6 +275,9 @@ const Calls = ({ navigation }) => {
           }}
         />
       }
+      {isLoading && <View style={Containers.centerContainer}>
+          <AppActivityIndicator/>
+        </View>}
       {searchText !== '' && searchedCalls.length === 0 && callNotFound === true ? (
         <View style={Containers.centerContainer}>
           <Text style={HomeNeoCards.noSearchResultText}>No caller with this name.</Text>
@@ -288,9 +293,10 @@ const Calls = ({ navigation }) => {
             // keyExtractor={(item) => { item.callerId.toString() }}
             />
             :
-            <View style={Containers.centerContainer}>
+           [isLoading==false&& <View style={Containers.centerContainer}>
               <Text style={HomeNeoCards.noSearchResultText}>No calls yet.</Text>
             </View>
+           ]
         )}
     </View>
   );

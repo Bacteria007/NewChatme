@@ -27,7 +27,7 @@ const GroupChat = props => {
 
   // VARIABLES
   const { item, allGroupMsgs } = props.route.params;
-  const { baseUrl, currentUser, token, apiKey } = useContext(AppContext);
+  const { baseUrl, currentUser, token, apiKey ,apiURL,aimodel} = useContext(AppContext);
   const { theme } = useContext(ThemeContext);
   let userId = currentUser.userId;
   // console.log('userId====', userId);
@@ -76,11 +76,12 @@ const GroupChat = props => {
     setIsSending(true);
     await axios
       .post(
-        'https://api.openai.com/v1/engines/text-davinci-003/completions',
+        apiURL,
         {
           prompt: `Detect the mood of the following text and give result in  emoji make sure emoji will be one : "${newMsg.trim()}"`,
           max_tokens: 1024,
           temperature: 0.5,
+          model:aimodel
         },
         {
           headers: {

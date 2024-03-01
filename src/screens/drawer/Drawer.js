@@ -80,9 +80,8 @@ const DrawerScreens = () => {
       await AsyncStorage.setItem('phoneNo', '')
       console.log(currentUser.name, 'logout');
       RNExitApp.exitApp()
-      // uninitZegoFunc()
-      navigation.replace('Splash');
-      // navigation.replace('AuthStack',{screen:'LogInScreen'});
+      // navigation.replace('AuthStack', { screen: 'LogInScreen' });
+      // navigation.replace('AuthStack',{screen:'Spalsh'});
 
     } catch (error) {
       console.log('Error while logging out:', error);

@@ -21,37 +21,87 @@ import BotChatHeader from '../../../components/Headers/ChatHeader/BotChatHeader'
 import BotScreenStyleSheet from '../../../assets/styles/BotStyleSheet/BotScreenStyleSheet';
 import AppContext from '../../../context/AppContext';
 
+
 const ChatBot = props => {
 
   //***********************************      USE STATE    ************************* */
-  const { baseUrl, currentUser, token, apiKey, apiURL } = useContext(AppContext)
+  const { baseUrl, currentUser, token, apiKey, apiURL,aimodel } = useContext(AppContext)
   const [data, setData] = useState([]);
   const [msgHistory, setMessageHistory] = useState([]);
   const [textInput, setTextInput] = useState('');
   const [userMsg, setUserMsg] = useState('');
   const [botMsg, setBotMsg] = useState('');
+  const flatListRef = useRef(null);
   let msgOfBot;
 
-  console.log("chat bot ", apiKey, apiURL)
-  //***********************************     VARIABLES   ************************* */
-  const flatListRef = useRef(null);
 
-  //***********************************      FUNCTIONS    ************************* */
 
-  // useEffect(()=>{
-  //   console.log("Bot Msg")
-  // },[botMsg])
   const handleSend = async () => {
-    const prompt = textInput;
-    console.log("enter into",textInput)
+    const prompt = textInput.toLowerCase().replace(/[\s\-]/g, '').replace(/[^\w\s]/g, '');
+    console.log("User Message:", prompt);
+    let botReply
+    // Check for specific greetings
+    if (prompt.includes('hi') || prompt.includes('hello')) {
+      botReply = `\n\n Hello there ! How can I assist you today?`
+      setBotMsg(botReply);
+      msgOfBot = botReply
+      setUserMsg(textInput);
+      const timestamp = new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+
+      setUserMsg(textInput)
+      setData(prevData => [
+        ...prevData,
+        { type: 'user', text: textInput, timestamp: timestamp },
+
+      ]);
+      setTextInput('');
+      setTimeout(() => {
+        setData(prevData => [
+          ...prevData,
+          { type: 'bot', text: botReply, timestamp: timestamp },
+        ]);
+      }, 1000);
+      storeInDb()
+      return;
+    }
+    if (prompt.includes('assalamoalaikum')) {
+      botReply = `\n \nWa Alaikumussalam ! How can I assist you today?`
+
+      setBotMsg(botReply);
+      msgOfBot = botReply
+      setUserMsg(textInput);
+      const timestamp = new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+
+      setUserMsg(textInput)
+      setData(prevData => [
+        ...prevData,
+        { type: 'user', text: textInput, timestamp: timestamp },
+
+      ]);
+      setTextInput('');
+      setTimeout(() => {
+        setData(prevData => [
+          ...prevData,
+          { type: 'bot', text: botReply, timestamp: timestamp },
+        ]);
+      }, 1000);
+      storeInDb()
+      return;
+    }
     await axios.post(
       apiURL,
       {
-        // messages: [{ 'role': "user", "content": textInput }],
-        prompt:prompt,
-        max_tokens: 900,
-        temperature: 1.0,
-        model: 'davinci-002'
+        // messages: [{ role: "system", content: "you are a helpful assistant" },{ role: "user", content: textInput }],
+        prompt: textInput,
+        max_tokens: 1024,
+        temperature: 0.8,
+        model: aimodel
       },
       {
         headers: {
@@ -89,6 +139,7 @@ const ChatBot = props => {
 
   };
 
+
   const storeInDb = async () => {
     const formData = new FormData();
     formData.append("userId", currentUser.userId);
@@ -124,7 +175,7 @@ const ChatBot = props => {
         <View style={BotScreenStyleSheet.botView}>
           <Text style={BotScreenStyleSheet.botImage}>
             {item.type === 'user' ? (
-              'Maryam:  '
+              `${currentUser.name}:  `
             ) : (
               <View style={{ borderRadius: hp('5') }}>
                 <Image

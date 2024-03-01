@@ -169,7 +169,7 @@ const MyActivity = ({ navigation }) => {
                         }}
                       >
                         <View style={MyActivityStyleSheet.reelsView}>
-                          <Video
+                          {/* <Video
                             source={{ uri: `${baseUrl}${item.uri}` }}
                             ref={videoRef}
                             resizeMode="cover"
@@ -180,7 +180,17 @@ const MyActivity = ({ navigation }) => {
                             onLoad={() => setIsLoading(false)} // Set isLoading to false when video is loaded
                             style={MyActivityStyleSheet.reelStyle}
 
-                          />
+                          /> */}
+                          <WebView
+                              originWhitelist={['*']}
+                              source={{ html: `${HtmlVideo}` }}
+                              style={MyActivityStyleSheet.reelStyle}
+                              scrollEnabled={false}
+                              showsVerticalScrollIndicator={false}
+                              showsHorizontalScrollIndicator={false}
+                              setDisplayZoomControls={false}
+                              setBuiltInZoomControls={false}
+                            />
                         </View>
                       </TouchableOpacity>
                     )

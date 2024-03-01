@@ -71,7 +71,7 @@ const UserProfile = props => {
         } else {
           const videosWithSources = data.UploadedVideos.map(video => ({
             _id: video._id,
-            uri: { uri: video.video },
+            uri:  video.video ,
             desc: video.name,
             user: video.userId,
           }));
@@ -441,6 +441,7 @@ const UserProfile = props => {
                   ListFooterComponentStyle={{ alignSelf: 'center', marginLeft: 5 }}
                   renderItem={({ item, index }) => {
                     const HtmlVideo = GenerateVideoHtml(baseUrl, item, false, true);
+                    console.log(item);
                     return (
                       <TouchableRipple
                         rippleColor={rippleColor}
@@ -456,6 +457,7 @@ const UserProfile = props => {
                             screen: 'activity',
                           })
                         }}>
+                           <View style={MyActivityStyleSheet.reelsView}>
                         <WebView
                           originWhitelist={['*']}
                           source={{ html: `${HtmlVideo}` }}
@@ -468,9 +470,10 @@ const UserProfile = props => {
                             borderRadius: 10,
                             height: wp('32'),
                             width: wp('32.5'),
-                            // backgroundColor: 'blue',
+                           
                           }}
-                        />
+                          />
+                        </View>
                       </TouchableRipple>
                     );
                   }}
