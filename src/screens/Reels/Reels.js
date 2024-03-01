@@ -150,9 +150,36 @@ const Reels = props => {
   };
   const changeIndex = ({ index }) => {
     setCurrentIndex(index);
+    console.log('uploadedReels[index]+++++++++++++++++=',uploadedReels[index].uri)
+    const videoId = uploadedReels[index]?.uri;
+    if (videoId) {
+      updateUserActivity(videoId);
+    }
     // setIsVideoLiked(uploadedReels[index]?.isLiked || false);
     // setLikeCount(uploadedReels[index]?.likeCount || 0);
   };
+  const updateUserActivity = async (videoId) => {
+    const formdata = new FormData();
+console.log("ye cal hova_______________-------------------")
+    formdata.append('userId', currentUser.userId);
+    formdata.append('videoUri', videoId);
+   
+    try {
+      await fetch(`${baseUrl}/userActivity`, {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+        body: formdata,
+      });
+  
+      console.log('User activity updated successfully');
+    } catch (error) {
+      console.error('Error updating user activity:', error);
+    }
+  };
+
   //    USE EFFECTS
 
   useEffect(() => {
