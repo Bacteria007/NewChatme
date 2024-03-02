@@ -8,36 +8,36 @@ import FontStyle from './FontStyle';
 import AppColors from '../colors/Appcolors';
 
 const NotificationStyle = StyleSheet.create({
-  containerView: {
+  containerView: bgColor=>({
     flex: 1,
-    backgroundColor: AppColors.white,
-  },
+    backgroundColor: bgColor,
+  }),
   mainView: {
     padding: wp('6%'),
     // justifyContent:'center',alignItems:'center'
   },
-  text: {
+  text:bgColor=>( {
     fontFamily: FontStyle.mediumFont,
     fontSize: wp('5%'),
     paddingBottom: hp('4'),
-    color: AppColors.black,
+    color: bgColor,
 
-  },
-  textInput: {
+  }),
+  textInput:bgColor=>( {
     fontFamily: FontStyle.regularFont,
     fontSize: wp('4.5%'),
     width: wp('87%'),
-    borderBottomColor: AppColors.black,
+    borderBottomColor: bgColor,
     elevation: 1,
-    color: AppColors.black,
+    color: bgColor,
     maxHeight: hp('40'),
     paddingHorizontal: wp('4'),
     // borderRadius: wp('10%'),
-    // borderWidth: wp('0.25'),
+    borderWidth: wp('0.25'),
     // backgroundColor: AppColors.gray,
     // height: hp('8'),
     // marginRight: wp('6'),
-  },
+  }),
   touchableText: {
     color: AppColors.white,
     fontSize: wp('4.5%'),

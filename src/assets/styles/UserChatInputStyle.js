@@ -27,12 +27,13 @@ const UserChatInputStyle = StyleSheet.create({
     paddingHorizontal: hp('2%'),
     
   }, 
-  input:{
+  input:bgColor=>({
     width: wp('75'),
     alignItems: 'center',
     alignSelf: 'flex-start',
+    color:bgColor
     // maxHeight:hp('6%'),
-  },
+  }),
   scroll_inputText: { flex: 1, alignSelf: 'center',   
 },
   microphoneContainerView: {
