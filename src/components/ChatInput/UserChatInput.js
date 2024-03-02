@@ -41,7 +41,7 @@ const UserChatInput = ({
 }) => {
   const { theme } = useContext(ThemeContext);
   const { baseUrl } = useContext(AppContext);
-  const iconsColor = AppColors.coolgray
+  const iconsColor = AppColors.gray
   const iconsColor2 = AppColors.black
   const screenDimensions = Dimensions.get('window');
   const [isScrollEnabled, setIsScrollEnabled] = useState(false);
@@ -88,7 +88,7 @@ const UserChatInput = ({
             :
 
             <TextInput
-              style={[UserChatInputStyle.input, { maxHeight: inputHeight }]}
+              style={[UserChatInputStyle.input(theme.inputColor), { maxHeight: inputHeight }]}
               placeholder="Message"
               value={currentMessage}
               onChangeText={(txt) => { setCurrentMessage(txt) }}

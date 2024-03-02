@@ -165,6 +165,48 @@ const ChatBot = props => {
     // setMessageHistory(data)
     console.log('after msg send:', data);
   }
+//   const messagesFromDb = async () => {
+//     const res = await fetch(`${baseUrl}/botmessages?userId=${currentUser.userId}`, {
+//       method: 'GET',
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         'Content-Type': 'application/json',
+//       },
+//     });
+//     const data = await res.json();
+
+//     if (data.message == 'Please provide a valid token.') {
+//       Alert.alert('Provide a valid token.');
+//     } else if (data.message == 'Please provide a token.') {
+//       Alert.alert('Token required');
+//     } else {
+//       console.log("bot mdg db",data.usermsg)
+//       console.log("bot mdg db",data.botmsg)
+//       setUserMsg(data.usermsg)
+//       setBotMsg(data.botmsg)
+//       const timestamp = new Date().toLocaleTimeString([], {
+//         hour: '2-digit',
+//         minute: '2-digit',
+//       });
+//       setData(prevData => [
+//         ...prevData,
+//         { type: 'user', text: data.usermsg, timestamp: timestamp },
+
+//       ]);
+     
+// setData(prevData => [
+//           ...prevData,
+//           { type: 'bot', text: data.botmsg, timestamp: timestamp },
+//         ]);
+//       // const filterMsgs = data.filter(message => {
+//       //   return !message.deletedBy.includes(currentMessage.userId);
+//       // });
+//       // setMessageList(filterMsgs);
+//       // // console.log('//////////////////\\\\\\\\\\\\\\\\\\',messageList)
+//       // setIsLoading(false)
+//     }
+//   };
+
   // useEffect(() => {
   //   storeInDb()
   // }, [])
@@ -217,6 +259,10 @@ const ChatBot = props => {
       flatListRef.current.scrollToEnd({ animated: true });
     }
   }, [data]);
+  // useEffect(() => {
+  //   // setMessageList(allMsgs)
+  //   messagesFromDb()
+  // }, []);
   //***********************************      DEWSIGNING OF SCREEN    ************************* */
   return (
     <View style={BotScreenStyleSheet.container(theme.chatScreenColor)}>
@@ -240,13 +286,12 @@ const ChatBot = props => {
 
       <View style={BotScreenStyleSheet.inputContainer}>
         <TextInput
-        lightTheme
-          style={BotScreenStyleSheet.input(theme.chatScreenColor)}
+          style={BotScreenStyleSheet.input(theme.inputColor)}
           value={textInput}
           onChangeText={text => setTextInput(text)}
           placeholder={TranslationFile[language].Ask_me_Anything}
-          placeholderTextColor={theme.headerSearchText}
-          inputStyle={{ color: theme.headerSearchText }}
+          placeholderTextColor={AppColors.gray}
+          // inputStyle={{ color: theme.inputColor }}
         />
 
 

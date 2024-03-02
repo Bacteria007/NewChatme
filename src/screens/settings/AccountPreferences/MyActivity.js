@@ -248,7 +248,7 @@ const MyActivity = ({ navigation }) => {
                         <Video
                           source={{ uri: `${baseUrl}${allUploads[currentIndex].uri}` }}
                           ref={videoRef}
-                          resizeMode="center"
+                          resizeMode="cover"
                           paused={false}
                           repeat={false}
                           onBuffer={onBuffer}

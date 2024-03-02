@@ -35,7 +35,7 @@ const NewGroup = (props) => {
                 formData.append('group_admin', currentUser.userId);
                 formData.append('members', JSON.stringify(selectedMembers));
                 if (groupDisplayPic != '') {
-                    formData.append("ProfileImage", groupDisplayPic);
+                    formData.append("profileImage", groupDisplayPic);
                 }
                 await fetch(`${baseUrl}/creategroup`, {
                     method: 'post',

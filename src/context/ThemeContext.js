@@ -58,7 +58,7 @@ const LightTheme = {
     rippleColor: AppColors.lightBlack,
     chatScreenColor: AppColors.white,
     nextBtn: AppColors.white,
-    inputColor:AppColors.gray
+    inputColor:AppColors.black
 };
 
 

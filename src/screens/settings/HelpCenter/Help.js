@@ -11,10 +11,12 @@ import NotificationStyle from '../../../assets/styles/NotificationStyle'
 import AppContext from '../../../context/AppContext'
 import { TouchableRipple } from 'react-native-paper'
 import TranslationFile from '../../../assets/translation/TranslationFile'
+import { ThemeContext } from '../../../context/ThemeContext'
 
 
 const Help = ({ navigation }) => {
   const { baseUrl, currentUser, token,language } = useContext(AppContext)
+  const { theme } = useContext(ThemeContext);
 
   const [helpMessage, setHelpMessage] = useState('')
   const sendHelpMessage = async () => {
@@ -54,14 +56,14 @@ const Help = ({ navigation }) => {
 
   };
   return (
-    <View style={[NotificationStyle.containerView]}>
+    <View style={[NotificationStyle.containerView(theme.chatScreenColor)]}>
       <InnerScreensHeader navigation={navigation} screenName={TranslationFile[language].Help_center} />
       <View style={[NotificationStyle.mainView]}>
-        <Text style={[NotificationStyle.text]}>{TranslationFile[language].Sender_name} : {currentUser.name}</Text>
+        <Text style={[NotificationStyle.text(theme.profileNameColor)]}>{TranslationFile[language].Sender_name} : {currentUser.name}</Text>
         <TextInput
           placeholder={TranslationFile[language].problem}
           placeholderTextColor={AppColors.gray}
-          style={NotificationStyle.textInput}
+          style={NotificationStyle.textInput(theme.profileNameColor)}
           value={helpMessage}
           onChangeText={text => setHelpMessage(text)}
           multiline={true}
